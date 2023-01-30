@@ -22,6 +22,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet"
         href="{{ asset('template') }}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+        <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('template') }}/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="{{ asset('template') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -111,13 +114,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('template') }}/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="{{ asset('template') }}/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('template') }}/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    {{-- Select search --}}
+    <!-- Select2 -->
+    <script src="{{ asset('template') }}/plugins/select2/js/select2.full.min.js"></script>
     <!-- Page specific script -->
     <script>
         $(function() {
             $("#example1").DataTable({
                 "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
+                "lengthChange": true,
+                "autoWidth": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             $('#example2').DataTable({
@@ -131,6 +137,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         });
     </script>
+ 
     {{-- mengelola dropdown --}}
     @if (Request::is('tpi'))
     <script type="text/javascript">
@@ -166,13 +173,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script type="text/javascript">
         let baris=1;
         $("#rowSatker").click(function() {
-            baris= baris+1;
+            baris+=1;
             newSatker =
                 '<div id="rowSatker" class="form-group">' +
                 '<div class="input-group"><div class="input-group-prepend">' +
                 '<button class="btn btn-danger" id="DeleteRow" type="button">' +
                 '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                '<select id="pref'+baris+'select" class="form-control preferenceSelect" name="satker_id[]"> required' +
+                '<select id="prefselect'+baris+'" class="select2bs4 form-control preferenceSelect" name="satker_id[]"> required' +
                 '<option value="">Pilih Satuan kerja '+baris+' </option>' +
                 '@foreach ($satker as $value)@if (old("satker_id") == $value->id)' +
                 '<option value="{{ $value->id }}" selected>{{ $value->nama_satker }} </option >' +
@@ -214,6 +221,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             });
         });
+    </script>
+
+    {{-- Select search --}}
+    <script>
+    $(function () {
+        $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+    });
+    </script>
+
+
+{{-- Coba --}}
+    <script>
+        $(".PLUS, .MIN").click(function(){
+        var itemVal = parseInt($(this).siblings(".InputText").val());
+        if ($(this).hasClass('MIN'))
+        itemVal--;      
+        else
+        itemVal++;
+        $(this).siblings(".InputText").val(itemVal);
+});
     </script>
 </body>
 

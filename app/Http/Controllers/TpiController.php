@@ -56,7 +56,8 @@ class TpiController extends Controller
     {
 
         $validatedData = $request->validate([
-            'nama' => 'required|unique:tpi', //nip
+            'id' => 'unique:tpi',
+            'nama' => 'required', //nip
             'wilayah'  => 'required',
             'dalnis'  => 'required',
             'ketua_tim'  => 'required',
@@ -64,7 +65,7 @@ class TpiController extends Controller
 
         ]);
         $validatedData['tahun'] = date('Y');
-        $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun']);
+        $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun'] .  'wil' . $validatedData['wilayah']);
 
         TPI::create($validatedData);
 
@@ -138,7 +139,7 @@ class TpiController extends Controller
 
         ]);
         $validatedData['tahun'] = date('Y');
-        $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun']);
+        $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun'] .  'wil' . $validatedData['wilayah']);
 
         TPI::where('id', $tpi->id)->update($validatedData);
 

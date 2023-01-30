@@ -1,6 +1,7 @@
 @extends('layouts.backEnd.main')
 
 @section('content')
+
     <div class="col-lg-3">
         <!-- Profile Image -->
         <div class="card card-primary card-outline">
@@ -116,7 +117,7 @@
                         <div class="form-group">
                             <label for="anggota_id">Anggota</label>
                             <select class="form-control" name="anggota_id" required>
-                                <option selected>Pilih Anggota</option>
+                                <option value="">Pilih Anggota</option>
                                 @foreach ($anggota as $a)
                                     @if (old('anggota_id') == $a->id)
                                         <option value="{{ $a->anggota }}" selected>{{ $a->user->name }}
@@ -128,6 +129,13 @@
                             </select>
                         </div>
                         <div class="row">
+                            {{-- <input id="nilai" class='InputText' value='0' name="nilai"> <button type="button"
+                                class='PLUS'>+</button>
+
+                            @php
+                                $count = 1;
+                            @endphp --}}
+                            {{-- @for ($i = 0; $i < $count; $i++) --}}
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="satker_id">Satuan Kerja</label>
@@ -137,15 +145,17 @@
                                     </button>
                                     <hr>
                                     <div class="input-group">
-                                        <select id="pref1select" class="form-control preferenceSelect" name="satker_id[]"
-                                            required>
+                                        <select id="prefselect1" class="form-control preferenceSelect select2bs4"
+                                            name="satker_id[]" required>
                                             <option value="">Pilih Satuan Kerja </option>
                                             @foreach ($satker as $value)
                                                 @if (old('satker_id') == $value->id)
-                                                    <option value="{{ $value->id }}" selected>{{ $value->nama_satker }}
+                                                    <option value="{{ $value->id }}" selected>
+                                                        {{ $value->nama_satker }}
                                                     </option>
                                                 @else
-                                                    <option value="{{ $value->id }}">{{ $value->nama_satker }}</option>
+                                                    <option value="{{ $value->id }}">{{ $value->nama_satker }}
+                                                    </option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -153,9 +163,12 @@
                                 </div>
                             </div>
                             <div id="inputSatker" class="col-lg-12"></div>
+                            {{-- @endfor --}}
+
 
 
                         </div>
+
 
 
                     </div>
@@ -182,7 +195,8 @@
                     </div>
                     <div class="modal-body">
                         <p class="text-danger">Apakah Anda Yakin untuk Menghapus pengawasan dengan Nama:</p>
-                        <b>{{ $value->anggota->name }}</b> pada Satuan Kerja <b>{{ $value->satker->nama_satker }}</b>
+                        <b>{{ $value->anggota->name }}</b> pada Satuan Kerja
+                        <b>{{ $value->satker->nama_satker }}</b>
                         ?
                     </div>
                     <form action="/pengawasan/{{ $value->id }}" method="POST" class="d-inline">
