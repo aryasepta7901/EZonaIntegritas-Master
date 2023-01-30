@@ -165,9 +165,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
@@ -193,28 +190,142 @@
                                 </div>
                             </div>
                             <div id="newinput" class="col-lg-12"></div>
-
-
                         </div>
-
-
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Create TPI</button>
                     </div>
                 </form>
-
-
-
-
-
-
             </div>
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
     </div>
+
+    {{-- Edit --}}
+    @foreach ($tpi as $value)
+        <div class="modal fade" id="edit{{ $value->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Tambah TPI</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form method="post" action="tpi/{{ $value->id }}">
+                        @method('put')
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="nama">Nama Tim</label>
+                                        <input type="text" class="form-control @error('nama') is-invalid  @enderror"
+                                            id="nama" name="nama" value="{{ old('nama', $value->nama) }}">
+                                        @error('nama')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="wilayah">Wilayah</label>
+                                        <select class="form-control" name="wilayah">
+                                            <option value="{{ $value->wilayah }}"> Wilayah {{ $value->wilayah }}</option>
+                                            <option value="1">Wilayah 1</option>
+                                            <option value="2">Wilayah 2</option>
+                                            <option value="3">Wilayah 3</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="dalnis">Pengendali Teknis</label>
+                                        <select class="form-control" name="dalnis">
+                                            <option selected>Pilih Dalnis</option>
+                                            @foreach ($dalnis as $d)
+                                                @if (old('dalnis', $value->dalnis) == $d->id)
+                                                    <option value="{{ $d->id }}" selected>{{ $d->name }}
+                                                    </option>
+                                                @else
+                                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="ketua_tim">Ketua Tim</label>
+                                        <select class="form-control" name="ketua_tim">
+                                            <option value="{{ $value->ketua_tim }}">{{ $value->ketua->name }} </option>
+                                            @foreach ($ketua_tim as $k)
+                                                @if (old('ketua_tim', $value->ketua_tim) == $k->id)
+                                                    <option value="{{ $k->id }}" selected>{{ $k->name }}
+                                                    </option>
+                                                @else
+                                                    <option value="{{ $k->id }}">{{ $k->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="anggota" class="m-3">Anggota Tim </label>
+                                <br>
+
+                                <button id="rowAdder" type="button" class="btn btn-dark m-2">
+                                    <span class="fa fa-plus">
+                                    </span>
+                                </button>
+
+                                @foreach ($value->anggota as $a)
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <select id="pref1select" class="form-control preferenceSelect"
+                                                    name="anggota[]">
+                                                    <option value="{{ $a->anggota }}">{{ $a->user->name }}</option>
+                                                    @foreach ($anggota as $value)
+                                                        @if (old('anggota') == $value->id)
+                                                            <option value="{{ $value->id }}" selected>
+                                                                {{ $value->name }}
+                                                            </option>
+                                                        @else
+                                                            <option value="{{ $value->id }}">{{ $value->name }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                <div id="newinput" class="col-lg-12"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create TPI</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endforeach
+
+
 
 
     {{-- Hapus --}}

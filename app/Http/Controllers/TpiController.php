@@ -117,7 +117,6 @@ class TpiController extends Controller
      */
     public function edit(TPI $tPI)
     {
-        //
     }
 
     /**
@@ -127,9 +126,35 @@ class TpiController extends Controller
      * @param  \App\Models\TPI  $tPI
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TPI $tPI)
+    public function update(Request $request, TPI $tpi)
     {
         //
+        $validatedData = $request->validate([
+            'nama' => 'required',
+            'wilayah'  => 'required',
+            'dalnis'  => 'required',
+            'ketua_tim'  => 'required',
+
+
+        ]);
+        $validatedData['tahun'] = date('Y');
+        $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun']);
+
+        TPI::where('id', $tpi->id)->update($validatedData);
+
+
+
+        foreach ($request->anggota as $key => $anggota) {
+            $data = new anggota_tpi();
+            $data->id = $anggota . date('Y');
+            $data->tpi_id =  $validatedData['id'];
+            $data->anggota = $anggota;
+            $data->jumlah_satker = 0;
+            $data->update();
+        }
+
+
+        return redirect('/tpi')->with('success', ' TIM Has Ben Updated');
     }
 
     /**

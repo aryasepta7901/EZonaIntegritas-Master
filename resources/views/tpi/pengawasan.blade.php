@@ -22,7 +22,9 @@
                         <b>Anggota</b>
                         <ul>
                             @foreach ($tpi->anggota as $a)
-                                <li>{{ $a->user->name }}</li>
+                                <li>{{ $a->user->name }}</li> : <button class="badge badge-info">{{ $a->jumlah_satker }}
+                                </button>
+                                Pengawasan
                             @endforeach
                         </ul>
                     </li>
@@ -125,9 +127,6 @@
                                 @endforeach
                             </select>
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
@@ -165,18 +164,11 @@
                         <button type="submit" class="btn btn-primary">Create Pengawasan</button>
                     </div>
                 </form>
-
-
-
-
-
-
             </div>
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
     </div>
-
     {{-- Hapus --}}
     @foreach ($pengawasan as $value)
         <div class="modal fade" id="hapus{{ $value->id }}">
