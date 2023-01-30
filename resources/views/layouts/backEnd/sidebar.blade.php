@@ -57,7 +57,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{ Request::is('persyaratan') ? 'active' : '' }}">
+                    <a href="/persyaratan" class="nav-link {{ Request::is('persyaratan') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-list"></i>
                         <p>
                             Mengelola Persyaratan

@@ -14,4 +14,8 @@ class Satker extends Model
     {
         return $this->hasOne(Pengawasan::class, 'satker_id');
     }
+    public function persyaratan()
+    {
+        return $this->hasOne(Persyaratan::class, 'satker_id');
+    }
 }
