@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\PengawasanController;
 use App\Http\Controllers\PersyaratanController;
+use App\Http\Controllers\RincianController;
+use App\Http\Controllers\SubRincianController;
 use App\Http\Controllers\TpiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +30,7 @@ Route::resource('/tpi', TpiController::class);
 Route::resource('/pengawasan', PengawasanController::class);
 // Persyarataan
 Route::resource('/persyaratan', PersyaratanController::class);
+// rincian
+Route::resource('/rincian', RincianController::class);
+// Sub Rincian
+Route::resource('/subrincian', SubRincianController::class);

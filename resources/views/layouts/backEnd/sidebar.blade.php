@@ -65,7 +65,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{ Request::is('lke') ? 'active' : '' }}">
+                    <a href="/rincian" class="nav-link {{ Request::is('rincian*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-question"></i>
                         <p>
                             Mengelola LKE
