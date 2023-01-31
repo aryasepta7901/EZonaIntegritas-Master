@@ -36,7 +36,17 @@ class SubRincianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'subRincian'  => 'required|unique:subRincian',
+            'bobot'  => 'required',
+        ]);
+
+        $validatedData['rincian_id'] = $request->rincian;
+        $validatedData['id'] = $validatedData['rincian_id'] . substr($validatedData['subRincian'], 0, 1);
+
+        SubRincian::create($validatedData);
+
+        return redirect('/rincian/' . $request->rincian)->with('success', 'New Rincian Has Ben Added');
     }
 
     /**
@@ -77,9 +87,17 @@ class SubRincianController extends Controller
      * @param  \App\Models\SubRincian  $subRincian
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SubRincian $subRincian)
+    public function update(Request $request, SubRincian $subrincian)
     {
-        //
+        $validatedData = $request->validate([
+            'subRincian'  => 'required',
+            'bobot'  => 'required',
+        ]);
+
+
+        SubRincian::where('id', $subrincian->id)->update($validatedData);
+
+        return redirect('/rincian/' . $request->rincian)->with('success', 'New Rincian Has Ben Updated');
     }
 
     /**
@@ -88,8 +106,9 @@ class SubRincianController extends Controller
      * @param  \App\Models\SubRincian  $subRincian
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SubRincian $subRincian)
+    public function destroy(SubRincian $subrincian)
     {
-        //
+        SubRincian::destroy($subrincian->id);
+        return redirect('/rincian/' . $subrincian->rincian_id)->with('success', 'New Rincian Has Ben Deleted');
     }
 }

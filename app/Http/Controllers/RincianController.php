@@ -43,7 +43,17 @@ class RincianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'rincian'  => 'required|unique:rincian',
+            'bobot'  => 'required',
+        ]);
+
+        $validatedData['id'] = substr($validatedData['rincian'], 0, 1);
+
+
+        Rincian::create($validatedData);
+
+        return redirect('/rincian')->with('success', 'New Rincian Has Ben Added');
     }
 
     /**
@@ -61,6 +71,7 @@ class RincianController extends Controller
                 'master' => 'Rincian LKE',
                 'link' => 'rincian',
                 'title' => 'SubRincian LKE : ' . $rincian->rincian,
+                'rincian' => $rincian,
                 'subRincian' => SubRincian::where('rincian_id', $rincian->id)->get(),
             ]
         );
@@ -86,7 +97,14 @@ class RincianController extends Controller
      */
     public function update(Request $request, Rincian $rincian)
     {
-        //
+        $validatedData = $request->validate([
+            'rincian'  => 'required',
+            'bobot'  => 'required',
+        ]);
+
+        Rincian::where('id', $rincian->id)->update($validatedData);
+
+        return redirect('/rincian')->with('success', 'New Rincian Has Ben Updated');
     }
 
     /**
@@ -98,5 +116,7 @@ class RincianController extends Controller
     public function destroy(Rincian $rincian)
     {
         //
+        Rincian::destroy($rincian->id);
+        return redirect('/rincian')->with('success', 'New Rincian Has Ben Deleted');
     }
 }

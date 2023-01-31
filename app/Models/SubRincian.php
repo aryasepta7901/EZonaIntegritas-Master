@@ -12,4 +12,11 @@ class SubRincian extends Model
     public $incrementing = false;
     public $timestamps = false;
     use HasFactory;
+
+    protected $fillable = [
+        'id',
+        'subRincian',
+        'bobot',
+        'rincian_id',
+    ];
 }
