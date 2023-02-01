@@ -19,7 +19,7 @@ class Pilar extends Migration
             $table->double('bobot', 6, 2);
             $table->double('min_wbk', 6, 2);
             $table->double('min_wbbm', 6, 2);
-            $table->char('subpilar_id', 2);
+            $table->char('subrincian_id', 2);
         });
     }
 

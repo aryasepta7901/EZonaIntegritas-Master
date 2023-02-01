@@ -37,7 +37,27 @@ class PilarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pilar =  Pilar::where('subrincian_id', $request->subrincian_id)->orderBy('id', 'DESC')->first(); //mengambil data terakhir yang masuk
+        $validatedData = $request->validate([
+            'pilar'  => 'required',
+            'min_wbk'  => 'required',
+            'min_wbbm'  => 'required',
+        ]);
+        if ($pilar) { //cek apakah data tersebut data awal atau tidak?
+            $id = substr($pilar->id, -1, 1); //ambil huruf terakhir 
+            $idNum = ord($id);
+            $id  = $idNum++; //tambahkan satu
+            $id = chr($idNum);
+        } else {
+            $id = "A"; // jika ini merupakan data pertama pada database
+        }
+        $validatedData['subrincian_id'] = $request->subrincian_id;
+        $validatedData['id'] = $validatedData['subrincian_id'] . $id;
+        $validatedData['bobot'] = 0;
+
+        Pilar::create($validatedData);
+
+        return redirect('/subrincian/' . $request->subrincian_id)->with('success', 'New Pilar Has Ben Added');
     }
 
     /**
@@ -80,7 +100,16 @@ class PilarController extends Controller
      */
     public function update(Request $request, Pilar $pilar)
     {
-        //
+        $validatedData = $request->validate([
+            'pilar'  => 'required',
+            'min_wbk'  => 'required',
+            'min_wbbm'  => 'required',
+        ]);
+
+
+        Pilar::where('id', $pilar->id)->update($validatedData);
+
+        return redirect('/subrincian/' . $request->subrincian_id)->with('success', 'New Pilar Has Ben Updated');
     }
 
     /**
@@ -91,6 +120,7 @@ class PilarController extends Controller
      */
     public function destroy(Pilar $pilar)
     {
-        //
+        Pilar::destroy($pilar->id);
+        return redirect('/subrincian/' . $pilar->subrincian_id)->with('success', ' Pilar Has Ben Deleted');
     }
 }

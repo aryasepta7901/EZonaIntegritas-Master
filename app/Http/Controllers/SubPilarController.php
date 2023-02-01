@@ -40,12 +40,15 @@ class SubPilarController extends Controller
     {
         $subpilar =  SubPilar::where('pilar_id', $request->pilar_id)->orderBy('id', 'DESC')->first(); //mengambil data terakhir yang masuk
         $validatedData = $request->validate([
-            'subPilar'  => 'required|unique:subpilar',
+            'subPilar'  => 'required',
             'bobot'  => 'required',
         ]);
-
-        $id = substr($subpilar->id, -1, 1); //ambil angka 
-        $id += 1; //tambahkan satu
+        if ($subpilar) {
+            $id = substr($subpilar->id, -1, 1); //ambil angka 
+            $id += 1; //tambahkan satu
+        } else {
+            $id = 1;
+        }
         $validatedData['pilar_id'] = $request->pilar_id;
         $validatedData['id'] = $validatedData['pilar_id'] . $id;
 

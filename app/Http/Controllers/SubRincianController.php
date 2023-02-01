@@ -38,15 +38,15 @@ class SubRincianController extends Controller
     {
         $validatedData = $request->validate([
             'subRincian'  => 'required|unique:subRincian',
-            'bobot'  => 'required',
         ]);
 
         $validatedData['rincian_id'] = $request->rincian;
         $validatedData['id'] = $validatedData['rincian_id'] . substr($validatedData['subRincian'], 0, 1);
+        $validatedData['bobot'] = 0;
 
         SubRincian::create($validatedData);
 
-        return redirect('/rincian/' . $request->rincian)->with('success', 'New Rincian Has Ben Added');
+        return redirect('/rincian/' . $request->rincian)->with('success', 'New SubRincian Has Ben Added');
     }
 
     /**
@@ -65,7 +65,7 @@ class SubRincianController extends Controller
                 'link' => 'rincian/' . substr($subrincian->id, 0, 1),
                 'title' => 'Pilar LKE: ' . $subrincian->subRincian,
                 'subrincian' => $subrincian,
-                'pilar' => Pilar::where('subpilar_id', $subrincian->id)->get(),
+                'pilar' => Pilar::where('subrincian_id', $subrincian->id)->get(),
             ]
         );
     }
@@ -92,13 +92,12 @@ class SubRincianController extends Controller
     {
         $validatedData = $request->validate([
             'subRincian'  => 'required',
-            'bobot'  => 'required',
         ]);
 
 
         SubRincian::where('id', $subrincian->id)->update($validatedData);
 
-        return redirect('/rincian/' . $request->rincian)->with('success', 'New Rincian Has Ben Updated');
+        return redirect('/rincian/' . $request->rincian)->with('success', 'New SubRincian Has Ben Updated');
     }
 
     /**
@@ -110,6 +109,6 @@ class SubRincianController extends Controller
     public function destroy(SubRincian $subrincian)
     {
         SubRincian::destroy($subrincian->id);
-        return redirect('/rincian/' . $subrincian->rincian_id)->with('success', 'New Rincian Has Ben Deleted');
+        return redirect('/rincian/' . $subrincian->rincian_id)->with('success', 'New SubRincian Has Ben Deleted');
     }
 }

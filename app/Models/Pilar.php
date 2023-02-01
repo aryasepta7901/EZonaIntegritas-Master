@@ -11,4 +11,13 @@ class Pilar extends Model
     public $incrementing = false;
     public $timestamps = false;
     use HasFactory;
+
+    protected $fillable = [
+        'id',
+        'pilar',
+        'bobot',
+        'min_wbk',
+        'min_wbbm',
+        'subrincian_id',
+    ];
 }

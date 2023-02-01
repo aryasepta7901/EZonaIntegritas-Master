@@ -45,10 +45,10 @@ class RincianController extends Controller
     {
         $validatedData = $request->validate([
             'rincian'  => 'required|unique:rincian',
-            'bobot'  => 'required',
         ]);
 
         $validatedData['id'] = substr($validatedData['rincian'], 0, 1);
+        $validatedData['bobot'] = 0;
 
 
         Rincian::create($validatedData);
@@ -99,7 +99,6 @@ class RincianController extends Controller
     {
         $validatedData = $request->validate([
             'rincian'  => 'required',
-            'bobot'  => 'required',
         ]);
 
         Rincian::where('id', $rincian->id)->update($validatedData);

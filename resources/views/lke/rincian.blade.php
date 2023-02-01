@@ -91,19 +91,6 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="bobot">Bobot</label>
-                                    <input type="number" class="form-control @error('bobot') is-invalid  @enderror"
-                                        id="bobot" name="bobot" value="{{ old('bobot') }}"
-                                        placeholder="Isi Nilai Bobot">
-                                    @error('bobot')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
 
 
@@ -143,19 +130,6 @@
                                             id="rincian" name="rincian" value="{{ old('rincian', $value->rincian) }}"
                                             placeholder="Isi Nama Rincian">
                                         @error('rincian')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="bobot">Bobot</label>
-                                        <input type="number" class="form-control @error('bobot') is-invalid  @enderror"
-                                            id="bobot" name="bobot" value="{{ old('bobot', $value->bobot) }}"
-                                            placeholder="Isi Nilai Bobot">
-                                        @error('bobot')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>

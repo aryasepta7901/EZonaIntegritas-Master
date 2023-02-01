@@ -97,26 +97,13 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="bobot">Bobot</label>
-                                    <input type="number" min="0" step=".01"
-                                        class="form-control @error('bobot') is-invalid  @enderror" id="bobot"
-                                        name="bobot" value="{{ old('bobot') }}" placeholder="Isi Nilai Bobot">
-                                    @error('bobot')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
 
 
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create Rincian</button>
+                        <button type="submit" class="btn btn-primary">Create Sub Rincian</button>
                     </div>
                 </form>
             </div>
@@ -146,25 +133,10 @@
                                     <div class="form-group">
                                         <label for="subRincian">Sub Rincian</label>
                                         <input type="text"
-                                            class="form-control @error('subRincian') is-invalid  @enderror"
-                                            id="subRincian" name="subRincian"
-                                            value="{{ old('subRincian', $value->subRincian) }}"
+                                            class="form-control @error('subRincian') is-invalid  @enderror" id="subRincian"
+                                            name="subRincian" value="{{ old('subRincian', $value->subRincian) }}"
                                             placeholder="Isi Nama Sub Rincian">
                                         @error('subRincian')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="bobot">Bobot</label>
-                                        <input type="number" min="0" step=".01"
-                                            class="form-control @error('bobot') is-invalid  @enderror" id="bobot"
-                                            name="bobot" value="{{ old('bobot', $value->bobot) }}"
-                                            placeholder="Isi Nilai Bobot">
-                                        @error('bobot')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -177,7 +149,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Edit Rincian</button>
+                            <button type="submit" class="btn btn-primary">Edit SubRincian</button>
                         </div>
                     </form>
                 </div>
@@ -200,7 +172,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p class="text-danger">Apakah Anda Yakin untuk Menghapus Rincian dengan Nama:</p>
+                        <p class="text-danger">Apakah Anda Yakin untuk Menghapus SubRincian dengan Nama:</p>
                         <b>{{ $value->subRincian }}
                             ?</b>
                     </div>
