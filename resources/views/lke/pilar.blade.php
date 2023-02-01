@@ -50,8 +50,12 @@
                                 <td class="text-center"><button class="badge badge-info">{{ $value->min_wbbm }}</button>
                                 </td>
                                 <td>
-                                    <a type="button" href="/subrincian/{{ $value->id }}" class="btn btn-sm btn-info"><i
-                                            class="fa fa-info"></i></a>
+                                    {{-- Agar Rincian Hasil Tidak Bergerak --}}
+                                    @if ($value->subpilar_id == 'PP' or 'PR')
+                                        <a type="button" href="/pilar/{{ $value->id }}" class="btn btn-sm btn-info"><i
+                                                class="fa fa-info"></i></a>
+                                    @endif
+
                                 </td>
                             </tr>
                         @endforeach

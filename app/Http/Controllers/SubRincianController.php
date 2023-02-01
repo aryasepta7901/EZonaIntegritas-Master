@@ -57,6 +57,7 @@ class SubRincianController extends Controller
      */
     public function show(SubRincian $subrincian)
     {
+
         return view(
             'lke.pilar',
             [
