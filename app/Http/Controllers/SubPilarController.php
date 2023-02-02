@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pertanyaan;
 use App\Models\Pilar;
 use App\Models\Rincian;
 use App\Models\SubPilar;
@@ -81,9 +82,18 @@ class SubPilarController extends Controller
      * @param  \App\Models\subPilar  $subPilar
      * @return \Illuminate\Http\Response
      */
-    public function show(subPilar $subPilar)
+    public function show(subPilar $subpilar)
     {
-        //
+        return view(
+            'lke.pertanyaan',
+            [
+                'master' => 'Pertanyaan LKE ',
+                'link' => 'pilar/' . substr($subpilar->id, 0, 3),
+                'title' => 'Pertanyaan LKE: ' . $subpilar->subPilar,
+                'subPilar' => $subpilar,
+                'pertanyaan' => Pertanyaan::where('subpilar_id', $subpilar->id)->get(),
+            ]
+        );
     }
 
     /**

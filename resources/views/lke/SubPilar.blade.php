@@ -49,7 +49,7 @@
 
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
                                         data-target="#edit{{ $value->id }}"><i class="fa fa-pen"></i></button>
-                                    <a type="button" href="/subrincian/{{ $value->id }}" class="btn btn-sm btn-info"><i
+                                    <a type="button" href="/subpilar/{{ $value->id }}" class="btn btn-sm btn-info"><i
                                             class="fa fa-info"></i></a>
                                     <button class="btn btn-sm btn-danger" data-toggle="modal"
                                         data-target="#hapus{{ $value->id }}"><i class="fa fa-trash"></i></button>

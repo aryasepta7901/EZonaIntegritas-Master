@@ -19,7 +19,7 @@ class RincianController extends Controller
             'lke.rincian',
             [
                 'title' => 'Rincian LKE',
-                'rincian' => Rincian::all(),
+                'rincian' => Rincian::orderBy('id', 'DESC')->get(),
 
             ]
         );

@@ -53,7 +53,7 @@
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
                                         data-target="#edit{{ $value->id }}"><i class="fa fa-pen"></i></button>
                                     {{-- Agar Rincian Hasil Tidak Bergerak --}}
-                                    @if ($value->subpilar_id == 'PP' or 'PR')
+                                    @if ($value->subrincian_id != 'HB' && $value->subrincian_id != 'HP')
                                         <a type="button" href="/pilar/{{ $value->id }}" class="btn btn-sm btn-info"><i
                                                 class="fa fa-info"></i></a>
                                     @endif
