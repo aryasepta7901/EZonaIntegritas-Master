@@ -37,7 +37,6 @@
                             <th>Penjelasan</th>
                             <th>Info</th>
                             <th>Bobot</th>
-                            <th>Opsi</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -46,12 +45,19 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->pertanyaan }}</td>
-                                <td>{{ $value->penjelasan }}</td>
+                                <td>
+                                    <ul>
+                                        @foreach ($value->opsi as $item)
+                                            <li>{{ $item->rincian }} <button
+                                                    class="badge badge-info">{{ $item->bobot }}</button></li>
+                                        @endforeach
+                                    </ul>
+                                </td>
                                 <td class="text-center"> <button class="btn btn-sm btn-info" data-toggle="modal"
                                         data-target="#info{{ $value->id }}"><i class="fa fa-info"></i></button></td>
                                 <td class="text-center"><button class="badge badge-info">{{ $value->bobot }}</button></td>
                                 </td>
-                                <td>{{ $value->opsi }}</td>
+
 
                                 <td class="text-center">
 

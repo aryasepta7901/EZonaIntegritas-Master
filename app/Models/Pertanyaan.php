@@ -16,4 +16,8 @@ class Pertanyaan extends Model
     {
         return $this->hasMany(dokumenLKE::class, 'pertanyaan_id');
     }
+    public function opsi()
+    {
+        return $this->hasMany(Opsi::class, 'pertanyaan_id');
+    }
 }
