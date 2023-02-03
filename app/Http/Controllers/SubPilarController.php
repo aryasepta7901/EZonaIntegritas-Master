@@ -8,6 +8,7 @@ use App\Models\Rincian;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class SubPilarController extends Controller
 {
@@ -84,6 +85,8 @@ class SubPilarController extends Controller
      */
     public function show(subPilar $subpilar)
     {
+        Session::put('subPilar', $subpilar);
+
         return view(
             'lke.pertanyaan',
             [

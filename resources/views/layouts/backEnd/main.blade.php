@@ -25,6 +25,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="{{ asset('template') }}/plugins/summernote/summernote-bs4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -117,9 +119,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     {{-- Select search --}}
     <!-- Select2 -->
     <script src="{{ asset('template') }}/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Summernote -->
+    <script src="{{ asset('template') }}/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- Page specific script -->
     <script>
         $(function() {
+            $('#summernote').summernote({
+                height: 200,                 // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: true                  // set focus to editable area after initializing summe
+            });
             $("#example1").DataTable({
                 "responsive": true,
                 "lengthChange": true,
@@ -193,6 +203,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
         })
     </script>
     @endif
+
+    {{-- Dropdown pertanyaan --}}   
+    @if (Request::is('pertanyaan/create'))
+    <script type="text/javascript">
+        $("#rowAdder").click(function() {
+            newData =
+                '<div class="col-lg-12"><div class="form-group">'+
+                '<div class="input-group"><div class="input-group-prepend">' +
+                '<button class="btn btn-danger" id="DeleteRow" type="button">' +
+                '<i class="bi bi-trash"></i>Delete</button> </div>' +
+                '<input type="text" class="form-control @error('dokumen') is-invalid  @enderror" id="dokumen" name="dokumen" value="{{ old('dokumen') }}"'+
+                'placeholder="Isi  Nama Dokumen"></div</div>';
+            $('#newinput').append(newData);
+        });
+
+        $("body").on("click", "#DeleteRow", function() {
+            $(this).parents("#rowAdder").remove();
+        })
+    </script>
+    @endif
+    
    
     {{-- @if (count($errors) > 0)
         <script type="text/javascript">

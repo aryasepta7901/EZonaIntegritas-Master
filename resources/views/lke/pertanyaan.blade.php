@@ -24,9 +24,8 @@
             <!-- /.card-header -->
 
             <div class="card-header d-flex justify-content-end">
-
-                <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
-                        Tambah</i></button>
+                <a href="/pertanyaan/create" class="btn btn-primary mb-3"><i class="fa fa-plus"> Tambah
+                        Pertanyaan</i></a>
             </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">

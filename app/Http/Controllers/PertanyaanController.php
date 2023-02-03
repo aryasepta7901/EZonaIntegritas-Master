@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pertanyaan;
+use App\Models\SubPilar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class PertanyaanController extends Controller
 {
@@ -24,7 +26,17 @@ class PertanyaanController extends Controller
      */
     public function create()
     {
-        //
+        $subPilar = Session::get('subPilar');
+        return view(
+            'lke.pertanyaan.create',
+            [
+                'master' => 'Pertanyaan LKE ',
+                'link' => 'subpilar/' . substr($subPilar->id, 0, 4),
+                'title' => 'Create Pertanyaan: ',
+                'subPilar' => $subPilar,
+
+            ]
+        );
     }
 
     /**
