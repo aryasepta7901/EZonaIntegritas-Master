@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Opsi;
 use App\Models\Pertanyaan;
 use App\Models\SubPilar;
 use Illuminate\Http\Request;
@@ -47,7 +48,27 @@ class PertanyaanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $validatedData = $request->validate([
+        //     'pertanyaan'  => 'required',
+        //     'info'  => 'required',
+        //     'bobot'  => 'required',
+        // ]);
+
+
+
+        // Pertanyaan::create($validatedData);
+        for ($i = 1; $i < 2; $i++) {
+            foreach ($request->opsi as $key => $opsi) {
+                $data = new Opsi();
+                $data->id = $opsi;
+                $data->rincian = $opsi;
+                $data->bobot = 0;
+                $data->type = "Cek";
+                $data->pertanyaan_id = "PP";
+                $data->save();
+            }
+        }
+        return redirect('pertanyaan/create')->with('success', 'New Rincian Has Ben Added');
     }
 
     /**

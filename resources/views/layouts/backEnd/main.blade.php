@@ -209,11 +209,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script type="text/javascript">
         $("#rowAdder").click(function() {
             newData =
-                '<div class="col-lg-12"><div class="form-group">'+
+                '<div id="rowAdder"<div class="form-group">'+
                 '<div class="input-group"><div class="input-group-prepend">' +
                 '<button class="btn btn-danger" id="DeleteRow" type="button">' +
                 '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                '<input type="text" class="form-control @error('dokumen') is-invalid  @enderror" id="dokumen" name="dokumen" value="{{ old('dokumen') }}"'+
+                '<input type="text" class="form-control" id="dokumen" name="dokumen"'+
                 'placeholder="Isi  Nama Dokumen"></div</div>';
             $('#newinput').append(newData);
         });
@@ -262,6 +262,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
     })
     });
     </script>
+
+    <script>
+        $(document).ready(function () {
+        toggleFields(); // call this first so we start out with the correct visibility depending on the selected form values
+        // this will call our toggleFields function every time the selection value of our other field changes
+        $("#type").change(function () {
+            toggleFields();
+        });
+
+    });
+        // this toggles the visibility of other server
+        function toggleFields() {
+            if ($("#type").val() === "input")
+                $("#input").show();
+            else
+                $("#input").hide();
+
+            if ($("#type").val() === "checkbox1")
+                $("#checkbox1").show();
+            else
+                $("#checkbox1").hide();
+            if ($("#type").val() === "checkbox2")
+                $("#checkbox2").show();
+            else
+                $("#checkbox2").hide();
+            if ($("#type").val() === "checkbox3")
+                $("#checkbox3").show();
+            else
+                $("#checkbox3").hide();
+            if ($("#type").val() === "checkbox4")
+                $("#checkbox4").show();
+            else
+                $("#checkbox4").hide();
+        }
+    </script>
+
 
 
 {{-- Coba --}}
