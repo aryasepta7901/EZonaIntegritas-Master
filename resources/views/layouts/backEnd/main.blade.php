@@ -22,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet"
         href="{{ asset('template') }}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-        <!-- Select2 -->
+    <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <!-- summernote -->
@@ -53,7 +53,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                                 @isset($master)
-                                    <li class="breadcrumb-item"><a href="/{{ $link }}">{{ $master }}</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{ $link }}">{{ $master }}</a>
+                                    </li>
                                 @endisset
                                 <li class="breadcrumb-item active">{{ $title }}</li>
 
@@ -125,10 +126,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script>
         $(function() {
             $('#summernote').summernote({
-                height: 200,                 // set editor height
-                minHeight: null,             // set minimum height of editor
-                maxHeight: null,             // set maximum height of editor
-                focus: true                  // set focus to editable area after initializing summe
+                height: 200, // set editor height
+                minHeight: null, // set minimum height of editor
+                maxHeight: null, // set maximum height of editor
+                focus: true // set focus to editable area after initializing summe
             });
             $("#example1").DataTable({
                 "responsive": true,
@@ -147,93 +148,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         });
     </script>
- 
-    {{-- mengelola dropdown --}}
-    @if (Request::is('tpi'))
-    <script type="text/javascript">
-        let baris=1;
-        $("#rowAdder").click(function() {
-            baris= baris+1;
-            newRowAdd =
-                '<div id="row" class="form-group">' +
-                '<div class="input-group"><div class="input-group-prepend">' +
-                '<button class="btn btn-danger" id="DeleteRow" type="button">' +
-                '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                '<select id="pref'+baris+'select" class="form-control preferenceSelect" name="anggota[]">' +
-                '<option value="">Pilih Anggota Tim '+baris+' </option>' +
-                '@foreach ($anggota as $value)@if (old("anggota") == $value->id)' +
-                '<option value="{{ $value->id }}" selected>{{ $value->name }} </option >' +
-                '@else <option value="{{ $value->id }}">{{ $value->name }}</option> @endif @endforeach'+
-                '</select></div></div>';
-
-            
-
-            $('#newinput').append(newRowAdd);
-        });
-
-        $("body").on("click", "#DeleteRow", function() {
-            $(this).parents("#row").remove();
-        })
-    </script>
-
-    @endif
-
-    {{-- Dropdown Satker --}}   
-    @if (Request::is('tpi/*'))
-    <script type="text/javascript">
-        let baris=1;
-        $("#rowSatker").click(function() {
-            baris+=1;
-            newSatker =
-                '<div id="rowSatker" class="form-group">' +
-                '<div class="input-group"><div class="input-group-prepend">' +
-                '<button class="btn btn-danger" id="DeleteRow" type="button">' +
-                '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                '<select id="prefselect'+baris+'" class="select2bs4 form-control preferenceSelect" name="satker_id[]"> required' +
-                '<option value="">Pilih Satuan kerja '+baris+' </option>' +
-                '@foreach ($satker as $value)@if (old("satker_id") == $value->id)' +
-                '<option value="{{ $value->id }}" selected>{{ $value->nama_satker }} </option >' +
-                '@else <option value="{{ $value->id }}">{{ $value->nama_satker }}</option> @endif @endforeach'+
-                '</select></div></div>';
-            $('#inputSatker').append(newSatker);
-        });
-
-        $("body").on("click", "#DeleteRow", function() {
-            $(this).parents("#rowSatker").remove();
-        })
-    </script>
-    @endif
-
-    {{-- Dropdown pertanyaan --}}   
+    {{-- Dropdown pertanyaan --}}
     @if (Request::is('pertanyaan/create'))
-    <script type="text/javascript">
-        $("#rowAdder").click(function() {
-            newData =
-                '<div id="rowAdder"<div class="form-group">'+
-                '<div class="input-group"><div class="input-group-prepend">' +
-                '<button class="btn btn-danger" id="DeleteRow" type="button">' +
-                '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                '<input type="text" class="form-control" id="dokumen" name="dokumen"'+
-                'placeholder="Isi  Nama Dokumen"></div</div>';
-            $('#newinput').append(newData);
-        });
-
-        $("body").on("click", "#DeleteRow", function() {
-            $(this).parents("#rowAdder").remove();
-        })
-    </script>
-    @endif
-    
-   
-    {{-- @if (count($errors) > 0)
         <script type="text/javascript">
-            $(document).ready(function() {
-                $('#tambah').modal('show');
+            $("#rowAdder").click(function() {
+                newData =
+                    '<div id="rowAdder"<div class="form-group">' +
+                    '<div class="input-group"><div class="input-group-prepend">' +
+                    '<button class="btn btn-danger" id="DeleteRow" type="button">' +
+                    '<i class="bi bi-trash"></i>Delete</button> </div>' +
+                    '<input type="text" class="form-control" id="dokumen" name="dokumen"' +
+                    'placeholder="Isi  Nama Dokumen"></div</div>';
+                $('#newinput').append(newData);
             });
-        </script>
-    @endif --}}
 
-    <script>
+            $("body").on("click", "#DeleteRow", function() {
+                $(this).parents("#rowAdder").remove();
+            })
+        </script>
+    @endif
+    {{-- <script>
         $(document).ready(function() {
             $(".preferenceSelect").change(function() {
                 // Get the selected value
@@ -252,26 +186,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             });
         });
-    </script>
+    </script> --}}
 
     {{-- Select search --}}
     <script>
-    $(function () {
-        $('.select2bs4').select2({
-        theme: 'bootstrap4'
-    })
-    });
+        $(function() {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        });
     </script>
 
     <script>
-        $(document).ready(function () {
-        toggleFields(); // call this first so we start out with the correct visibility depending on the selected form values
-        // this will call our toggleFields function every time the selection value of our other field changes
-        $("#type").change(function () {
-            toggleFields();
-        });
+        $(document).ready(function() {
+            toggleFields
+                (); // call this first so we start out with the correct visibility depending on the selected form values
+            // this will call our toggleFields function every time the selection value of our other field changes
+            $("#type").change(function() {
+                toggleFields();
+            });
 
-    });
+        });
         // this toggles the visibility of other server
         function toggleFields() {
             if ($("#type").val() === "input")
@@ -300,16 +235,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
-{{-- Coba --}}
+    {{-- Coba --}}
     <script>
-        $(".PLUS, .MIN").click(function(){
-        var itemVal = parseInt($(this).siblings(".InputText").val());
-        if ($(this).hasClass('MIN'))
-        itemVal--;      
-        else
-        itemVal++;
-        $(this).siblings(".InputText").val(itemVal);
-});
+        $(".PLUS, .MIN").click(function() {
+            var itemVal = parseInt($(this).siblings(".InputText").val());
+            if ($(this).hasClass('MIN'))
+                itemVal--;
+            else
+                itemVal++;
+            $(this).siblings(".InputText").val(itemVal);
+        });
     </script>
 </body>
 

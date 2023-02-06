@@ -37,13 +37,13 @@ class PengawasanController extends Controller
     public function store(Request $request)
     {
         //anggota_tpi
-        $anggota = anggota_tpi::where('anggota', $request->anggota_id)->get();
-        $no = 0;
-        foreach ($request->satker_id as $key => $satker) {
-            $no += 1;
-        }
-        $data['jumlah_satker'] = $anggota[0]->jumlah_satker + $no;
-        anggota_tpi::where('anggota', $request->anggota_id)->update($data);
+        // $anggota = anggota_tpi::where('anggota', $request->anggota_id)->get();
+        // $no = 0;
+        // foreach ($request->satker_id as $key => $satker) {
+        //     $no += 1;
+        // }
+        // $data['jumlah_satker'] = $anggota[0]->jumlah_satker + $no;
+        // anggota_tpi::where('anggota', $request->anggota_id)->update($data);
 
 
         // pengawasan_satker

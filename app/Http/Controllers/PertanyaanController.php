@@ -7,6 +7,7 @@ use App\Models\Pertanyaan;
 use App\Models\SubPilar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php;
 
 class PertanyaanController extends Controller
 {
@@ -53,20 +54,30 @@ class PertanyaanController extends Controller
         //     'info'  => 'required',
         //     'bobot'  => 'required',
         // ]);
-
-
-
+        $subpilar = $request->subpilar_id;
+        $pertanyaan =  Pertanyaan::where('subpilar_id', $subpilar)->orderBy('id', 'DESC')->first(); //mengambil data terakhir yang masuk
+        if ($pertanyaan) { //cek apakah data tersebut data awal atau tidak?
+            $id = substr($pertanyaan->id, -1, 1); //ambil huruf terakhir 
+            $idNum = ord($id);
+            $id  = $idNum++; //tambahkan satu
+            $id = chr($idNum);
+        } else {
+            $id = "A"; // jika ini merupakan data pertama pada database
+        }
+        $validatedData['id'] = $subpilar . $id;
+        $validatedData['subpilar_id'] = $subpilar;
         // Pertanyaan::create($validatedData);
-        for ($i = 1; $i < 2; $i++) {
-            foreach ($request->opsi as $key => $opsi) {
-                $data = new Opsi();
-                $data->id = $opsi;
-                $data->rincian = $opsi;
-                $data->bobot = 0;
-                $data->type = "Cek";
-                $data->pertanyaan_id = "PP";
-                $data->save();
-            }
+
+        // Opsi
+        $no = 1;
+        foreach ($request->rincian as $key => $rincian) {
+            $data = new Opsi();
+            $data->id = $validatedData['id'] . $no++;
+            $data->rincian = $rincian;
+            $data->bobot = 0;
+            $data->type = "checkbox";
+            $data->pertanyaan_id = $validatedData['id'];
+            $data->save();
         }
         return redirect('pertanyaan/create')->with('success', 'New Rincian Has Ben Added');
     }

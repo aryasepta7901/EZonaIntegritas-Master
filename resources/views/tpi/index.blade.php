@@ -63,10 +63,16 @@
 
                                 </td>
                                 <td>
-                                    @foreach ($value->anggota as $a)
+                                    @php
+                                        $jumlah_satker = App\Models\Pengawasan::where('tpi_id', $value->id)->count();
+                                    @endphp
+                                    {{ $jumlah_satker }}
+                                    {{-- @foreach ($value->anggota as $a)
                                         {{ $a->jumlah_satker }}
                                         <hr>
-                                    @endforeach
+                                    @endforeach --}}
+
+
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
@@ -165,18 +171,14 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="anggota">Anggota Tim </label>
-                                    <button id="rowAdder" type="button" class="btn btn-dark">
-                                        <span class="fa fa-plus">
-                                        </span>
-                                    </button>
-                                    <hr>
                                     <div class="input-group">
-                                        <select id="pref1select" class="form-control preferenceSelect" name="anggota[]">
-                                            <option value="">Pilih Anggota Tim </option>
+                                        <select class="form-control select2bs4" multiple="multiple"
+                                            data-placeholder="Pilih Anggota Tim " name="anggota[]">
                                             @foreach ($anggota as $value)
                                                 @if (old('anggota') == $value->id)
                                                     <option value="{{ $value->id }}" selected>{{ $value->name }}
@@ -189,7 +191,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="newinput" class="col-lg-12"></div>
+
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -209,7 +211,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Tambah TPI</h4>
+                        <h4 class="modal-title">Edit TPI</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -278,23 +280,21 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-lg-12">
+                                </div>
                             </div>
+
                             <div class="row">
                                 <label for="anggota" class="m-3">Anggota Tim </label>
-                                <br>
-
-                                <button id="rowAdder" type="button" class="btn btn-dark m-2">
-                                    <span class="fa fa-plus">
-                                    </span>
-                                </button>
-
-                                @foreach ($value->anggota as $a)
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <select id="pref1select" class="form-control preferenceSelect"
-                                                    name="anggota[]">
-                                                    <option value="{{ $a->anggota }}">{{ $a->user->name }}</option>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control select2bs4" multiple="multiple"
+                                                data-placeholder="Pilih Anggota Tim " name="anggota[]">
+                                                @foreach ($value->anggota as $a)
+                                                    <option selected value="{{ $a->anggota }}">
+                                                        {{ $a->user->name }}
+                                                    </option>
                                                     @foreach ($anggota as $value)
                                                         @if (old('anggota') == $value->id)
                                                             <option value="{{ $value->id }}" selected>
@@ -305,17 +305,16 @@
                                                             </option>
                                                         @endif
                                                     @endforeach
-                                                </select>
-                                            </div>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                @endforeach
-                                <div id="newinput" class="col-lg-12"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Create TPI</button>
+                            <button type="submit" class="btn btn-primary">Update TPI</button>
                         </div>
                     </form>
                 </div>

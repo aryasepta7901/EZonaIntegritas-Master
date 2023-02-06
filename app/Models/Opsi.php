@@ -11,6 +11,14 @@ class Opsi extends Model
     protected $table = 'opsi';
     public $incrementing = false;
     public $timestamps = false;
+    protected $fillable = [
+        'id',
+        'rincian',
+        'bobot',
+        'type',
+        'pertanyaan_id',
+
+    ];
 
     public function pertanyaan()
     {

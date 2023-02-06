@@ -12,6 +12,15 @@ class Pertanyaan extends Model
     public $timestamps = false;
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'pertanyaan',
+        'info',
+        'bobot',
+        'subpilar_id',
+
+    ];
+
     public function dokumen()
     {
         return $this->hasMany(dokumenLKE::class, 'pertanyaan_id');

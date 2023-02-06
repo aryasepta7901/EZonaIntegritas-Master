@@ -17,7 +17,7 @@ class AnggotaTpi extends Migration
             $table->id();
             $table->char('tpi_id', 10);
             $table->string('nama_anggota');
-            $table->integer('jumlah_satker');
+            // $table->integer('jumlah_satker');
         });
     }
 

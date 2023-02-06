@@ -70,6 +70,7 @@ class TpiController extends Controller
         TPI::create($validatedData);
 
 
+
         foreach ($request->anggota as $key => $anggota) {
             $data = new anggota_tpi();
             $data->id = $anggota . date('Y');
@@ -143,7 +144,7 @@ class TpiController extends Controller
 
         TPI::where('id', $tpi->id)->update($validatedData);
 
-
+        $anggota = anggota_tpi::where('tpi_id', $tpi->id)->delete();
 
         foreach ($request->anggota as $key => $anggota) {
             $data = new anggota_tpi();
@@ -151,8 +152,9 @@ class TpiController extends Controller
             $data->tpi_id =  $validatedData['id'];
             $data->anggota = $anggota;
             $data->jumlah_satker = 0;
-            $data->update();
+            $data->save();
         }
+
 
 
         return redirect('/tpi')->with('success', ' TIM Has Ben Updated');

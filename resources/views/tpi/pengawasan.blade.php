@@ -23,8 +23,14 @@
                         <b>Anggota</b>
                         <ul>
                             @foreach ($tpi->anggota as $a)
-                                <li>{{ $a->user->name }}</li> : <button class="badge badge-info">{{ $a->jumlah_satker }}
+                                <li>{{ $a->user->name }}</li> : <button class="badge badge-info">
+                                    @php
+                                        $jumlah_satker = App\Models\Pengawasan::where('anggota_id', $a->anggota)->count();
+                                    @endphp
+                                    {{ $jumlah_satker }}
                                 </button>
+                                {{-- <li>{{ $a->user->name }}</li> : <button class="badge badge-info">{{ $a->jumlah_satker }}
+                                </button> --}}
                                 Pengawasan
                             @endforeach
                         </ul>
@@ -84,11 +90,6 @@
                                 </td>
                             </tr>
                         @endforeach
-
-
-
-
-
                     </tbody>
 
                 </table>
@@ -129,24 +130,14 @@
                             </select>
                         </div>
                         <div class="row">
-                            {{-- <input id="nilai" class='InputText' value='0' name="nilai"> <button type="button"
-                                class='PLUS'>+</button>
-
-                            @php
-                                $count = 1;
-                            @endphp --}}
-                            {{-- @for ($i = 0; $i < $count; $i++) --}}
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="satker_id">Satuan Kerja</label>
-                                    <button id="rowSatker" type="button" class="btn btn-dark">
-                                        <span class="fa fa-plus">
-                                        </span>
-                                    </button>
-                                    <hr>
+
+
                                     <div class="input-group">
-                                        <select id="prefselect1" class="form-control preferenceSelect select2bs4"
-                                            name="satker_id[]" required>
+                                        <select class="form-control  select2bs4" multiple="multiple"
+                                            data-placeholder="Pilih Anggota Tim " name="satker_id[]" required>
                                             <option value="">Pilih Satuan Kerja </option>
                                             @foreach ($satker as $value)
                                                 @if (old('satker_id') == $value->id)
@@ -162,15 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="inputSatker" class="col-lg-12"></div>
-                            {{-- @endfor --}}
-
-
-
                         </div>
-
-
-
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

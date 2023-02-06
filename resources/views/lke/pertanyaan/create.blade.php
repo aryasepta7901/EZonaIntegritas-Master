@@ -58,7 +58,7 @@
                         <div id="input" class="col-lg-12">
                             <div class="form-group">
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="opsi[]"
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi  opsi">
 
                             </div>
@@ -66,10 +66,10 @@
                         <div id="checkbox1" class="col-lg-12">
                             <div class="form-group">
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="opsi1"
-                                    value="{{ old('opsi1') }}" placeholder="Isi Opsi 1">
-                                <input type="text" class="form-control" id="opsi" name="opsi2"
-                                    value="{{ old('opsi2') }}" placeholder="Isi Opsi 2">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="Ya, "
+                                    placeholder="Isi Opsi 1">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="Tidak"
+                                    placeholder="Isi Opsi 2">
 
 
                             </div>
@@ -77,11 +77,11 @@
                         <div id="checkbox2" class="col-lg-12">
                             <div class="form-group">
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="A."
+                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="A."
                                     placeholder="Isi Opsi A">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="B."
+                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="B."
                                     placeholder="Isi Opsi B">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="C."
+                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="C."
                                     placeholder="Isi Opsi C">
 
                             </div>
@@ -89,30 +89,30 @@
                         <div id="checkbox3" class="col-lg-12">
                             <div class="form-group">
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="A."
+                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="A."
                                     placeholder="Isi Opsi A">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="B."
-                                    placeholder="Isi Opsi B">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="C."
-                                    placeholder="Isi Opsi C">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="D."
-                                    placeholder="Isi Opsi D">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="B." placeholder="Isi Opsi B">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="C." placeholder="Isi Opsi C">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="D." placeholder="Isi Opsi D">
 
                             </div>
                         </div>
                         <div id="checkbox4" class="col-lg-12">
                             <div class="form-group">
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="A."
-                                    placeholder="Isi Opsi A">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="B."
-                                    placeholder="Isi Opsi B">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="C."
-                                    placeholder="Isi Opsi C">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="D."
-                                    placeholder="Isi Opsi D">
-                                <input type="text" class="form-control" id="opsi" name="opsi[]" value="E."
-                                    placeholder="Isi Opsi E">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="A." placeholder="Isi Opsi A">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="B." placeholder="Isi Opsi B">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="C." placeholder="Isi Opsi C">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="D." placeholder="Isi Opsi D">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    value="E." placeholder="Isi Opsi E">
 
                             </div>
                         </div>
