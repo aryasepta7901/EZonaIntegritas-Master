@@ -22,8 +22,9 @@ use App\Http\Controllers\PersyaratanController;
 |
 */
 
+// login
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 // users
 Route::resource('/users', UserController::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\dokumenLKE;
 use App\Models\Opsi;
 use App\Models\Pertanyaan;
 use App\Models\SubPilar;
@@ -49,11 +50,11 @@ class PertanyaanController extends Controller
      */
     public function store(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'pertanyaan'  => 'required',
-        //     'info'  => 'required',
-        //     'bobot'  => 'required',
-        // ]);
+        $validatedData = $request->validate([
+            'pertanyaan'  => 'required',
+            'info'  => 'required',
+            'bobot'  => 'required',
+        ]);
         $subpilar = $request->subpilar_id;
         $pertanyaan =  Pertanyaan::where('subpilar_id', $subpilar)->orderBy('id', 'DESC')->first(); //mengambil data terakhir yang masuk
         if ($pertanyaan) { //cek apakah data tersebut data awal atau tidak?
@@ -66,20 +67,33 @@ class PertanyaanController extends Controller
         }
         $validatedData['id'] = $subpilar . $id;
         $validatedData['subpilar_id'] = $subpilar;
-        // Pertanyaan::create($validatedData);
+        Pertanyaan::create($validatedData);
 
         // Opsi
         $no = 1;
+        $bobot = 1;
         foreach ($request->rincian as $key => $rincian) {
-            $data = new Opsi();
+            if ($rincian != null) {
+                $data = new Opsi();
+                $data->id = $validatedData['id'] . $no++;
+                $data->rincian = $rincian;
+                $data->bobot = $request->input('bobot' . $bobot++);
+                $data->type = $request->type;
+                $data->pertanyaan_id = $validatedData['id'];
+                $data->save();
+            }
+        }
+
+        // dokumen
+        $no = 1;
+        foreach ($request->dokumen as $key => $dokumen) {
+            $data = new dokumenLKE();
             $data->id = $validatedData['id'] . $no++;
-            $data->rincian = $rincian;
-            $data->bobot = 0;
-            $data->type = "checkbox";
+            $data->dokumen = $dokumen;
             $data->pertanyaan_id = $validatedData['id'];
             $data->save();
         }
-        return redirect('pertanyaan/create')->with('success', 'New Rincian Has Ben Added');
+        return redirect('subpilar/' . $subpilar)->with('success', 'New Pertanyaan Has Ben Added');
     }
 
     /**
@@ -124,6 +138,10 @@ class PertanyaanController extends Controller
      */
     public function destroy(Pertanyaan $pertanyaan)
     {
-        //
+        Pertanyaan::destroy($pertanyaan->id);
+        Opsi::where('pertanyaan_id', $pertanyaan->id)->delete();
+        dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->delete();
+
+        return redirect('/subpilar/' . $pertanyaan->subpilar_id)->with('success', ' Pertanyaan Has Ben Deleted');
     }
 }

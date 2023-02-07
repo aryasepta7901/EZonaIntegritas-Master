@@ -12,6 +12,12 @@ class dokumenLKE extends Model
     public $timestamps = false;
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'dokumen',
+        'pertanyaan_id',
+
+    ];
     public function pertanyaan()
     {
         return $this->belongsTo(Pertanyaan::class, 'pertanyaan_id');

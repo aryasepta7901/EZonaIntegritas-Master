@@ -157,7 +157,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<div class="input-group"><div class="input-group-prepend">' +
                     '<button class="btn btn-danger" id="DeleteRow" type="button">' +
                     '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                    '<input type="text" class="form-control" id="dokumen" name="dokumen"' +
+                    '<input type="text" class="form-control" id="dokumen" name="dokumen[]"' +
                     'placeholder="Isi  Nama Dokumen"></div</div>';
                 $('#newinput').append(newData);
             });

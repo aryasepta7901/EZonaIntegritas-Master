@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 <label for="type">Type</label>
                                 <select id="type" class="form-control opsi" name="type">
-                                    <option value="{{ old('type') }}">{{ old('type') }} </option>
+                                    <option value="">Pilih Salah Satu </option>
                                     <option value="checkbox1">Ya/Tidak</option>
                                     <option value="checkbox2">A/B/C</option>
                                     <option value="checkbox3">A/B/C/D</option>
@@ -65,54 +65,89 @@
                         </div>
                         <div id="checkbox1" class="col-lg-12">
                             <div class="form-group">
+                                <input type="hidden" name="type" value="checkbox">
+
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="Ya, "
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi Opsi 1">
-                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="Tidak"
+                                <input type="hidden" name="bobot1" value="1">
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi Opsi 2">
+                                <input type="hidden" name="bobot2" value="0">
+
 
 
                             </div>
                         </div>
                         <div id="checkbox2" class="col-lg-12">
                             <div class="form-group">
+                                <input type="hidden" name="type" value="checkbox">
+
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="A."
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi Opsi A">
-                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="B."
+                                <input type="hidden" name="bobot1" value="1">
+
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi Opsi B">
-                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="C."
+                                <input type="hidden" name="bobot2" value="0.5">
+
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi Opsi C">
+                                <input type="hidden" name="bobot3" value="0">
+
 
                             </div>
                         </div>
                         <div id="checkbox3" class="col-lg-12">
                             <div class="form-group">
+                                <input type="hidden" name="type" value="checkbox">
+
                                 <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="rincian[]" value="A."
+                                <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi Opsi A">
+                                <input type="hidden" name="bobot1" value="1">
+
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="B." placeholder="Isi Opsi B">
+                                    placeholder="Isi Opsi B">
+                                <input type="hidden" name="bobot2" value="0.67">
+
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="C." placeholder="Isi Opsi C">
+                                    placeholder="Isi Opsi C">
+                                <input type="hidden" name="bobot3" value="0.33">
+
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="D." placeholder="Isi Opsi D">
+                                    placeholder="Isi Opsi D">
+                                <input type="hidden" name="bobot4" value="0">
+
 
                             </div>
                         </div>
                         <div id="checkbox4" class="col-lg-12">
                             <div class="form-group">
+                                <input type="hidden" name="type" value="checkbox">
+
                                 <label for="opsi">Opsi</label>
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="A." placeholder="Isi Opsi A">
+                                    placeholder="Isi Opsi A">
+                                <input type="hidden" name="bobot1" value="1">
+
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="B." placeholder="Isi Opsi B">
+                                    placeholder="Isi Opsi B">
+                                <input type="hidden" name="bobot2" value="0.75">
+
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="C." placeholder="Isi Opsi C">
+                                    placeholder="Isi Opsi C">
+                                <input type="hidden" name="bobot3" value="0.50">
+
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="D." placeholder="Isi Opsi D">
+                                    placeholder="Isi Opsi D">
+                                <input type="hidden" name="bobot4" value="0.25">
+
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    value="E." placeholder="Isi Opsi E">
+                                    placeholder="Isi Opsi E">
+                                <input type="hidden" name="bobot5" value="0">
+
 
                             </div>
                         </div>
@@ -131,7 +166,7 @@
                         <div class="col-lg-12">
                             <hr>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="dokumen" name="dokumen[]"
+                                <input type="text" class="form-control" id="dokumen" name="dokumen[]" required
                                     placeholder="Isi  Nama Dokumen">
                             </div>
                         </div>

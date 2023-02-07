@@ -117,6 +117,38 @@
     @endforeach
 
 
+    @foreach ($pertanyaan as $value)
+        {{-- Hapus --}}
+        <div class="modal fade" id="hapus{{ $value->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Hapus</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger">Apakah Anda Yakin untuk Menghapus Pertanyaan dengan Isi:</p>
+                        <b>{{ $value->pertanyaan }}
+                            ?</b>
+                    </div>
+                    <form action="/pertanyaan/{{ $value->id }}" method="POST" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endforeach
+
+
 
 
 
