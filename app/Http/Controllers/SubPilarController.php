@@ -88,7 +88,7 @@ class SubPilarController extends Controller
         Session::put('subPilar', $subpilar);
 
         return view(
-            'lke.pertanyaan',
+            'lke.pertanyaan.index',
             [
                 'master' => 'Pertanyaan LKE ',
                 'link' => 'pilar/' . substr($subpilar->id, 0, 3),

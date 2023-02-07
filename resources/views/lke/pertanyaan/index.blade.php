@@ -2,17 +2,6 @@
 
 @section('content')
     <div class="col-lg-12">
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                    <br>
-                @endforeach
-
-            </div>
-        @endif
         @if (session()->has('success'))
             <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -59,10 +48,9 @@
 
 
                                 <td class="text-center">
-
-                                    <button class="btn btn-sm btn-success" data-toggle="modal"
-                                        data-target="#edit{{ $value->id }}"><i class="fa fa-pen"></i></button>
-
+                                    <a href="/pertanyaan/{{ $value->id }}/edit" class="btn btn-sm btn-success"><i
+                                            class="fa fa-pen">
+                                        </i></a>
                                     <button class="btn btn-sm btn-danger" data-toggle="modal"
                                         data-target="#hapus{{ $value->id }}"><i class="fa fa-trash"></i></button>
                                 </td>
@@ -103,7 +91,7 @@
                                 <li>{{ $item->dokumen }}</li>
                             @endforeach
                         </ul>
-                        <p>{{ $value->info }}</p>
+                        {!! $value->info !!}
                     </div>
 
                     <div class="modal-footer justify-content-between">
@@ -147,10 +135,4 @@
             <!-- /.modal-dialog -->
         </div>
     @endforeach
-
-
-
-
-
-
 @endsection

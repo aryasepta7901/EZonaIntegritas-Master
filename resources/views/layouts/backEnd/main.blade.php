@@ -149,7 +149,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
     </script>
     {{-- Dropdown pertanyaan --}}
-    @if (Request::is('pertanyaan/create'))
+    @if (Request::is('pertanyaan*'))
         <script type="text/javascript">
             $("#rowAdder").click(function() {
                 newData =

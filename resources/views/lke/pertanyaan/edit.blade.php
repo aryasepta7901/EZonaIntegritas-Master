@@ -5,16 +5,16 @@
         <div class="card">
             <!-- /.card-header -->
             <div class="card-body">
-                <form method="post" action="/pertanyaan">
+                <form method="post" action="/pertanyaan/{{ $pertanyaan->id }}">
+                    @method('put')
                     @csrf
                     <div class="row">
-                        <input type="hidden" name="subpilar_id" value="{{ $subPilar->id }}">
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="pertanyaan">Pertanyaan</label>
                                 <input type="text" class="form-control @error('pertanyaan') is-invalid  @enderror"
-                                    id="pertanyaan" name="pertanyaan" value="{{ old('pertanyaan') }}"
-                                    placeholder="Isi  pertanyaan">
+                                    id="pertanyaan" name="pertanyaan"
+                                    value="{{ old('pertanyaan', $pertanyaan->pertanyaan) }}" placeholder="Isi  pertanyaan">
                                 @error('pertanyaan')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -25,15 +25,15 @@
                         <div class="col-lg-12">
                             <label for="info">Informasi</label>
                             <textarea id="summernote" name="info">
-                                    {{ old('info') }}
+                                    {{ old('info', $pertanyaan->info) }}
                             </textarea>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="bobot">Bobot</label>
                                 <input type="number" class="form-control @error('bobot') is-invalid  @enderror"
-                                    id="bobot" name="bobot" value="{{ old('bobot') }}" placeholder="Isi Nilai Bobot"
-                                    min="0" step=".01">
+                                    id="bobot" name="bobot" value="{{ old('bobot', $pertanyaan->bobot) }}"
+                                    placeholder="Isi Nilai Bobot" min="0" step=".01">
                                 @error('bobot')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -95,8 +95,6 @@
                                 <input type="text" class="form-control" id="opsi" name="rincian[]"
                                     placeholder="Isi Opsi C">
                                 <input type="hidden" name="bobot3" value="0">
-
-
                             </div>
                         </div>
                         <div id="checkbox3" class="col-lg-12">
@@ -162,14 +160,23 @@
                                 <span class="fa fa-plus">
                                 </span>
                             </button>
-                        </div>
-                        <div class="col-lg-12">
                             <hr>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="dokumen" name="dokumen[]" required
-                                    placeholder="Isi  Nama Dokumen">
-                            </div>
                         </div>
+                        @foreach ($dokumen as $value)
+                            <div id="rowAdder" class="col-lg-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-danger" id="DeleteRow" type="button"><i
+                                                    class="bi bi-trash"></i>Delete</button>
+                                        </div>
+                                        <input type="text" class="form-control" id="dokumen" name="dokumen[]"
+                                            required placeholder="Isi  Nama Dokumen" value="{{ $value['dokumen'] }}">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
                         <div id="newinput" class="col-lg-12"></div>
                     </div>
 
@@ -177,7 +184,7 @@
             <!-- /.card-body -->
             <div class="card-footer justify-content-between">
                 @php
-                    $kembali = $subPilar->id;
+                    $kembali = substr($subPilar, 0, 4);
                 @endphp
                 <a href="/subpilar/{{ $kembali }}" class="btn btn-secondary"><i class="fa fa-backward"></i>
                     Kembali</a>

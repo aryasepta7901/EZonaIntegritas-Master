@@ -34,7 +34,7 @@ class PertanyaanController extends Controller
             'lke.pertanyaan.create',
             [
                 'master' => 'Pertanyaan LKE ',
-                'link' => 'subpilar/' . substr($subPilar->id, 0, 4),
+                'link' => 'subpilar/' . $subPilar->id,
                 'title' => 'Create Pertanyaan: ',
                 'subPilar' => $subPilar,
 
@@ -115,7 +115,18 @@ class PertanyaanController extends Controller
      */
     public function edit(Pertanyaan $pertanyaan)
     {
-        //
+        return view(
+            'lke.pertanyaan.edit',
+            [
+                'master' => 'Pertanyaan LKE ',
+                'link' => 'subpilar/' . $pertanyaan->subpilar_id,
+                'title' => 'Update Pertanyaan: ',
+                'pertanyaan' => $pertanyaan,
+                'dokumen' => dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->get(),
+                'subPilar' => $pertanyaan->subpilar_id,
+
+            ]
+        );
     }
 
     /**
@@ -127,7 +138,42 @@ class PertanyaanController extends Controller
      */
     public function update(Request $request, Pertanyaan $pertanyaan)
     {
-        //
+
+        $validatedData = $request->validate([
+            'pertanyaan'  => 'required',
+            'info'  => 'required',
+            'bobot'  => 'required',
+        ]);
+
+        Pertanyaan::where('id', $pertanyaan->id)->update($validatedData);
+        $subpilar = $pertanyaan->subpilar_id;
+
+        // Opsi
+        // $no = 1;
+        // $bobot = 1;
+        // foreach ($request->rincian as $key => $rincian) {
+        //     if ($rincian != null) {
+        //         $data = new Opsi();
+        //         $data->id = $validatedData['id'] . $no++;
+        //         $data->rincian = $rincian;
+        //         $data->bobot = $request->input('bobot' . $bobot++);
+        //         $data->type = $request->type;
+        //         $data->pertanyaan_id = $validatedData['id'];
+        //         $data->save();
+        //     }
+        // }
+
+        // dokumen
+        dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->delete();
+        $no = 1;
+        foreach ($request->dokumen as $key => $dokumen) {
+            $data = new dokumenLKE();
+            $data->id = $pertanyaan->id . $no++;
+            $data->dokumen = $dokumen;
+            $data->pertanyaan_id = $pertanyaan->id;
+            $data->save();
+        }
+        return redirect('subpilar/' . $subpilar)->with('success', ' Pertanyaan Has Ben Updated');
     }
 
     /**
