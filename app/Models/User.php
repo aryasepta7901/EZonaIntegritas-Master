@@ -25,6 +25,7 @@ class User extends Authenticatable
         'satker_id',
         'level_id',
         'password',
+        'google_id'
     ];
 
     /**

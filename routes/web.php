@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TpiController;
 use App\Http\Controllers\UserController;
@@ -46,3 +47,7 @@ Route::resource('/pilar', PilarController::class);
 Route::resource('/subpilar', SubPilarController::class);
 // Pertanyaan
 Route::resource('/pertanyaan', PertanyaanController::class);
+
+// Google 
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
