@@ -22,9 +22,19 @@ class GoogleController extends Controller
             $findUser = User::where('email', $user->getEmail())->first();
             if ($findUser) {
                 Auth::login($findUser);
-                return redirect()->intended('users');
+                return redirect()->intended('dashboard');
             }
         } catch (\Throwable $th) {
         }
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

@@ -16,7 +16,7 @@
                     alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{ auth()->user()->name }}</a>
             </div>
         </div>
 
@@ -34,47 +34,69 @@
         </div>
 
         <!-- Sidebar Menu -->
+
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
-            with font-awesome or any other icon font library -->
+                                                    with font-awesome or any other icon font library -->
 
                 <li class="nav-item">
-                    <a href="/users" class="nav-link {{ Request::is('users') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-users"></i>
+                    <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Mengelola Pengguna
+                            Dashboard
                         </p>
                     </a>
                 </li>
+                {{-- Admin --}}
+                @can('admin')
+                    <li class="nav-item">
+                        <a href="/users" class="nav-link {{ Request::is('users') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                User
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/tpi" class="nav-link {{ Request::is('tpi*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-globe"></i>
+                            <p>
+                                Mengelola Wilayah TPI
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/persyaratan" class="nav-link {{ Request::is('persyaratan') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-list"></i>
+                            <p>
+                                Mengelola Persyaratan
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/rincian"
+                            class="nav-link {{ Request::is('rincian*') | Request::is('subrincian*') | Request::is('pilar*') | Request::is('subpilar*') | Request::is('pertanyaan*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-question"></i>
+                            <p>
+                                Mengelola LKE
+                            </p>
+                        </a>
+                    </li>
+                @endcan
                 <li class="nav-item">
-                    <a href="/tpi" class="nav-link {{ Request::is('tpi*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-globe"></i>
+                    <a href="/logout" class="nav-link ">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
                         <p>
-                            Mengelola Wilayah TPI
+                            Logout
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/persyaratan" class="nav-link {{ Request::is('persyaratan') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-list"></i>
-                        <p>
-                            Mengelola Persyaratan
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/rincian"
-                        class="nav-link {{ Request::is('rincian*') | Request::is('subrincian*') | Request::is('pilar*') | Request::is('subpilar*') | Request::is('pertanyaan*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-question"></i>
-                        <p>
-                            Mengelola LKE
-                        </p>
-                    </a>
-                </li>
+
             </ul>
         </nav>
+
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

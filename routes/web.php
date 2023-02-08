@@ -26,7 +26,13 @@ use App\Http\Controllers\PersyaratanController;
 // login
 Route::get('/', function () {
     return view('login');
-});
+})->name('login');
+// dashboard
+Route::get('/dashboard', function () {
+    return view('dashboard', [
+        'title' => 'Dashboard',
+    ]);
+})->name('dashboard');
 // users
 Route::resource('/users', UserController::class);
 // Wilayah TPI
@@ -51,3 +57,4 @@ Route::resource('/pertanyaan', PertanyaanController::class);
 // Google 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+Route::get('logout', [GoogleController::class, 'logout'])->name('logout');

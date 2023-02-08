@@ -13,6 +13,7 @@ class PersyaratanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         return view(

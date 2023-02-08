@@ -12,6 +12,7 @@ use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php;
 
 class PertanyaanController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
