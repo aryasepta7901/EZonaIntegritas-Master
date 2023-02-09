@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\GoogleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TpiController;
@@ -28,11 +29,8 @@ Route::get('/', function () {
     return view('login');
 })->name('login')->middleware('guest');
 // dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard', [
-        'title' => 'Dashboard',
-    ]);
-})->name('dashboard')->middleware('auth');
+Route::resource('/dashboard', dashboardController::class)->middleware('auth');
+
 // users
 Route::resource('/users', UserController::class)->middleware('auth');
 // Wilayah TPI

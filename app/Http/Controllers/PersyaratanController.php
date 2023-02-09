@@ -100,9 +100,7 @@ class PersyaratanController extends Controller
      */
     public function update(Request $request, persyaratan $persyaratan)
     {
-        $validatedData = $request->validate([
-            'satker_id' => 'required',
-        ]);
+        $validatedData['satker_id'] = $persyaratan->satker_id;
         $validatedData['tahun'] = date('Y');
 
         $validatedData['id'] = $validatedData['satker_id'] . $validatedData['tahun'];
