@@ -49,6 +49,16 @@
                         </p>
                     </a>
                 </li>
+                @can('pic')
+                    <li class="nav-item">
+                        <a href="/lke" class="nav-link {{ Request::is('lke*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Self Assessment LKE
+                            </p>
+                        </a>
+                    </li>
+                @endcan
                 {{-- Admin --}}
                 @can('admin')
                     <li class="nav-item">

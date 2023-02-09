@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\LKEController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TpiController;
 use App\Http\Controllers\UserController;
@@ -29,7 +30,12 @@ Route::get('/', function () {
     return view('login');
 })->name('login')->middleware('guest');
 // dashboard
-Route::resource('/dashboard', dashboardController::class)->middleware('auth');
+Route::get('/dashboard', function () {
+    return view('dashboard', [
+        'title' => 'Dashboard'
+    ]);
+})->name('dashboard')->middleware('auth');
+
 
 // users
 Route::resource('/users', UserController::class)->middleware('auth');
@@ -56,3 +62,7 @@ Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
+
+
+// LKE
+Route::resource('/lke', LKEController::class)->middleware('auth');

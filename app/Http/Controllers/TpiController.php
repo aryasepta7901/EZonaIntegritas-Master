@@ -8,7 +8,6 @@ use App\Models\Satker;
 use App\Models\TPI;
 use App\Models\User;
 use Illuminate\Http\Request;
-use PengawasanSatker;
 
 class TpiController extends Controller
 {
