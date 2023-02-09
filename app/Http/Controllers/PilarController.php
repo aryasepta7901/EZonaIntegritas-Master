@@ -69,6 +69,8 @@ class PilarController extends Controller
      */
     public function show(Pilar $pilar)
     {
+        $this->authorize('admin');
+
         return view(
             'lke.SubPilar',
             [

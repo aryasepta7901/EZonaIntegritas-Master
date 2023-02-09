@@ -26,33 +26,33 @@ use App\Http\Controllers\PersyaratanController;
 // login
 Route::get('/', function () {
     return view('login');
-})->name('login');
+})->name('login')->middleware('guest');
 // dashboard
 Route::get('/dashboard', function () {
     return view('dashboard', [
         'title' => 'Dashboard',
     ]);
-})->name('dashboard');
+})->name('dashboard')->middleware('auth');
 // users
-Route::resource('/users', UserController::class);
+Route::resource('/users', UserController::class)->middleware('auth');
 // Wilayah TPI
-Route::resource('/tpi', TpiController::class);
+Route::resource('/tpi', TpiController::class)->middleware('auth');
 // pengawasan satker
-Route::resource('/pengawasan', PengawasanController::class);
+Route::resource('/pengawasan', PengawasanController::class)->middleware('auth');
 // Persyarataan
-Route::resource('/persyaratan', PersyaratanController::class);
+Route::resource('/persyaratan', PersyaratanController::class)->middleware('auth');
 
 // CRUD LKE
 // rincian
-Route::resource('/rincian', RincianController::class);
+Route::resource('/rincian', RincianController::class)->middleware('auth');
 // Sub Rincian
-Route::resource('/subrincian', SubRincianController::class);
+Route::resource('/subrincian', SubRincianController::class)->middleware('auth');
 // Pilar
-Route::resource('/pilar', PilarController::class);
+Route::resource('/pilar', PilarController::class)->middleware('auth');
 // subpilar
-Route::resource('/subpilar', SubPilarController::class);
+Route::resource('/subpilar', SubPilarController::class)->middleware('auth');
 // Pertanyaan
-Route::resource('/pertanyaan', PertanyaanController::class);
+Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
 
 // Google 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');

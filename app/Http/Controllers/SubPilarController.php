@@ -86,6 +86,8 @@ class SubPilarController extends Controller
      */
     public function show(subPilar $subpilar)
     {
+        $this->authorize('admin');
+
         Session::put('subPilar', $subpilar);
 
         return view(

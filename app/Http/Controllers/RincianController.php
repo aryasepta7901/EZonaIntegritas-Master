@@ -16,6 +16,8 @@ class RincianController extends Controller
 
     public function index()
     {
+        $this->authorize('admin');
+
         return view(
             'lke.rincian',
             [
@@ -65,6 +67,7 @@ class RincianController extends Controller
      */
     public function show(Rincian $rincian)
     {
+        $this->authorize('admin');
 
         return view(
             'lke.subRincian',

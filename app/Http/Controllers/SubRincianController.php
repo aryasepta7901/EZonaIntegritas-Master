@@ -58,6 +58,7 @@ class SubRincianController extends Controller
      */
     public function show(SubRincian $subrincian)
     {
+        $this->authorize('admin');
 
         return view(
             'lke.pilar',

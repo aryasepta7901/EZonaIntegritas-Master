@@ -30,6 +30,8 @@ class PertanyaanController extends Controller
      */
     public function create()
     {
+        $this->authorize('admin');
+
         $subPilar = Session::get('subPilar');
         return view(
             'lke.pertanyaan.create',
@@ -116,6 +118,8 @@ class PertanyaanController extends Controller
      */
     public function edit(Pertanyaan $pertanyaan)
     {
+        $this->authorize('admin');
+
         return view(
             'lke.pertanyaan.edit',
             [

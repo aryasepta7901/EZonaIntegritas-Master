@@ -166,27 +166,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 $(this).parents("#rowAdder").remove();
             })
         </script>
-    @endif
-    {{-- <script>
-        $(document).ready(function() {
-            $(".preferenceSelect").change(function() {
-                // Get the selected value
-                var selected = $("option:selected", $(this)).val();
-                // Get the ID of this element
-                var thisID = $(this).attr("id");
-                // Reset so all values are showing:
-                $(".preferenceSelect option").each(function() {
-                    $(this).show();
-                });
-                $(".preferenceSelect").each(function() {
-                    if ($(this).attr("id") != thisID) {
-                        $("option[value='" + selected + "']", $(this)).attr("disabled", true);
-                    }
-                });
-
+        <script type="text/javascript">
+            $("#row").click(function() {
+                newData =
+                    '<div id="row"<div class="form-group">' +
+                    '<div class="input-group"><div class="input-group-prepend">' +
+                    '<button class="btn btn-danger" id="DeleteRow" type="button">' +
+                    '<i class="bi bi-trash"></i>Delete</button> </div>' +
+                    '<input type="hidden" name="bobot2" value="1">' +
+                    '<input type="text" class="form-control" id="rincian" name="rincian[]"' +
+                    'placeholder="Isi Opsi"></div</div>';
+                $('#new').append(newData);
             });
-        });
-    </script> --}}
+
+            $("body").on("click", "#DeleteRow", function() {
+                $(this).parents("#row").remove();
+            })
+        </script>
+    @endif
 
     {{-- Select search --}}
     <script>
@@ -214,38 +211,114 @@ scratch. This page gets rid of all links and provides the needed markup only.
             else
                 $("#input").hide();
 
-            if ($("#type").val() === "checkbox1")
-                $("#checkbox1").show();
-            else
-                $("#checkbox1").hide();
-            if ($("#type").val() === "checkbox2")
-                $("#checkbox2").show();
-            else
-                $("#checkbox2").hide();
-            if ($("#type").val() === "checkbox3")
-                $("#checkbox3").show();
-            else
-                $("#checkbox3").hide();
-            if ($("#type").val() === "checkbox4")
-                $("#checkbox4").show();
-            else
-                $("#checkbox4").hide();
+            // if ($("#type").val() === "checkbox1")
+            //     $("#checkbox1").show();
+            // else
+            //     $("#checkbox1").hide();
+            // if ($("#type").val() === "checkbox2")
+            //     $("#checkbox2").show();
+            // else
+            //     $("#checkbox2").hide();
+            // if ($("#type").val() === "checkbox3")
+            //     $("#checkbox3").show();
+            // else
+            //     $("#checkbox3").hide();
+            // if ($("#type").val() === "checkbox4")
+            //     $("#checkbox4").show();
+            // else
+            //     $("#checkbox4").hide();
         }
     </script>
 
-
-
-    {{-- Coba --}}
     <script>
-        $(".PLUS, .MIN").click(function() {
-            var itemVal = parseInt($(this).siblings(".InputText").val());
-            if ($(this).hasClass('MIN'))
-                itemVal--;
-            else
-                itemVal++;
-            $(this).siblings(".InputText").val(itemVal);
+        const select = document.querySelector('#type');
+        const inputContainer = document.querySelector('#inputContainer');
+
+        select.addEventListener('change', function() {
+            const selectedValue = this.value;
+
+            if (selectedValue === 'checkbox1') {
+                inputContainer.innerHTML =
+                    '<label>Opsi</label>' +
+                    '<input type="hidden" name="type" value="checkbox">' +
+                    // Ya
+                    ' <div class="form-group">' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}" ' +
+                    'required placeholder = "Opsi Ya" >' +
+                    '<input type="hidden" name="bobot1" value="1">' +
+                    // Tidak
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi Tidak" >' +
+                    '<input type="hidden" name="bobot2" value="0">  </div>';
+            } else if (selectedValue === 'checkbox2') {
+                inputContainer.innerHTML =
+                    '<label>Opsi</label>' +
+                    '<input type="hidden" name="type" value="checkbox">' +
+                    // A
+                    '   <div class="form-group">' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}" ' +
+                    'required placeholder = "Opsi A" >' +
+                    '<input type="hidden" name="bobot1" value="1">' +
+                    // B
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi B" >' +
+                    '<input type="hidden" name="bobot2" value="0.5">' +
+                    // C
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi C" >' +
+                    '<input type="hidden" name="bobot3" value="0">  </div>';
+            } else if (selectedValue === 'checkbox3') {
+                inputContainer.innerHTML =
+                    '<label>Opsi</label>' +
+                    '<input type="hidden" name="type" value="checkbox">' +
+                    // A
+                    '   <div class="form-group">' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}" ' +
+                    'required placeholder = "Opsi A" >' +
+                    '<input type="hidden" name="bobot1" value="1">' +
+                    // B
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi B" >' +
+                    '<input type="hidden" name="bobot2" value="0.67">' +
+                    // C
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi C" >' +
+                    '<input type="hidden" name="bobot3" value="0.33">' +
+                    // D
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi D" >' +
+                    '<input type="hidden" name="bobot4" value="0">  </div>';
+            } else if (selectedValue === 'checkbox4') {
+                inputContainer.innerHTML =
+
+                    '<label>Opsi</label>' +
+                    '<input type="hidden" name="type" value="checkbox">' +
+                    // A
+                    '   <div class="form-group">' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}" ' +
+                    'required placeholder = "Opsi A" >' +
+                    '<input type="hidden" name="bobot1" value="1">' +
+                    // B
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi B" >' +
+                    '<input type="hidden" name="bobot2" value="0.75">' +
+                    // C
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi C" >' +
+                    '<input type="hidden" name="bobot3" value="0.5">' +
+                    // D
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi D" >' +
+                    '<input type="hidden" name="bobot4" value="0.25">' +
+                    // E
+                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    'required placeholder = "Opsi E" >' +
+                    '<input type="hidden" name="bobot5" value="0">  </div>';
+            }
         });
     </script>
+
+
 </body>
 
 </html>
