@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Persyaratan;
-use App\Models\Rekapitulasi;
-use App\Models\Rincian;
 use App\Models\Pilar;
+use App\Models\Rekapitulasi;
+use App\Models\SubPilar;
 use App\Models\SubRincian;
 use Illuminate\Http\Request;
 
@@ -70,6 +70,15 @@ class LKEController extends Controller
 
         ]);
     }
+    public function show2(Rekapitulasi $lke, Pilar $pilar)
+    {
+        return view('self-assessment.pertanyaan', [
+            'title' => $pilar->pilar,
+            'pilar' => $pilar,
+
+        ]);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

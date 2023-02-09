@@ -40,17 +40,16 @@
                                 $pilar = App\Models\Pilar::where('subrincian_id', $value->id)->get();
                                 
                             @endphp
-
                             @foreach ($pilar as $value)
                                 @php
                                     $jumlah_soal = App\Models\Pertanyaan::where('subpilar_id', 'LIKE', '%' . $value->id . '%')->count();
-                                    
                                 @endphp
                                 <div class="col-lg-4">
-                                    <div class="info-box bg-warning">
-                                        <div class="info-box-content">
-                                            <span class="info-box-text text-bold mb-3 text-center">
-                                                {{-- @php
+                                    <a href="/lke/{{ $rekap->id }}/{{ $value->id }}">
+                                        <div class="info-box bg-warning">
+                                            <div class="info-box-content">
+                                                <span class="info-box-text text-bold mb-3 text-center">
+                                                    {{-- @php
                                                     $chunk_size = 30;
                                                     $total_chunks = ceil(strlen($value->pilar) / $chunk_size);
                                                     for ($i = 0; $i < $total_chunks; $i++) {
@@ -59,21 +58,22 @@
                                                         echo $chunk . '<br>';
                                                     }
                                                 @endphp --}}
-                                                {{ wordwrap($value->pilar, '15', "\n") }}
-                                                ({{ $jumlah_soal }})
-                                            </span>
-                                            <span class="info-box-number">0/ {{ $value->bobot }}</span>
+                                                    {{ wordwrap($value->pilar, '15', "\n") }}
+                                                    ({{ $jumlah_soal }})
+                                                </span>
+                                                <span class="info-box-number">0/ {{ $value->bobot }}</span>
 
-                                            <div class="progress ">
-                                                <div class="progress-bar" style="width: 70%"></div>
+                                                <div class="progress ">
+                                                    <div class="progress-bar" style="width: 70%"></div>
+                                                </div>
+                                                <small>Menjawab 2 dari {{ $jumlah_soal }} Soal</small>
+                                                <span class="info-box-number d-flex justify-content-end ">
+                                                    <b class="h5 text-bold">20</b>/60
+                                                </span>
                                             </div>
-                                            <small>Menjawab 2 dari {{ $jumlah_soal }} Soal</small>
-                                            <span class="info-box-number d-flex justify-content-end ">
-                                                <b class="h5 text-bold">20</b>/60
-                                            </span>
+                                            <!-- /.info-box-content -->
                                         </div>
-                                        <!-- /.info-box-content -->
-                                    </div>
+                                    </a>
                                 </div>
                             @endforeach
 

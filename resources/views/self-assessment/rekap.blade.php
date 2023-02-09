@@ -36,7 +36,7 @@
                                     <td>Nilai</td>
                                     <td>{{ $value->status }}</td>
                                     <td class="text-center">
-                                        <a type="button" href="/lke/{{ $value['id'] }}" class="btn btn-sm btn-success"><i
+                                        <a type="button" href="/lke/{{ $value->id }}" class="btn btn-sm btn-success"><i
                                                 class="fa fa-file"></i> LKE</a>
                                     </td>
                                 </tr>

@@ -13,6 +13,7 @@ use App\Http\Controllers\PengawasanController;
 use App\Http\Controllers\PertanyaanController;
 use App\Http\Controllers\SubRincianController;
 use App\Http\Controllers\PersyaratanController;
+use App\Http\Controllers\PertanyaanLKEController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,3 +67,4 @@ Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
 
 // LKE
 Route::resource('/lke', LKEController::class)->middleware('auth');
+Route::get('lke/{lke}/{pilar}', [LKEController::class, 'show2'])->name('lke.show2');
