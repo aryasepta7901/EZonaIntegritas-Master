@@ -59,17 +59,19 @@
                                                     }
                                                 @endphp --}}
                                                     {{ wordwrap($value->pilar, '15', "\n") }}
-                                                    ({{ $jumlah_soal }})
                                                 </span>
                                                 <span class="info-box-number">0/ {{ $value->bobot }}</span>
 
                                                 <div class="progress ">
                                                     <div class="progress-bar" style="width: 70%"></div>
                                                 </div>
-                                                <small>Menjawab 2 dari {{ $jumlah_soal }} Soal</small>
-                                                <span class="info-box-number d-flex justify-content-end ">
-                                                    <b class="h5 text-bold">20</b>/60
-                                                </span>
+                                                <div class="d-flex justify-content-between">
+                                                    <small>Menjawab 2 dari {{ $jumlah_soal }} Soal
+                                                    </small>
+                                                    <small class="info-box-number">10%</small>
+                                                </div>
+
+
                                             </div>
                                             <!-- /.info-box-content -->
                                         </div>
@@ -87,4 +89,8 @@
             <!-- /.card -->
         </div>
     @endforeach
+
+
+    <a href="/lke" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+        Kembali</a>
 @endsection

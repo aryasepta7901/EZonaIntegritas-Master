@@ -18,7 +18,7 @@ background: transparent; }
 font-size: 16px;
 color: rgba(0, 0, 0, 0.3); }
 
-.myaccordion .btn {
+.myaccordion .button {
 width: 100%;
 font-weight: normal;
 color: rgba(0, 0, 0, 0.8);
@@ -28,8 +28,8 @@ border-radius: 0 !important;
 border-top: 1px solid rgba(0, 0, 0, 0.05);
 border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
 
-.myaccordion .btn-link:hover,
-.myaccordion .btn-link:focus {
+.myaccordion .button-link:hover,
+.myaccordion .button-link:focus {
 text-decoration: none; }
 
 [data-toggle="collapse"] .fa:before {

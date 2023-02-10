@@ -18,6 +18,8 @@ class LKEController extends Controller
      */
     public function index()
     {
+        $this->authorize('pic');
+
         return view('self-assessment.rekap', [
             'title' => 'Rekapitulasi Lembar Kerja Evaluasi',
             'persyaratan' => Persyaratan::where('satker_id', auth()->user()->satker_id)->where('tahun', date('Y'))->first(),
@@ -62,8 +64,11 @@ class LKEController extends Controller
      */
     public function show(Rekapitulasi $lke)
     {
+        $this->authorize('pic');
 
         return view('self-assessment.lke', [
+            'master' => 'Rekapitulasi ',
+            'link' => 'lke/',
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $lke,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
@@ -72,9 +77,14 @@ class LKEController extends Controller
     }
     public function show2(Rekapitulasi $lke, Pilar $pilar)
     {
+        $this->authorize('pic');
+
         return view('self-assessment.pertanyaan', [
+            'master' => 'LKE ',
+            'link' => 'lke/' . $lke->id,
             'title' => $pilar->pilar,
             'pilar' => $pilar,
+            'lke' => $lke,
 
         ]);
     }
