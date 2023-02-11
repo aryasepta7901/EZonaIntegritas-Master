@@ -4,14 +4,29 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                {{-- @foreach ($rekap as $value)
-                        @if (!isset($rekap) || $value->tahun != date('Y')) --}}
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary  " data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
-                            Pengajuan WBK / WBBM</i></button>
-                </div>
-                {{-- @endif
-                    @endforeach --}}
+
+
+                @if ($rekap->count() === 0)
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary  " data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
+                                Pengajuan WBK / WBBM</i></button>
+                    </div>
+                @else
+                    @php
+                        $last = $rekap->last(); //ambil data terakhir
+                    @endphp
+                    @if ($last->tahun != date('Y'))
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary  " data-toggle="modal" data-target="#tambah"><i
+                                    class="fa fa-plus">
+                                    Pengajuan WBK / WBBM </i></button>
+                        </div>
+                    @endif
+                @endif
+
+
+
+
             </div>
             <div class="card-body">
 
@@ -107,5 +122,4 @@
         </div>
         <!-- /.card -->
     </div>
-
 @endsection

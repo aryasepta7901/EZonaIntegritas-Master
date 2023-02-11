@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\LKEController;
 use Illuminate\Support\Facades\Route;
@@ -13,7 +12,7 @@ use App\Http\Controllers\PengawasanController;
 use App\Http\Controllers\PertanyaanController;
 use App\Http\Controllers\SubRincianController;
 use App\Http\Controllers\PersyaratanController;
-use App\Http\Controllers\PertanyaanLKEController;
+use App\Http\Controllers\SelfAssessmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,3 +67,5 @@ Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
 // LKE
 Route::resource('/lke', LKEController::class)->middleware('auth');
 Route::get('lke/{lke}/{pilar}', [LKEController::class, 'show2'])->name('lke.show2')->middleware('auth');
+// Self Assessment
+Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');

@@ -112,7 +112,7 @@
                         <h2 class="mb-0">
                             <button href="#collapse{{ $loop->iteration }}"
                                 class="d-flex py-4 px-4 align-items-center justify-content-between btn btn-link button"
-                                data-parent="#accordion" data-toggle="collapse" aria-expanded="false"
+                                data-parent="#accordion" data-toggle="collapse" aria-expanded="true"
                                 aria-controls="collapse{{ $loop->iteration }}">
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
@@ -124,7 +124,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div class="collapse " id="collapse{{ $loop->iteration }}" role="tabpanel"
+                    <div class="collapse show" id="collapse{{ $loop->iteration }}" role="tabpanel"
                         aria-labelledby="heading{{ $loop->iteration }}">
 
                         <div class="card-body">
@@ -142,62 +142,153 @@
                                         <tbody>
                                             @foreach ($pertanyaan as $value)
                                                 <tr>
-                                                    <td style="min-width: 550px;">
-                                                        @php
-                                                            $opsi = App\Models\Opsi::where('pertanyaan_id', $value->id)->get(); //untuk mengambil data Opsi
-                                                            $dokumen = App\Models\dokumenLKE::where('pertanyaan_id', $value->id)->get(); //untuk mengambil data Opsi
-                                                        @endphp
-                                                        <form action="">
+                                                    @php
+                                                        $opsi = App\Models\Opsi::where('pertanyaan_id', $value->id)->get(); //untuk mengambil data Opsi
+                                                        $dokumen = App\Models\dokumenLKE::where('pertanyaan_id', $value->id)->get(); //untuk mengambil data Opsi
+                                                        $selfAssessment = App\Models\selfAssessment::where('pertanyaan_id', $value->id)->get();
+                                                    @endphp
+
+
+
+                                                    @if ($selfAssessment->count() != 0)
+                                                        @foreach ($selfAssessment as $self)
+                                                            <form method="POST" action="/selfAssessment">
+                                                                @csrf
+                                                                <td style="min-width: 550px;">
+                                                                    <div class="card-body">
+
+                                                                        <div class="form-group">
+                                                                            <label
+                                                                                for="pertanyaan">{{ $value->pertanyaan }}</label>
+                                                                            <input type="hidden" name="pertanyaan_id"
+                                                                                value="{{ $value->id }}">
+                                                                            <input type="hidden" name="lke"
+                                                                                value="{{ $lke->id }}">
+
+                                                                            @foreach ($opsi as $item)
+                                                                                @if ($item->type == 'checkbox')
+                                                                                    <div class="form-check ml-4">
+                                                                                        <input class="form-check-input"
+                                                                                            type="radio" name="opsi_id"
+                                                                                            value="{{ $item->id }}">
+
+                                                                                        <label
+                                                                                            class="form-check-label">{{ $item->rincian }}</label>
+                                                                                    </div>
+                                                                                @elseif($item->type == 'input')
+                                                                                    <p for="input">{{ $item->rincian }}
+                                                                                    </p>
+                                                                                    <input type="number" min="0"
+                                                                                        class="form-control" name="opsi_id">
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label for="catatan">Catatan</label>
+                                                                            <textarea class="form-control @error('catatan') is-invalid  @enderror" rows="4" name="catatan">{{ old('catatan', $self->catatan) }} </textarea>
+                                                                            @error('catatan')
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $message }}
+                                                                                </div>
+                                                                            @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="d-flex justify-content-between mr-3">
+                                                                        <button type="button" class="btn btn-success"
+                                                                            data-toggle="modal"
+                                                                            data-target="#dokumen{{ $value->id }}"><i
+                                                                                class="fas fa-upload">
+                                                                                Upload Dokumen</i></button>
+                                                                        <button type="submit" class="btn btn-primary"><i
+                                                                                class="fas fa-save"></i>
+                                                                            Update
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+
+
+                                                                <td style="min-width: 150px;">
+                                                                    <p>Bukti Dukung:</p>
+                                                                    <ul>
+                                                                        @foreach ($dokumen as $item)
+                                                                            <li>{{ $item->dokumen }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                    {!! $value->info !!}
+                                                                </td>
+                                                            </form>
+                                                        @endforeach
+                                                    @else
+                                                        <form method="POST" action="/selfAssessment">
                                                             @csrf
-                                                            <div class="card-body">
-                                                                <div class="form-group">
-                                                                    <label for="pertanyaan">{{ $value->pertanyaan }}</label>
+                                                            <td style="min-width: 550px;">
+                                                                <div class="card-body">
 
-                                                                    @foreach ($opsi as $item)
-                                                                        @if ($item->type == 'checkbox')
-                                                                            <div class="form-check ml-4">
-                                                                                <input class="form-check-input"
-                                                                                    type="radio" name="radio1">
-                                                                                <label
-                                                                                    class="form-check-label">{{ $item->rincian }}</label>
+                                                                    <div class="form-group">
+                                                                        <label
+                                                                            for="pertanyaan">{{ $value->pertanyaan }}</label>
+                                                                        <input type="hidden" name="pertanyaan_id"
+                                                                            value="{{ $value->id }}">
+                                                                        <input type="hidden" name="lke"
+                                                                            value="{{ $lke->id }}">
+
+                                                                        @foreach ($opsi as $item)
+                                                                            @if ($item->type == 'checkbox')
+                                                                                <div class="form-check ml-4">
+                                                                                    <input class="form-check-input"
+                                                                                        type="radio" name="opsi_id"
+                                                                                        value="{{ $item->id }}">
+
+                                                                                    <label
+                                                                                        class="form-check-label">{{ $item->rincian }}</label>
+                                                                                </div>
+                                                                            @elseif($item->type == 'input')
+                                                                                <p for="input">{{ $item->rincian }}
+                                                                                </p>
+                                                                                <input type="number" min="0"
+                                                                                    class="form-control" name="opsi_id">
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="catatan">Catatan</label>
+                                                                        <textarea class="form-control @error('catatan') is-invalid  @enderror" rows="4" name="catatan">{{ old('catatan') }} </textarea>
+                                                                        @error('catatan')
+                                                                            <div class="invalid-feedback">
+                                                                                {{ $message }}
                                                                             </div>
-                                                                        @elseif($item->type == 'input')
-                                                                            <p for="input">{{ $item->rincian }}</p>
-                                                                            <input type="number" min="0"
-                                                                                class="form-control" name="input">
-                                                                        @endif
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="d-flex justify-content-between mr-3">
+                                                                    <button type="button" class="btn btn-success"
+                                                                        data-toggle="modal"
+                                                                        data-target="#dokumen{{ $value->id }}"><i
+                                                                            class="fas fa-upload">
+                                                                            Upload Dokumen</i></button>
+                                                                    <button type="submit" class="btn btn-primary"><i
+                                                                            class="fas fa-save"></i>
+                                                                        Simpan
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+
+
+                                                            <td style="min-width: 150px;">
+                                                                <p>Bukti Dukung:</p>
+                                                                <ul>
+                                                                    @foreach ($dokumen as $item)
+                                                                        <li>{{ $item->dokumen }}</li>
                                                                     @endforeach
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="catatan">Catatan</label>
-                                                                    <textarea class="form-control" rows="4" name="catatan" required>{{ old('catatan') }} </textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-between mr-3">
-                                                                <button type="button" class="btn btn-success"
-                                                                    data-toggle="modal"
-                                                                    data-target="#dokumen{{ $value->id }}"><i
-                                                                        class="fas fa-upload">
-                                                                        Upload Dokumen</i></button>
-                                                                <button type="submit" class="btn btn-primary"><i
-                                                                        class="fas fa-save"></i>
-                                                                    Simpan
-                                                                </button>
-                                                            </div>
+                                                                </ul>
+                                                                {!! $value->info !!}
+                                                            </td>
                                                         </form>
-
-                                                        <hr>
-                                                    </td>
-                                                    <td style="min-width: 150px;">
-                                                        <p>Bukti Dukung:</p>
-                                                        <ul>
-                                                            @foreach ($dokumen as $item)
-                                                                <li>{{ $item->dokumen }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                        {!! $value->info !!}
-                                                    </td>
+                                                    @endif
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -235,8 +326,8 @@
                                                     <td style="min-width: 200px">{{ $item->dokumen }}</td>
                                                     <td>
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="customFile"
-                                                                name="file">
+                                                            <input type="file" class="custom-file-input"
+                                                                id="customFile" name="file">
                                                             <label class="custom-file-label" for="customFile">Choose
                                                                 file</label>
                                                         </div>

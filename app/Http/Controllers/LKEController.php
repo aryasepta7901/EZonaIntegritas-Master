@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Persyaratan;
 use App\Models\Pilar;
 use App\Models\Rekapitulasi;
+use App\Models\SelfAssessment;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
 use Illuminate\Http\Request;
@@ -85,6 +86,7 @@ class LKEController extends Controller
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'lke' => $lke,
+
 
         ]);
     }

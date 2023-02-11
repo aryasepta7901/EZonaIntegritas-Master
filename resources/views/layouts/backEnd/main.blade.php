@@ -338,7 +338,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $(this).next('.custom-file-label').html(files.join(', '));
         });
     </script>
+    <!-- Stay In Position when refresh -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            var scrollpos = localStorage.getItem('scrollpos');
 
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+
+        };
+    </script>
 
 
 </body>
