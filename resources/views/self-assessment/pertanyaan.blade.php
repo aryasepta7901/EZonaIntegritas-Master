@@ -8,6 +8,20 @@
                 $subPilar = App\Models\SubPilar::where('pilar_id', $pilar->id)->get(); //untuk mengambil data subPilar
             @endphp
             @foreach ($subPilar as $value)
+                @php
+                    $pertanyaan = App\Models\Pertanyaan::where('subpilar_id', $value->id)->get(); //untuk mengambil data pertanyaan pertama
+                    // Perhitungan Nilai setiap Pertanyaan
+                    $jml_pertanyaan = $pertanyaan->count();
+                    $penimbang = $value->bobot / $jml_pertanyaan;
+                    
+                @endphp
+                @foreach ($pertanyaan as $p)
+                    @php
+                        $nilai = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $p->subpilar_id . '%')->sum('nilai'); //mengambil nilai
+                        $total = round($nilai * $penimbang, 2);
+                    @endphp
+                @endforeach
+
                 <div class="card">
                     <div class="card-header p-0" id="heading{{ $loop->iteration }}">
                         <h2 class="mb-0">
@@ -17,7 +31,7 @@
                                 aria-controls="collapse{{ $loop->iteration }}">
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
-                                    <p class="info-box-number m-4">Nilai : 0</p>
+                                    <p class="info-box-number m-4">Nilai : {{ $total }}</p>
 
                                     <i class="fa my-4 " aria-hidden="true"></i>
 
@@ -27,11 +41,7 @@
                     </div>
                     <div class="collapse show" id="collapse{{ $loop->iteration }}" role="tabpanel"
                         aria-labelledby="heading{{ $loop->iteration }}">
-
                         <div class="card-body">
-                            @php
-                                $pertanyaan = App\Models\Pertanyaan::where('subpilar_id', $value->id)->get(); //untuk mengambil data pertanyaan pertama
-                            @endphp
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">Pertanyaan</h3>
@@ -48,6 +58,7 @@
                                                         $dokumen = App\Models\dokumenLKE::where('pertanyaan_id', $value->id)->get(); //untuk mengambil data Opsi
                                                         $selfAssessment = App\Models\selfAssessment::where('pertanyaan_id', $value->id)->get();
                                                     @endphp
+
                                                     {{-- Update --}}
                                                     @if ($selfAssessment->count() != 0)
                                                         @foreach ($selfAssessment as $self)
@@ -290,8 +301,7 @@
             @endforeach
         </div>
 
-    </div>
-    <a href="/lke/{{ $lke->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
-        Kembali</a>
+        <a href="/lke/{{ $lke->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+            Kembali</a>
     </div>
 @endsection

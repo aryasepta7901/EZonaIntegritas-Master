@@ -43,32 +43,29 @@
                             @foreach ($pilar as $value)
                                 @php
                                     $jumlah_soal = App\Models\Pertanyaan::where('subpilar_id', 'LIKE', '%' . $value->id . '%')->count();
+                                    $soal_terjawab = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')->count(); //mengambil nilai
+                                    $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
                                 @endphp
+
+
+
                                 <div class="col-lg-4">
                                     <a href="/lke/{{ $rekap->id }}/{{ $value->id }}">
                                         <div class="info-box bg-warning">
                                             <div class="info-box-content">
                                                 <span class="info-box-text text-bold mb-3 text-center">
-                                                    {{-- @php
-                                                    $chunk_size = 30;
-                                                    $total_chunks = ceil(strlen($value->pilar) / $chunk_size);
-                                                    for ($i = 0; $i < $total_chunks; $i++) {
-                                                        $offset = $i * $chunk_size;
-                                                        $chunk = substr($value->pilar, $offset, $chunk_size);
-                                                        echo $chunk . '<br>';
-                                                    }
-                                                @endphp --}}
+
                                                     {{ wordwrap($value->pilar, '15', "\n") }}
                                                 </span>
                                                 <span class="info-box-number">0/ {{ $value->bobot }}</span>
 
                                                 <div class="progress ">
-                                                    <div class="progress-bar" style="width: 70%"></div>
+                                                    <div class="progress-bar" style="width: {{ $progress }}% "></div>
                                                 </div>
                                                 <div class="d-flex justify-content-between">
-                                                    <small>Menjawab 2 dari {{ $jumlah_soal }} Soal
+                                                    <small>Menjawab {{ $soal_terjawab }} dari {{ $jumlah_soal }} Soal
                                                     </small>
-                                                    <small class="info-box-number">10%</small>
+                                                    <small class="info-box-number">{{ $progress }}%</small>
                                                 </div>
 
 
