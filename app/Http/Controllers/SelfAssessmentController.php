@@ -36,25 +36,16 @@ class SelfAssessmentController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
-
             'opsi_id' => 'required',
-
             'catatan'  => 'required',
-
-
-
-
         ]);
         $validatedData['tahun'] = date('Y');
         $validatedData['pertanyaan_id'] = $request->pertanyaan_id;
         $validatedData['satker_id'] = auth()->user()->satker_id;
         $validatedData['id'] = $validatedData['tahun'] . $validatedData['satker_id'] . $validatedData['pertanyaan_id'];
         $validatedData['nilai'] = Opsi::where('id', $validatedData['opsi_id'])->first()->bobot;
-
-
-
-
         SelfAssessment::create($validatedData);
         return redirect('/lke/' . $request->lke . '/' . substr($validatedData['pertanyaan_id'], 0, 3))->with('success', 'Berhasil');
     }
