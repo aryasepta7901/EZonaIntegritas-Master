@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Opsi;
+use App\Models\RekapPilar;
 use App\Models\SelfAssessment;
 use App\Models\UploadDokumen;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 
 class SelfAssessmentController extends Controller
 {
@@ -50,20 +51,43 @@ class SelfAssessmentController extends Controller
         SelfAssessment::create($validatedData);
 
         // Dokumen
-        // if ($request->file('dokumen')) {
-        $dokumenlke_id = 1;
-        foreach ($request->dokumen as $key => $dokumen) {
-            // jika ada isinya ,jika tidak upload gambar tidak apa2
-            $data = new UploadDokumen();
-            $data->selfassessment_id = $validatedData['id'];
-            $data->dokumenlke_id = $request->input('id' . $dokumenlke_id++);
-            $data->id = date('Y') . $data->dokumenlke_id . $validatedData['satker_id'];
-            $data->file  =  $dokumen->store('dokumen');
-            $data->save();
+        if ($request->file('dokumen')) {
+            foreach ($request->dokumen as $key => $dokumen) {
+                // jika ada isinya ,jika tidak upload gambar tidak apa2
+                $data = new UploadDokumen();
+                $data->selfassessment_id = $validatedData['id'];
+                $data->dokumenlke_id = $request->input('id' . $key);
+                $data->id = date('Y') . $data->dokumenlke_id . $validatedData['satker_id'];
+                $data->file  =  $dokumen->store('dokumen');
+                $data->save();
+            }
         }
-        // }
 
-        return redirect('/lke/' . $request->lke . '/' . substr($validatedData['pertanyaan_id'], 0, 3))->with('success', 'Berhasil');
+        // RekapPilar ->nilai
+
+
+        $rekapitulasi_id = $request->rekapitulasi_id;
+        $pilar_id = $request->pilar_id;
+        $id = $pilar_id . $rekapitulasi_id;
+        // Cek apakah ada nilai lama
+        $nilaiLama = RekapPilar::where('id', $id)->first();
+
+        $penimbang = $request->penimbang;
+
+        if ($nilaiLama !== null)
+            $total = round($validatedData['nilai'] * $penimbang, 2) + $nilaiLama->nilai;
+        else {
+            $total = round($validatedData['nilai'] * $penimbang, 2);
+        }
+        RekapPilar::updateOrCreate(
+            ['id' => $id],
+            [
+                'rekapitulasi_id' => $rekapitulasi_id,
+                'pilar_id' => $pilar_id,
+                'nilai' => $total,
+            ],
+        );
+        return redirect('/lke/' . $request->rekapitulasi_id . '/' . substr($validatedData['pertanyaan_id'], 0, 3))->with('success', 'Berhasil');
     }
 
 
@@ -87,7 +111,6 @@ class SelfAssessmentController extends Controller
      */
     public function edit(SelfAssessment $selfAssessment)
     {
-        //
     }
 
     /**
@@ -99,7 +122,74 @@ class SelfAssessmentController extends Controller
      */
     public function update(Request $request, SelfAssessment $selfAssessment)
     {
-        //
+        $validatedData = $request->validate([
+            'opsi_id' => 'required',
+            'catatan'  => 'required',
+        ]);
+        $validatedData['nilai'] = Opsi::where('id', $validatedData['opsi_id'])->first()->bobot;
+        SelfAssessment::where('id', $selfAssessment->id)->update($validatedData);
+
+        // Dokumen
+        if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
+            foreach ($request->dokumen as $key => $dokumen) {
+                $id = date('Y') . $request->input('id' . $key) . $selfAssessment->satker_id;
+                // Ambil File lamanya
+                $oldFile = UploadDokumen::where('id', $id)->first();
+                if ($oldFile) {
+                    // jika ada gambar lama maka hapus
+                    Storage::delete($oldFile->file);
+                }
+
+                // fitur validasi
+                $this->validate($request, [
+                    'dokumen' => 'file|max:1024',
+                ]);
+
+                UploadDokumen::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'file' =>  $dokumen->store('dokumen'),
+                        'dokumenlke_id' => $request->input('id' . $key),
+                        'selfassessment_id' => $selfAssessment->id,
+                    ]
+                );
+            }
+        }
+
+        // RekapPilar ->nilai
+        $rekapitulasi_id = $request->rekapitulasi_id;
+        $pilar_id = $request->pilar_id;
+        $id = $pilar_id . $rekapitulasi_id;
+        // Cek apakah ada nilai lama pada rekappilar
+        $nilaiLama = RekapPilar::where('id', $id)->first(); //ambil nilai lama
+        $penimbang = $request->penimbang;
+        // Cek apakah melakukan update atau create
+        // Jika Update
+        if ($selfAssessment) {
+            if ($nilaiLama)
+                $total = round($validatedData['nilai'] * $penimbang, 2) + $nilaiLama->nilai -  round($selfAssessment->nilai * $penimbang, 2);
+            else {
+                $total = round($validatedData['nilai'] * $penimbang, 2);
+            }
+        } else {
+            // Jika create
+            if ($nilaiLama)
+                $total = round($validatedData['nilai'] * $penimbang, 2) + $nilaiLama->nilai;
+            else {
+                $total = round($validatedData['nilai'] * $penimbang, 2);
+            }
+        }
+
+
+        RekapPilar::updateOrCreate(
+            ['id' => $id],
+            [
+                'rekapitulasi_id' => $rekapitulasi_id,
+                'pilar_id' => $pilar_id,
+                'nilai' => $total,
+            ],
+        );
+        return redirect('/lke/' . $request->rekapitulasi_id . '/' . substr($selfAssessment->pertanyaan_id, 0, 3))->with('success', 'Data Berhasil di Tambahkan');
     }
 
     /**

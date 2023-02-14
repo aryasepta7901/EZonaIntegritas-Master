@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Persyaratan;
 use App\Models\Pilar;
 use App\Models\Rekapitulasi;
+use App\Models\RekapPilar;
 use App\Models\SelfAssessment;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
@@ -73,6 +74,7 @@ class LKEController extends Controller
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $lke,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
+            'nilai' => RekapPilar::where('rekapitulasi_id', $lke->id)->sum('nilai'),
 
         ]);
     }

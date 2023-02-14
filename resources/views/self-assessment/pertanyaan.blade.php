@@ -3,6 +3,17 @@
 @section('content')
     <div class="col-md-8 col-lg-12">
 
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
+                    <br>
+                @endforeach
+
+            </div>
+        @endif
         <div id="accordion" class="myaccordion w-100" aria-multiselectable="true">
             @php
                 $subPilar = App\Models\SubPilar::where('pilar_id', $pilar->id)->get(); //untuk mengambil data subPilar
@@ -62,20 +73,27 @@
                                                     {{-- Update --}}
                                                     @if ($selfAssessment->count() != 0)
                                                         @foreach ($selfAssessment as $self)
-                                                            <form method="POST" action="/selfAssessment"
+                                                            <form method="POST"
+                                                                action="/selfAssessment/{{ $self->id }}"
                                                                 enctype="multipart/form-data">
+                                                                @method('put')
                                                                 @csrf
+                                                                {{-- Data RekapPilar --}}
+                                                                <input type="hidden" name="rekapitulasi_id"
+                                                                    value="{{ $lke->id }}">
+                                                                <input type="hidden" name="pilar_id"
+                                                                    value="{{ $pilar->id }}">
+                                                                <input type="hidden" name="penimbang"
+                                                                    value="{{ $penimbang }}">
+                                                                {{-- Data RekapPilar --}}
+
                                                                 <td style="min-width: 550px;">
                                                                     <div class="card-body">
-
                                                                         <div class="form-group">
                                                                             <label
                                                                                 for="pertanyaan">{{ $value->pertanyaan }}</label>
                                                                             <input type="hidden" name="pertanyaan_id"
                                                                                 value="{{ $value->id }}">
-                                                                            <input type="hidden" name="lke"
-                                                                                value="{{ $lke->id }}">
-
                                                                             @foreach ($opsi as $item)
                                                                                 @if ($item->type == 'checkbox')
                                                                                     <div class="form-check ml-4">
@@ -127,10 +145,11 @@
                                                                                         <td style="min-width: 200px">
                                                                                             {{ $item->dokumen }}
                                                                                             <input type="hidden"
-                                                                                                name="id{{ $loop->iteration }}"
+                                                                                                name="id{{ $loop->index }}"
                                                                                                 value="{{ $item->id }}">
                                                                                         </td>
                                                                                         <td class="text-center">
+
                                                                                             @if ($file->count() != 0)
                                                                                                 @foreach ($file as $f)
                                                                                                     <a target="__self"
@@ -160,12 +179,8 @@
                                                                         </table>
                                                                     </div>
                                                                     <hr>
-                                                                    <div class="d-flex justify-content-between mr-3">
-                                                                        <button type="button" class="btn btn-success"
-                                                                            data-toggle="modal"
-                                                                            data-target="#dokumen{{ $value->id }}"><i
-                                                                                class="fas fa-upload">
-                                                                                Upload Dokumen</i></button>
+                                                                    <div class="d-flex justify-content-end mr-3">
+
                                                                         <button type="submit" class="btn btn-primary"><i
                                                                                 class="fas fa-save"></i>
                                                                             Update
@@ -190,6 +205,15 @@
                                                         <form method="POST" action="/selfAssessment"
                                                             enctype="multipart/form-data">
                                                             @csrf
+                                                            {{-- Data RekapPilar --}}
+                                                            <input type="hidden" name="rekapitulasi_id"
+                                                                value="{{ $lke->id }}">
+
+                                                            <input type="hidden" name="pilar_id"
+                                                                value="{{ $pilar->id }}">
+                                                            <input type="hidden" name="penimbang"
+                                                                value="{{ $penimbang }}">
+                                                            {{-- Data RekapPilar --}}
                                                             <td style="min-width: 550px;">
                                                                 <div class="card-body">
 
@@ -198,8 +222,7 @@
                                                                             for="pertanyaan">{{ $value->pertanyaan }}</label>
                                                                         <input type="hidden" name="pertanyaan_id"
                                                                             value="{{ $value->id }}">
-                                                                        <input type="hidden" name="lke"
-                                                                            value="{{ $lke->id }}">
+
 
                                                                         @foreach ($opsi as $item)
                                                                             @if ($item->type == 'checkbox')
@@ -249,7 +272,7 @@
                                                                                 <td style="min-width: 200px">
                                                                                     {{ $item->dokumen }}
                                                                                     <input type="hidden"
-                                                                                        name="id{{ $loop->iteration }}"
+                                                                                        name="id{{ $loop->index }}"
                                                                                         value="{{ $item->id }}">
                                                                                 </td>
 
@@ -304,4 +327,5 @@
         <a href="/lke/{{ $lke->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
             Kembali</a>
     </div>
+
 @endsection

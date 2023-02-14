@@ -5,7 +5,7 @@
         <div class="info-box bg-light">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-bold mb-3">{{ $rekap->satker->nama_satker }}</span>
-                <span class="info-box-number text-center text-muted mb-3">2300</span>
+                <span class="info-box-number text-center text-muted mb-3">{{ $nilai }}</span>
                 <span class="info-box-text text-center text-muted mb-0">Nilai Self-Assessment</span>
             </div>
         </div>
@@ -15,12 +15,18 @@
             <div class="info-box-content">
                 <span class="info-box-text text-bold mb-3">LKE Zona Integritas {{ $rekap->tahun }}</span>
                 <span class="info-box-text">Total Pengungkit</span>
+                @php
+                    $tot_jumlah_soal = App\Models\Pertanyaan::count();
+                    $tot_soal_terjawab = App\Models\selfAssessment::where('satker_id', auth()->user()->satker_id)->count(); //mengambil nilai
+                    $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
+                    
+                @endphp
 
                 <div class="progress ">
-                    <div class="progress-bar" style="width: 70%"></div>
+                    <div class="progress-bar" style="width: {{ $Totprogress }}%"></div>
                 </div>
                 <span class="info-box-number d-flex justify-content-end ">
-                    <b class="h5 text-bold">20</b>/60
+                    <b class="h5 text-bold">{{ $Totprogress }}%</b>
                 </span>
             </div>
             <!-- /.info-box-content -->
@@ -57,8 +63,23 @@
 
                                                     {{ wordwrap($value->pilar, '15', "\n") }}
                                                 </span>
-                                                <span class="info-box-number">0/ {{ $value->bobot }}</span>
 
+                                                @php
+                                                    // Ambil Nilai
+                                                    $nilai = App\Models\RekapPilar::where('rekapitulasi_id', $rekap->id)
+                                                        ->where('pilar_id', $value->id)
+                                                        ->first();
+                                                    
+                                                @endphp
+                                                <span class="info-box-number">
+                                                    {{-- Jika nilai ada di database --}}
+                                                    @if ($nilai !== null)
+                                                        {{ $nilai->nilai }}
+                                                    @else
+                                                        0
+                                                    @endif /
+                                                    {{ $value->bobot }}
+                                                </span>
                                                 <div class="progress ">
                                                     <div class="progress-bar" style="width: {{ $progress }}% "></div>
                                                 </div>

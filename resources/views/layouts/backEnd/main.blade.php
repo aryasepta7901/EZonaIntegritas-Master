@@ -30,8 +30,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/summernote/summernote-bs4.min.css">
     {{-- Accordion --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-    {{-- https://preview.colorlib.com/theme/bac/accordion-03/ --}}
+    <link rel="stylesheet" href="/css/style.css"> {{-- https://preview.colorlib.com/theme/bac/accordion-03/ --}}
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{{ asset('template') }}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -127,13 +130,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('template') }}/plugins/select2/js/select2.full.min.js"></script>
     <!-- Summernote -->
     <script src="{{ asset('template') }}/plugins/summernote/summernote-bs4.min.js"></script>
-    {{-- Accordion --}}
+    <!-- SweetAlert2 -->
+    <script src="{{ asset('template') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
 
+    <script>
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        if (Session::has('success')) {
+            Toast.fire({
+                icon: 'success',
+                title: "{{ Session::get('success') }}"
+            })
+        }
+    </script>
+    {{-- Accordion --}}
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993"
         integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA=="
         data-cf-beacon='{"rayId":"796cb3b09d786bff","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2022.11.3","si":100}'
         crossorigin="anonymous"></script>
     <!-- Page specific script -->
+
     <script>
         $(function() {
             $('#summernote').summernote({
@@ -351,6 +371,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         };
     </script>
+
 
 
 </body>
