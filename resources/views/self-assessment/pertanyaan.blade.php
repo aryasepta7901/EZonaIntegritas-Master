@@ -2,18 +2,6 @@
 
 @section('content')
     <div class="col-md-8 col-lg-12">
-
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                    <br>
-                @endforeach
-
-            </div>
-        @endif
         <div id="accordion" class="myaccordion w-100" aria-multiselectable="true">
             @php
                 $subPilar = App\Models\SubPilar::where('pilar_id', $pilar->id)->get(); //untuk mengambil data subPilar
@@ -327,5 +315,33 @@
         <a href="/lke/{{ $lke->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
             Kembali</a>
     </div>
-
+    <script script src="{{ asset('template') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 10000
+        });
+    </script>
+    @if ($errors->any())
+        <script>
+            Toast.fire({
+                icon: 'error',
+                title: "{{ __('Error in form request!') }}",
+                text: "{{ implode('', $errors->all()) }}",
+                type: "error"
+            });
+        </script>
+        <br>
+    @endif
+    <br>
+    @if (Session::has('success'))
+        <script>
+            Toast.fire({
+                icon: 'success',
+                title: "{{ Session::get('success') }}"
+            })
+        </script>
+    @endif
 @endsection

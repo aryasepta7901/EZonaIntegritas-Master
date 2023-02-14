@@ -39,10 +39,19 @@ class SelfAssessmentController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'opsi_id' => 'required',
-            'catatan'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'opsi_id' => 'required',
+                'catatan'  => 'required',
+                'dokumen.*' => 'mimes:pdf|max:2048',
+            ],
+            [
+                'opsi_id.required' => 'Silahkan Pilih Jawaban,',
+                'catatan.required' => 'Catatan Wajib di Isi,',
+                'mimes' => 'Dokumen hanya boleh format :values,',
+                'max' => 'Dokumen hanya boleh Berukuran :max,'
+            ]
+        );
         $validatedData['tahun'] = date('Y');
         $validatedData['pertanyaan_id'] = $request->pertanyaan_id;
         $validatedData['satker_id'] = auth()->user()->satker_id;
@@ -51,21 +60,24 @@ class SelfAssessmentController extends Controller
         SelfAssessment::create($validatedData);
 
         // Dokumen
-        if ($request->file('dokumen')) {
+
+        if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
             foreach ($request->dokumen as $key => $dokumen) {
-                // jika ada isinya ,jika tidak upload gambar tidak apa2
-                $data = new UploadDokumen();
-                $data->selfassessment_id = $validatedData['id'];
-                $data->dokumenlke_id = $request->input('id' . $key);
-                $data->id = date('Y') . $data->dokumenlke_id . $validatedData['satker_id'];
-                $data->file  =  $dokumen->store('dokumen');
-                $data->save();
+
+                $id = date('Y') .  $request->input('id' . $key) .  $validatedData['satker_id'];
+
+                UploadDokumen::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'file' =>  $dokumen->store('dokumen'),
+                        'dokumenlke_id' => $request->input('id' . $key),
+                        'selfassessment_id' => $validatedData['id'],
+                    ]
+                );
             }
         }
 
         // RekapPilar ->nilai
-
-
         $rekapitulasi_id = $request->rekapitulasi_id;
         $pilar_id = $request->pilar_id;
         $id = $pilar_id . $rekapitulasi_id;
@@ -87,7 +99,7 @@ class SelfAssessmentController extends Controller
                 'nilai' => $total,
             ],
         );
-        return redirect('/lke/' . $request->rekapitulasi_id . '/' . substr($validatedData['pertanyaan_id'], 0, 3))->with('success', 'Berhasil');
+        return redirect('/lke/' . $request->rekapitulasi_id . '/' . substr($validatedData['pertanyaan_id'], 0, 3))->with('success', 'Data Berhasil Ditambahkan');
     }
 
 
@@ -122,10 +134,20 @@ class SelfAssessmentController extends Controller
      */
     public function update(Request $request, SelfAssessment $selfAssessment)
     {
-        $validatedData = $request->validate([
-            'opsi_id' => 'required',
-            'catatan'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'opsi_id' => 'required',
+                'catatan'  => 'required',
+                'dokumen.*' => 'mimes:pdf|max:2048',
+            ],
+            [
+                'opsi_id.required' => 'Silahkan Pilih Jawaban',
+                'catatan.required' => 'Catatan Wajib di Isi',
+                'mimes' => 'Dokumen hanya boleh format :values',
+                'max' => 'Dokumen hanya boleh Berukuran :max'
+            ]
+        );
+
         $validatedData['nilai'] = Opsi::where('id', $validatedData['opsi_id'])->first()->bobot;
         SelfAssessment::where('id', $selfAssessment->id)->update($validatedData);
 
@@ -139,12 +161,6 @@ class SelfAssessmentController extends Controller
                     // jika ada gambar lama maka hapus
                     Storage::delete($oldFile->file);
                 }
-
-                // fitur validasi
-                $this->validate($request, [
-                    'dokumen' => 'file|max:1024',
-                ]);
-
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
@@ -189,7 +205,7 @@ class SelfAssessmentController extends Controller
                 'nilai' => $total,
             ],
         );
-        return redirect('/lke/' . $request->rekapitulasi_id . '/' . substr($selfAssessment->pertanyaan_id, 0, 3))->with('success', 'Data Berhasil di Tambahkan');
+        return redirect('/lke/' . $request->rekapitulasi_id . '/' . substr($selfAssessment->pertanyaan_id, 0, 3))->with('success', 'Data Berhasil di Update');
     }
 
     /**
