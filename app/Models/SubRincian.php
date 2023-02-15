@@ -19,4 +19,8 @@ class SubRincian extends Model
         'bobot',
         'rincian_id',
     ];
+    public function pilar()
+    {
+        return $this->hasMany(Pilar::class, 'subrincian_id');
+    }
 }

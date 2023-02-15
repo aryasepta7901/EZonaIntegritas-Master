@@ -3,9 +3,6 @@
 @section('content')
     <div class="col-md-8 col-lg-12">
         <div id="accordion" class="myaccordion w-100" aria-multiselectable="true">
-            @php
-                $subPilar = App\Models\SubPilar::where('pilar_id', $pilar->id)->get(); //untuk mengambil data subPilar
-            @endphp
             @foreach ($subPilar as $value)
                 @php
                     $pertanyaan = App\Models\Pertanyaan::where('subpilar_id', $value->id)->get(); //untuk mengambil data pertanyaan pertama
@@ -31,7 +28,6 @@
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
                                     <p class="info-box-number m-4">Nilai : {{ $total }}</p>
-
                                     <i class="fa my-4 " aria-hidden="true"></i>
 
                                 </div>
@@ -50,14 +46,13 @@
                                 <div class="card-body">
                                     <table id="" class="table table-bordered table-responsive table-striped">
                                         <tbody>
-                                            @foreach ($pertanyaan as $value)
+                                            @foreach ($value->pertanyaan as $value)
                                                 <tr>
                                                     @php
-                                                        $opsi = App\Models\Opsi::where('pertanyaan_id', $value->id)->get(); //untuk mengambil data Opsi
-                                                        $dokumen = App\Models\dokumenLKE::where('pertanyaan_id', $value->id)->get(); //untuk mengambil data Opsi
-                                                        $selfAssessment = App\Models\selfAssessment::where('pertanyaan_id', $value->id)->get();
+                                                        $selfAssessment = App\Models\selfAssessment::where('pertanyaan_id', $value->id)
+                                                            ->where('satker_id', auth()->user()->satker_id)
+                                                            ->get();
                                                     @endphp
-
                                                     {{-- Update --}}
                                                     @if ($selfAssessment->count() != 0)
                                                         @foreach ($selfAssessment as $self)
@@ -74,7 +69,6 @@
                                                                 <input type="hidden" name="penimbang"
                                                                     value="{{ $penimbang }}">
                                                                 {{-- Data RekapPilar --}}
-
                                                                 <td style="min-width: 550px;">
                                                                     <div class="card-body">
                                                                         <div class="form-group">
@@ -82,7 +76,7 @@
                                                                                 for="pertanyaan">{{ $value->pertanyaan }}</label>
                                                                             <input type="hidden" name="pertanyaan_id"
                                                                                 value="{{ $value->id }}">
-                                                                            @foreach ($opsi as $item)
+                                                                            @foreach ($value->opsi as $item)
                                                                                 @if ($item->type == 'checkbox')
                                                                                     <div class="form-check ml-4">
                                                                                         <input
@@ -123,10 +117,7 @@
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                                @foreach ($dokumen as $item)
-                                                                                    @php
-                                                                                        $file = App\Models\UploadDokumen::where('dokumenlke_id', $item->id)->get();
-                                                                                    @endphp
+                                                                                @foreach ($value->dokumen as $item)
                                                                                     <tr>
                                                                                         <td>{{ $loop->iteration }}</td>
 
@@ -137,9 +128,8 @@
                                                                                                 value="{{ $item->id }}">
                                                                                         </td>
                                                                                         <td class="text-center">
-
-                                                                                            @if ($file->count() != 0)
-                                                                                                @foreach ($file as $f)
+                                                                                            @if ($item->file->count() != 0)
+                                                                                                @foreach ($item->file as $f)
                                                                                                     <a target="__self"
                                                                                                         href="{{ asset('storage/' . $f->file) }}"><i
                                                                                                             class="fas fa-file"></i></a>
@@ -175,12 +165,10 @@
                                                                         </button>
                                                                     </div>
                                                                 </td>
-
-
                                                                 <td style="min-width: 150px;">
                                                                     <p>Bukti Dukung:</p>
                                                                     <ul>
-                                                                        @foreach ($dokumen as $item)
+                                                                        @foreach ($value->dokumen as $item)
                                                                             <li>{{ $item->dokumen }}</li>
                                                                         @endforeach
                                                                     </ul>
@@ -196,7 +184,6 @@
                                                             {{-- Data RekapPilar --}}
                                                             <input type="hidden" name="rekapitulasi_id"
                                                                 value="{{ $lke->id }}">
-
                                                             <input type="hidden" name="pilar_id"
                                                                 value="{{ $pilar->id }}">
                                                             <input type="hidden" name="penimbang"
@@ -212,7 +199,7 @@
                                                                             value="{{ $value->id }}">
 
 
-                                                                        @foreach ($opsi as $item)
+                                                                        @foreach ($value->opsi as $item)
                                                                             @if ($item->type == 'checkbox')
                                                                                 <div class="form-check ml-4">
                                                                                     <input class="form-check-input"
@@ -253,7 +240,7 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        @foreach ($dokumen as $item)
+                                                                        @foreach ($value->dokumen as $item)
                                                                             <tr>
                                                                                 <td>{{ $loop->iteration }}</td>
 
@@ -292,7 +279,7 @@
                                                             <td style="min-width: 150px;">
                                                                 <p>Bukti Dukung:</p>
                                                                 <ul>
-                                                                    @foreach ($dokumen as $item)
+                                                                    @foreach ($value->dokumen as $item)
                                                                         <li>{{ $item->dokumen }}</li>
                                                                     @endforeach
                                                                 </ul>

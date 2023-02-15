@@ -42,19 +42,12 @@
                 <div class="card-body">
                     <div class="card-body">
                         <div class="row">
-                            @php
-                                $pilar = App\Models\Pilar::where('subrincian_id', $value->id)->get();
-                                
-                            @endphp
-                            @foreach ($pilar as $value)
+                            @foreach ($value->pilar as $value)
                                 @php
                                     $jumlah_soal = App\Models\Pertanyaan::where('subpilar_id', 'LIKE', '%' . $value->id . '%')->count();
                                     $soal_terjawab = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')->count(); //mengambil nilai
                                     $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
                                 @endphp
-
-
-
                                 <div class="col-lg-4">
                                     <a href="/lke/{{ $rekap->id }}/{{ $value->id }}">
                                         <div class="info-box bg-warning">
@@ -69,7 +62,6 @@
                                                     $nilai = App\Models\RekapPilar::where('rekapitulasi_id', $rekap->id)
                                                         ->where('pilar_id', $value->id)
                                                         ->first();
-                                                    
                                                 @endphp
                                                 <span class="info-box-number">
                                                     {{-- Jika nilai ada di database --}}

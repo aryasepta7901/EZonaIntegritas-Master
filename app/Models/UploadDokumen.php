@@ -19,4 +19,8 @@ class UploadDokumen extends Model
         'selfassessment_id',
 
     ];
+    public function dokumenLKE()
+    {
+        return $this->belongsTo(dokumenLKE::class, 'dokumenlke_id');
+    }
 }

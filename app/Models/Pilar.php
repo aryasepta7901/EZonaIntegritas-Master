@@ -20,4 +20,8 @@ class Pilar extends Model
         'min_wbbm',
         'subrincian_id',
     ];
+    public function SubRincian()
+    {
+        return $this->belongsTo(SubRincian::class, 'subrincian_id');
+    }
 }

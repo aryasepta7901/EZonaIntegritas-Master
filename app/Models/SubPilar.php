@@ -18,4 +18,8 @@ class SubPilar extends Model
         'bobot',
         'pilar_id',
     ];
+    public function pertanyaan()
+    {
+        return $this->hasMany(Pertanyaan::class, 'subpilar_id');
+    }
 }

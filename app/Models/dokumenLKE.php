@@ -22,4 +22,8 @@ class dokumenLKE extends Model
     {
         return $this->belongsTo(Pertanyaan::class, 'pertanyaan_id');
     }
+    public function file()
+    {
+        return $this->hasMany(UploadDokumen::class, 'dokumenlke_id');
+    }
 }

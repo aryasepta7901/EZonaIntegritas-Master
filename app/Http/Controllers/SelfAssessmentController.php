@@ -39,7 +39,8 @@ class SelfAssessmentController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate(
+        // validasi
+        $request->validate(
             [
                 'opsi_id' => 'required',
                 'catatan'  => 'required',
@@ -52,44 +53,45 @@ class SelfAssessmentController extends Controller
                 'max' => 'Dokumen hanya boleh Berukuran :max,'
             ]
         );
-        $validatedData['tahun'] = date('Y');
-        $validatedData['pertanyaan_id'] = $request->pertanyaan_id;
-        $validatedData['satker_id'] = auth()->user()->satker_id;
-        $validatedData['id'] = $validatedData['tahun'] . $validatedData['satker_id'] . $validatedData['pertanyaan_id'];
-        $validatedData['nilai'] = Opsi::where('id', $validatedData['opsi_id'])->first()->bobot;
-        SelfAssessment::create($validatedData);
-
+        // SelfAssessment
+        $tahun = date('Y');
+        $satker_id = auth()->user()->satker_id;
+        $pertanyaan_id = $request->pertanyaan_id;
+        $data = [
+            'id' => $tahun . $satker_id . $pertanyaan_id,
+            'tahun' => $tahun,
+            'opsi_id' => $request->opsi_id,
+            'catatan' => $request->catatan,
+            'satker_id' => $satker_id,
+            'pertanyaan_id' => $pertanyaan_id,
+        ];
+        $data['nilai'] = Opsi::where('id', $data['opsi_id'])->first()->bobot;
+        SelfAssessment::create($data);
         // Dokumen
-
         if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
             foreach ($request->dokumen as $key => $dokumen) {
-
-                $id = date('Y') .  $request->input('id' . $key) .  $validatedData['satker_id'];
-
+                $id = date('Y') .  $request->input('id' . $key) .  $data['satker_id'];
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
                         'file' =>  $dokumen->store('dokumen'),
                         'dokumenlke_id' => $request->input('id' . $key),
-                        'selfassessment_id' => $validatedData['id'],
+                        'selfassessment_id' => $data['id'],
                     ]
                 );
             }
         }
-
         // RekapPilar ->nilai
         $rekapitulasi_id = $request->rekapitulasi_id;
         $pilar_id = $request->pilar_id;
         $id = $pilar_id . $rekapitulasi_id;
         // Cek apakah ada nilai lama
         $nilaiLama = RekapPilar::where('id', $id)->first();
-
         $penimbang = $request->penimbang;
-
         if ($nilaiLama !== null)
-            $total = round($validatedData['nilai'] * $penimbang, 2) + $nilaiLama->nilai;
+            $total = round($data['nilai'] * $penimbang, 2) + $nilaiLama->nilai;
         else {
-            $total = round($validatedData['nilai'] * $penimbang, 2);
+            $total = round($data['nilai'] * $penimbang, 2);
         }
         RekapPilar::updateOrCreate(
             ['id' => $id],
@@ -99,11 +101,8 @@ class SelfAssessmentController extends Controller
                 'nilai' => $total,
             ],
         );
-        return redirect('/lke/' . $request->rekapitulasi_id . '/' . substr($validatedData['pertanyaan_id'], 0, 3))->with('success', 'Data Berhasil Ditambahkan');
+        return redirect('/lke/' .   $rekapitulasi_id . '/' . substr($data['pertanyaan_id'], 0, 3))->with('success', 'Data Berhasil Ditambahkan');
     }
-
-
-
     /**
      * Display the specified resource.
      *
@@ -134,7 +133,7 @@ class SelfAssessmentController extends Controller
      */
     public function update(Request $request, SelfAssessment $selfAssessment)
     {
-        $validatedData = $request->validate(
+        $request->validate(
             [
                 'opsi_id' => 'required',
                 'catatan'  => 'required',
@@ -148,8 +147,12 @@ class SelfAssessmentController extends Controller
             ]
         );
 
-        $validatedData['nilai'] = Opsi::where('id', $validatedData['opsi_id'])->first()->bobot;
-        SelfAssessment::where('id', $selfAssessment->id)->update($validatedData);
+        $data = [
+            'opsi_id' => $request->opsi_id,
+            'catatan' => $request->catatan,
+        ];
+        $data['nilai'] = Opsi::where('id', $data['opsi_id'])->first()->bobot;
+        SelfAssessment::where('id', $selfAssessment->id)->update($data);
 
         // Dokumen
         if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
@@ -180,23 +183,19 @@ class SelfAssessmentController extends Controller
         $nilaiLama = RekapPilar::where('id', $id)->first(); //ambil nilai lama
         $penimbang = $request->penimbang;
         // Cek apakah melakukan update atau create
-        // Jika Update
         if ($selfAssessment) {
-            if ($nilaiLama)
-                $total = round($validatedData['nilai'] * $penimbang, 2) + $nilaiLama->nilai -  round($selfAssessment->nilai * $penimbang, 2);
-            else {
-                $total = round($validatedData['nilai'] * $penimbang, 2);
-            }
+            // Jika Update
+            $total = round($data['nilai'] * $penimbang, 2) + $nilaiLama->nilai -  round($selfAssessment->nilai * $penimbang, 2);
         } else {
             // Jika create
             if ($nilaiLama)
-                $total = round($validatedData['nilai'] * $penimbang, 2) + $nilaiLama->nilai;
+                // Jika nilai lama sudah ada
+                $total = round($data['nilai'] * $penimbang, 2) + $nilaiLama->nilai;
             else {
-                $total = round($validatedData['nilai'] * $penimbang, 2);
+                // Jika Belum ada nilai lama
+                $total = round($data['nilai'] * $penimbang, 2);
             }
         }
-
-
         RekapPilar::updateOrCreate(
             ['id' => $id],
             [

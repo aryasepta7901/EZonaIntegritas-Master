@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use SelfAssessment;
 
 class Pertanyaan extends Model
 {
@@ -20,7 +21,10 @@ class Pertanyaan extends Model
         'subpilar_id',
 
     ];
-
+    public function SubPilar()
+    {
+        return $this->belongsTo(SubPilar::class, 'subpilar_id');
+    }
     public function dokumen()
     {
         return $this->hasMany(dokumenLKE::class, 'pertanyaan_id');

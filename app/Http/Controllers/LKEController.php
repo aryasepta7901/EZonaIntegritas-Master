@@ -47,13 +47,14 @@ class LKEController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData['predikat'] = $request->predikat;
-        $validatedData['tahun'] = date('Y');
-        $validatedData['satker_id'] = $request->satker_id;
+        $data = [
+            'predikat' => $request->predikat,
+            'tahun' => date('Y'),
+            'satker_id' => $request->satker_id,
+        ];
+        $data['id'] = $data['tahun'] . $data['predikat'] . $data['satker_id'];
 
-        $validatedData['id'] = $validatedData['tahun'] . $validatedData['predikat'] . $validatedData['satker_id'];
-
-        Rekapitulasi::create($validatedData);
+        Rekapitulasi::create($data);
 
         return redirect('/lke')->with('success', 'Pengajuan Berhasil di Buat');
     }
@@ -87,6 +88,7 @@ class LKEController extends Controller
             'link' => 'lke/' . $lke->id,
             'title' => $pilar->pilar,
             'pilar' => $pilar,
+            'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
             'lke' => $lke,
 
 
