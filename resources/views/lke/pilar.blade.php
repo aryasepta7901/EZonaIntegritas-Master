@@ -34,6 +34,11 @@
                         <tr class="text-center">
                             <th>No</th>
                             <th>Pilar</th>
+                            {{-- Buat halaman rincian hasil --}}
+                            @if ($subrincian->id == 'HB' || $subrincian->id == 'HP')
+                                <th>Penjelasan</th>
+                            @endif
+
                             <th>Bobot</th>
                             <th>Minimal WBK</th>
                             <th>Minimal WBBM</th>
@@ -45,6 +50,17 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->pilar }}</td>
+
+                                @if ($subrincian->id == 'HB' || $subrincian->id == 'HP')
+                                    <td>
+                                        <ul>
+                                            @foreach ($value->opsi as $item)
+                                                <li>{{ $item->rincian }} <button
+                                                        class="badge badge-info">{{ $item->bobot }}</button></li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                @endif
                                 <td class="text-center"><button class="badge badge-info">{{ $value->bobot }}</button></td>
                                 <td class="text-center"><button class="badge badge-info">{{ $value->min_wbk }}</button></td>
                                 <td class="text-center"><button class="badge badge-info">{{ $value->min_wbbm }}</button>

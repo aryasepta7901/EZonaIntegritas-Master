@@ -12,6 +12,7 @@ use App\Http\Controllers\PengawasanController;
 use App\Http\Controllers\PertanyaanController;
 use App\Http\Controllers\SubRincianController;
 use App\Http\Controllers\PersyaratanController;
+use App\Http\Controllers\RincianHasilController;
 use App\Http\Controllers\SelfAssessmentController;
 
 /*
@@ -69,3 +70,5 @@ Route::resource('/lke', LKEController::class)->middleware('auth');
 Route::get('lke/{lke}/{pilar}', [LKEController::class, 'show2'])->name('lke.show2')->middleware('auth');
 // Self Assessment
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
+// Upload Rincian hasil
+Route::resource('/hasil', RincianHasilController::class)->middleware('auth');

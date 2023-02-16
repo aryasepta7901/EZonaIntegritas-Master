@@ -85,14 +85,30 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="/rincian"
+                    <li class="nav-item menu-open">
+                        <a href="#"
                             class="nav-link {{ Request::is('rincian*') | Request::is('subrincian*') | Request::is('pilar*') | Request::is('subpilar*') | Request::is('pertanyaan*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-question"></i>
                             <p>
                                 Mengelola LKE
+                                <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/rincian"
+                                    class="nav-link {{ Request::is('rincian*') | Request::is('subrincian*') | Request::is('pilar*') | Request::is('subpilar*') | Request::is('pertanyaan*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>LKE</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/hasil " class="nav-link {{ Request::is('hasil*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Upload Rincian Hasil</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endcan
                 <li class="nav-item">

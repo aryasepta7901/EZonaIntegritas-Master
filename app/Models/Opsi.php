@@ -24,4 +24,8 @@ class Opsi extends Model
     {
         return $this->belongsTo(Pertanyaan::class, 'pertanyaan_id');
     }
+    public function Pilar()
+    {
+        return $this->belongsTo(Pilar::class, 'pertanyaan_id');
+    }
 }
