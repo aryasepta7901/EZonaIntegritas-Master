@@ -20,4 +20,12 @@ class RekapHasil extends Model
         'pilar_id',
         'satker_id',
     ];
+    public function satker()
+    {
+        return $this->belongsTo(Satker::class, 'satker_id');
+    }
+    public function Opsi()
+    {
+        return $this->belongsTo(Opsi::class, 'opsi_id');
+    }
 }

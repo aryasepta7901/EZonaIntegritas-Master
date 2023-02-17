@@ -22,4 +22,9 @@ class Satker extends Model
     {
         return $this->belongsTo(Rekapitulasi::class, 'satker_id');
     }
+
+    public function RekapHasil()
+    {
+        return $this->hasOne(RekapHasil::class, 'satker_id');
+    }
 }

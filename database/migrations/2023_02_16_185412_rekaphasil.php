@@ -14,7 +14,7 @@ class Rekaphasil extends Migration
     public function up()
     {
         Schema::create('rekaphasil', function (Blueprint $table) {
-            $table->id();
+            $table->char('id', 15)->primary();
             $table->year('tahun'); //tahun-satker-pilar_id
             $table->char('opsi_id', 6);
             $table->double('nilai', 6, 2);

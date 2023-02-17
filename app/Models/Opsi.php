@@ -28,4 +28,8 @@ class Opsi extends Model
     {
         return $this->belongsTo(Pilar::class, 'pertanyaan_id');
     }
+    public function RekapHasil()
+    {
+        return $this->belongsTo(RekapHasil::class, 'opsi_id');
+    }
 }

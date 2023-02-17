@@ -59,7 +59,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
 
-                                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
                                 @isset($master)
                                     <li class="breadcrumb-item"><a href="/{{ $link }}">{{ $master }}</a>
                                     </li>

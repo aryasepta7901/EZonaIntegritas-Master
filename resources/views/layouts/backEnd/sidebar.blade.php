@@ -85,7 +85,8 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item menu-open">
+                    <li
+                        class="nav-item {{ Request::is('rincian*') | Request::is('subrincian*') | Request::is('pilar*') | Request::is('subpilar*') | Request::is('pertanyaan*') | Request::is('hasil*') ? 'menu-open' : '' }} ">
                         <a href="#"
                             class="nav-link {{ Request::is('rincian*') | Request::is('subrincian*') | Request::is('pilar*') | Request::is('subpilar*') | Request::is('pertanyaan*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-question"></i>
