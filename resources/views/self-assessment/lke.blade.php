@@ -45,7 +45,9 @@
                             @foreach ($value->pilar as $value)
                                 @php
                                     $jumlah_soal = App\Models\Pertanyaan::where('subpilar_id', 'LIKE', '%' . $value->id . '%')->count();
-                                    $soal_terjawab = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')->count(); //mengambil nilai
+                                    $soal_terjawab = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')
+                                        ->where('satker_id', auth()->user()->satker_id)
+                                        ->count(); //mengambil nilai
                                     $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
                                 @endphp
                                 <div class="col-lg-4">

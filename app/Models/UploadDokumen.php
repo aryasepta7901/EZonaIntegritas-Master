@@ -14,6 +14,7 @@ class UploadDokumen extends Model
 
     protected $fillable = [
         'id',
+        'name',
         'file',
         'dokumenlke_id',
         'selfassessment_id',
@@ -22,5 +23,9 @@ class UploadDokumen extends Model
     public function dokumenLKE()
     {
         return $this->belongsTo(dokumenLKE::class, 'dokumenlke_id');
+    }
+    public function pertanyaan()
+    {
+        return $this->belongsTo(Pertanyaan::class, 'dokumenlke_id');
     }
 }

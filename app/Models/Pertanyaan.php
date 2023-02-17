@@ -33,4 +33,8 @@ class Pertanyaan extends Model
     {
         return $this->hasMany(Opsi::class, 'pertanyaan_id');
     }
+    public function file()
+    {
+        return $this->hasMany(UploadDokumen::class, 'dokumenlke_id');
+    }
 }

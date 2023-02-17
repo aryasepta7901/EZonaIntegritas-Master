@@ -13,7 +13,9 @@
                 @endphp
                 @foreach ($pertanyaan as $p)
                     @php
-                        $nilai = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $p->subpilar_id . '%')->sum('nilai'); //mengambil nilai
+                        $nilai = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $p->subpilar_id . '%')
+                            ->where('satker_id', auth()->user()->satker_id)
+                            ->sum('nilai'); //mengambil nilai
                         $total = round($nilai * $penimbang, 2);
                     @endphp
                 @endforeach
@@ -120,7 +122,6 @@
                                                                                 @foreach ($value->dokumen as $item)
                                                                                     <tr>
                                                                                         <td>{{ $loop->iteration }}</td>
-
                                                                                         <td style="min-width: 200px">
                                                                                             {{ $item->dokumen }}
                                                                                             <input type="hidden"
@@ -152,8 +153,64 @@
                                                                                         </td>
                                                                                     </tr>
                                                                                 @endforeach
-                                                                            </tbody>
 
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <label for="catatan">Upload Dokumen
+                                                                            Tambahan</label>
+                                                                        <div class="custom-file">
+
+                                                                            <input type="file" class="custom-file-input"
+                                                                                id="formFileMultiple" name="fileCreate[]"
+                                                                                multiple>
+                                                                            <label class="custom-file-label"
+                                                                                for="formFileMultiple">
+                                                                                Dokumen Tambahan</label>
+
+                                                                        </div>
+                                                                        <table
+                                                                            class="table table-bordered table-striped mt-3">
+                                                                            <thead>
+                                                                                <tr class="text-center">
+                                                                                    <th>No</th>
+                                                                                    <th>Nama Dokumen</th>
+                                                                                    <th>File</th>
+                                                                                    <th>Upload</th>
+
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                                @foreach ($value->file as $item)
+                                                                                    <tr>
+                                                                                        <td>{{ $loop->iteration }}</td>
+                                                                                        <td style="min-width: 200px">
+                                                                                            {{ $item->name }}
+                                                                                            <input type="hidden"
+                                                                                                name="upload_id{{ $loop->index }}"
+                                                                                                value="{{ $item->id }}">
+                                                                                        </td>
+
+                                                                                        <td class="text-center">
+                                                                                            <a target="__self"
+                                                                                                href="{{ asset('storage/' . $item->file) }}"><i
+                                                                                                    class="fas fa-file"></i></a>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div class="custom-file">
+                                                                                                <input type="file"
+                                                                                                    class="custom-file-input"
+                                                                                                    id="customFile"
+                                                                                                    name="fileUpdate[]">
+                                                                                                <label
+                                                                                                    class="custom-file-label"
+                                                                                                    for="customFile">Update
+                                                                                                    File</label>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            </tbody>
                                                                         </table>
                                                                     </div>
                                                                     <hr>
@@ -267,6 +324,17 @@
                                                                     </tbody>
 
                                                                 </table>
+                                                                <label for="catatan">Upload Dokumen
+                                                                    Tambahan</label>
+                                                                <div class="custom-file">
+
+                                                                    <input type="file" class="custom-file-input"
+                                                                        id="formFileMultiple" name="fileCreate[]"
+                                                                        multiple>
+                                                                    <label class="custom-file-label"
+                                                                        for="formFileMultiple">
+                                                                        Dokumen Tambahan</label>
+                                                                </div>
                                                                 <hr>
                                                                 <div class="d-flex justify-content-end mr-3">
 
