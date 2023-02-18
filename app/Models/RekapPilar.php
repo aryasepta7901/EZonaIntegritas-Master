@@ -19,4 +19,8 @@ class RekapPilar extends Model
         'pilar_id',
 
     ];
+    public function Rekapitulasi()
+    {
+        return $this->belongsTo(Rekapitulasi::class, 'rekapitulasi_id');
+    }
 }

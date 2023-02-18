@@ -45,10 +45,19 @@
                     <tbody>
                         @foreach ($rekap as $value)
                             <tr>
+
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->tahun }}</td>
                                 <td>{{ $value->predikat }}</td>
-                                <td>Nilai</td>
+                                <td>
+                                    {{-- Hitung jumlah nilai rincian pengungkit --}}
+                                    @foreach ($value->RekapPilar as $item)
+                                        @php
+                                            $nilai = $item->sum('nilai');
+                                        @endphp
+                                    @endforeach
+                                    {{ $nilai }}
+                                </td>
                                 <td>{{ $value->status }}</td>
                                 <td class="text-center">
                                     <a type="button" href="/lke/{{ $value->id }}" class="btn btn-sm btn-success"><i

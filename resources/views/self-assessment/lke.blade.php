@@ -1,6 +1,15 @@
 @extends('layouts.backEnd.main')
 
 @section('content')
+    {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
+    @if ($rekap->status == 0)
+        <div class="col-lg-12 mb-3 d-flex justify-content-end">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
+                    Kirim LKE</i></button>
+        </div>
+    @endif
+
+
     <div class="col-lg-4">
         <div class="info-box bg-light">
             <div class="info-box-content">
@@ -105,4 +114,39 @@
 
     <a href="/lke" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
         Kembali</a>
+
+    {{-- Kirim LKE --}}
+    <div class="modal fade" id="simpan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirim LKE?</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form method="post" action="/lke/{{ $rekap->id }}">
+                    @method('put')
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="{{ $rekap->id }}">
+
+                        <p> <b> Note:</b> <br></p>
+                        <p>Harap Periksa Kembali Isian anda , apakah sudah lengkap atau tidak , jika LKE
+                            sudah dikirim maka
+                            tidak akan bisa diisi kembali. LKE akan dikirim dan di cek oleh validator Provinsi</p>
+
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection

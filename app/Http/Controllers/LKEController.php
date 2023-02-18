@@ -6,7 +6,6 @@ use App\Models\Persyaratan;
 use App\Models\Pilar;
 use App\Models\Rekapitulasi;
 use App\Models\RekapPilar;
-use App\Models\SelfAssessment;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
 use Illuminate\Http\Request;
@@ -20,6 +19,7 @@ class LKEController extends Controller
      */
     public function index()
     {
+
         $this->authorize('pic');
 
         return view('self-assessment.rekap', [
@@ -89,7 +89,7 @@ class LKEController extends Controller
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
-            'lke' => $lke,
+            'rekap' => $lke,
 
 
         ]);
@@ -116,7 +116,9 @@ class LKEController extends Controller
      */
     public function update(Request $request, Rekapitulasi $rekapitulasi)
     {
-        //
+        $id = $request->id;
+        Rekapitulasi::where('id', $id)->update(['status' => 1]);
+        return redirect('/lke')->with('success', 'LKE Berhasil Di Kirim');
     }
 
     /**

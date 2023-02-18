@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EvaluatorProvinsiController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\LKEController;
 use Illuminate\Support\Facades\Route;
@@ -72,3 +73,6 @@ Route::get('lke/{lke}/{pilar}', [LKEController::class, 'show2'])->name('lke.show
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
 // Upload Rincian hasil
 Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
+
+// Evaluator Provinsi
+Route::resource('/evaluasi/prov', EvaluatorProvinsiController::class)->middleware('auth');

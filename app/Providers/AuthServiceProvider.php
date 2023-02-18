@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Rekapitulasi;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -32,6 +33,9 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('pic', function (User $user) {
             return $user->level_id === 'PT';
+        });
+        Gate::define('EvalProv', function (User $user) {
+            return $user->level_id === 'EP';
         });
     }
 }

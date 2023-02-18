@@ -24,4 +24,8 @@ class Rekapitulasi extends Model
     {
         return $this->belongsTo(Satker::class, 'satker_id');
     }
+    public function RekapPilar()
+    {
+        return $this->hasMany(RekapPilar::class, 'rekapitulasi_id');
+    }
 }
