@@ -13,7 +13,7 @@
                 @foreach ($pertanyaan as $p)
                     @php
                         $nilai = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $p->subpilar_id . '%')
-                            ->where('satker_id', auth()->user()->satker_id)
+                            ->where('rekapitulasi_id', $rekap->id)
                             ->sum('nilai'); //mengambil nilai
                         $total = round($nilai * $penimbang, 2);
                     @endphp
@@ -51,7 +51,7 @@
                                                 <tr>
                                                     @php
                                                         $selfAssessment = App\Models\selfAssessment::where('pertanyaan_id', $value->id)
-                                                            ->where('satker_id', auth()->user()->satker_id)
+                                                            ->where('rekapitulasi_id', $rekap->id)
                                                             ->get();
                                                     @endphp
                                                     {{-- Update --}}
@@ -132,8 +132,11 @@
                                                                                                 value="{{ $item->id }}">
                                                                                         </td>
                                                                                         <td class="text-center">
-                                                                                            @if ($item->file->count() != 0)
-                                                                                                @foreach ($item->file as $f)
+                                                                                            @php
+                                                                                                $file = $item->file->where('selfassessment_id', $self->id);
+                                                                                            @endphp
+                                                                                            @if ($file->count() != 0)
+                                                                                                @foreach ($file as $f)
                                                                                                     <a target="__self"
                                                                                                         href="{{ asset('storage/' . $f->file) }}"><i
                                                                                                             class="fas fa-file"></i></a>
@@ -156,8 +159,8 @@
                                                                                         </td>
                                                                                         {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
                                                                                         @if ($rekap->status == 0)
-                                                                                            @if ($item->file->count() != 0)
-                                                                                                @foreach ($item->file as $f)
+                                                                                            @if ($file->count() != 0)
+                                                                                                @foreach ($file as $f)
                                                                                                     <td class="text-center">
                                                                                                         <button
                                                                                                             type="button"
@@ -207,7 +210,7 @@
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                                @foreach ($value->file as $item)
+                                                                                @foreach ($value->file->where('selfassessment_id', $self->id) as $item)
                                                                                     <tr>
                                                                                         <td>{{ $loop->iteration }}</td>
                                                                                         <td style="min-width: 200px">

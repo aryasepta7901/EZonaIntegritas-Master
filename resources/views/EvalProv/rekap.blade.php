@@ -31,6 +31,7 @@
                                 <td>{{ $value->satker->nama_satker }}</td>
                                 <td>{{ $value->predikat }}</td>
                                 <td>
+
                                     {{-- Hitung jumlah nilai rincian pengungkit --}}
                                     @foreach ($value->RekapPilar as $item)
                                         @php
@@ -39,8 +40,10 @@
                                     @endforeach
                                     {{ $nilai }}
                                 </td>
-                                <td class="text-center"><button class="btn btn-sm btn-info"><i
-                                            class="fas fa-file"></i></button>
+                                <td class="text-center">
+                                    <a type="button" href="/lke/{{ $value->id }}" class="btn btn-sm btn-success"><i
+                                            class="fa fa-file"></i> LKE</a>
+                                </td>
                                 </td>
                                 <td>{{ $value->status }}</td>
                             </tr>

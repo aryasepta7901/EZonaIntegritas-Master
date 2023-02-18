@@ -46,17 +46,27 @@
                         @foreach ($rekap as $value)
                             <tr>
 
+
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->tahun }}</td>
                                 <td>{{ $value->predikat }}</td>
                                 <td>
-                                    {{-- Hitung jumlah nilai rincian pengungkit --}}
-                                    @foreach ($value->RekapPilar as $item)
-                                        @php
-                                            $nilai = $item->sum('nilai');
-                                        @endphp
-                                    @endforeach
-                                    {{ $nilai }}
+                                    {{-- Cek apakah data rekappilar ada didatabase --}}
+
+                                    @php
+                                        $RekapPilar = $value->RekapPilar->where('rekapitulasi_id', $value->id);
+                                    @endphp
+                                    @if ($RekapPilar->count() != 0)
+                                        {{-- Hitung jumlah nilai rincian pengungkit --}}
+                                        @foreach ($RekapPilar as $item)
+                                            @php
+                                                $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai');
+                                            @endphp
+                                        @endforeach
+                                        {{-- Masih Error --}}
+                                        {{ $nilai }}
+                                    @endif
+
                                 </td>
                                 <td>{{ $value->status }}</td>
                                 <td class="text-center">

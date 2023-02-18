@@ -61,14 +61,6 @@
                 @endcan
                 @can('EvalProv')
                     <li class="nav-item">
-                        <a href="/lke" class="nav-link {{ Request::is('lke*') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Self Assessment LKE
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="/evaluasi/prov" class="nav-link {{ Request::is('evaluasi*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>

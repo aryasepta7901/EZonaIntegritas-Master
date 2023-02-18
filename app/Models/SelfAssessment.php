@@ -18,6 +18,7 @@ class SelfAssessment extends Model
         'opsi_id',
         'catatan',
         'nilai',
+        'rekapitulasi_id',
         'satker_id',
         'pertanyaan_id',
 

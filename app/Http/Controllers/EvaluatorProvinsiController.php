@@ -19,7 +19,7 @@ class EvaluatorProvinsiController extends Controller
 
         return view('EvalProv.rekap', [
             'title' => 'Rekapitulasi Pengajuan Zona Integritas',
-            'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->get(),
+            'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 1)->get(),
         ]);
     }
 

@@ -7,6 +7,15 @@
             <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
                     Kirim LKE</i></button>
         </div>
+    @elseif($rekap->status == 1)
+        <div class="col-lg-12 mb-3 d-flex justify-content-end">
+            <button class="btn btn-success m-2" data-toggle="modal" data-target="#setuju"><i class="fa fa-save">
+                    Setuju</i></button>
+            <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
+                    Revisi</i></button>
+            <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
+                    Tolak</i></button>
+        </div>
     @endif
 
 
@@ -26,7 +35,7 @@
                 <span class="info-box-text">Total Pengungkit</span>
                 @php
                     $tot_jumlah_soal = App\Models\Pertanyaan::count();
-                    $tot_soal_terjawab = App\Models\selfAssessment::where('satker_id', auth()->user()->satker_id)->count(); //mengambil nilai
+                    $tot_soal_terjawab = App\Models\selfAssessment::where('rekapitulasi_id', $rekap->id)->count(); //mengambil nilai
                     $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
                     
                 @endphp
@@ -55,7 +64,7 @@
                                 @php
                                     $jumlah_soal = App\Models\Pertanyaan::where('subpilar_id', 'LIKE', '%' . $value->id . '%')->count();
                                     $soal_terjawab = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')
-                                        ->where('satker_id', auth()->user()->satker_id)
+                                        ->where('rekapitulasi_id', $rekap->id)
                                         ->count(); //mengambil nilai
                                     $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
                                 @endphp

@@ -65,6 +65,7 @@ class SelfAssessmentController extends Controller
             'tahun' => $tahun,
             'opsi_id' => $request->opsi_id,
             'catatan' => $request->catatan,
+            'rekapitulasi_id' => $request->rekapitulasi_id,
             'satker_id' => $satker_id,
             'pertanyaan_id' => $pertanyaan_id,
         ];
@@ -90,14 +91,14 @@ class SelfAssessmentController extends Controller
 
             foreach ($request->fileCreate as $key => $file) {
                 // cek data terakhir yang masuk
-                $dataLama =  UploadDokumen::where('dokumenlke_id', $request->pertanyaan_id)->orderBy('id', 'DESC')->first();
+                $dataLama =  UploadDokumen::where('dokumenlke_id', $request->pertanyaan_id)->where('selfassessment_id', $data['id'])->orderBy('id', 'DESC')->first();
                 if ($dataLama) {
                     $id = substr($dataLama->id, -1, 1); //ambil angka 
                     $id += 1; //tambahkan satu
                 } else {
                     $id = 1;
                 }
-                $id = date('Y') .   $data['satker_id'] . $request->pertanyaan_id . $id;
+                $id = date('Y') .   $data['id'] . $id;
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
@@ -177,7 +178,6 @@ class SelfAssessmentController extends Controller
                 'max' => 'Dokumen hanya boleh Berukuran :max'
             ]
         );
-
         $data = [
             'opsi_id' => $request->opsi_id,
             'catatan' => $request->catatan,
@@ -234,14 +234,15 @@ class SelfAssessmentController extends Controller
         if ($request->file('fileCreate')) { //cek apakah ada dokumen yang di upload
             foreach ($request->fileCreate as $key => $file) {
                 // cek data terakhir yang masuk
-                $dataLama =  UploadDokumen::where('dokumenlke_id', $request->pertanyaan_id)->orderBy('id', 'DESC')->first();
+                $dataLama =  UploadDokumen::where('dokumenlke_id', $request->pertanyaan_id)->where('selfassessment_id', $selfAssessment->id)->orderBy('id', 'DESC')->first();
                 if ($dataLama) {
+
                     $id = substr($dataLama->id, -1, 1); //ambil angka 
                     $id += 1; //tambahkan satu
                 } else {
                     $id = 1;
                 }
-                $id = date('Y') .   $selfAssessment->satker_id . $request->pertanyaan_id . $id;
+                $id = $selfAssessment->id . $id;
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
