@@ -45,6 +45,8 @@ class SelfAssessmentController extends Controller
                 'opsi_id' => 'required',
                 'catatan'  => 'required',
                 'dokumen.*' => 'mimes:pdf|max:2048',
+                'fileCreate.*' => 'mimes:pdf|max:2048',
+
             ],
             [
                 'opsi_id.required' => 'Silahkan Pilih Jawaban,',
@@ -164,6 +166,8 @@ class SelfAssessmentController extends Controller
                 'opsi_id' => 'required',
                 'catatan'  => 'required',
                 'dokumen.*' => 'mimes:pdf|max:2048',
+                'fileUpdate.*' => 'mimes:pdf|max:2048',
+                'fileCreate.*' => 'mimes:pdf|max:2048',
             ],
             [
                 'opsi_id.required' => 'Silahkan Pilih Jawaban',
@@ -202,7 +206,7 @@ class SelfAssessmentController extends Controller
                 );
             }
         }
-        // file tambahan Update
+        // file tambahan {Update}
         if ($request->file('fileUpdate')) { //cek apakah ada dokumen yang di upload
             foreach ($request->fileUpdate as $key => $fileUpdate) {
                 $id =  $request->input('upload_id' . $key);
@@ -225,7 +229,7 @@ class SelfAssessmentController extends Controller
             }
         }
 
-        // file tambahan Create
+        // file tambahan {Create}
         if ($request->file('fileCreate')) { //cek apakah ada dokumen yang di upload
             foreach ($request->fileCreate as $key => $file) {
                 // cek data terakhir yang masuk
@@ -278,8 +282,13 @@ class SelfAssessmentController extends Controller
      * @param  \App\Models\SelfAssessment  $selfAssessment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SelfAssessment $selfAssessment)
+    public function destroy(UploadDokumen $selfAssessment)
     {
-        //
+        if ($selfAssessment->file) {
+            // jika ada gambar lama maka hapus
+            Storage::delete($selfAssessment->file);
+        }
+        UploadDokumen::destroy($selfAssessment->id);
+        return redirect()->back()->with('success', ' Dokumen Has Ben Deleted');
     }
 }

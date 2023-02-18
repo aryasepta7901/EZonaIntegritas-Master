@@ -9,7 +9,6 @@
                     // Perhitungan Nilai setiap Pertanyaan
                     $jml_pertanyaan = $pertanyaan->count();
                     $penimbang = $value->bobot / $jml_pertanyaan;
-                    
                 @endphp
                 @foreach ($pertanyaan as $p)
                     @php
@@ -71,7 +70,7 @@
                                                                 <input type="hidden" name="penimbang"
                                                                     value="{{ $penimbang }}">
                                                                 {{-- Data RekapPilar --}}
-                                                                <td style="min-width: 550px;">
+                                                                <td style="min-width: 650px;">
                                                                     <div class="card-body">
                                                                         <div class="form-group">
                                                                             <label
@@ -107,6 +106,7 @@
                                                                                 </div>
                                                                             @enderror
                                                                         </div>
+                                                                        {{-- File Utama --}}
                                                                         <label for="catatan">Upload Dokumen</label>
                                                                         <table class="table table-bordered table-striped">
                                                                             <thead>
@@ -115,6 +115,7 @@
                                                                                     <th>Nama Dokumen</th>
                                                                                     <th>File</th>
                                                                                     <th>Upload</th>
+                                                                                    <th>Delete</th>
 
                                                                                 </tr>
                                                                             </thead>
@@ -151,11 +152,27 @@
                                                                                                     File</label>
                                                                                             </div>
                                                                                         </td>
+                                                                                        @if ($item->file->count() != 0)
+                                                                                            @foreach ($item->file as $f)
+                                                                                                <td class="text-center">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-sm btn-danger"
+                                                                                                        data-toggle="modal"
+                                                                                                        data-target="#hapus{{ $f->id }}"><i
+                                                                                                            class="fa fa-trash"></i></button>
+                                                                                                </td>
+                                                                                            @endforeach
+                                                                                        @else
+                                                                                            <td></td>
+                                                                                        @endif
+
                                                                                     </tr>
                                                                                 @endforeach
 
                                                                             </tbody>
                                                                         </table>
+                                                                        {{-- File Utama --}}
+                                                                        {{-- File Tambahan --}}
                                                                         <label for="catatan">Upload Dokumen
                                                                             Tambahan</label>
                                                                         <div class="custom-file">
@@ -176,11 +193,10 @@
                                                                                     <th>Nama Dokumen</th>
                                                                                     <th>File</th>
                                                                                     <th>Upload</th>
-
+                                                                                    <td>Delete</td>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
-
                                                                                 @foreach ($value->file as $item)
                                                                                     <tr>
                                                                                         <td>{{ $loop->iteration }}</td>
@@ -206,12 +222,23 @@
                                                                                                     class="custom-file-label"
                                                                                                     for="customFile">Update
                                                                                                     File</label>
+
                                                                                             </div>
+                                                                                        </td>
+                                                                                        <td class="text-center">
+                                                                                            <button type="button"
+                                                                                                class="btn btn-sm btn-danger"
+                                                                                                data-toggle="modal"
+                                                                                                data-target="#hapus{{ $item->id }}"><i
+                                                                                                    class="fa fa-trash"></i></button>
                                                                                         </td>
                                                                                     </tr>
                                                                                 @endforeach
+
+
                                                                             </tbody>
                                                                         </table>
+                                                                        {{-- File Tambahan --}}
                                                                     </div>
                                                                     <hr>
                                                                     <div class="d-flex justify-content-end mr-3">
@@ -232,6 +259,96 @@
                                                                     {!! $value->info !!}
                                                                 </td>
                                                             </form>
+                                                            {{-- Modal Delete File Utama --}}
+                                                            @foreach ($value->file as $item)
+                                                                <div class="modal fade" id="hapus{{ $item->id }}">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h4 class="modal-title">
+                                                                                    Hapus</h4>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <p class="text-danger">
+                                                                                    Apakah Anda
+                                                                                    Yakin untuk
+                                                                                    Menghapus
+                                                                                    Dokumen</p>
+                                                                                <b>{{ $item->name }}
+                                                                                    ?</b>
+                                                                            </div>
+                                                                            <form
+                                                                                action="/selfAssessment/{{ $item->id }}"
+                                                                                method="POST" class="d-inline">
+                                                                                @method('delete')
+                                                                                @csrf
+                                                                                <div
+                                                                                    class="modal-footer justify-content-between">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-default"
+                                                                                        data-dismiss="modal">Close</button>
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary">Delete</button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                        <!-- /.modal-content -->
+                                                                    </div>
+                                                                    <!-- /.modal-dialog -->
+                                                                </div>
+                                                            @endforeach
+                                                            {{-- Modal Delete File Tambahan --}}
+                                                            @foreach ($value->dokumen as $item)
+                                                                @foreach ($item->file as $f)
+                                                                    <div class="modal fade"
+                                                                        id="hapus{{ $f->id }}">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h4 class="modal-title">
+                                                                                        Hapus</h4>
+                                                                                    <button type="button" class="close"
+                                                                                        data-dismiss="modal"
+                                                                                        aria-label="Close">
+                                                                                        <span
+                                                                                            aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <p class="text-danger">
+                                                                                        Apakah Anda
+                                                                                        Yakin untuk
+                                                                                        Menghapus
+                                                                                        Dokumen</p>
+                                                                                    <b>{{ $f->name }}
+                                                                                        ?</b>
+                                                                                </div>
+                                                                                <form
+                                                                                    action="/selfAssessment/{{ $f->id }}"
+                                                                                    method="POST" class="d-inline">
+                                                                                    @method('delete')
+                                                                                    @csrf
+                                                                                    <div
+                                                                                        class="modal-footer justify-content-between">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-default"
+                                                                                            data-dismiss="modal">Close</button>
+                                                                                        <button type="submit"
+                                                                                            class="btn btn-primary">Delete</button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                            <!-- /.modal-content -->
+                                                                        </div>
+                                                                        <!-- /.modal-dialog -->
+                                                                    </div>
+                                                                @endforeach
+                                                            @endforeach
                                                         @endforeach
                                                     @else
                                                         {{-- Create --}}
@@ -246,7 +363,7 @@
                                                             <input type="hidden" name="penimbang"
                                                                 value="{{ $penimbang }}">
                                                             {{-- Data RekapPilar --}}
-                                                            <td style="min-width: 550px;">
+                                                            <td style="min-width: 650px;">
                                                                 <div class="card-body">
 
                                                                     <div class="form-group">
@@ -254,8 +371,6 @@
                                                                             for="pertanyaan">{{ $value->pertanyaan }}</label>
                                                                         <input type="hidden" name="pertanyaan_id"
                                                                             value="{{ $value->id }}">
-
-
                                                                         @foreach ($value->opsi as $item)
                                                                             @if ($item->type == 'checkbox')
                                                                                 <div class="form-check ml-4">
@@ -293,7 +408,6 @@
                                                                             <th>No</th>
                                                                             <th>Nama Dokumen</th>
                                                                             <th>Upload</th>
-
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -370,6 +484,7 @@
         <a href="/lke/{{ $lke->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
             Kembali</a>
     </div>
+
     <script script src="{{ asset('template') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script>
         var Toast = Swal.mixin({
