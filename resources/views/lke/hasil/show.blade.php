@@ -23,11 +23,14 @@
         <div class="card">
             <!-- /.card-header -->
 
-            <div class="card-header d-flex justify-content-between">
-                <p>{{ $pilar->pilar }}</p>
-                <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
-                        Tambah</i></button>
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
 
+                    <p>{{ $pilar->pilar }}</p>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
+                            Tambah</i></button>
+
+                </div>
             </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -46,7 +49,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->satker->nama_satker }}</td>
                                 <td>{{ $value->opsi->rincian }}</td>
-                                <td class="text-center"><button class="badge badge-info">{{ $value->nilai }}</button></td>
+                                <td class="text-center"><button class="badge badge-info">{{ $value->nilai }}</button>
+                                </td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
                                         data-target="#edit{{ $value->id }}"><i class="fa fa-pen"></i></button>

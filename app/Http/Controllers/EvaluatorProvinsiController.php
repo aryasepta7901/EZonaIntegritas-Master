@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rekapitulasi;
 use App\Models\RekapPilar;
+use App\Models\RekapHasil;
 use App\Models\Pilar;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
@@ -67,7 +68,9 @@ class EvaluatorProvinsiController extends Controller
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $evaluasi,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
+            'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'nilai' => RekapPilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai'),
+            'nilaiHasil' => RekapHasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
 
         ]);
     }

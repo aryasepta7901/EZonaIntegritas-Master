@@ -19,6 +19,7 @@ class Rekapitulasi extends Model
         'nilai_hasil',
         'status',
         'satker_id',
+        'surat_rekomendasi',
     ];
     public function satker()
     {

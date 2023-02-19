@@ -40,16 +40,88 @@
             <!-- /.card-body -->
         </div>
     </div>
+    <div class="col-lg-8">
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
+                    <br>
+                @endforeach
+
+            </div>
+        @endif
+        @if (session()->has('success'))
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Sukses!</h5>
+                {{ session('success') }}
+            </div>
+        @endif
+        <div class="card">
+            <div class="card-header">
+                Upload Surat Rekomendasi
+            </div>
+            <div class="card-body">
+                <form action="/prov/surat" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @foreach ($rekap as $value)
+                        <input type="hidden" value="{{ $value->id }}" name="id[]">
+                    @endforeach
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="upload" name="surat">
+                        <label class="custom-file-label" for="upload">
+                            Upload</label>
+                    </div>
+
+                    @if ($rekap->first()->surat_rekomendasi)
+                        <table class="table table-bordered table-striped mt-3">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>File</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">
+                                        <a target="__self"
+                                            href="{{ asset('storage/' . $rekap->first()->surat_rekomendasi) }}"><i
+                                                class="fas fa-file"></i></a>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                                            data-target="#hapus"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    @endif
+
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-end mr-3">
+
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>
+                        Simpan
+                    </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-
-
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-between">
                     <b>{{ auth()->user()->satker->nama_satker }}</b>
+                    <button class="btn btn-primary"><i class="fas fa-download"></i></button>
                 </div>
             </div>
             <div class="card-body">
+                <p>Ini Templete Surat Untuk DiDownload</p>
 
 
             </div>
@@ -59,4 +131,39 @@
         </div>
         <!-- /.card -->
     </div>
+    @foreach ($rekap as $value)
+        <div class="modal fade" id="hapus">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Hapus</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger">
+                            Apakah Anda
+                            Yakin untuk
+                            Menghapus
+                            Surat Rekomendasi dari {{ auth()->user()->satker->nama_satker }}</p>
+
+                    </div>
+                    <form action="/prov/surat/{{ $value->id }}" method="POST" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        <input type="hidden" value="{{ $value->id }}" name="id[]">
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endforeach
+
 @endsection

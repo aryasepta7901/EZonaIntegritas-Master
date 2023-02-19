@@ -22,6 +22,7 @@ class Rekapitulasi extends Migration
             $table->double('nilai_hasil', 6, 2)->default(0);
             $table->char('status', 1)->default(0);
             $table->char('satker_id', 4);
+            $table->text('surat_rekomendasi');
             $table->timestamps();
         });
     }

@@ -27,8 +27,21 @@
         <div class="info-box bg-light">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-bold mb-3">{{ $rekap->satker->nama_satker }}</span>
+                @can('EvalProv')
+                    @php
+                        $nilai += $nilaiHasil;
+                    @endphp
+                @endcan
+                @php
+                    
+                @endphp
                 <span class="info-box-number text-center text-muted mb-3">{{ $nilai }}</span>
-                <span class="info-box-text text-center text-muted mb-0">Nilai Self-Assessment</span>
+                @can('pic')
+                    <span class="info-box-text text-center text-muted mb-0">Nilai Self-Assessment</span>
+                @endcan
+                @can('EvalProv')
+                    <span class="info-box-text text-center text-muted mb-0">Nilai Zona Integritas</span>
+                @endcan
             </div>
         </div>
     </div>
@@ -54,6 +67,7 @@
             <!-- /.info-box-content -->
         </div>
     </div>
+    {{-- Rincian Pengungkit --}}
     <b class="mb-3">Rincian Pengungkit</b>
     @foreach ($subrincian as $value)
         <div class="col-lg-12">
@@ -166,9 +180,55 @@
                 </div>
                 <!-- /.card-body -->
             </div>
-            <!-- /.card -->
         </div>
     @endforeach
+    {{-- Rincian Hasil --}}
+    @can('EvalProv')
+        <b class="mb-3">Rincian Hasil</b>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach ($rincianhasil as $value)
+                                <div class="col-lg-4">
+                                    {{-- <a href="/prov/evaluasi/{{ $rekap->id }}/{{ $value->id }}"> --}}
+                                    <div class="info-box bg-warning">
+                                        <div class="info-box-content" style="height: 150px">
+                                            <span class="info-box-number text-bold mb-3 text-center">
+                                                {{ $value->pilar }}
+                                            </span>
+                                            @php
+                                                $nilaiHasil = App\Models\RekapHasil::where('satker_id', $rekap->satker_id)
+                                                    ->where('pilar_id', $value->id)
+                                                    ->where('tahun', date('Y'))
+                                                    ->first();
+                                            @endphp
+                                            <span class="info-box-number text-center">
+                                                {{-- Jika nilai ada di database --}}
+                                                Nilai :
+                                                @if ($nilaiHasil !== null)
+                                                    {{ $nilaiHasil->nilai }}
+                                                @else
+                                                    0
+                                                @endif /
+                                                {{ $value->bobot }}
+                                            </span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    {{-- </a> --}}
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endcan
+
+
+
     {{-- Jika yang akses Tim Evaluator Provinsi --}}
     @can('EvalProv')
         <a href="/prov/evaluasi" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>

@@ -4,15 +4,12 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-
-
                 <div class="d-flex justify-content-end">
                     <a href="/prov/surat" class="btn btn-primary  "><i class="fa fa-print">
                             Cetak Surat Persetujuan</i></a>
                 </div>
             </div>
             <div class="card-body">
-
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -57,9 +54,6 @@
                                 @php
                                     $total = $nilai + $nilaiHasil;
                                 @endphp
-
-
-
                                 <td class="text-center">
                                     <a type="button" href="/prov/evaluasi/{{ $value->id }}"
                                         class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
@@ -72,8 +66,6 @@
 
                 </table>
             </div>
-
-
             <!-- /.card-body -->
         </div>
         <!-- /.card -->

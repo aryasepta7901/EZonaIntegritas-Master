@@ -51,6 +51,7 @@ class LKEController extends Controller
             'predikat' => $request->predikat,
             'tahun' => date('Y'),
             'satker_id' => $request->satker_id,
+            'surat_rekomendasi' => ''
         ];
         $data['id'] = $data['tahun'] . $data['predikat'] . $data['satker_id'];
 

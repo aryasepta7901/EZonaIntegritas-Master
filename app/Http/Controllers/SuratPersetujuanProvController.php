@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\rekapitulasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SuratPersetujuanProvController extends Controller
 {
@@ -31,7 +32,6 @@ class SuratPersetujuanProvController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -43,6 +43,34 @@ class SuratPersetujuanProvController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate(
+            [
+                'surat.*' => 'mimes:pdf|max:2048',
+
+            ],
+            [
+                'mimes' => 'Dokumen hanya boleh format :values,',
+                'max' => 'Dokumen hanya boleh Berukuran :max,'
+            ]
+        );
+        if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
+            // Ambil File lamanya
+            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
+            if ($rekap) {
+                // jika ada file lama maka hapus
+                Storage::delete($rekap->surat_rekomendasi);
+            }
+            foreach ($request->id as $key => $id) {
+
+                Rekapitulasi::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'surat_rekomendasi' =>  $request->file('surat')->store('surat_rekomendasi_prov'),
+                    ]
+                );
+            }
+        }
+        return redirect()->back()->with('success', 'Surat Rekomendai Berhasil di Simpan');
     }
 
     /**
@@ -85,8 +113,23 @@ class SuratPersetujuanProvController extends Controller
      * @param  \App\Models\rekapitulasi  $rekapitulasi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(rekapitulasi $rekapitulasi)
+    public function destroy(rekapitulasi $surat, Request $request)
     {
-        //
+        $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
+
+
+        if ($rekap->surat_rekomendasi) {
+            // jika ada file lama maka hapus
+            Storage::delete($rekap->surat_rekomendasi);
+        }
+        foreach ($request->id as $key => $id) {
+            Rekapitulasi::updateOrCreate(
+                ['id' => $id],
+                [
+                    'surat_rekomendasi' =>  '',
+                ]
+            );
+        }
+        return redirect()->back()->with('success', 'Surat Rekomendai Berhasil di Simpan');
     }
 }
