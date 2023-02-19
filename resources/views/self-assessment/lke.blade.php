@@ -75,7 +75,7 @@
                                 <div class="col-lg-4">
                                     {{-- Jika Evaluator Prov Koreksi --}}
                                     @can('EvalProv')
-                                        <a href="/evaluasi/prov/{{ $rekap->id }}/{{ $value->id }}">
+                                        <a href="/prov/evaluasi/{{ $rekap->id }}/{{ $value->id }}">
                                             <div class="info-box bg-warning">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-bold mb-3 text-center">
@@ -171,7 +171,7 @@
     @endforeach
     {{-- Jika yang akses Tim Evaluator Provinsi --}}
     @can('EvalProv')
-        <a href="/evaluasi/prov" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+        <a href="/prov/evaluasi" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
             Kembali</a>
     @endcan
     {{-- Jika yang akses  PIC --}}
@@ -227,7 +227,7 @@
                     </button>
                 </div>
 
-                <form method="post" action="/evaluasi/prov/{{ $rekap->id }}">
+                <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
                     @method('put')
                     @csrf
                     <div class="modal-body">
@@ -260,7 +260,7 @@
                     </button>
                 </div>
 
-                <form method="post" action="/evaluasi/prov/{{ $rekap->id }}">
+                <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
                     @method('put')
                     @csrf
                     <div class="modal-body">
@@ -291,7 +291,7 @@
                     </button>
                 </div>
 
-                <form method="post" action="/evaluasi/prov/{{ $rekap->id }}">
+                <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
                     @method('put')
                     @csrf
                     <div class="modal-body">

@@ -7,7 +7,7 @@
 
 
                 <div class="d-flex justify-content-end">
-                    <a href="/evaluasi/prov/cetak/" class="btn btn-primary  "><i class="fa fa-print">
+                    <a href="/prov/surat" class="btn btn-primary  "><i class="fa fa-print">
                             Cetak Surat Persetujuan</i></a>
                 </div>
             </div>
@@ -19,7 +19,8 @@
                             <th>No</th>
                             <th>Kabupaten/Kota</th>
                             <th>Predikat</th>
-                            <th>Nilai</th>
+                            <th>Nilai Pengungkit</th>
+                            <th>Nilai Hasil</th>
                             <th>Dokumen</th>
                             <th>Status</th>
                         </tr>
@@ -39,8 +40,28 @@
                                     @endforeach
                                     {{ $nilai }}
                                 </td>
+                                <td>
+                                    {{-- Hitung jumlah nilai rincian hasil --}}
+                                    @php
+                                        $nilaiHasil = App\Models\RekapHasil::where('satker_id', $value->satker_id)
+                                            ->where('tahun', date('Y'))
+                                            ->get();
+                                    @endphp
+                                    @foreach ($nilaiHasil as $item)
+                                        @php
+                                            $nilaiHasil = $item->where('satker_id', $value->satker_id)->sum('nilai');
+                                        @endphp
+                                    @endforeach
+                                    {{ $nilaiHasil }}
+                                </td>
+                                @php
+                                    $total = $nilai + $nilaiHasil;
+                                @endphp
+
+
+
                                 <td class="text-center">
-                                    <a type="button" href="/evaluasi/prov/{{ $value->id }}"
+                                    <a type="button" href="/prov/evaluasi/{{ $value->id }}"
                                         class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                 </td>
                                 </td>

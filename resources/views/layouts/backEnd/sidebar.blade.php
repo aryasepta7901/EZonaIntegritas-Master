@@ -61,7 +61,7 @@
                 @endcan
                 @can('EvalProv')
                     <li class="nav-item">
-                        <a href="/evaluasi/prov" class="nav-link {{ Request::is('evaluasi*') ? 'active' : '' }}">
+                        <a href="/prov/evaluasi" class="nav-link {{ Request::is('prov*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Evaluasi Kabupaten/Kota

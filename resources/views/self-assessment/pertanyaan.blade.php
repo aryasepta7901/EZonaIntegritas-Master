@@ -524,7 +524,7 @@
 
         {{-- Jika yang akses Tim Evaluator Provinsi --}}
         @can('EvalProv')
-            <a href="/evaluasi/prov/{{ $rekap->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+            <a href="/prov/evaluasi/{{ $rekap->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
                 Kembali</a>
         @endcan
         {{-- Jika yang akses  PIC --}}

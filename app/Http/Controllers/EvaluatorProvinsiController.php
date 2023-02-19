@@ -27,10 +27,7 @@ class EvaluatorProvinsiController extends Controller
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->get(),
         ]);
     }
-    public function cetak()
-    {
-        dd('cek');
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -60,30 +57,30 @@ class EvaluatorProvinsiController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show(Rekapitulasi $prov)
+    public function show(Rekapitulasi $evaluasi)
     {
         $this->authorize('EvalProv');
 
         return view('self-assessment.lke', [
             'master' => 'Evaluasi Provinsi ',
-            'link' => 'evaluasi/prov/',
+            'link' => 'prov/evaluasi',
             'title' => 'Lembar Kerja Evaluasi',
-            'rekap' => $prov,
+            'rekap' => $evaluasi,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
-            'nilai' => RekapPilar::where('rekapitulasi_id', $prov->id)->sum('nilai'),
+            'nilai' => RekapPilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai'),
 
         ]);
     }
-    public function show2(Rekapitulasi $prov, Pilar $pilar)
+    public function show2(Rekapitulasi $evaluasi, Pilar $pilar)
     {
         $this->authorize('EvalProv');
         return view('self-assessment.pertanyaan', [
             'master' => 'LKE ',
-            'link' => 'evaluasi/prov/' . $prov->id,
+            'link' => 'prov/evaluasi/' . $evaluasi->id,
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
-            'rekap' => $prov,
+            'rekap' => $evaluasi,
 
 
         ]);
@@ -111,7 +108,7 @@ class EvaluatorProvinsiController extends Controller
     {
         $id = $request->id;
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
-        return redirect('/evaluasi/prov')->with('success', 'LKE Berhasil Di Kirim');
+        return redirect('/prov/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
     }
 
     /**

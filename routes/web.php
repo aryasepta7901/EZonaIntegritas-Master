@@ -15,6 +15,7 @@ use App\Http\Controllers\SubRincianController;
 use App\Http\Controllers\PersyaratanController;
 use App\Http\Controllers\RincianHasilController;
 use App\Http\Controllers\SelfAssessmentController;
+use App\Http\Controllers\SuratPersetujuanProvController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,7 @@ Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware(
 Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
 
 // Evaluator Provinsi
-Route::resource('/evaluasi/prov', EvaluatorProvinsiController::class)->middleware('auth');
-Route::get('evaluasi/prov/{prov}/{pilar}', [EvaluatorProvinsiController::class, 'show2'])->name('prov.show2')->middleware('auth');
-Route::get('/evaluasi/prov/cetak', [EvaluatorProvinsiController::class, 'cetak'])->name('prov.cetak')->middleware('auth');
+Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middleware('auth');
+Route::get('/prov/evaluasi/{evaluasi}/{pilar}', [EvaluatorProvinsiController::class, 'show2'])->name('evaluasi.show2')->middleware('auth');
+// Surat Persetujuan BPS Provinsi
+Route::resource('/prov/surat', SuratPersetujuanProvController::class)->middleware('auth');
