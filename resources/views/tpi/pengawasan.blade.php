@@ -25,7 +25,7 @@
                             @foreach ($tpi->anggota as $a)
                                 <li>{{ $a->user->name }}</li> : <button class="badge badge-info">
                                     @php
-                                        $jumlah_satker = App\Models\Pengawasan::where('anggota_id', $a->anggota)->count();
+                                        $jumlah_satker = App\Models\Pengawasan::where('anggota_id', $a->anggota_id)->count();
                                     @endphp
                                     {{ $jumlah_satker }}
                                 </button>
@@ -121,10 +121,10 @@
                                 <option value="">Pilih Anggota</option>
                                 @foreach ($anggota as $a)
                                     @if (old('anggota_id') == $a->id)
-                                        <option value="{{ $a->anggota }}" selected>{{ $a->user->name }}
+                                        <option value="{{ $a->anggota_id }}" selected>{{ $a->user->name }}
                                         </option>
                                     @else
-                                        <option value="{{ $a->anggota }}">{{ $a->user->name }}</option>
+                                        <option value="{{ $a->anggota_id }}">{{ $a->user->name }}</option>
                                     @endif
                                 @endforeach
                             </select>

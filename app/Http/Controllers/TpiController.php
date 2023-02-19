@@ -74,7 +74,7 @@ class TpiController extends Controller
             $data = new anggota_tpi();
             $data->id = $anggota . date('Y');
             $data->tpi_id =  $validatedData['id'];
-            $data->anggota = $anggota;
+            $data->anggota_id = $anggota;
             $data->jumlah_satker = 0;
             $data->save();
         }

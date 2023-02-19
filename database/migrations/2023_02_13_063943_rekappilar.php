@@ -19,6 +19,7 @@ class Rekappilar extends Migration
             $table->char('rekapitulasi_id', 12);
             $table->char('pilar_id', 3);
             $table->timestamps();
+            $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
         });
     }
 

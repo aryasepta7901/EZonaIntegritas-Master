@@ -98,7 +98,7 @@ class SelfAssessmentController extends Controller
                 } else {
                     $id = 1;
                 }
-                $id = date('Y') .   $data['id'] . $id;
+                $id =    $data['id'] . $id;
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [

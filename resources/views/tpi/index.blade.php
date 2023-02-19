@@ -67,10 +67,7 @@
                                         $jumlah_satker = App\Models\Pengawasan::where('tpi_id', $value->id)->count();
                                     @endphp
                                     {{ $jumlah_satker }}
-                                    {{-- @foreach ($value->anggota as $a)
-                                        {{ $a->jumlah_satker }}
-                                        <hr>
-                                    @endforeach --}}
+
 
 
                                 </td>
@@ -323,10 +320,6 @@
             <!-- /.modal-dialog -->
         </div>
     @endforeach
-
-
-
-
     {{-- Hapus --}}
     @foreach ($tpi as $value)
         <div class="modal fade" id="hapus{{ $value->id }}">

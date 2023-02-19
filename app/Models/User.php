@@ -18,14 +18,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'nip',
+        'id',
         'name',
         'email',
         'no_telp',
         'satker_id',
         'level_id',
-        'password',
-        'google_id'
+
     ];
 
     /**
@@ -66,7 +65,7 @@ class User extends Authenticatable
     }
     public function anggota()
     {
-        return $this->hasOne(anggota_tpi::class, 'anggota');
+        return $this->hasOne(anggota_tpi::class, 'anggota_id');
     }
     public function pengawasan()
     {

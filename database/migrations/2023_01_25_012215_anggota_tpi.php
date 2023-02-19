@@ -15,9 +15,9 @@ class AnggotaTpi extends Migration
     {
         Schema::create('anggota_tpi', function (Blueprint $table) {
             $table->id();
-            $table->char('tpi_id', 10);
-            $table->string('nama_anggota');
-            // $table->integer('jumlah_satker');
+            $table->char('tpi_id', 12);
+            $table->string('anggota_id');
+            $table->double('jumlah_satker');
         });
     }
 
