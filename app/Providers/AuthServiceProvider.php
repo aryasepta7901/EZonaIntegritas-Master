@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->level_id === 'A';
         });
         Gate::define('pic', function (User $user) {
-            return $user->level_id === 'PT' || $user->level_id === 'EP';
+            return $user->level_id === 'PT';
         });
         Gate::define('EvalProv', function (User $user) {
             return $user->level_id === 'EP';

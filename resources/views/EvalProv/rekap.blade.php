@@ -7,8 +7,8 @@
 
 
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary  " data-toggle="modal" data-target="#tambah"><i class="fa fa-print">
-                            Cetak Surat Persetujuan</i></button>
+                    <a href="/evaluasi/prov/cetak/" class="btn btn-primary  "><i class="fa fa-print">
+                            Cetak Surat Persetujuan</i></a>
                 </div>
             </div>
             <div class="card-body">
@@ -31,21 +31,20 @@
                                 <td>{{ $value->satker->nama_satker }}</td>
                                 <td>{{ $value->predikat }}</td>
                                 <td>
-
                                     {{-- Hitung jumlah nilai rincian pengungkit --}}
                                     @foreach ($value->RekapPilar as $item)
                                         @php
-                                            $nilai = $item->sum('nilai');
+                                            $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai');
                                         @endphp
                                     @endforeach
                                     {{ $nilai }}
                                 </td>
                                 <td class="text-center">
-                                    <a type="button" href="/lke/{{ $value->id }}" class="btn btn-sm btn-success"><i
-                                            class="fa fa-file"></i> LKE</a>
+                                    <a type="button" href="/evaluasi/prov/{{ $value->id }}"
+                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                 </td>
                                 </td>
-                                <td>{{ $value->status }}</td>
+                                <td>{{ $value->StatusRekap->status }}</td>
                             </tr>
                         @endforeach
                     </tbody>

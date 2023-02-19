@@ -115,9 +115,11 @@
                                                                                     <th>Nama Dokumen</th>
                                                                                     <th>File</th>
                                                                                     <th>Upload</th>
-                                                                                    @if ($rekap->status == 0)
-                                                                                        <th>Delete</th>
-                                                                                    @endif
+                                                                                    @can('pic')
+                                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                            <th>Delete</th>
+                                                                                        @endif
+                                                                                    @endcan
 
                                                                                 </tr>
                                                                             </thead>
@@ -158,22 +160,25 @@
                                                                                             </div>
                                                                                         </td>
                                                                                         {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                                        @if ($rekap->status == 0)
-                                                                                            @if ($file->count() != 0)
-                                                                                                @foreach ($file as $f)
-                                                                                                    <td class="text-center">
-                                                                                                        <button
-                                                                                                            type="button"
-                                                                                                            class="btn btn-sm btn-danger"
-                                                                                                            data-toggle="modal"
-                                                                                                            data-target="#hapus{{ $f->id }}"><i
-                                                                                                                class="fa fa-trash"></i></button>
-                                                                                                    </td>
-                                                                                                @endforeach
-                                                                                            @else
-                                                                                                <td></td>
+                                                                                        @can('pic')
+                                                                                            @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                                @if ($file->count() != 0)
+                                                                                                    @foreach ($file as $f)
+                                                                                                        <td class="text-center">
+                                                                                                            <button
+                                                                                                                type="button"
+                                                                                                                class="btn btn-sm btn-danger"
+                                                                                                                data-toggle="modal"
+                                                                                                                data-target="#hapus{{ $f->id }}"><i
+                                                                                                                    class="fa fa-trash"></i></button>
+                                                                                                        </td>
+                                                                                                    @endforeach
+                                                                                                @else
+                                                                                                    <td></td>
+                                                                                                @endif
                                                                                             @endif
-                                                                                        @endif
+                                                                                        @endcan
+
 
                                                                                     </tr>
                                                                                 @endforeach
@@ -203,9 +208,11 @@
                                                                                     <th>File</th>
                                                                                     <th>Upload</th>
                                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                                    @if ($rekap->status == 0)
-                                                                                        <th>Delete</th>
-                                                                                    @endif
+                                                                                    @can('pic')
+                                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                            <th>Delete</th>
+                                                                                        @endif
+                                                                                    @endcan
 
                                                                                 </tr>
                                                                             </thead>
@@ -239,15 +246,18 @@
                                                                                             </div>
                                                                                         </td>
                                                                                         {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                                        @if ($rekap->status == 0)
-                                                                                            <td class="text-center">
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-sm btn-danger"
-                                                                                                    data-toggle="modal"
-                                                                                                    data-target="#hapus{{ $item->id }}"><i
-                                                                                                        class="fa fa-trash"></i></button>
-                                                                                            </td>
-                                                                                        @endif
+                                                                                        @can('pic')
+                                                                                            @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                                <td class="text-center">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-sm btn-danger"
+                                                                                                        data-toggle="modal"
+                                                                                                        data-target="#hapus{{ $item->id }}"><i
+                                                                                                            class="fa fa-trash"></i></button>
+                                                                                                </td>
+                                                                                            @endif
+                                                                                        @endcan
+
 
                                                                                     </tr>
                                                                                 @endforeach
@@ -259,16 +269,19 @@
                                                                     </div>
                                                                     <hr>
                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                    @if ($rekap->status == 0)
-                                                                        <div class="d-flex justify-content-end mr-3">
+                                                                    @can('pic')
+                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                            <div class="d-flex justify-content-end mr-3">
 
-                                                                            <button type="submit"
-                                                                                class="btn btn-primary"><i
-                                                                                    class="fas fa-save"></i>
-                                                                                Update
-                                                                            </button>
-                                                                        </div>
-                                                                    @endif
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary"><i
+                                                                                        class="fas fa-save"></i>
+                                                                                    Update
+                                                                                </button>
+                                                                            </div>
+                                                                        @endif
+                                                                    @endcan
+
 
 
                                                                 </td>
@@ -475,12 +488,15 @@
                                                                 <hr>
                                                                 <div class="d-flex justify-content-end mr-3">
                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                    @if ($rekap->status == 0)
-                                                                        <button type="submit" class="btn btn-primary"><i
-                                                                                class="fas fa-save"></i>
-                                                                            Simpan
-                                                                        </button>
-                                                                    @endif
+                                                                    @can('pic')
+                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                            <button type="submit" class="btn btn-primary"><i
+                                                                                    class="fas fa-save"></i>
+                                                                                Simpan
+                                                                            </button>
+                                                                        @endif
+                                                                    @endcan
+
                                                                 </div>
                                                             </td>
                                                             <td style="min-width: 150px;">
@@ -506,8 +522,19 @@
             @endforeach
         </div>
 
-        <a href="/lke/{{ $rekap->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
-            Kembali</a>
+        {{-- Jika yang akses Tim Evaluator Provinsi --}}
+        @can('EvalProv')
+            <a href="/evaluasi/prov/{{ $rekap->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+                Kembali</a>
+        @endcan
+        {{-- Jika yang akses  PIC --}}
+
+        @can('pic')
+            <a href="/lke/{{ $rekap->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+                Kembali</a>
+        @endcan
+
+
     </div>
 
     <script script src="{{ asset('template') }}/plugins/sweetalert2/sweetalert2.min.js"></script>

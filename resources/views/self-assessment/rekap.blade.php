@@ -29,7 +29,6 @@
 
             </div>
             <div class="card-body">
-
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -45,8 +44,6 @@
                     <tbody>
                         @foreach ($rekap as $value)
                             <tr>
-
-
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->tahun }}</td>
                                 <td>{{ $value->predikat }}</td>
@@ -68,7 +65,7 @@
                                     @endif
 
                                 </td>
-                                <td>{{ $value->status }}</td>
+                                <td>{{ $value->StatusRekap->status }}</td>
                                 <td class="text-center">
                                     <a type="button" href="/lke/{{ $value->id }}" class="btn btn-sm btn-success"><i
                                             class="fa fa-file"></i> LKE</a>
@@ -90,48 +87,56 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        {{-- Cek apakah persyaratan sudah diisi oleh admin atau tidak --}}
+                        @if ($persyaratan)
+                            <form method="post" action="/lke">
+                                @csrf
+                                <input type="hidden" name="satker_id" value="{{ auth()->user()->satker_id }}">
+                                @if ($persyaratan->wbbm == 1)
+                                    @php
+                                        $nilai = 'WBBM';
+                                    @endphp
+                                @elseif($persyaratan->wbk == 1)
+                                    @php
+                                        $nilai = 'WBK';
+                                    @endphp
+                                @endif
 
-                        <form method="post" action="/lke">
-                            @csrf
-                            <input type="hidden" name="satker_id" value="{{ auth()->user()->satker_id }}">
-                            @if ($persyaratan->wbbm == 1)
-                                @php
-                                    $nilai = 'WBBM';
-                                @endphp
-                            @elseif($persyaratan->wbk == 1)
-                                @php
-                                    $nilai = 'WBK';
-                                @endphp
-                            @endif
+                                @isset($nilai)
+                                    <input type="hidden" name="predikat" value="{{ $nilai }}">
+                                @endisset
+                                <div class="modal-body">
 
-                            @isset($nilai)
-                                <input type="hidden" name="predikat" value="{{ $nilai }}">
-                            @endisset
+                                    @if ($persyaratan->wbk == 1 || $persyaratan->wbbm == 1)
+                                        <p>Satuan Kerja Anda Berhak mengajukan: <button class="badge badge-sm badge-info">
+                                                @if ($persyaratan->wbbm == 1)
+                                                    Wilayah Birokrasi Bersih dan Melayani
+                                                @else
+                                                    Wilayah Bebas dari Korupsi
+                                                @endif
+                                            </button>
+                                        </p>
+                                        <small>Note: Silahkan Klik Lanjutkan untuk membuka LKE</small>
+                                    @else
+                                        <p class="text-danger text-center">{{ $persyaratan->satker->nama_satker }} Belum
+                                            Memenuhi dalam
+                                            pengajuan WBK/WBBM </p>
+                                    @endif
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    @if ($persyaratan->wbk != 0 || $persyaratan->wbbm != 0)
+                                        <button type="submit" class="btn btn-primary">Lanjutkan</button>
+                                    @endif
+                                </div>
+                            </form>
+                        @else
+                            {{-- Jika Persyaratan belum diisi oleh admin --}}
                             <div class="modal-body">
+                                <p>Persyaratan Belum Diisi Oleh Admin </p>
+                            </div>
+                        @endif
 
-                                @if ($persyaratan->wbk == 1 || $persyaratan->wbbm == 1)
-                                    <p>Satuan Kerja Anda Berhak mengajukan: <button class="badge badge-sm badge-info">
-                                            @if ($persyaratan->wbbm == 1)
-                                                Wilayah Birokrasi Bersih dan Melayani
-                                            @else
-                                                Wilayah Bebas dari Korupsi
-                                            @endif
-                                        </button>
-                                    </p>
-                                    <small>Note: Silahkan Klik Lanjutkan untuk membuka LKE</small>
-                                @else
-                                    <p class="text-danger text-center">{{ $persyaratan->satker->nama_satker }} Belum
-                                        Memenuhi dalam
-                                        pengajuan WBK/WBBM </p>
-                                @endif
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                @if ($persyaratan->wbk != 0 || $persyaratan->wbbm != 0)
-                                    <button type="submit" class="btn btn-primary">Lanjutkan</button>
-                                @endif
-                            </div>
-                        </form>
                     </div>
                     <!-- /.modal-content -->
                 </div>

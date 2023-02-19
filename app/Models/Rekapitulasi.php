@@ -28,4 +28,8 @@ class Rekapitulasi extends Model
     {
         return $this->hasMany(RekapPilar::class, 'rekapitulasi_id');
     }
+    public function StatusRekap()
+    {
+        return $this->belongsTo(StatusRekap::class, 'status');
+    }
 }
