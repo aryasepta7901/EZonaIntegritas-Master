@@ -44,12 +44,6 @@
 
                                 <div class="card-body">
                                     <table id="" class="table table-bordered table-responsive table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Self-Assessment</th>
-                                                <th>Desk-Evaluation</th>
-                                            </tr>
-                                        </thead>
                                         <tbody>
                                             @foreach ($value->pertanyaan as $value)
                                                 <tr>
@@ -179,6 +173,9 @@
                                                                 </div>
                                                                 <hr>
                                                             </td>
+                                                            <td style="min-width: 150px;">
+                                                                <p>Desk-evaluation</p>
+                                                            </td>
                                                         @endforeach
                                                         {{-- Belum diisi --}}
                                                     @else
@@ -249,129 +246,10 @@
                                                             </table>
                                                             <hr>
                                                         </td>
+                                                        <td style="min-width: 150px;">
+                                                            <p>Desk-evaluation</p>
+                                                        </td>
                                                     @endif
-                                                    {{-- Desk Evaluation TPI --}}
-
-                                                    {{-- Anggota Tim --}}
-                                                    <td style="min-width:500px;">
-                                                        <div class="card-body">
-                                                            <div class="form-group">
-                                                                <label for="anggota">Anggota Tim</label>
-                                                                @foreach ($value->opsi as $item)
-                                                                    @if ($item->type == 'checkbox')
-                                                                        <div class="form-check ml-4">
-                                                                            <input class="form-check-input" type="radio"
-                                                                                name="opsi_id"
-                                                                                value="{{ $item->id }}"
-                                                                                @if ($pengawasan->status != 0) disabled @endif>
-
-                                                                            <label
-                                                                                class="form-check-label">{{ $item->rincian }}</label>
-                                                                        </div>
-                                                                    @elseif($item->type == 'input')
-                                                                        <p for="input">{{ $item->rincian }}
-                                                                        </p>
-                                                                        <input type="number" min="0"
-                                                                            class="form-control" name="opsi_id"
-                                                                            @if ($pengawasan->status != 0) disabled @endif>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="catatan">Catatan</label>
-                                                                <textarea class="form-control  " rows="4" name="catatan" @if ($pengawasan->status != 0) disabled @endif>{{ old('catatan') }} </textarea>
-                                                            </div>
-                                                            <div class="d-flex justify-content-start">
-                                                                {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                @if ($rekap->status == 4 && $pengawasan->status == 0)
-                                                                    <button type="submit" class="btn btn-primary"><i
-                                                                            class="fas fa-save"></i>
-                                                                        Simpan
-                                                                    </button>
-                                                                @endif
-                                                            </div>
-
-
-                                                        </div>
-                                                        <hr>
-                                                        {{-- Ketua Tim --}}
-                                                        <div class="card-body">
-                                                            <div class="form-group">
-                                                                <label for="anggota">Ketua Tim</label>
-                                                                @foreach ($value->opsi as $item)
-                                                                    @if ($item->type == 'checkbox')
-                                                                        <div class="form-check ml-4">
-                                                                            <input class="form-check-input" type="radio"
-                                                                                name="opsi_id"
-                                                                                value="{{ $item->id }}"
-                                                                                @if ($pengawasan->status != 1) disabled @endif>
-                                                                            <label
-                                                                                class="form-check-label">{{ $item->rincian }}</label>
-                                                                        </div>
-                                                                    @elseif($item->type == 'input')
-                                                                        <p for="input">{{ $item->rincian }}
-                                                                        </p>
-                                                                        <input type="number" min="0"
-                                                                            class="form-control" name="opsi_id"
-                                                                            @if ($pengawasan->status != 1) disabled @endif>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="catatan">Catatan</label>
-                                                                <textarea class="form-control  " rows="4" name="catatan" @if ($pengawasan->status != 1) disabled @endif>
-                                                                    {{ old('catatan') }} </textarea>
-                                                            </div>
-                                                            <div class="d-flex justify-content-start">
-                                                                {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                @if ($rekap->status == 4 && $pengawasan->status == 1)
-                                                                    <button type="submit" class="btn btn-primary"><i
-                                                                            class="fas fa-save"></i>
-                                                                        Simpan
-                                                                    </button>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        {{-- Pengendali Teknis --}}
-                                                        <div class="card-body">
-                                                            <div class="form-group">
-                                                                <label for="anggota">Pengendali Teknis</label>
-                                                                @foreach ($value->opsi as $item)
-                                                                    @if ($item->type == 'checkbox')
-                                                                        <div class="form-check ml-4">
-                                                                            <input class="form-check-input" type="radio"
-                                                                                name="opsi_id"
-                                                                                value="{{ $item->id }}"
-                                                                                @if ($pengawasan->status != 2) disabled @endif>
-                                                                            <label
-                                                                                class="form-check-label">{{ $item->rincian }}</label>
-                                                                        </div>
-                                                                    @elseif($item->type == 'input')
-                                                                        <p for="input">{{ $item->rincian }}
-                                                                        </p>
-                                                                        <input type="number" min="0"
-                                                                            class="form-control" name="opsi_id"
-                                                                            @if ($pengawasan->status != 2) disabled @endif>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="catatan">Catatan</label>
-                                                                <textarea class="form-control  " rows="4" name="catatan" @if ($pengawasan->status != 2) disabled @endif>
-                                                                    {{ old('catatan') }} </textarea>
-                                                            </div>
-                                                            <div class="d-flex justify-content-start">
-                                                                {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                @if ($rekap->status == 4 && $pengawasan->status == 2)
-                                                                    <button type="submit" class="btn btn-primary"><i
-                                                                            class="fas fa-save"></i>
-                                                                        Simpan
-                                                                    </button>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

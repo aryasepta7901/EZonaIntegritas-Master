@@ -43,6 +43,7 @@
                             <th>Nilai Hasil</th>
                             <th>Surat Rekomendasi</th>
                             <th>LKE</th>
+                            <th>Status</th>
 
                         </tr>
                     </thead>
@@ -84,6 +85,7 @@
                                         <a type="button" href="/tpi/evaluasi/{{ $item->id }}"
                                             class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                     </td>
+                                    <td>{{ $item->StatusRekap->status }}</td>
                                 @endforeach
                             </tr>
                         @endforeach

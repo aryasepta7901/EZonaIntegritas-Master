@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\anggota_tpi;
 use App\Models\DeskEvaluation;
+use App\Models\Pengawasan;
 use App\Models\Pilar;
 use App\Models\SubRincian;
 use App\Models\Rekappilar;
@@ -27,7 +28,6 @@ class DeskEvaluationController extends Controller
             [
                 'title' => 'Desk-Evaluation Zona Integritas',
                 'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
-                // 'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->get(),
 
 
             ]
@@ -88,6 +88,8 @@ class DeskEvaluationController extends Controller
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
             'rekap' => $evaluasi,
+            'pengawasan' => Pengawasan::where('anggota_id', auth()->user()->id)->where('satker_id', $evaluasi->satker_id)->first(),
+
         ]);
     }
 
