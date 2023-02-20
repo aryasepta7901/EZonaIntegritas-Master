@@ -21,7 +21,7 @@ class TpiController extends Controller
     {
         $this->authorize('admin');
         return view(
-            'tpi.index',
+            'tim.index',
             [
                 'title' => 'Mengelola Wilayah Tugas',
                 'tpi' => tpi::all(),
@@ -101,17 +101,17 @@ class TpiController extends Controller
      * @param  \App\Models\TPI  $tPI
      * @return \Illuminate\Http\Response
      */
-    public function show(TPI $tpi)
+    public function show(TPI $tim)
     {
         return view(
-            'tpi.pengawasan',
+            'tim.pengawasan',
             [
                 'master' => 'Mengelola Wilayah Tugas',
-                'link' => 'tpi',
-                'title' => ' Wilayah pengawasan ' . $tpi->nama,
-                'tpi' => $tpi,
-                'pengawasan' => Pengawasan::where('tpi_id', $tpi->id)->get(),
-                'anggota' => anggota_tpi::where('tpi_id', $tpi->id)->get(),
+                'link' => 'tim',
+                'title' => ' Wilayah pengawasan ' . $tim->nama,
+                'tpi' => $tim,
+                'pengawasan' => Pengawasan::where('tpi_id', $tim->id)->get(),
+                'anggota' => anggota_tpi::where('tpi_id', $tim->id)->get(),
                 'satker' => Satker::doesntHave('pengawasan')->get(),
             ]
 
@@ -136,7 +136,7 @@ class TpiController extends Controller
      * @param  \App\Models\TPI  $tPI
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TPI $tpi)
+    public function update(Request $request, TPI $tim)
     {
         //TPI
         $validatedData = $request->validate([
@@ -148,12 +148,12 @@ class TpiController extends Controller
         $validatedData['tahun'] = date('Y');
         $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun'] .  'wil' . $validatedData['wilayah']);
 
-        TPI::where('id', $tpi->id)->update($validatedData);
+        TPI::where('id', $tim->id)->update($validatedData);
 
 
         // Anggota TPI
 
-        $anggota = anggota_tpi::where('tpi_id', $tpi->id)->delete();
+        $anggota = anggota_tpi::where('tpi_id', $tim->id)->delete();
 
         foreach ($request->anggota as $key => $anggota) {
             $id = $anggota . date('Y');
@@ -174,12 +174,12 @@ class TpiController extends Controller
      * @param  \App\Models\TPI  $tPI
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TPI $tpi)
+    public function destroy(TPI $tim)
     {
 
-        TPI::destroy($tpi->id);
-        anggota_tpi::where('tpi_id', $tpi->id)->delete();
-        Pengawasan::where('tpi_id', $tpi->id)->delete();
+        TPI::destroy($tim->id);
+        anggota_tpi::where('tpi_id', $tim->id)->delete();
+        Pengawasan::where('tpi_id', $tim->id)->delete();
         return redirect()->back()->with('success', 'TPI Has Ben Deleted');
     }
 }

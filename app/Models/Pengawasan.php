@@ -37,4 +37,8 @@ class Pengawasan extends Model
     {
         return $this->belongsTo(TPI::class, 'tpi_id');
     }
+    public function Rekapitulasi()
+    {
+        return $this->hasMany(Rekapitulasi::class, 'satker_id', 'satker_id');
+    }
 }

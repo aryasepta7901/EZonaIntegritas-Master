@@ -33,4 +33,8 @@ class Rekapitulasi extends Model
     {
         return $this->belongsTo(StatusRekap::class, 'status');
     }
+    public function Pengawasan()
+    {
+        return $this->belongsTo(Pengawasan::class, 'satker_id', 'satker_id');
+    }
 }

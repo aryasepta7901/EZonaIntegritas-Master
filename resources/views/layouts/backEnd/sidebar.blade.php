@@ -49,6 +49,7 @@
                         </p>
                     </a>
                 </li>
+                {{-- PIC Satker --}}
                 @can('pic')
                     <li class="nav-item">
                         <a href="/lke" class="nav-link {{ Request::is('lke*') ? 'active' : '' }}">
@@ -59,12 +60,24 @@
                         </a>
                     </li>
                 @endcan
+                {{-- Evaluator Provinsi --}}
                 @can('EvalProv')
                     <li class="nav-item">
                         <a href="/prov/evaluasi" class="nav-link {{ Request::is('prov*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Evaluasi Kabupaten/Kota
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+                {{-- TPI --}}
+                @can('TPI')
+                    <li class="nav-item">
+                        <a href="/tpi/evaluasi" class="nav-link {{ Request::is('tpi*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Desk-Evaluation
                             </p>
                         </a>
                     </li>
@@ -81,7 +94,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/tpi" class="nav-link {{ Request::is('tpi*') ? 'active' : '' }}">
+                        <a href="/tim" class="nav-link {{ Request::is('tim*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-globe"></i>
                             <p>
                                 Mengelola Wilayah TPI

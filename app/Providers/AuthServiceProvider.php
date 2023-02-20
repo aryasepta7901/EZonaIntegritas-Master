@@ -37,5 +37,11 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('EvalProv', function (User $user) {
             return $user->level_id === 'EP';
         });
+        Gate::define('TPI', function (User $user) {
+            return $user->level_id === 'AT' || $user->level_id === 'KT' | $user->level_id === 'DL';
+        });
+        Gate::define('AT', function (User $user) {
+            return $user->level_id === 'AT';
+        });
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DeskEvaluationController;
 use App\Http\Controllers\EvaluatorProvinsiController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\LKEController;
@@ -43,7 +44,7 @@ Route::get('/dashboard', function () {
 // users
 Route::resource('/users', UserController::class)->middleware('auth');
 // Wilayah TPI
-Route::resource('/tpi', TpiController::class)->middleware('auth');
+Route::resource('/tim', TpiController::class)->middleware('auth');
 // pengawasan satker
 Route::resource('/pengawasan', PengawasanController::class)->middleware('auth');
 // Persyarataan
@@ -80,3 +81,6 @@ Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middlewar
 Route::get('/prov/evaluasi/{evaluasi}/{pilar}', [EvaluatorProvinsiController::class, 'show2'])->name('evaluasi.show2')->middleware('auth');
 // Surat Persetujuan BPS Provinsi
 Route::resource('/prov/surat', SuratPersetujuanProvController::class)->middleware('auth');
+
+// Desk Evaluation
+Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('auth');
