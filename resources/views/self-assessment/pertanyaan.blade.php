@@ -5,12 +5,11 @@
         <div id="accordion" class="myaccordion w-100" aria-multiselectable="true">
             @foreach ($subPilar as $value)
                 @php
-                    $pertanyaan = App\Models\Pertanyaan::where('subpilar_id', $value->id)->get(); //untuk mengambil data pertanyaan pertama
                     // Perhitungan Nilai setiap Pertanyaan
-                    $jml_pertanyaan = $pertanyaan->count();
+                    $jml_pertanyaan = $value->pertanyaan->count();
                     $penimbang = $value->bobot / $jml_pertanyaan;
                 @endphp
-                @foreach ($pertanyaan as $p)
+                @foreach ($value->pertanyaan as $p)
                     @php
                         $nilai = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $p->subpilar_id . '%')
                             ->where('rekapitulasi_id', $rekap->id)

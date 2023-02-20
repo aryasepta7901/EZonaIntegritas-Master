@@ -41,8 +41,8 @@
                             <th>Predikat</th>
                             <th>Nilai Pengungkit</th>
                             <th>Nilai Hasil</th>
-                            <th>Dokumen</th>
-                            <th>Status</th>
+                            <th>Surat Rekomendasi</th>
+                            <th>LKE</th>
 
                         </tr>
                     </thead>
@@ -51,7 +51,6 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->satker->nama_satker }}</td>
-
                                 @foreach ($value->rekapitulasi as $item)
                                     <td>{{ $item->predikat }}</td>
                                     <td>
@@ -81,16 +80,14 @@
                                         <a target="__self" href="{{ asset('storage/' . $item->surat_rekomendasi) }}"><i
                                                 class="fas fa-file"></i></a>
                                     </td>
-                                    <td></td>
+                                    <td class="text-center">
+                                        <a type="button" href="/tpi/evaluasi/{{ $item->id }}"
+                                            class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
+                                    </td>
                                 @endforeach
-
-
                             </tr>
                         @endforeach
-
-
                     </tbody>
-
                 </table>
             </div>
             <!-- /.card-body -->

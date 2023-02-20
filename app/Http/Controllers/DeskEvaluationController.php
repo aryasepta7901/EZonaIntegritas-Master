@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\anggota_tpi;
 use App\Models\DeskEvaluation;
+use App\Models\Pilar;
+use App\Models\SubRincian;
+use App\Models\Rekappilar;
+use App\Models\Rekaphasil;
 use App\Models\Rekapitulasi;
+use App\Models\SubPilar;
 use Illuminate\Http\Request;
 
 class DeskEvaluationController extends Controller
@@ -54,12 +59,36 @@ class DeskEvaluationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DeskEvaluation  $deskEvaluation
+     * @param  \App\Models\Rekapitulasi  $Rekapitulasi
      * @return \Illuminate\Http\Response
      */
-    public function show(DeskEvaluation $deskEvaluation)
+    public function show(Rekapitulasi $evaluasi)
     {
-        //
+        $this->authorize('TPI');
+
+        return view('tpi.lke', [
+            'master' => 'Desk-Evaluation ',
+            'link' => 'tpi/evaluasi',
+            'title' => 'Lembar Kerja Evaluasi',
+            'rekap' => $evaluasi,
+            'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
+            'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
+            'nilai' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai'),
+            'nilaiHasil' => Rekaphasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
+
+        ]);
+    }
+    public function show2(Rekapitulasi $evaluasi, Pilar $pilar)
+    {
+        $this->authorize('TPI');
+        return view('tpi.pertanyaan', [
+            'master' => 'LKE ',
+            'link' => 'tpi/evaluasi/' . $evaluasi->id,
+            'title' => $pilar->pilar,
+            'pilar' => $pilar,
+            'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
+            'rekap' => $evaluasi,
+        ]);
     }
 
     /**

@@ -84,3 +84,4 @@ Route::resource('/prov/surat', SuratPersetujuanProvController::class)->middlewar
 
 // Desk Evaluation
 Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('auth');
+Route::get('/tpi/evaluasi/{evaluasi}/{pilar}', [DeskEvaluationController::class, 'show2'])->name('evaluasi.show2')->middleware('auth');
