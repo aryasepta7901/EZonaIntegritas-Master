@@ -36,4 +36,16 @@ class GoogleController extends Controller
 
         return redirect('/');
     }
+
+    // Login Manual
+    public function login(Request $request)
+    {
+        $findUser = User::where('email', $request->email)->first();
+        if ($findUser) {
+            Auth::login($findUser);
+            return redirect()->intended('dashboard');
+        }
+        // Jika gagal
+        return back()->with('loginError', 'Login Failed!');
+    }
 }

@@ -64,12 +64,9 @@
                                 </td>
                                 <td>
                                     @php
-                                        $jumlah_satker = App\Models\Pengawasan::where('tpi_id', $value->id)->count();
+                                        $jumlah_satker = $value->pengawasan->count();
                                     @endphp
                                     {{ $jumlah_satker }}
-
-
-
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
@@ -87,9 +84,6 @@
             </div>
             <!-- /.card-body -->
         </div>
-
-
-
         <!-- /.card -->
     </div>
 
@@ -125,7 +119,7 @@
                                 <div class="form-group">
                                     <label for="wilayah">Wilayah</label>
                                     <select class="form-control" name="wilayah">
-                                        <option selected>Pilih Wilayah TPI </option>
+                                        <option value="">Pilih Wilayah TPI </option>
                                         <option value="1">Wilayah 1</option>
                                         <option value="2">Wilayah 2</option>
                                         <option value="3">Wilayah 3</option>
@@ -139,7 +133,7 @@
                                 <div class="form-group">
                                     <label for="dalnis">Pengendali Teknis</label>
                                     <select class="form-control" name="dalnis">
-                                        <option selected>Pilih Dalnis</option>
+                                        <option value="">Pilih Dalnis</option>
                                         @foreach ($dalnis as $d)
                                             @if (old('dalnis') == $d->id)
                                                 <option value="{{ $d->id }}" selected>{{ $d->name }}
@@ -289,7 +283,7 @@
                                             <select class="form-control select2bs4" multiple="multiple"
                                                 data-placeholder="Pilih Anggota Tim " name="anggota[]">
                                                 @foreach ($value->anggota as $a)
-                                                    <option selected value="{{ $a->anggota }}">
+                                                    <option selected value="{{ $a->anggota_id }}">
                                                         {{ $a->user->name }}
                                                     </option>
                                                     @foreach ($anggota as $value)

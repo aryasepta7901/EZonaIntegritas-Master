@@ -16,7 +16,6 @@ class anggota_tpi extends Model
     protected $fillable = [
         'tpi_id',
         'anggota_id',
-        'jumlah_satker',
 
     ];
 
@@ -27,5 +26,9 @@ class anggota_tpi extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'anggota_id');
+    }
+    public function pengawasan()
+    {
+        return $this->hasMany(Pengawasan::class, 'anggota_id', 'anggota_id');
     }
 }

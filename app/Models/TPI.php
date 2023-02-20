@@ -35,4 +35,8 @@ class TPI extends Model
     {
         return $this->belongsTo(User::class, 'ketua_tim');
     }
+    public function pengawasan()
+    {
+        return $this->hasMany(Pengawasan::class, 'tpi_id');
+    }
 }

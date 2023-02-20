@@ -131,6 +131,8 @@
         </div>
         <!-- /.card -->
     </div>
+
+    {{-- Hapus Surat --}}
     @foreach ($rekap as $value)
         <div class="modal fade" id="hapus">
             <div class="modal-dialog">

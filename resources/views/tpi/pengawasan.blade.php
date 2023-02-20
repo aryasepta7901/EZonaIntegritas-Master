@@ -25,12 +25,11 @@
                             @foreach ($tpi->anggota as $a)
                                 <li>{{ $a->user->name }}</li> : <button class="badge badge-info">
                                     @php
-                                        $jumlah_satker = App\Models\Pengawasan::where('anggota_id', $a->anggota_id)->count();
+                                        $jumlah_satker = $a->pengawasan->count();
                                     @endphp
                                     {{ $jumlah_satker }}
                                 </button>
-                                {{-- <li>{{ $a->user->name }}</li> : <button class="badge badge-info">{{ $a->jumlah_satker }}
-                                </button> --}}
+
                                 Pengawasan
                             @endforeach
                         </ul>
@@ -117,7 +116,7 @@
                         <input type="hidden" name="tpi_id" value="{{ $tpi->id }}">
                         <div class="form-group">
                             <label for="anggota_id">Anggota</label>
-                            <select class="form-control" name="anggota_id" required>
+                            <select class="form-control" name="anggota_id">
                                 <option value="">Pilih Anggota</option>
                                 @foreach ($anggota as $a)
                                     @if (old('anggota_id') == $a->id)
@@ -137,7 +136,7 @@
 
                                     <div class="input-group">
                                         <select class="form-control  select2bs4" multiple="multiple"
-                                            data-placeholder="Pilih Anggota Tim " name="satker_id[]" required>
+                                            data-placeholder="Pilih Anggota Tim " name="satker_id[]">
                                             <option value="">Pilih Satuan Kerja </option>
                                             @foreach ($satker as $value)
                                                 @if (old('satker_id') == $value->id)

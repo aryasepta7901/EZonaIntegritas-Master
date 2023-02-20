@@ -64,8 +64,8 @@ Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
 // Google 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+Route::post('login', [GoogleController::class, 'login'])->name('login');
 Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
-
 
 // LKE
 Route::resource('/lke', LKEController::class)->middleware('auth');

@@ -40,20 +40,32 @@ class PengawasanController extends Controller
     {
 
         // pengawasan_satker
-        $validatedData = $request->validate([
-            'anggota_id' => 'required',
-            'satker_id'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'anggota_id' => 'required',
+                'satker_id'  => 'required',
+            ],
+            [
+                'anggota_id.required' => 'Anggota TPI Wajib di Pilih',
+                'satker_id.required' => 'Wilayah Pengawasan Satuan Kerja wajib di isi',
+
+            ]
+        );
+
         foreach ($request->satker_id as $key => $satker) {
-            $data = new Pengawasan();
-            $data->id = $validatedData['anggota_id'] . $satker;
-            $data->tpi_id = $request->tpi_id;
-            $data->anggota_id =  $validatedData['anggota_id'];
-            $data->satker_id = $satker;
-            $data->status = 0;
-            $data->save();
+            $id = $validatedData['anggota_id'] . $satker;
+            Pengawasan::updateOrCreate(
+                ['id' => $id],
+                [
+                    'tpi_id' =>  $request->tpi_id,
+                    'anggota_id' => $validatedData['anggota_id'],
+                    'satker_id' =>  $satker,
+                    'status' => 0,
+                ]
+            );
         }
-        return redirect('/tpi/' . $request->tpi_id)->with('success', 'New Pengawasan Has Ben Added');
+
+        return redirect()->back()->with('success', 'Data Pengawasan Berhasil di Tambahkan');
     }
 
     /**
@@ -98,14 +110,7 @@ class PengawasanController extends Controller
      */
     public function destroy(Pengawasan $pengawasan)
     {
-
-        // Update jumlah_satker di tbl anggota_tpi
-        $anggota = anggota_tpi::where('anggota', $pengawasan->anggota_id)->get();
-        $data['jumlah_satker'] = $anggota[0]->jumlah_satker - 1;
-        anggota_tpi::where('anggota', $pengawasan->anggota_id)->update($data);
-
-
         Pengawasan::destroy($pengawasan->id);
-        return redirect('/tpi/' . $pengawasan->tpi_id)->with('success', 'Pengawasan Has Ben Deleted');
+        return redirect()->back()->with('success', 'Data Pengawasan Berhasil di Hapus');
     }
 }

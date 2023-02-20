@@ -28,8 +28,6 @@ class TpiController extends Controller
                 'dalnis' => User::where('level_id', 'DL')->get(),
                 'ketua_tim' => User::doesntHave('ketua')->where('level_id', 'KT')->get(),
                 'anggota' => User::doesntHave('anggota')->where('level_id', 'AT')->get(),
-
-
             ]
 
         );
@@ -53,34 +51,48 @@ class TpiController extends Controller
      */
     public function store(Request $request)
     {
+        // validasi
+        $request->validate(
+            [
+                'id' => 'unique:tpi',
+                'nama' => 'required',
+                'wilayah'  => 'required',
+                'dalnis'  => 'required',
+                'ketua_tim'  => 'required',
+                'anggota' => 'required',
+            ],
+            [
+                'required' => ':attribute Wajib di Isi',
+            ]
+        );
 
-        $validatedData = $request->validate([
-            'id' => 'unique:tpi',
-            'nama' => 'required', //nip
-            'wilayah'  => 'required',
-            'dalnis'  => 'required',
-            'ketua_tim'  => 'required',
+        // TPI
+        $tahun = date('Y');
+        $nama = $request->nama;
+        $wilayah = $request->wilayah;
+        $data = [
+            'id' => strtoupper(str_replace(' ', '', $nama . $tahun .  'wil' . $wilayah)),
+            'tahun' => $tahun,
+            'nama' => $nama,
+            'dalnis' => $request->dalnis,
+            'ketua_tim' => $request->ketua_tim,
+            'wilayah' => $wilayah,
+        ];
+        TPI::create($data);
 
-
-        ]);
-        $validatedData['tahun'] = date('Y');
-        $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun'] .  'wil' . $validatedData['wilayah']);
-
-        TPI::create($validatedData);
-
-
-
+        // Anggota TPI
         foreach ($request->anggota as $key => $anggota) {
-            $data = new anggota_tpi();
-            $data->id = $anggota . date('Y');
-            $data->tpi_id =  $validatedData['id'];
-            $data->anggota_id = $anggota;
-            $data->jumlah_satker = 0;
-            $data->save();
+            $id = $anggota . $tahun;
+            anggota_tpi::updateOrCreate(
+                ['id' => $id],
+                [
+                    'tpi_id' =>  $data['id'],
+                    'anggota_id' => $anggota,
+                ]
+            );
         }
 
-
-        return redirect('/tpi')->with('success', 'New TIM Has Ben Added');
+        return redirect()->back()->with('success', 'TPI Berhasil di Tambahkan');
     }
 
     /**
@@ -101,9 +113,6 @@ class TpiController extends Controller
                 'pengawasan' => Pengawasan::where('tpi_id', $tpi->id)->get(),
                 'anggota' => anggota_tpi::where('tpi_id', $tpi->id)->get(),
                 'satker' => Satker::doesntHave('pengawasan')->get(),
-
-
-
             ]
 
 
@@ -129,34 +138,34 @@ class TpiController extends Controller
      */
     public function update(Request $request, TPI $tpi)
     {
-        //
+        //TPI
         $validatedData = $request->validate([
             'nama' => 'required',
             'wilayah'  => 'required',
             'dalnis'  => 'required',
             'ketua_tim'  => 'required',
-
-
         ]);
         $validatedData['tahun'] = date('Y');
         $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun'] .  'wil' . $validatedData['wilayah']);
 
         TPI::where('id', $tpi->id)->update($validatedData);
 
+
+        // Anggota TPI
+
         $anggota = anggota_tpi::where('tpi_id', $tpi->id)->delete();
 
         foreach ($request->anggota as $key => $anggota) {
-            $data = new anggota_tpi();
-            $data->id = $anggota . date('Y');
-            $data->tpi_id =  $validatedData['id'];
-            $data->anggota = $anggota;
-            $data->jumlah_satker = 0;
-            $data->save();
+            $id = $anggota . date('Y');
+            anggota_tpi::updateOrCreate(
+                ['id' => $id],
+                [
+                    'tpi_id' =>  $validatedData['id'],
+                    'anggota_id' => $anggota,
+                ]
+            );
         }
-
-
-
-        return redirect('/tpi')->with('success', ' TIM Has Ben Updated');
+        return redirect()->back()->with('success', ' TIM Has Ben Updated');
     }
 
     /**
@@ -167,10 +176,10 @@ class TpiController extends Controller
      */
     public function destroy(TPI $tpi)
     {
-        //
+
         TPI::destroy($tpi->id);
         anggota_tpi::where('tpi_id', $tpi->id)->delete();
         Pengawasan::where('tpi_id', $tpi->id)->delete();
-        return redirect('/tpi')->with('success', 'TPI Has Ben Deleted');
+        return redirect()->back()->with('success', 'TPI Has Ben Deleted');
     }
 }
