@@ -73,7 +73,7 @@ class LKEController extends Controller
         return view('self-assessment.lke', [
             'master' => 'Rekapitulasi ',
             'link' => 'lke/',
-            'title' => 'Lembar Kerja Evaluasi',
+            'title' => 'Lembar Kerja Evaluasi: ' . $lke->predikat,
             'rekap' => $lke,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
             'nilai' => RekapPilar::where('rekapitulasi_id', $lke->id)->sum('nilai'),

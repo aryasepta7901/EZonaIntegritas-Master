@@ -108,7 +108,8 @@
                                 <div class="modal-body">
 
                                     @if ($persyaratan->wbk == 1 || $persyaratan->wbbm == 1)
-                                        <p>Satuan Kerja Anda Berhak mengajukan: <button class="badge badge-sm badge-info">
+                                        <p>Satuan Kerja Anda Berhak mengajukan: <button type="button"
+                                                class="badge badge-sm badge-info">
                                                 @if ($persyaratan->wbbm == 1)
                                                     Wilayah Birokrasi Bersih dan Melayani
                                                 @else

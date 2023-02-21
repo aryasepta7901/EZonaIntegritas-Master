@@ -8,6 +8,7 @@
                     <a href="/prov/surat" class="btn btn-primary  "><i class="fa fa-print">
                             Cetak Surat Persetujuan</i></a>
                 </div>
+
             </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -44,12 +45,20 @@
                                             ->where('tahun', date('Y'))
                                             ->get();
                                     @endphp
-                                    @foreach ($nilaiHasil as $item)
+                                    @if ($nilaiHasil->count() != 0)
+                                        @foreach ($nilaiHasil as $item)
+                                            @php
+                                                $nilaiHasil = $item->where('satker_id', $value->satker_id)->sum('nilai');
+                                            @endphp
+                                        @endforeach
+                                        {{ $nilaiHasil }}
+                                    @else
                                         @php
-                                            $nilaiHasil = $item->where('satker_id', $value->satker_id)->sum('nilai');
+                                            $nilaiHasil = 0;
                                         @endphp
-                                    @endforeach
-                                    {{ $nilaiHasil }}
+                                        {{ $nilaiHasil }} (Data Nilai Hasil Belum di Upload Inspektorat Utama)
+                                    @endif
+
                                 </td>
                                 @php
                                     $total = $nilai + $nilaiHasil;
