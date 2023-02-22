@@ -50,6 +50,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->satker->nama_satker }}</td>
+
                                 @foreach ($value->rekapitulasi as $item)
                                     <td>{{ $item->predikat }}</td>
                                     <td>
@@ -83,6 +84,7 @@
                                         <a type="button" href="/tpi/evaluasi/{{ $item->id }}"
                                             class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                     </td>
+
                                     <td>{{ $item->StatusRekap->status }}</td>
                                 @endforeach
                             </tr>
@@ -94,6 +96,4 @@
         </div>
         <!-- /.card -->
     </div>
-
-
 @endsection

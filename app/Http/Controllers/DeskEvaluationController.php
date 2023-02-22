@@ -11,6 +11,7 @@ use App\Models\Rekappilar;
 use App\Models\Rekaphasil;
 use App\Models\Rekapitulasi;
 use App\Models\SubPilar;
+use App\Models\Opsi;
 use Illuminate\Http\Request;
 
 class DeskEvaluationController extends Controller
@@ -53,7 +54,33 @@ class DeskEvaluationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->submit_at) {
+            // validasi
+            $request->validate(
+                [
+                    'jawaban_at' => 'required',
+                    'catatan_at' => 'required',
+                ],
+                [
+                    'catatan*.required' => 'Silahkan Isi Catatan, ',
+                    'jawaban*.required' => 'Silahkan Pilih Jawaban, ',
+
+                ]
+            );
+            $jawaban = $request->jawaban_at;
+            $nilai = Opsi::where('id', $jawaban)->first()->bobot;
+
+            DeskEvaluation::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'jawaban_at' => $jawaban,
+                    'catatan_at' => $request->catatan_at,
+                    'nilai_at' => $nilai,
+                    'pengawasan_id' => $request->pengawasan,
+                ]
+            );
+        }
+        return redirect()->back()->with('success', 'Jawaban Berhasil Disimpan');
     }
 
     /**
