@@ -106,7 +106,7 @@
                                                     <span class="info-box-number">
                                                         {{-- Jika nilai ada di database --}}
                                                         @if ($nilai !== null)
-                                                            {{ $nilai->nilai }}
+                                                            {{ $nilai->nilai_sa }}
                                                         @else
                                                             0
                                                         @endif /
@@ -147,7 +147,7 @@
                                                     <span class="info-box-number">
                                                         {{-- Jika nilai ada di database --}}
                                                         @if ($nilai !== null)
-                                                            {{ $nilai->nilai }}
+                                                            {{ $nilai->nilai_sa }}
                                                         @else
                                                             0
                                                         @endif /

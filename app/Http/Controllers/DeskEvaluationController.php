@@ -100,7 +100,7 @@ class DeskEvaluationController extends Controller
             'rekap' => $evaluasi,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
             'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-            'nilai' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai'),
+            'nilai' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai_sa'),
             'nilaiHasil' => Rekaphasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
 
         ]);

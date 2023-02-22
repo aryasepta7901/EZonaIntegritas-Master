@@ -119,7 +119,7 @@ class SelfAssessmentController extends Controller
         $nilaiLama = RekapPilar::where('id', $id)->first();
         $penimbang = $request->penimbang;
         if ($nilaiLama !== null)
-            $total = round($data['nilai'] * $penimbang, 2) + $nilaiLama->nilai;
+            $total = round($data['nilai'] * $penimbang, 2) + $nilaiLama->nilai_sa;
         else {
             $total = round($data['nilai'] * $penimbang, 2);
         }
@@ -128,7 +128,7 @@ class SelfAssessmentController extends Controller
             [
                 'rekapitulasi_id' => $rekapitulasi_id,
                 'pilar_id' => $pilar_id,
-                'nilai' => $total,
+                'nilai_sa' => $total,
             ],
         );
         return redirect()->back()->with('success', 'Jawaban Berhasil Disimpan');
@@ -265,14 +265,14 @@ class SelfAssessmentController extends Controller
         // Cek apakah melakukan update atau create
         if ($selfAssessment) {
             // Jika Update
-            $total = round($data['nilai'] * $penimbang, 2) + $nilaiLama->nilai -  round($selfAssessment->nilai * $penimbang, 2);
+            $total = round($data['nilai'] * $penimbang, 2) + $nilaiLama->nilai_sa -  round($selfAssessment->nilai * $penimbang, 2);
         }
         RekapPilar::updateOrCreate(
             ['id' => $id],
             [
                 'rekapitulasi_id' => $rekapitulasi_id,
                 'pilar_id' => $pilar_id,
-                'nilai' => $total,
+                'nilai_sa' => $total,
             ],
         );
         return redirect()->back()->with('success', 'Jawaban Berhasil di Update');

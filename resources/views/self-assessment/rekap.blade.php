@@ -57,7 +57,7 @@
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
                                         @foreach ($RekapPilar as $item)
                                             @php
-                                                $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai');
+                                                $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                             @endphp
                                         @endforeach
                                         {{-- Masih Error --}}

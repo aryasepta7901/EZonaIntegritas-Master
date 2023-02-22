@@ -14,7 +14,10 @@ class RekapPilar extends Model
     use HasFactory;
     protected $fillable = [
         'id',
-        'nilai',
+        'nilai_sa', // self assessment
+        'nilai_at', //anggota Tim
+        'nilai_kt', //ketua tim
+        'nilai_dl', //pengandali teknis
         'rekapitulasi_id',
         'pilar_id',
 

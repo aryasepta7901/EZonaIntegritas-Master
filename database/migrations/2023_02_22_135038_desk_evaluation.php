@@ -30,7 +30,6 @@ class DeskEvaluation extends Migration
             $table->char('pengawasan_id');
             $table->timestamps();
             $table->foreign('id')->references('id')->on('self_assessment')->onDelete('cascade');
-            $table->foreign('pengawasan_id')->references('id')->on('pengawasan_satker')->onDelete('cascade');
         });
     }
 
