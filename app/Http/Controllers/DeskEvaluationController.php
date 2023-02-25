@@ -69,9 +69,10 @@ class DeskEvaluationController extends Controller
             );
             $jawaban = $request->jawaban_at;
             $nilai = Opsi::where('id', $jawaban)->first()->bobot;
+            $id = date('Y') . $request->satker_id . $request->pertanyaan_id;
 
             DeskEvaluation::updateOrCreate(
-                ['id' => $request->id],
+                ['id' => $id],
                 [
                     'jawaban_at' => $jawaban,
                     'catatan_at' => $request->catatan_at,
@@ -79,7 +80,29 @@ class DeskEvaluationController extends Controller
                     'pengawasan_id' => $request->pengawasan,
                 ]
             );
+            // RekapPilar ->nilai_at
+            $rekapitulasi_id = $request->rekapitulasi_id;
+            $pilar_id = $request->pilar_id;
+            $id = $pilar_id . $rekapitulasi_id;
+            // Cek apakah ada nilai lama
+            $nilaiLama = RekapPilar::where('id', $id)->first();
+
+            $penimbang = $request->penimbang;
+            if ($nilaiLama->nilai_at !== null)
+                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_at;
+            else {
+                $total = round($nilai * $penimbang, 2);
+            }
+            RekapPilar::updateOrCreate(
+                ['id' => $id],
+                [
+                    'rekapitulasi_id' => $rekapitulasi_id,
+                    'pilar_id' => $pilar_id,
+                    'nilai_at' => $total,
+                ],
+            );
         }
+
         return redirect()->back()->with('success', 'Jawaban Berhasil Disimpan');
     }
 
@@ -138,9 +161,56 @@ class DeskEvaluationController extends Controller
      * @param  \App\Models\DeskEvaluation  $deskEvaluation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DeskEvaluation $deskEvaluation)
+    public function update(Request $request, DeskEvaluation $evaluasi)
     {
-        //
+
+        if ($request->submit_at) {
+            // validasi
+            $request->validate(
+                [
+                    'jawaban_at' => 'required',
+                    'catatan_at' => 'required',
+                ],
+                [
+                    'catatan*.required' => 'Silahkan Isi Catatan, ',
+                    'jawaban*.required' => 'Silahkan Pilih Jawaban, ',
+
+                ]
+            );
+            $jawaban = $request->jawaban_at;
+            $nilai = Opsi::where('id', $jawaban)->first()->bobot;
+
+            DeskEvaluation::updateOrCreate(
+                ['id' => $evaluasi->id],
+                [
+                    'jawaban_at' => $jawaban,
+                    'catatan_at' => $request->catatan_at,
+                    'nilai_at' => $nilai,
+                    'pengawasan_id' => $request->pengawasan,
+                ]
+            );
+            // RekapPilar ->nilai_at
+            $rekapitulasi_id = $request->rekapitulasi_id;
+            $pilar_id = $request->pilar_id;
+            $id = $pilar_id . $rekapitulasi_id;
+            // Cek apakah ada nilai lama
+            $nilaiLama = RekapPilar::where('id', $id)->first();
+            $penimbang = $request->penimbang;
+            if ($evaluasi) {
+                // Jika Update
+                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_at -  round($evaluasi->nilai_at * $penimbang, 2);
+            }
+            RekapPilar::updateOrCreate(
+                ['id' => $id],
+                [
+                    'rekapitulasi_id' => $rekapitulasi_id,
+                    'pilar_id' => $pilar_id,
+                    'nilai_at' => $total,
+                ],
+            );
+        }
+
+        return redirect()->back()->with('success', 'Jawaban Berhasil Disimpan');
     }
 
     /**

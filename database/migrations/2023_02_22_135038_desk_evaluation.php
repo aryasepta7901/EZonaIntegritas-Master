@@ -29,7 +29,6 @@ class DeskEvaluation extends Migration
             $table->double('nilai_pt', 6, 2)->nullable();
             $table->char('pengawasan_id');
             $table->timestamps();
-            $table->foreign('id')->references('id')->on('self_assessment')->onDelete('cascade');
         });
     }
 

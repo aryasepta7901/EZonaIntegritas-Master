@@ -260,8 +260,10 @@
 
                                                     {{-- Desk Evaluation TPI --}}
                                                     @php
-                                                        $deskEvaluation = App\Models\deskEvaluation::where('id', $self->id)->get();
+                                                        $id = date('Y') . $rekap->satker_id . $value->id;
+                                                        $deskEvaluation = App\Models\deskEvaluation::where('id', $id)->get();
                                                     @endphp
+
                                                     @if ($rekap->status == 4)
                                                         <td style="min-width:500px;">
                                                             {{-- Anggota Tim --}}
@@ -269,13 +271,22 @@
                                                             @if ($deskEvaluation->count() != 0)
                                                                 @foreach ($deskEvaluation as $desk)
                                                                     <div class="card-body">
-                                                                        <form action="/tpi/evaluasi" method="post">
+                                                                        <form action="/tpi/evaluasi/{{ $desk->id }}"
+                                                                            method="post">
+                                                                            @method('put')
                                                                             @csrf
                                                                             <div class="form-group">
-                                                                                <label for="anggota">Anggota Tim</label>
+                                                                                <label for="anggota">Anggota
+                                                                                    Tim</label>
                                                                                 <input type="hidden"
-                                                                                    value="{{ $self->id }}"
-                                                                                    name="id">
+                                                                                    value="{{ $rekap->id }}"
+                                                                                    name="rekapitulasi_id">
+                                                                                <input type="hidden"
+                                                                                    value="{{ $pilar->id }}"
+                                                                                    name="pilar_id">
+                                                                                <input type="hidden"
+                                                                                    value="{{ $penimbang }}"
+                                                                                    name="penimbang">
                                                                                 <input type="hidden"
                                                                                     value="{{ $pengawasan->id }}"
                                                                                     name="pengawasan">
@@ -321,7 +332,7 @@
                                                                                         class="btn btn-primary"
                                                                                         name="submit_at" value="at"><i
                                                                                             class="fas fa-save"></i>
-                                                                                        Simpan
+                                                                                        Update
                                                                                     </button>
                                                                                 @endif
                                                                             </div>
@@ -336,8 +347,19 @@
                                                                         <div class="form-group">
                                                                             <label for="anggota">Anggota Tim</label>
                                                                             <input type="hidden"
-                                                                                value="{{ $self->id }}"
-                                                                                name="id">
+                                                                                value="{{ $rekap->satker_id }}"
+                                                                                name="satker_id">
+                                                                            <input type="hidden" name="pertanyaan_id"
+                                                                                value="{{ $value->id }}">
+                                                                            <input type="hidden"
+                                                                                value="{{ $rekap->id }}"
+                                                                                name="rekapitulasi_id">
+                                                                            <input type="hidden"
+                                                                                value="{{ $pilar->id }}"
+                                                                                name="pilar_id">
+                                                                            <input type="hidden"
+                                                                                value="{{ $penimbang }}"
+                                                                                name="penimbang">
                                                                             <input type="hidden"
                                                                                 value="{{ $pengawasan->id }}"
                                                                                 name="pengawasan">
@@ -355,7 +377,8 @@
                                                                                             class="form-check-label">{{ $item->rincian }}</label>
                                                                                     </div>
                                                                                 @elseif($item->type == 'input')
-                                                                                    <p for="input">{{ $item->rincian }}
+                                                                                    <p for="input">
+                                                                                        {{ $item->rincian }}
                                                                                     </p>
                                                                                     <input type="number" min="0"
                                                                                         class="form-control"
