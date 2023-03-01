@@ -103,6 +103,7 @@ class TpiController extends Controller
      */
     public function show(TPI $tim)
     {
+
         return view(
             'tim.pengawasan',
             [

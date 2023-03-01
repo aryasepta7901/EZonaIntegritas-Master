@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\anggota_tpi;
+use App\Models\TPI;
 use App\Models\DeskEvaluation;
 use App\Models\Pengawasan;
 use App\Models\Pilar;
@@ -28,10 +29,11 @@ class DeskEvaluationController extends Controller
             'tpi.index',
             [
                 'title' => 'Desk-Evaluation Zona Integritas',
+                'ketua' => TPI::where('ketua_tim', auth()->user()->id)->first(),
                 'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
-
-
+                'dalnis' => TPI::where('dalnis', auth()->user()->id)->get(),
             ]
+
 
         );
     }
@@ -103,6 +105,7 @@ class DeskEvaluationController extends Controller
             );
         }
 
+
         return redirect()->back()->with('success', 'Jawaban Berhasil Disimpan');
     }
 
@@ -125,6 +128,11 @@ class DeskEvaluationController extends Controller
             'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'nilai' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai_sa'),
             'nilaiHasil' => Rekaphasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
+            // Permasalahan
+            'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
+            'pengawasan' => Pengawasan::where('satker_id', $evaluasi->satker_id)->first(),
+
+
 
         ]);
     }
@@ -138,7 +146,7 @@ class DeskEvaluationController extends Controller
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
             'rekap' => $evaluasi,
-            'pengawasan' => Pengawasan::where('anggota_id', auth()->user()->id)->where('satker_id', $evaluasi->satker_id)->first(),
+            'pengawasan' => Pengawasan::where('satker_id', $evaluasi->satker_id)->first(),
 
         ]);
     }
@@ -206,6 +214,51 @@ class DeskEvaluationController extends Controller
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
                     'nilai_at' => $total,
+                ],
+            );
+        }
+        if ($request->submit_kt) {
+            // validasi
+            $request->validate(
+                [
+                    'jawaban_kt' => 'required',
+                    'catatan_kt' => 'required',
+                ],
+                [
+                    'catatan*.required' => 'Silahkan Isi Catatan, ',
+                    'jawaban*.required' => 'Silahkan Pilih Jawaban, ',
+
+                ]
+            );
+            $jawaban = $request->jawaban_kt;
+            $nilai = Opsi::where('id', $jawaban)->first()->bobot;
+
+            DeskEvaluation::updateOrCreate(
+                ['id' => $evaluasi->id],
+                [
+                    'jawaban_kt' => $jawaban,
+                    'catatan_kt' => $request->catatan_kt,
+                    'nilai_kt' => $nilai,
+                    'pengawasan_id' => $request->pengawasan,
+                ]
+            );
+            // RekapPilar ->nilai_kt
+            $rekapitulasi_id = $request->rekapitulasi_id;
+            $pilar_id = $request->pilar_id;
+            $id = $pilar_id . $rekapitulasi_id;
+            // Cek apakah ada nilai lama
+            $nilaiLama = RekapPilar::where('id', $id)->first();
+            $penimbang = $request->penimbang;
+            if ($evaluasi) {
+                // Jika Update
+                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_kt -  round($evaluasi->nilai_kt * $penimbang, 2);
+            }
+            RekapPilar::updateOrCreate(
+                ['id' => $id],
+                [
+                    'rekapitulasi_id' => $rekapitulasi_id,
+                    'pilar_id' => $pilar_id,
+                    'nilai_kt' => $total,
                 ],
             );
         }

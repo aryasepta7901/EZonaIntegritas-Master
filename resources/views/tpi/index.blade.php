@@ -46,7 +46,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($anggota->pengawasan as $value)
+                        @if (auth()->user()->level_id == 'AT')
+                            @php
+                                $data = $anggota->pengawasan;
+                            @endphp
+                        @elseif(auth()->user()->level_id == 'KT')
+                            @php
+                                $tpi = $ketua->id;
+                                $data = App\Models\Pengawasan::where('tpi_id', $tpi)->get();
+                            @endphp
+                        @elseif(auth()->user()->level_id == 'DL')
+                            @foreach ($dalnis as $d)
+                                @php
+                                    $tpi[] = $d->id;
+                                    
+                                    $data = App\Models\Pengawasan::whereIn('tpi_id', $tpi)->get();
+                                    
+                                @endphp
+                            @endforeach
+                        @endif
+                        @foreach ($data as $value)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->satker->nama_satker }}</td>

@@ -29,10 +29,11 @@ class Pengawasan extends Model
     {
         return $this->belongsTo(Satker::class, 'satker_id');
     }
-    public function pengawasan()
+    public function pengawasanAT()
     {
-        return $this->hasMany(Pengawasan::class, 'anggota_id', 'anggota_id');
+        return $this->belongsTo(anggota_tpi::class, 'anggota_id', 'anggota_id');
     }
+
     public function tpi()
     {
         return $this->belongsTo(TPI::class, 'tpi_id');

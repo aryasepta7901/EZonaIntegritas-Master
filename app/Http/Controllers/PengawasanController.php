@@ -99,7 +99,17 @@ class PengawasanController extends Controller
      */
     public function update(Request $request, Pengawasan $pengawasan)
     {
-        //
+
+        Pengawasan::where('id', $request->pengawasan_id)->update(['status' => $request->status]);
+        if ($request->status == 1)
+            $kata = 'LKE Berhasil di Kirim ke Ketua Tim';
+        elseif ($request->status == 2)
+            $kata = ' LKE Berhasil di Kirim ke Pengendali Teknis';
+        elseif ($request->status == 0)
+            $kata = ' LKE dikembalikan ke Anggota Tim';
+
+
+        return redirect('/tpi/evaluasi')->with('success', $kata);
     }
 
     /**

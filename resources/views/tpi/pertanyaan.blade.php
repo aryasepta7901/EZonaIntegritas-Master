@@ -298,7 +298,7 @@
                                                                                                 type="radio"
                                                                                                 name="jawaban_at"
                                                                                                 value="{{ $item->id }}"
-                                                                                                @if ($pengawasan->status != 0) disabled @endif
+                                                                                                @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif
                                                                                                 @if ($desk->jawaban_at == $item->id) checked @endif>
 
                                                                                             <label
@@ -312,13 +312,14 @@
                                                                                             min="0"
                                                                                             class="form-control"
                                                                                             name="jawaban_at"
-                                                                                            @if ($pengawasan->status != 0) disabled @endif>
+                                                                                            @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif>
                                                                                     @endif
                                                                                 @endforeach
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label for="catatan">Catatan</label>
-                                                                                <textarea class="form-control @error('catatan_at') is-invalid  @enderror" rows="4" name="catatan_at">{{ old('catatan_at', $desk->catatan_at) }} </textarea>
+                                                                                <textarea class="form-control @error('catatan_at') is-invalid  @enderror" rows="4" name="catatan_at"
+                                                                                    @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif>{{ old('catatan_at', $desk->catatan_at) }}  </textarea>
                                                                                 @error('catatan_at')
                                                                                     <div class="invalid-feedback">
                                                                                         {{ $message }}
@@ -327,12 +328,12 @@
                                                                             </div>
                                                                             <div class="d-flex justify-content-start">
                                                                                 {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                                @if ($rekap->status == 4 && $pengawasan->status == 0)
+                                                                                @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
                                                                                     <button type="submit"
                                                                                         class="btn btn-primary"
                                                                                         name="submit_at" value="at"><i
                                                                                             class="fas fa-save"></i>
-                                                                                        Update
+                                                                                        Simpan
                                                                                     </button>
                                                                                 @endif
                                                                             </div>
@@ -371,8 +372,7 @@
                                                                                             type="radio"
                                                                                             name="jawaban_at"
                                                                                             value="{{ $item->id }}"
-                                                                                            @if ($pengawasan->status != 0) disabled @endif>
-
+                                                                                            @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif>
                                                                                         <label
                                                                                             class="form-check-label">{{ $item->rincian }}</label>
                                                                                     </div>
@@ -383,13 +383,14 @@
                                                                                     <input type="number" min="0"
                                                                                         class="form-control"
                                                                                         name="jawaban_at"
-                                                                                        @if ($pengawasan->status != 0) disabled @endif>
+                                                                                        @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif>
                                                                                 @endif
                                                                             @endforeach
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control @error('catatan_at') is-invalid  @enderror" rows="4" name="catatan_at">{{ old('catatan_at') }} </textarea>
+                                                                            <textarea class="form-control @error('catatan_at') is-invalid  @enderror" rows="4" name="catatan_at"
+                                                                                @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif>{{ old('catatan_at') }} </textarea>
                                                                             @error('catatan_at')
                                                                                 <div class="invalid-feedback">
                                                                                     {{ $message }}
@@ -398,7 +399,7 @@
                                                                         </div>
                                                                         <div class="d-flex justify-content-start">
                                                                             {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                            @if ($rekap->status == 4 && $pengawasan->status == 0)
+                                                                            @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
                                                                                 <button type="submit"
                                                                                     class="btn btn-primary"
                                                                                     name="submit_at" value="at"><i
@@ -412,43 +413,151 @@
                                                             @endif
                                                             <hr>
                                                             {{-- Ketua Tim --}}
-                                                            <div class="card-body">
-                                                                <div class="form-group">
-                                                                    <label for="anggota">Ketua Tim</label>
-                                                                    @foreach ($value->opsi as $item)
-                                                                        @if ($item->type == 'checkbox')
-                                                                            <div class="form-check ml-4">
-                                                                                <input class="form-check-input"
-                                                                                    type="radio" name="opsi_id"
-                                                                                    value="{{ $item->id }}"
-                                                                                    @if ($pengawasan->status != 1) disabled @endif>
-                                                                                <label
-                                                                                    class="form-check-label">{{ $item->rincian }}</label>
+
+                                                            @if ($deskEvaluation->count() != 0)
+                                                                @foreach ($deskEvaluation as $desk)
+                                                                    <div class="card-body">
+                                                                        <form action="/tpi/evaluasi/{{ $desk->id }}"
+                                                                            method="post">
+                                                                            @method('put')
+                                                                            @csrf
+                                                                            <div class="form-group">
+                                                                                <label for="anggota">Ketua
+                                                                                    Tim</label>
+                                                                                <input type="hidden"
+                                                                                    value="{{ $rekap->id }}"
+                                                                                    name="rekapitulasi_id">
+                                                                                <input type="hidden"
+                                                                                    value="{{ $pilar->id }}"
+                                                                                    name="pilar_id">
+                                                                                <input type="hidden"
+                                                                                    value="{{ $penimbang }}"
+                                                                                    name="penimbang">
+                                                                                <input type="hidden"
+                                                                                    value="{{ $pengawasan->id }}"
+                                                                                    name="pengawasan">
+
+                                                                                @foreach ($value->opsi as $item)
+                                                                                    @if ($item->type == 'checkbox')
+                                                                                        <div class="form-check ml-4">
+                                                                                            <input class="form-check-input"
+                                                                                                type="radio"
+                                                                                                name="jawaban_kt"
+                                                                                                value="{{ $item->id }}"
+                                                                                                @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif
+                                                                                                @if ($desk->jawaban_kt == $item->id) checked @endif>
+
+                                                                                            <label
+                                                                                                class="form-check-label">{{ $item->rincian }}</label>
+                                                                                        </div>
+                                                                                    @elseif($item->type == 'input')
+                                                                                        <p for="input">
+                                                                                            {{ $item->rincian }}
+                                                                                        </p>
+                                                                                        <input type="number"
+                                                                                            min="0"
+                                                                                            class="form-control"
+                                                                                            name="jawaban_kt"
+                                                                                            @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>
+                                                                                    @endif
+                                                                                @endforeach
                                                                             </div>
-                                                                        @elseif($item->type == 'input')
-                                                                            <p for="input">{{ $item->rincian }}
-                                                                            </p>
-                                                                            <input type="number" min="0"
-                                                                                class="form-control" name="opsi_id"
-                                                                                @if ($pengawasan->status != 1) disabled @endif>
-                                                                        @endif
-                                                                    @endforeach
+                                                                            <div class="form-group">
+                                                                                <label for="catatan">Catatan</label>
+                                                                                <textarea class="form-control @error('catatan_kt') is-invalid  @enderror" rows="4" name="catatan_kt"
+                                                                                    @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>{{ old('catatan_kt', $desk->catatan_kt) }}  </textarea>
+                                                                                @error('catatan_kt')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}
+                                                                                    </div>
+                                                                                @enderror
+                                                                            </div>
+                                                                            <div class="d-flex justify-content-start">
+                                                                                {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
+                                                                                @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary"
+                                                                                        name="submit_kt" value="at"><i
+                                                                                            class="fas fa-save"></i>
+                                                                                        Simpan
+                                                                                    </button>
+                                                                                @endif
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                @endforeach
+                                                            @else
+                                                                {{-- Create --}}
+                                                                <div class="card-body">
+                                                                    <form action="/tpi/evaluasi" method="post">
+                                                                        @csrf
+                                                                        <div class="form-group">
+                                                                            <label for="anggota">Ketua Tim</label>
+                                                                            <input type="hidden"
+                                                                                value="{{ $rekap->satker_id }}"
+                                                                                name="satker_id">
+                                                                            <input type="hidden" name="pertanyaan_id"
+                                                                                value="{{ $value->id }}">
+                                                                            <input type="hidden"
+                                                                                value="{{ $rekap->id }}"
+                                                                                name="rekapitulasi_id">
+                                                                            <input type="hidden"
+                                                                                value="{{ $pilar->id }}"
+                                                                                name="pilar_id">
+                                                                            <input type="hidden"
+                                                                                value="{{ $penimbang }}"
+                                                                                name="penimbang">
+                                                                            <input type="hidden"
+                                                                                value="{{ $pengawasan->id }}"
+                                                                                name="pengawasan">
+
+                                                                            @foreach ($value->opsi as $item)
+                                                                                @if ($item->type == 'checkbox')
+                                                                                    <div class="form-check ml-4">
+                                                                                        <input class="form-check-input"
+                                                                                            type="radio"
+                                                                                            name="jawaban_at"
+                                                                                            value="{{ $item->id }}"
+                                                                                            @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>
+                                                                                        <label
+                                                                                            class="form-check-label">{{ $item->rincian }}</label>
+                                                                                    </div>
+                                                                                @elseif($item->type == 'input')
+                                                                                    <p for="input">
+                                                                                        {{ $item->rincian }}
+                                                                                    </p>
+                                                                                    <input type="number" min="0"
+                                                                                        class="form-control"
+                                                                                        name="jawaban_at"
+                                                                                        @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="catatan">Catatan</label>
+                                                                            <textarea class="form-control @error('catatan_kt') is-invalid  @enderror" rows="4" name="catatan_kt"
+                                                                                @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>{{ old('catatan_kt') }} </textarea>
+                                                                            @error('catatan_kt')
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $message }}
+                                                                                </div>
+                                                                            @enderror
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-start">
+                                                                            {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
+                                                                            @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary"
+                                                                                    name="submit_at" value="at"><i
+                                                                                        class="fas fa-save"></i>
+                                                                                    Simpan
+                                                                                </button>
+                                                                            @endif
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="catatan">Catatan</label>
-                                                                    <textarea class="form-control  " rows="4" name="catatan" @if ($pengawasan->status != 1) disabled @endif>
-                                                                    {{ old('catatan') }} </textarea>
-                                                                </div>
-                                                                <div class="d-flex justify-content-start">
-                                                                    {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                    @if ($rekap->status == 4 && $pengawasan->status == 1)
-                                                                        <button type="submit" class="btn btn-primary"><i
-                                                                                class="fas fa-save"></i>
-                                                                            Simpan
-                                                                        </button>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
+                                                            @endif
+
                                                             <hr>
                                                             {{-- Pengendali Teknis --}}
                                                             <div class="card-body">
@@ -460,7 +569,7 @@
                                                                                 <input class="form-check-input"
                                                                                     type="radio" name="opsi_id"
                                                                                     value="{{ $item->id }}"
-                                                                                    @if ($pengawasan->status != 2) disabled @endif>
+                                                                                    @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
                                                                                 <label
                                                                                     class="form-check-label">{{ $item->rincian }}</label>
                                                                             </div>
@@ -469,18 +578,18 @@
                                                                             </p>
                                                                             <input type="number" min="0"
                                                                                 class="form-control" name="opsi_id"
-                                                                                @if ($pengawasan->status != 2) disabled @endif>
+                                                                                @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
                                                                         @endif
                                                                     @endforeach
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="catatan">Catatan</label>
-                                                                    <textarea class="form-control  " rows="4" name="catatan" @if ($pengawasan->status != 2) disabled @endif>
+                                                                    <textarea class="form-control  " rows="4" name="catatan" @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
                                                                     {{ old('catatan') }} </textarea>
                                                                 </div>
                                                                 <div class="d-flex justify-content-start">
                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
-                                                                    @if ($rekap->status == 4 && $pengawasan->status == 2)
+                                                                    @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
                                                                         <button type="submit" class="btn btn-primary"><i
                                                                                 class="fas fa-save"></i>
                                                                             Simpan
