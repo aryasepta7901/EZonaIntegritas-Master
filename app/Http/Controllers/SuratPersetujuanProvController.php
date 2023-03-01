@@ -21,7 +21,7 @@ class SuratPersetujuanProvController extends Controller
             'master' => 'Rekapitulasi',
             'link' => 'prov/evaluasi',
             'title' => 'Surat Persetujuan',
-            'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->get(),
+            'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7])->get(),
         ]);
     }
 

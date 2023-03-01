@@ -107,11 +107,19 @@ class EvaluatorProvinsiController extends Controller
      * @param  \App\Models\Rekapitulasi  $rekapitulasi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rekapitulasi $rekapitulasi)
+    public function update(Request $request, Rekapitulasi $evaluasi)
     {
+
         $id = $request->id;
+
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
-        return redirect('/prov/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
+        if ($evaluasi->status == 4) {
+            // Jika dilakukan TPI
+            return redirect('/tpi/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
+        } else {
+            // Jika dilakukan provinsi 
+            return redirect('/prov/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
+        }
     }
 
     /**

@@ -262,6 +262,51 @@ class DeskEvaluationController extends Controller
                 ],
             );
         }
+        if ($request->submit_pt) {
+            // validasi
+            $request->validate(
+                [
+                    'jawaban_pt' => 'required',
+                    'catatan_pt' => 'required',
+                ],
+                [
+                    'catatan*.required' => 'Silahkan Isi Catatan, ',
+                    'jawaban*.required' => 'Silahkan Pilih Jawaban, ',
+
+                ]
+            );
+            $jawaban = $request->jawaban_pt;
+            $nilai = Opsi::where('id', $jawaban)->first()->bobot;
+
+            DeskEvaluation::updateOrCreate(
+                ['id' => $evaluasi->id],
+                [
+                    'jawaban_pt' => $jawaban,
+                    'catatan_pt' => $request->catatan_pt,
+                    'nilai_pt' => $nilai,
+                    'pengawasan_id' => $request->pengawasan,
+                ]
+            );
+            // RekapPilar ->nilai_pt
+            $rekapitulasi_id = $request->rekapitulasi_id;
+            $pilar_id = $request->pilar_id;
+            $id = $pilar_id . $rekapitulasi_id;
+            // Cek apakah ada nilai lama
+            $nilaiLama = RekapPilar::where('id', $id)->first();
+            $penimbang = $request->penimbang;
+            if ($evaluasi) {
+                // Jika Update
+                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_pt -  round($evaluasi->nilai_pt * $penimbang, 2);
+            }
+            RekapPilar::updateOrCreate(
+                ['id' => $id],
+                [
+                    'rekapitulasi_id' => $rekapitulasi_id,
+                    'pilar_id' => $pilar_id,
+                    'nilai_pt' => $total,
+                ],
+            );
+        }
 
         return redirect()->back()->with('success', 'Jawaban Berhasil Disimpan');
     }

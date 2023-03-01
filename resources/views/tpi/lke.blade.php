@@ -115,14 +115,111 @@
                 <!-- /.modal-dialog -->
             </div>
         @endif
-        {{-- <div class="col-lg-12 mb-3 d-flex justify-content-end">
-            <button class="btn btn-success m-2" data-toggle="modal" data-target="#setuju"><i class="fa fa-save">
-                    Setuju</i></button>
-            <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
-                    Revisi</i></button>
-            <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
-                    Tolak</i></button>
-        </div> --}}
+        {{-- Pengendali Teknis --}}
+        @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
+            <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                <button class="btn btn-success m-2" data-toggle="modal" data-target="#setuju"><i class="fa fa-save">
+                        Setuju</i></button>
+                <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
+                        Revisi</i></button>
+                <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
+                        Tolak</i></button>
+            </div>
+            {{-- Setuju --}}
+            {{-- Setuju LKE --}}
+            <div class="modal fade" id="setuju">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Apakah Kamu Yakin untuk Menyetujui LKE?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
+                            @method('put')
+                            @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name="id" value="{{ $rekap->id }}">
+                                <input type="hidden" name="status" value="6">
+                                <p> <b> Note:</b> <br></p>
+                                <p>LKE yang telah disetujui akan menjadi re komendasi dalam pengajuan ZI kepada KemenpanRB
+                                </p>
+
+
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Kirim</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            {{-- Revisi --}}
+            <div class="modal fade" id="revisi">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirimkan Kembali LKE?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
+                            @method('put')
+                            @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name="id" value="{{ $rekap->id }}">
+                                <input type="hidden" name="status" value="5">
+                                <p> <b> Note:</b> <br></p>
+                                <p>LKE akan dikembalikan ke {{ $rekap->satker->nama_satker }} untuk diperbaiki kembali</p>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Kirim</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            {{-- Tolak --}}
+            <div class="modal fade" id="tolak">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Apakah Kamu Yakin untuk Menolak LKE?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
+                            @method('put')
+                            @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name="id" value="{{ $rekap->id }}">
+                                <input type="hidden" name="status" value="7">
+                                <p> <b> Note:</b> <br></p>
+                                <p>LKE : {{ $rekap->satker->nama_satker }} akan ditolak dan dilakukan pembinaan</p>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Kirim</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        @endif
     @endif
     <div class="col-lg-4">
         <div class="info-box bg-light">

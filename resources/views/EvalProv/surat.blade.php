@@ -17,7 +17,6 @@
                                 @php
                                     $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                 @endphp
-                                {{ $nilai }}
                             @endforeach
                             {{-- Hitung jumlah nilai rincian hasil --}}
                             @php
@@ -33,7 +32,7 @@
                             @php
                                 $total = $nilai + $nilaiHasil;
                             @endphp
-                            Nilai ZI: {{ $total }}
+                            <p>Nilai ZI: {{ $total }}</p>
                         </li>
                     @endforeach
                 </ul>
@@ -87,9 +86,9 @@
                             <tbody>
                                 <tr>
                                     <td class="text-center">
-                                        <a target="__self"
-                                            href="{{ asset('storage/' . $rekap->first()->surat_rekomendasi) }}"><i
-                                                class="fas fa-file"></i></a>
+                                        <button type="button" class="btn btn-info btn-sm m-2" data-toggle="modal"
+                                            data-target="#surat_rekomendasi"><i class="fas fa-file">
+                                            </i></button>
                                     </td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
@@ -168,5 +167,32 @@
             <!-- /.modal-dialog -->
         </div>
     @endforeach
+
+    <div class="modal fade" id="surat_rekomendasi">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Surat Rekomendasi
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item"
+                            src="{{ asset('storage/' . $rekap->first()->surat_rekomendasi) }}" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 
 @endsection
