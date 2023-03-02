@@ -26,4 +26,8 @@ class DeskEvaluation extends Model
         'pengawasan_id',
 
     ];
+    public function SelfAssessment()
+    {
+        return $this->belongsTo(SelfAssessment::class, 'id', 'id');
+    }
 }

@@ -37,4 +37,8 @@ class Pertanyaan extends Model
     {
         return $this->hasMany(UploadDokumen::class, 'dokumenlke_id');
     }
+    public function SelfAssessment()
+    {
+        return $this->hasMany(SelfAssessment::class, 'pertanyaan_id');
+    }
 }

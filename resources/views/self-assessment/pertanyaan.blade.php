@@ -8,13 +8,13 @@
                     // Perhitungan Nilai setiap Pertanyaan
                     $jml_pertanyaan = $value->pertanyaan->count();
                     $penimbang = $value->bobot / $jml_pertanyaan;
+                    $total_sa = 0;
+
                 @endphp
                 @foreach ($value->pertanyaan as $p)
                     @php
-                        $nilai = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $p->subpilar_id . '%')
-                            ->where('rekapitulasi_id', $rekap->id)
-                            ->sum('nilai'); //mengambil nilai
-                        $total = round($nilai * $penimbang, 2);
+                        $nilai = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
+                        $total += round($nilai * $penimbang, 2);
                     @endphp
                 @endforeach
 

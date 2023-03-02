@@ -23,4 +23,12 @@ class SelfAssessment extends Model
         'pertanyaan_id',
 
     ];
+    public function pertanyaan()
+    {
+        return $this->belongsTo(Pertanyaan::class, 'pertanyaan_id');
+    }
+    public function DeskEvaluation()
+    {
+        return $this->hasMany(DeskEvaluation::class, 'id', 'id');
+    }
 }

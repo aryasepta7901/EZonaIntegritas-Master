@@ -8,14 +8,31 @@
                     // Perhitungan Nilai setiap Pertanyaan
                     $jml_pertanyaan = $value->pertanyaan->count();
                     $penimbang = $value->bobot / $jml_pertanyaan;
+                    $total_sa = 0;
+                    $total_at = 0;
+                    $total_kt = 0;
+                    $total_pt = 0;
                 @endphp
                 @foreach ($value->pertanyaan as $p)
                     @php
-                        $nilai = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $p->subpilar_id . '%')
-                            ->where('rekapitulasi_id', $rekap->id)
-                            ->sum('nilai'); //mengambil nilai
-                        $total = round($nilai * $penimbang, 2);
+                        $nilai_sa = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
+                        $total_sa += round($nilai_sa * $penimbang, 2);
+                        
+                        // $nilai_at = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $p->subpilar_id . '%')
+                        //     ->where('rekapitulasi_id', $rekap->id)
+                        //     ->sum('nilai'); //mengambil nilai
+                        
                     @endphp
+                    @foreach ($p->SelfAssessment->where('rekapitulasi_id', $rekap->id) as $s)
+                        @php
+                            $nilai_at = $s->DeskEvaluation->sum('nilai_at');
+                            $total_at += round($nilai_at * $penimbang, 2);
+                            $nilai_kt = $s->DeskEvaluation->sum('nilai_kt');
+                            $total_kt += round($nilai_kt * $penimbang, 2);
+                            $nilai_pt = $s->DeskEvaluation->sum('nilai_pt');
+                            $total_pt += round($nilai_pt * $penimbang, 2);
+                        @endphp
+                    @endforeach
                 @endforeach
                 <div class="card">
                     <div class="card-header p-0" id="heading{{ $loop->iteration }}">
@@ -26,8 +43,7 @@
                                 aria-controls="collapse{{ $loop->iteration }}">
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
-                                    <p class="info-box-number m-4">Nilai : {{ $total }}</p>
-                                    <i class="fa my-4 " aria-hidden="true"></i>
+                                    <i class="fa " aria-hidden="true"></i>
 
                                 </div>
                             </button>
@@ -46,9 +62,26 @@
                                     <table id="" class="table table-bordered table-responsive table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Self-Assessment</th>
+                                                <th>
+                                                    <div class="d-flex justify-content-between">
+                                                        Self-Assessment
+                                                        <button class="badge badge-info btn-sm">Nilai :
+                                                            {{ $total_sa }}</button>
+                                                    </div>
+                                                </th>
                                                 @if ($rekap->status == 4)
-                                                    <th>Desk-Evaluation</th>
+                                                    <th>
+                                                        <div class="d-flex justify-content-between">
+                                                            Desk-Evaluation
+                                                            <button class="badge badge-info btn-sm">Nilai AT :
+                                                                {{ $total_at }}</button>
+                                                            <button class="badge badge-info btn-sm">Nilai KT :
+                                                                {{ $total_pt }}</button>
+                                                            <button class="badge badge-info btn-sm">Nilai PT :
+                                                                {{ $total_kt }}</button>
+                                                        </div>
+
+                                                    </th>
                                                 @endif
 
                                             </tr>
