@@ -15,6 +15,8 @@ class DeskEvaluation extends Migration
     {
         Schema::create('desk_evaluation', function (Blueprint $table) {
             $table->char('id', 15)->primary();
+            $table->char('rekapitulasi_id', 12);
+
             // Anggota Tim
             $table->char('jawaban_at', 6)->nullable();
             $table->text('catatan_at')->nullable();
@@ -24,10 +26,11 @@ class DeskEvaluation extends Migration
             $table->text('catatan_kt')->nullable();
             $table->double('nilai_kt', 6, 2)->nullable();
             // Pengendali Teknis
-            $table->char('jawaban_pt', 6)->nullable();
-            $table->text('catatan_pt')->nullable();
-            $table->double('nilai_pt', 6, 2)->nullable();
+            $table->char('jawaban_dl', 6)->nullable();
+            $table->text('catatan_dl')->nullable();
+            $table->double('nilai_dl', 6, 2)->nullable();
             $table->char('pengawasan_id');
+            $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
             $table->timestamps();
         });
     }

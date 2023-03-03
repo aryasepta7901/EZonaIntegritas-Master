@@ -69,7 +69,7 @@ class EvaluatorProvinsiController extends Controller
             'rekap' => $evaluasi,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
             'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-            'nilai' => RekapPilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai_sa'),
+            'nilaiPilar' => RekapPilar::where('rekapitulasi_id', $evaluasi->id)->get(),
             'nilaiHasil' => RekapHasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
 
         ]);

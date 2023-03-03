@@ -14,15 +14,16 @@ class DeskEvaluation extends Model
 
     protected $fillable = [
         'id',
+        'rekapitulasi_id',
         'jawaban_at',
         'jawaban_kt',
-        'jawaban_pt',
+        'jawaban_dl',
         'catatan_at',
         'catatan_kt',
-        'catatan_pt',
+        'catatan_dl',
         'nilai_at',
         'nilai_kt',
-        'nilai_pt',
+        'nilai_dl',
         'pengawasan_id',
 
     ];

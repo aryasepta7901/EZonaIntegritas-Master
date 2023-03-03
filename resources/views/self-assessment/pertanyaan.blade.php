@@ -8,16 +8,14 @@
                     // Perhitungan Nilai setiap Pertanyaan
                     $jml_pertanyaan = $value->pertanyaan->count();
                     $penimbang = $value->bobot / $jml_pertanyaan;
-                    $total_sa = 0;
-
+                    $total = 0;
                 @endphp
                 @foreach ($value->pertanyaan as $p)
                     @php
                         $nilai = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
-                        $total += round($nilai * $penimbang, 2);
+                        $total += $nilai * $penimbang;
                     @endphp
                 @endforeach
-
                 <div class="card">
                     <div class="card-header p-0" id="heading{{ $loop->iteration }}">
                         <h2 class="mb-0">
@@ -27,7 +25,7 @@
                                 aria-controls="collapse{{ $loop->iteration }}">
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
-                                    <p class="info-box-number m-4">Nilai : {{ $total }}</p>
+                                    <p class="info-box-number m-4">Nilai : {{ round($total, 2) }}</p>
                                     <i class="fa my-4 " aria-hidden="true"></i>
 
                                 </div>

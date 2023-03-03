@@ -8,7 +8,6 @@
                     <a href="/prov/surat" class="btn btn-primary  "><i class="fa fa-print">
                             Cetak Surat Persetujuan</i></a>
                 </div>
-
             </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -30,13 +29,22 @@
                                 <td>{{ $value->satker->nama_satker }}</td>
                                 <td>{{ $value->predikat }}</td>
                                 <td>
-                                    {{-- Hitung jumlah nilai rincian pengungkit --}}
-                                    @foreach ($value->RekapPilar as $item)
-                                        @php
-                                            $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
-                                        @endphp
-                                    @endforeach
-                                    {{ $nilai }}
+                                    {{-- Cek apakah data rekappilar ada didatabase --}}
+                                    @if ($value->RekapPilar->count() != 0)
+                                        {{-- Hitung jumlah nilai rincian pengungkit --}}
+                                        @foreach ($value->RekapPilar as $item)
+                                            @php
+                                                $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
+                                                $nilai_sa = 0;
+                                            @endphp
+                                            @foreach ($nilaiRekap as $r)
+                                                @php
+                                                    $nilai_sa += round($r->nilai_sa, 2);
+                                                @endphp
+                                            @endforeach
+                                        @endforeach
+                                        {{ $nilai_sa }}
+                                    @endif
                                 </td>
                                 <td>
                                     {{-- Hitung jumlah nilai rincian hasil --}}
@@ -60,9 +68,7 @@
                                     @endif
 
                                 </td>
-                                @php
-                                    $total = $nilai + $nilaiHasil;
-                                @endphp
+
                                 <td class="text-center">
                                     <a type="button" href="/prov/evaluasi/{{ $value->id }}"
                                         class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>

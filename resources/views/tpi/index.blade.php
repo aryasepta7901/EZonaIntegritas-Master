@@ -76,10 +76,16 @@
                                             {{-- Hitung jumlah nilai rincian pengungkit --}}
                                             @foreach ($item->RekapPilar as $P)
                                                 @php
-                                                    $nilai = $P->where('rekapitulasi_id', $item->id)->sum('nilai_sa');
+                                                    $nilaiRekap = $P->where('rekapitulasi_id', $item->id)->get();
+                                                    $nilai_sa = 0;
                                                 @endphp
+                                                @foreach ($nilaiRekap as $n)
+                                                    @php
+                                                        $nilai_sa += round($n->nilai_sa, 2);
+                                                    @endphp
+                                                @endforeach
                                             @endforeach
-                                            {{ $nilai }}
+                                            {{ $nilai_sa }}
                                         </td>
                                         <td>
                                             {{-- Hitung jumlah nilai rincian hasil --}}

@@ -8,6 +8,7 @@ use App\Models\Rekapitulasi;
 use App\Models\RekapPilar;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
+use App\Models\RekapHasil;
 use Illuminate\Http\Request;
 
 class LKEController extends Controller
@@ -75,8 +76,11 @@ class LKEController extends Controller
             'link' => 'lke/',
             'title' => 'Lembar Kerja Evaluasi: ' . $lke->predikat,
             'rekap' => $lke,
+            'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
-            'nilai' => RekapPilar::where('rekapitulasi_id', $lke->id)->sum('nilai_sa'),
+            'nilaiPilar' => RekapPilar::where('rekapitulasi_id', $lke->id)->get(),
+            'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->sum('nilai'),
+
 
         ]);
     }

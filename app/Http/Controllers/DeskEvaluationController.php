@@ -80,6 +80,8 @@ class DeskEvaluationController extends Controller
                     'catatan_at' => $request->catatan_at,
                     'nilai_at' => $nilai,
                     'pengawasan_id' => $request->pengawasan,
+                    'rekapitulasi_id' => $request->rekapitulasi_id,
+
                 ]
             );
             // RekapPilar ->nilai_at
@@ -91,9 +93,9 @@ class DeskEvaluationController extends Controller
 
             $penimbang = $request->penimbang;
             if ($nilaiLama->nilai_at !== null)
-                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_at;
+                $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_at;
             else {
-                $total = round($nilai * $penimbang, 2);
+                $total = round($nilai * $penimbang, 3);
             }
             RekapPilar::updateOrCreate(
                 ['id' => $id],
@@ -126,7 +128,7 @@ class DeskEvaluationController extends Controller
             'rekap' => $evaluasi,
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
             'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-            'nilai' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->sum('nilai_sa'),
+            'nilaiPilar' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->get(),
             'nilaiHasil' => Rekaphasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
             // Permasalahan
             'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
@@ -206,7 +208,7 @@ class DeskEvaluationController extends Controller
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
-                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_at -  round($evaluasi->nilai_at * $penimbang, 2);
+                $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_at -  round($evaluasi->nilai_at * $penimbang, 3);
             }
             RekapPilar::updateOrCreate(
                 ['id' => $id],
@@ -251,7 +253,7 @@ class DeskEvaluationController extends Controller
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
-                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_kt -  round($evaluasi->nilai_kt * $penimbang, 2);
+                $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_kt -  round($evaluasi->nilai_kt * $penimbang, 3);
             }
             RekapPilar::updateOrCreate(
                 ['id' => $id],
@@ -262,12 +264,12 @@ class DeskEvaluationController extends Controller
                 ],
             );
         }
-        if ($request->submit_pt) {
+        if ($request->submit_dl) {
             // validasi
             $request->validate(
                 [
-                    'jawaban_pt' => 'required',
-                    'catatan_pt' => 'required',
+                    'jawaban_dl' => 'required',
+                    'catatan_dl' => 'required',
                 ],
                 [
                     'catatan*.required' => 'Silahkan Isi Catatan, ',
@@ -275,19 +277,19 @@ class DeskEvaluationController extends Controller
 
                 ]
             );
-            $jawaban = $request->jawaban_pt;
+            $jawaban = $request->jawaban_dl;
             $nilai = Opsi::where('id', $jawaban)->first()->bobot;
 
             DeskEvaluation::updateOrCreate(
                 ['id' => $evaluasi->id],
                 [
-                    'jawaban_pt' => $jawaban,
-                    'catatan_pt' => $request->catatan_pt,
-                    'nilai_pt' => $nilai,
+                    'jawaban_dl' => $jawaban,
+                    'catatan_dl' => $request->catatan_dl,
+                    'nilai_dl' => $nilai,
                     'pengawasan_id' => $request->pengawasan,
                 ]
             );
-            // RekapPilar ->nilai_pt
+            // RekapPilar ->nilai_dl
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
             $id = $pilar_id . $rekapitulasi_id;
@@ -296,14 +298,14 @@ class DeskEvaluationController extends Controller
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
-                $total = round($nilai * $penimbang, 2) + $nilaiLama->nilai_pt -  round($evaluasi->nilai_pt * $penimbang, 2);
+                $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_dl -  round($evaluasi->nilai_dl * $penimbang, 3);
             }
             RekapPilar::updateOrCreate(
                 ['id' => $id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
-                    'nilai_pt' => $total,
+                    'nilai_dl' => $total,
                 ],
             );
         }

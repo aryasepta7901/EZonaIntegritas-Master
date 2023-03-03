@@ -17,7 +17,7 @@ class RekapPilar extends Model
         'nilai_sa', // self assessment
         'nilai_at', //anggota Tim
         'nilai_kt', //ketua tim
-        'nilai_pt', //pengandali teknis
+        'nilai_dl', //pengandali teknis
         'rekapitulasi_id',
         'pilar_id',
 

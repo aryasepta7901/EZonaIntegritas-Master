@@ -11,12 +11,12 @@
                     $total_sa = 0;
                     $total_at = 0;
                     $total_kt = 0;
-                    $total_pt = 0;
+                    $total_dl = 0;
                 @endphp
                 @foreach ($value->pertanyaan as $p)
                     @php
                         $nilai_sa = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
-                        $total_sa += round($nilai_sa * $penimbang, 2);
+                        $total_sa += $nilai_sa * $penimbang;
                         
                         // $nilai_at = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $p->subpilar_id . '%')
                         //     ->where('rekapitulasi_id', $rekap->id)
@@ -26,11 +26,11 @@
                     @foreach ($p->SelfAssessment->where('rekapitulasi_id', $rekap->id) as $s)
                         @php
                             $nilai_at = $s->DeskEvaluation->sum('nilai_at');
-                            $total_at += round($nilai_at * $penimbang, 2);
+                            $total_at += $nilai_at * $penimbang;
                             $nilai_kt = $s->DeskEvaluation->sum('nilai_kt');
-                            $total_kt += round($nilai_kt * $penimbang, 2);
-                            $nilai_pt = $s->DeskEvaluation->sum('nilai_pt');
-                            $total_pt += round($nilai_pt * $penimbang, 2);
+                            $total_kt += $nilai_kt * $penimbang;
+                            $nilai_dl = $s->DeskEvaluation->sum('nilai_dl');
+                            $total_dl += $nilai_dl * $penimbang;
                         @endphp
                     @endforeach
                 @endforeach
@@ -66,7 +66,7 @@
                                                     <div class="d-flex justify-content-between">
                                                         Self-Assessment
                                                         <button class="badge badge-info btn-sm">Nilai :
-                                                            {{ $total_sa }}</button>
+                                                            {{ round($total_sa, 2) }}</button>
                                                     </div>
                                                 </th>
                                                 @if ($rekap->status == 4)
@@ -74,11 +74,11 @@
                                                         <div class="d-flex justify-content-between">
                                                             Desk-Evaluation
                                                             <button class="badge badge-info btn-sm">Nilai AT :
-                                                                {{ $total_at }}</button>
+                                                                {{ round($total_at, 2) }}</button>
                                                             <button class="badge badge-info btn-sm">Nilai KT :
-                                                                {{ $total_pt }}</button>
+                                                                {{ round($total_kt, 2) }}</button>
                                                             <button class="badge badge-info btn-sm">Nilai PT :
-                                                                {{ $total_kt }}</button>
+                                                                {{ round($total_dl, 2) }}</button>
                                                         </div>
 
                                                     </th>
@@ -324,6 +324,7 @@
                                                                                     value="{{ $pengawasan->id }}"
                                                                                     name="pengawasan">
 
+
                                                                                 @foreach ($value->opsi as $item)
                                                                                     @if ($item->type == 'checkbox')
                                                                                         <div class="form-check ml-4">
@@ -363,7 +364,7 @@
                                                                                 @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
                                                                                     <button type="submit"
                                                                                         class="btn btn-primary"
-                                                                                        name="submit_at"><i
+                                                                                        name="submit_at" value="at"><i
                                                                                             class="fas fa-save"></i>
                                                                                         Simpan
                                                                                     </button>
@@ -433,7 +434,7 @@
                                                                             @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
                                                                                 <button type="submit"
                                                                                     class="btn btn-primary"
-                                                                                    name="submit_at"><i
+                                                                                    name="submit_at" value="at"><i
                                                                                         class="fas fa-save"></i>
                                                                                     Simpan
                                                                                 </button>
@@ -506,7 +507,7 @@
                                                                                 @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
                                                                                     <button type="submit"
                                                                                         class="btn btn-primary"
-                                                                                        name="submit_kt"><i
+                                                                                        name="submit_kt" value="kt"><i
                                                                                             class="fas fa-save"></i>
                                                                                         Simpan
                                                                                     </button>
@@ -576,7 +577,7 @@
                                                                             @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
                                                                                 <button type="submit"
                                                                                     class="btn btn-primary"
-                                                                                    name="submit_at"><i
+                                                                                    name="submit_kt" value="kt"><i
                                                                                         class="fas fa-save"></i>
                                                                                     Simpan
                                                                                 </button>
@@ -615,10 +616,10 @@
                                                                                         <div class="form-check ml-4">
                                                                                             <input class="form-check-input"
                                                                                                 type="radio"
-                                                                                                name="jawaban_pt"
+                                                                                                name="jawaban_dl"
                                                                                                 value="{{ $item->id }}"
                                                                                                 @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif
-                                                                                                @if ($desk->jawaban_pt == $item->id) checked @endif>
+                                                                                                @if ($desk->jawaban_dl == $item->id) checked @endif>
 
                                                                                             <label
                                                                                                 class="form-check-label">{{ $item->rincian }}</label>
@@ -630,16 +631,16 @@
                                                                                         <input type="number"
                                                                                             min="0"
                                                                                             class="form-control"
-                                                                                            name="jawaban_pt"
+                                                                                            name="jawaban_dl"
                                                                                             @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
                                                                                     @endif
                                                                                 @endforeach
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label for="catatan">Catatan</label>
-                                                                                <textarea class="form-control @error('catatan_pt') is-invalid  @enderror" rows="4" name="catatan_pt"
-                                                                                    @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>{{ old('catatan_pt', $desk->catatan_pt) }}  </textarea>
-                                                                                @error('catatan_pt')
+                                                                                <textarea class="form-control @error('catatan_dl') is-invalid  @enderror" rows="4" name="catatan_dl"
+                                                                                    @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>{{ old('catatan_dl', $desk->catatan_dl) }}  </textarea>
+                                                                                @error('catatan_dl')
                                                                                     <div class="invalid-feedback">
                                                                                         {{ $message }}
                                                                                     </div>
@@ -649,7 +650,7 @@
                                                                                 @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
                                                                                     <button type="submit"
                                                                                         class="btn btn-primary"
-                                                                                        name="submit_pt"><i
+                                                                                        name="submit_dl" value="dl"><i
                                                                                             class="fas fa-save"></i>
                                                                                         Simpan
                                                                                     </button>
@@ -688,7 +689,7 @@
                                                                                     <div class="form-check ml-4">
                                                                                         <input class="form-check-input"
                                                                                             type="radio"
-                                                                                            name="jawaban_pt"
+                                                                                            name="jawaban_dl"
                                                                                             value="{{ $item->id }}"
                                                                                             @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
                                                                                         <label
@@ -700,16 +701,16 @@
                                                                                     </p>
                                                                                     <input type="number" min="0"
                                                                                         class="form-control"
-                                                                                        name="jawaban_pt"
+                                                                                        name="jawaban_dl"
                                                                                         @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
                                                                                 @endif
                                                                             @endforeach
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control @error('catatan_pt') is-invalid  @enderror" rows="4" name="catatan_pt"
-                                                                                @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>{{ old('catatan_pt') }} </textarea>
-                                                                            @error('catatan_pt')
+                                                                            <textarea class="form-control @error('catatan_dl') is-invalid  @enderror" rows="4" name="catatan_dl"
+                                                                                @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>{{ old('catatan_dl') }} </textarea>
+                                                                            @error('catatan_dl')
                                                                                 <div class="invalid-feedback">
                                                                                     {{ $message }}
                                                                                 </div>
@@ -719,7 +720,7 @@
                                                                             @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
                                                                                 <button type="submit"
                                                                                     class="btn btn-primary"
-                                                                                    name="submit_pt"><i
+                                                                                    name="submit_dl" value="dl"><i
                                                                                         class="fas fa-save"></i>
                                                                                     Simpan
                                                                                 </button>

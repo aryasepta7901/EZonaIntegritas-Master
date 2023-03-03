@@ -18,8 +18,6 @@ class Rekapitulasi extends Migration
             $table->char('id', 15)->primary();
             $table->year('tahun');
             $table->char('predikat', 4);
-            $table->double('nilai_pengungkit', 6, 2)->default(0);
-            $table->double('nilai_hasil', 6, 2)->default(0);
             $table->char('status', 1)->default(0);
             $table->char('satker_id', 4);
             $table->text('surat_rekomendasi');

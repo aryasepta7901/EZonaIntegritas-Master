@@ -49,19 +49,20 @@
                                 <td>{{ $value->predikat }}</td>
                                 <td>
                                     {{-- Cek apakah data rekappilar ada didatabase --}}
-
-                                    @php
-                                        $RekapPilar = $value->RekapPilar->where('rekapitulasi_id', $value->id);
-                                    @endphp
-                                    @if ($RekapPilar->count() != 0)
+                                    @if ($value->RekapPilar->count() != 0)
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
-                                        @foreach ($RekapPilar as $item)
+                                        @foreach ($value->RekapPilar as $item)
                                             @php
-                                                $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
+                                                $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
+                                                $nilai_sa = 0;
                                             @endphp
                                         @endforeach
-                                        {{-- Masih Error --}}
-                                        {{ $nilai }}
+                                        @foreach ($nilaiRekap as $r)
+                                            @php
+                                                $nilai_sa += round($r->nilai_sa, 2);
+                                            @endphp
+                                        @endforeach
+                                        {{ $nilai_sa }}
                                     @endif
 
                                 </td>

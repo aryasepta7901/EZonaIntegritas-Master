@@ -15,10 +15,10 @@ class Rekappilar extends Migration
     {
         Schema::create('rekappilar', function (Blueprint $table) {
             $table->char('id', 15)->primary();
-            $table->double('nilai_sa', 6, 2);
-            $table->double('nilai_at', 6, 2)->nullable();
-            $table->double('nilai_kt', 6, 2)->nullable();
-            $table->double('nilai_pt', 6, 2)->nullable();
+            $table->double('nilai_sa', 6, 3);
+            $table->double('nilai_at', 6, 3)->nullable();
+            $table->double('nilai_kt', 6, 3)->nullable();
+            $table->double('nilai_pt', 6, 3)->nullable();
             $table->char('rekapitulasi_id', 12);
             $table->char('pilar_id', 3);
             $table->timestamps();

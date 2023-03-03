@@ -144,7 +144,7 @@
                                 <input type="hidden" name="id" value="{{ $rekap->id }}">
                                 <input type="hidden" name="status" value="6">
                                 <p> <b> Note:</b> <br></p>
-                                <p>LKE yang telah disetujui akan menjadi re komendasi dalam pengajuan ZI kepada KemenpanRB
+                                <p>LKE yang telah disetujui akan menjadi rekomendasi dalam pengajuan ZI kepada KemenpanRB
                                 </p>
 
 
@@ -225,21 +225,45 @@
         <div class="info-box bg-light">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-bold mb-3">{{ $rekap->satker->nama_satker }}</span>
-
                 @php
-                    $nilai += $nilaiHasil;
+                    $nilai_sa = 0;
+                    $nilai_at = 0;
+                    $nilai_kt = 0;
+                    $nilai_dl = 0;
+                @endphp
+                @foreach ($nilaiPilar as $n)
+                    @php
+                        $nilai_sa += round($n->nilai_sa, 2);
+                        $nilai_at += round($n->nilai_at, 2);
+                        $nilai_kt += round($n->nilai_kt, 2);
+                        $nilai_dl += round($n->nilai_dl, 2);
+                    @endphp
+                @endforeach
+                @php
+                    $nilai_sa += $nilaiHasil;
                 @endphp
                 <div class="row">
                     {{-- Self-Assessment --}}
                     <div class="col-lg-6">
-                        <span class="info-box-number text-center text-muted mb-3">{{ $nilai }}</span>
-
+                        <span class="info-box-number text-center text-muted mb-3">{{ $nilai_sa }}</span>
                         <span class="info-box-text text-center text-muted mb-0">Nilai Zona Integritas</span>
                     </div>
                     {{-- Desk-Evaluation --}}
                     <div class="col-lg-6">
-                        <span class="info-box-number text-center text-muted mb-3">{{ $nilai }}</span>
-
+                        @if (auth()->user()->level_id == 'AT')
+                            @php
+                                $total = $nilai_at + $nilaiHasil;
+                            @endphp
+                        @elseif(auth()->user()->level_id == 'KT')
+                            @php
+                                $total = $nilai_kt + $nilaiHasil;
+                            @endphp
+                        @elseif(auth()->user()->level_id == 'DL')
+                            @php
+                                $total = $nilai_dl + $nilaiHasil;
+                            @endphp
+                        @endif
+                        <span class="info-box-number text-center text-muted mb-3">{{ $total }}</span>
                         <span class="info-box-text text-center text-muted mb-0">Nilai Desk-Evaluation </span>
                     </div>
                 </div>
@@ -258,7 +282,6 @@
                             $tot_jumlah_soal = App\Models\Pertanyaan::count();
                             $tot_soal_terjawab = App\Models\selfAssessment::where('rekapitulasi_id', $rekap->id)->count();
                             $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
-                            
                         @endphp
 
                         <div class="progress ">
@@ -270,14 +293,28 @@
                     </div>
                     <div class="col-lg-6">
                         {{-- Desk-Evaluation --}}
-                        <span class="info-box-text">Total Pengungkit Desk-Evaluation</span>
+                        @if (auth()->user()->level_id == 'AT')
+                            @php
+                                $tot_soal_terjawab = App\Models\DeskEvaluation::where('rekapitulasi_id', $rekap->id)->count('jawaban_at');
+                                $aktor = 'Anggota Tim';
+                            @endphp
+                        @elseif(auth()->user()->level_id == 'KT')
+                            @php
+                                $tot_soal_terjawab = App\Models\DeskEvaluation::where('rekapitulasi_id', $rekap->id)->count('jawaban_kt');
+                                $aktor = 'Ketua Tim';
+                            @endphp
+                        @elseif(auth()->user()->level_id == 'DL')
+                            @php
+                                $tot_soal_terjawab = App\Models\DeskEvaluation::where('rekapitulasi_id', $rekap->id)->count('jawaban_dl');
+                                $aktor = 'Pengendali Teknis';
+                            @endphp
+                        @endif
+                        <span class="info-box-text">Total Pengungkit Desk-Evaluation {{ $aktor }}</span>
+
                         @php
-                            $tot_jumlah_soal = App\Models\Pertanyaan::count();
-                            $tot_soal_terjawab = App\Models\selfAssessment::where('rekapitulasi_id', $rekap->id)->count();
                             $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
                             
                         @endphp
-
                         <div class="progress ">
                             <div class="progress-bar" style="width: {{ $Totprogress }}%"></div>
                         </div>
@@ -333,7 +370,7 @@
                                                         <span class="info-box-number">
                                                             {{-- Jika nilai ada di database --}}
                                                             @if ($nilai !== null)
-                                                                {{ $nilai->nilai_sa }}
+                                                                {{ round($nilai->nilai_sa, 2) }}
                                                             @else
                                                                 0
                                                             @endif /
@@ -352,6 +389,7 @@
                                                         </div>
                                                     </div>
                                                     {{-- Desk-Evaluation --}}
+
                                                     <div class="col-lg-12">
                                                         <span class="info-box-text text-bold  text-center">
                                                             Desk-Evaluation
@@ -359,7 +397,34 @@
                                                         <span class="info-box-number">
                                                             {{-- Jika nilai ada di database --}}
                                                             @if ($nilai !== null)
-                                                                {{ $nilai->nilai_sa }}
+                                                                @if (auth()->user()->level_id == 'AT')
+                                                                    @php
+                                                                        $nilai = $nilai->nilai_at;
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                            ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->count('jawaban_at'); //mengambil nilai
+                                                                    @endphp
+                                                                @elseif(auth()->user()->level_id == 'KT')
+                                                                    @php
+                                                                        $nilai = $nilai->nilai_kt;
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                            ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->count('jawaban_kt'); //mengambil nilai
+                                                                    @endphp
+                                                                @elseif(auth()->user()->level_id == 'DL')
+                                                                    @php
+                                                                        $nilai = $nilai->nilai_dl;
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                            ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->count('jawaban_dl'); //mengambil nilai
+                                                                    @endphp
+                                                                @endif
+                                                                @php
+                                                                    
+                                                                    $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
+                                                                    
+                                                                @endphp
+                                                                {{ round($nilai, 2) }}
                                                             @else
                                                                 0
                                                             @endif /

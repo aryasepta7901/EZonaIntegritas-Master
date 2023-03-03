@@ -15,8 +15,6 @@ class Rekapitulasi extends Model
         'id',
         'tahun',
         'predikat',
-        'nilai_pengungkit',
-        'nilai_hasil',
         'status',
         'satker_id',
         'surat_rekomendasi',

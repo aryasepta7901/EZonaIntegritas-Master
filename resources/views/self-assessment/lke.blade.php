@@ -27,15 +27,19 @@
         <div class="info-box bg-light">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-bold mb-3">{{ $rekap->satker->nama_satker }}</span>
-                @can('EvalProv')
-                    @php
-                        $nilai += $nilaiHasil;
-                    @endphp
-                @endcan
                 @php
-                    
+                    $nilai_sa = 0;
                 @endphp
-                <span class="info-box-number text-center text-muted mb-3">{{ $nilai }}</span>
+                @foreach ($nilaiPilar as $n)
+                    @php
+                        $nilai_sa += round($n->nilai_sa, 2);
+                    @endphp
+                @endforeach
+                @php
+                    $nilai_sa += $nilaiHasil;
+                @endphp
+
+                <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_sa, 2) }}</span>
                 @can('pic')
                     <span class="info-box-text text-center text-muted mb-0">Nilai Self-Assessment</span>
                 @endcan
@@ -54,9 +58,7 @@
                     $tot_jumlah_soal = App\Models\Pertanyaan::count();
                     $tot_soal_terjawab = App\Models\selfAssessment::where('rekapitulasi_id', $rekap->id)->count(); //mengambil nilai
                     $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
-                    
                 @endphp
-
                 <div class="progress ">
                     <div class="progress-bar" style="width: {{ $Totprogress }}%"></div>
                 </div>
@@ -106,7 +108,7 @@
                                                     <span class="info-box-number">
                                                         {{-- Jika nilai ada di database --}}
                                                         @if ($nilai !== null)
-                                                            {{ $nilai->nilai_sa }}
+                                                            {{ round($nilai->nilai_sa, 2) }}
                                                         @else
                                                             0
                                                         @endif /
@@ -147,7 +149,7 @@
                                                     <span class="info-box-number">
                                                         {{-- Jika nilai ada di database --}}
                                                         @if ($nilai !== null)
-                                                            {{ $nilai->nilai_sa }}
+                                                            {{ round($nilai->nilai_sa, 2) }}
                                                         @else
                                                             0
                                                         @endif /
@@ -175,57 +177,53 @@
 
                         </div>
                     </div>
-
-
                 </div>
                 <!-- /.card-body -->
             </div>
         </div>
     @endforeach
     {{-- Rincian Hasil --}}
-    @can('EvalProv')
-        <b class="mb-3">Rincian Hasil</b>
-        <div class="col-lg-12">
-            <div class="card">
+    <b class="mb-3">Rincian Hasil</b>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
                 <div class="card-body">
-                    <div class="card-body">
-                        <div class="row">
-                            @foreach ($rincianhasil as $value)
-                                <div class="col-lg-4">
-                                    {{-- <a href="/prov/evaluasi/{{ $rekap->id }}/{{ $value->id }}"> --}}
-                                    <div class="info-box bg-warning">
-                                        <div class="info-box-content" style="height: 150px">
-                                            <span class="info-box-number text-bold mb-3 text-center">
-                                                {{ $value->pilar }}
-                                            </span>
-                                            @php
-                                                $nilaiHasil = App\Models\RekapHasil::where('satker_id', $rekap->satker_id)
-                                                    ->where('pilar_id', $value->id)
-                                                    ->where('tahun', date('Y'))
-                                                    ->first();
-                                            @endphp
-                                            <span class="info-box-number text-center">
-                                                {{-- Jika nilai ada di database --}}
-                                                Nilai :
-                                                @if ($nilaiHasil !== null)
-                                                    {{ $nilaiHasil->nilai }}
-                                                @else
-                                                    0
-                                                @endif /
-                                                {{ $value->bobot }}
-                                            </span>
-                                        </div>
-                                        <!-- /.info-box-content -->
+                    <div class="row">
+                        @foreach ($rincianhasil as $value)
+                            <div class="col-lg-4">
+                                {{-- <a href="/prov/evaluasi/{{ $rekap->id }}/{{ $value->id }}"> --}}
+                                <div class="info-box bg-warning">
+                                    <div class="info-box-content" style="height: 150px">
+                                        <span class="info-box-number text-bold mb-3 text-center">
+                                            {{ $value->pilar }}
+                                        </span>
+                                        @php
+                                            $nilaiHasil = App\Models\RekapHasil::where('satker_id', $rekap->satker_id)
+                                                ->where('pilar_id', $value->id)
+                                                ->where('tahun', date('Y'))
+                                                ->first();
+                                        @endphp
+                                        <span class="info-box-number text-center">
+                                            {{-- Jika nilai ada di database --}}
+                                            Nilai :
+                                            @if ($nilaiHasil !== null)
+                                                {{ $nilaiHasil->nilai }}
+                                            @else
+                                                0
+                                            @endif /
+                                            {{ $value->bobot }}
+                                        </span>
                                     </div>
-                                    {{-- </a> --}}
+                                    <!-- /.info-box-content -->
                                 </div>
-                            @endforeach
-                        </div>
+                                {{-- </a> --}}
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
-    @endcan
+    </div>
 
 
 

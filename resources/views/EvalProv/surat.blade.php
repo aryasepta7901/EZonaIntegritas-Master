@@ -12,27 +12,45 @@
                     @foreach ($rekap as $value)
                         <li class="list-group-item">
                             <b>{{ $value->satker->nama_satker }}</b> <a class="float-right">{{ $value->predikat }}</a>
-                            {{-- Hitung jumlah nilai rincian pengungkit --}}
-                            @foreach ($value->RekapPilar as $item)
-                                @php
-                                    $nilai = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
-                                @endphp
-                            @endforeach
+                            {{-- Cek apakah data rekappilar ada didatabase --}}
+                            @if ($value->RekapPilar->count() != 0)
+                                {{-- Hitung jumlah nilai rincian pengungkit --}}
+                                @foreach ($value->RekapPilar as $item)
+                                    @php
+                                        $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
+                                        $nilai_sa = 0;
+                                    @endphp
+                                    @foreach ($nilaiRekap as $n)
+                                        @php
+                                            $nilai_sa += round($n->nilai_sa, 2);
+                                        @endphp
+                                    @endforeach
+                                @endforeach
+                            @endif
                             {{-- Hitung jumlah nilai rincian hasil --}}
                             @php
                                 $nilaiHasil = App\Models\RekapHasil::where('satker_id', $value->satker_id)
                                     ->where('tahun', date('Y'))
                                     ->get();
                             @endphp
-                            @foreach ($nilaiHasil as $item)
+                            @if ($nilaiHasil->count() != 0)
+                                @foreach ($nilaiHasil as $item)
+                                    @php
+                                        $nilaiHasil = $item->where('satker_id', $value->satker_id)->sum('nilai');
+                                    @endphp
+                                @endforeach
+                            @else
+                                {{-- Nilai Hasil Belum di Upload Oleh Admin --}}
                                 @php
-                                    $nilaiHasil = $item->where('satker_id', $value->satker_id)->sum('nilai');
+                                    $nilaiHasil = 0;
                                 @endphp
-                            @endforeach
+                            @endif
                             @php
-                                $total = $nilai + $nilaiHasil;
+                                $total = $nilai_sa + $nilaiHasil;
                             @endphp
                             <p>Nilai ZI: {{ $total }}</p>
+
+
                         </li>
                     @endforeach
                 </ul>
@@ -194,5 +212,4 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-
 @endsection
