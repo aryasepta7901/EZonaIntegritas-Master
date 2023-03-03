@@ -17,11 +17,6 @@
                     @php
                         $nilai_sa = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
                         $total_sa += $nilai_sa * $penimbang;
-                        
-                        // $nilai_at = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $p->subpilar_id . '%')
-                        //     ->where('rekapitulasi_id', $rekap->id)
-                        //     ->sum('nilai'); //mengambil nilai
-                        
                     @endphp
                     @foreach ($p->SelfAssessment->where('rekapitulasi_id', $rekap->id) as $s)
                         @php
@@ -297,7 +292,7 @@
                                                         $deskEvaluation = App\Models\deskEvaluation::where('id', $id)->get();
                                                     @endphp
 
-                                                    @if ($rekap->status == 4)
+                                                    @if ($rekap->status == 4 || $rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                         <td style="min-width:500px;">
                                                             {{-- Anggota Tim --}}
                                                             {{-- Update --}}
@@ -361,13 +356,16 @@
                                                                                 @enderror
                                                                             </div>
                                                                             <div class="d-flex justify-content-start">
-                                                                                @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-primary"
-                                                                                        name="submit_at" value="at"><i
-                                                                                            class="fas fa-save"></i>
-                                                                                        Simpan
-                                                                                    </button>
+                                                                                @if ($rekap->status == 4)
+                                                                                    @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
+                                                                                        <button type="submit"
+                                                                                            class="btn btn-primary"
+                                                                                            name="submit_at"
+                                                                                            value="at"><i
+                                                                                                class="fas fa-save"></i>
+                                                                                            Simpan
+                                                                                        </button>
+                                                                                    @endif
                                                                                 @endif
                                                                             </div>
                                                                         </form>
@@ -431,13 +429,15 @@
                                                                             @enderror
                                                                         </div>
                                                                         <div class="d-flex justify-content-start">
-                                                                            @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary"
-                                                                                    name="submit_at" value="at"><i
-                                                                                        class="fas fa-save"></i>
-                                                                                    Simpan
-                                                                                </button>
+                                                                            @if ($rekap->status == 4)
+                                                                                @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary"
+                                                                                        name="submit_at" value="at"><i
+                                                                                            class="fas fa-save"></i>
+                                                                                        Simpan
+                                                                                    </button>
+                                                                                @endif
                                                                             @endif
                                                                         </div>
                                                                     </form>
@@ -504,13 +504,16 @@
                                                                                 @enderror
                                                                             </div>
                                                                             <div class="d-flex justify-content-start">
-                                                                                @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-primary"
-                                                                                        name="submit_kt" value="kt"><i
-                                                                                            class="fas fa-save"></i>
-                                                                                        Simpan
-                                                                                    </button>
+                                                                                @if ($rekap->status == 4)
+                                                                                    @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
+                                                                                        <button type="submit"
+                                                                                            class="btn btn-primary"
+                                                                                            name="submit_kt"
+                                                                                            value="kt"><i
+                                                                                                class="fas fa-save"></i>
+                                                                                            Simpan
+                                                                                        </button>
+                                                                                    @endif
                                                                                 @endif
                                                                             </div>
                                                                         </form>
@@ -574,13 +577,15 @@
                                                                             @enderror
                                                                         </div>
                                                                         <div class="d-flex justify-content-start">
-                                                                            @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary"
-                                                                                    name="submit_kt" value="kt"><i
-                                                                                        class="fas fa-save"></i>
-                                                                                    Simpan
-                                                                                </button>
+                                                                            @if ($rekap->status == 4)
+                                                                                @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary"
+                                                                                        name="submit_kt" value="kt"><i
+                                                                                            class="fas fa-save"></i>
+                                                                                        Simpan
+                                                                                    </button>
+                                                                                @endif
                                                                             @endif
                                                                         </div>
                                                                     </form>
@@ -647,13 +652,16 @@
                                                                                 @enderror
                                                                             </div>
                                                                             <div class="d-flex justify-content-start">
-                                                                                @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-primary"
-                                                                                        name="submit_dl" value="dl"><i
-                                                                                            class="fas fa-save"></i>
-                                                                                        Simpan
-                                                                                    </button>
+                                                                                @if ($rekap->status == 4)
+                                                                                    @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
+                                                                                        <button type="submit"
+                                                                                            class="btn btn-primary"
+                                                                                            name="submit_dl"
+                                                                                            value="dl"><i
+                                                                                                class="fas fa-save"></i>
+                                                                                            Simpan
+                                                                                        </button>
+                                                                                    @endif
                                                                                 @endif
                                                                             </div>
                                                                         </form>
@@ -717,13 +725,15 @@
                                                                             @enderror
                                                                         </div>
                                                                         <div class="d-flex justify-content-start">
-                                                                            @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary"
-                                                                                    name="submit_dl" value="dl"><i
-                                                                                        class="fas fa-save"></i>
-                                                                                    Simpan
-                                                                                </button>
+                                                                            @if ($rekap->status == 4)
+                                                                                @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary"
+                                                                                        name="submit_dl" value="dl"><i
+                                                                                            class="fas fa-save"></i>
+                                                                                        Simpan
+                                                                                    </button>
+                                                                                @endif
                                                                             @endif
                                                                         </div>
                                                                     </form>

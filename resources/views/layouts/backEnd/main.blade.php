@@ -37,7 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 </head>
 
-<body class="hold-transition sidebar-mini {{ Request::is('tpi*') ? 'sidebar-collapse' : '' }}">
+<body class="hold-transition sidebar-mini {{ Request::is('tpi*') || Request::is('lke*') ? 'sidebar-collapse' : '' }}">
     <div class="wrapper">
 
         {{-- Navbar --}}

@@ -130,7 +130,6 @@ class DeskEvaluationController extends Controller
             'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'nilaiPilar' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->get(),
             'nilaiHasil' => Rekaphasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
-            // Permasalahan
             'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
             'pengawasan' => Pengawasan::where('satker_id', $evaluasi->satker_id)->first(),
 

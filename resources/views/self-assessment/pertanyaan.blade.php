@@ -8,12 +8,12 @@
                     // Perhitungan Nilai setiap Pertanyaan
                     $jml_pertanyaan = $value->pertanyaan->count();
                     $penimbang = $value->bobot / $jml_pertanyaan;
-                    $total = 0;
+                    $total_sa = 0;
                 @endphp
                 @foreach ($value->pertanyaan as $p)
                     @php
                         $nilai = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
-                        $total += $nilai * $penimbang;
+                        $total_sa += $nilai * $penimbang;
                     @endphp
                 @endforeach
                 <div class="card">
@@ -25,7 +25,7 @@
                                 aria-controls="collapse{{ $loop->iteration }}">
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
-                                    <p class="info-box-number m-4">Nilai : {{ round($total, 2) }}</p>
+                                    <p class="info-box-number m-4">Nilai : {{ round($total_sa, 2) }}</p>
                                     <i class="fa my-4 " aria-hidden="true"></i>
 
                                 </div>
@@ -43,6 +43,17 @@
 
                                 <div class="card-body">
                                     <table id="" class="table table-bordered table-responsive table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <div class="d-flex justify-content-between">
+                                                        Self-Assessment
+                                                        <button class="badge badge-info btn-sm">Nilai :
+                                                            {{ round($total_sa, 2) }}</button>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
                                             @foreach ($value->pertanyaan as $value)
                                                 <tr>
@@ -113,7 +124,7 @@
                                                                                     <th>File</th>
                                                                                     <th>Upload</th>
                                                                                     @can('pic')
-                                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                        @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                                             <th>Delete</th>
                                                                                         @endif
                                                                                     @endcan
@@ -158,7 +169,7 @@
                                                                                         </td>
                                                                                         {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
                                                                                         @can('pic')
-                                                                                            @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                            @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                                                 @if ($file->count() != 0)
                                                                                                     @foreach ($file as $f)
                                                                                                         <td class="text-center">
@@ -206,7 +217,7 @@
                                                                                     <th>Upload</th>
                                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
                                                                                     @can('pic')
-                                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                        @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                                             <th>Delete</th>
                                                                                         @endif
                                                                                     @endcan
@@ -244,7 +255,7 @@
                                                                                         </td>
                                                                                         {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
                                                                                         @can('pic')
-                                                                                            @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                                            @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                                                 <td class="text-center">
                                                                                                     <button type="button"
                                                                                                         class="btn btn-sm btn-danger"
@@ -267,7 +278,7 @@
                                                                     <hr>
                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
                                                                     @can('pic')
-                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                        @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                             <div class="d-flex justify-content-end mr-3">
 
                                                                                 <button type="submit"
@@ -486,7 +497,7 @@
                                                                 <div class="d-flex justify-content-end mr-3">
                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
                                                                     @can('pic')
-                                                                        @if ($rekap->status == 0 || $rekap->status == 2)
+                                                                        @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                             <button type="submit" class="btn btn-primary"><i
                                                                                     class="fas fa-save"></i>
                                                                                 Simpan
