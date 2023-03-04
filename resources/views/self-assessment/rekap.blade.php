@@ -2,32 +2,27 @@
 
 @section('content')
     <div class="col-lg-12">
+        {{-- Session Sukses --}}
+        @if (session()->has('success'))
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Sukses!</h5>
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="card">
-            <div class="card-header">
-
-
-                @if ($rekap->count() === 0)
+            @php
+                $last = $rekap->last(); //ambil data tahun terakhir
+            @endphp
+            {{-- hanya bisa diakses jika data pertama kali dibuat atau  data rekap berbeda tahun dengan yang ada di database  --}}
+            @if ($rekap->count() == 0 || $last->tahun != date('Y'))
+                <div class="card-header">
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-primary  " data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
                                 Pengajuan WBK / WBBM</i></button>
                     </div>
-                @else
-                    @php
-                        $last = $rekap->last(); //ambil data terakhir
-                    @endphp
-                    @if ($last->tahun != date('Y'))
-                        <div class="d-flex justify-content-end">
-                            <button class="btn btn-primary  " data-toggle="modal" data-target="#tambah"><i
-                                    class="fa fa-plus">
-                                    Pengajuan WBK / WBBM </i></button>
-                        </div>
-                    @endif
-                @endif
-
-
-
-
-            </div>
+                </div>
+            @endif
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -38,7 +33,6 @@
                             <th>Nilai</th>
                             <th>Status</th>
                             <th>Dokumen</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -63,8 +57,10 @@
                                             @endphp
                                         @endforeach
                                         {{ $nilai_sa }}
+                                    @else
+                                        {{-- Jika data rekappilar belum ada didatabase --}}
+                                        0
                                     @endif
-
                                 </td>
                                 <td>{{ $value->StatusRekap->status }}</td>
                                 <td class="text-center">
@@ -77,7 +73,6 @@
 
                 </table>
             </div>
-
             {{-- Tambah --}}
             <div class="modal fade" id="tambah">
                 <div class="modal-dialog">

@@ -36,7 +36,6 @@
                 @php
                     $nilai_sa = 0;
                     $nilai_dl = 0;
-                    
                 @endphp
                 @foreach ($nilaiPilar as $n)
                     @php
@@ -46,8 +45,8 @@
                     @endphp
                 @endforeach
                 @php
-                    $nilai_sa += $nilaiHasil;
-                    $nilai_dl += $nilaiHasil;
+                    $nilai_sa += $nilaiHasil->sum('nilai');
+                    $nilai_dl += $nilaiHasil->sum('nilai');
                 @endphp
                 <div class="row">
                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
@@ -80,14 +79,14 @@
             <div class="info-box-content">
                 <span class="info-box-text text-bold mb-3">LKE Zona Integritas {{ $rekap->tahun }}</span>
                 <div class="row">
+                    {{-- Self Assessment --}}
                     <div class="{{ $lg }}">
                         <span class="info-box-text">Total Pengungkit Self-Assessment</span>
                         @php
-                            $tot_jumlah_soal = App\Models\Pertanyaan::count();
-                            $tot_soal_terjawab = App\Models\selfAssessment::where('rekapitulasi_id', $rekap->id)->count();
+                            $tot_jumlah_soal = $pertanyaan;
+                            $tot_soal_terjawab = $selfAssessment;
                             $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
                         @endphp
-
                         <div class="progress ">
                             <div class="progress-bar" style="width: {{ $Totprogress }}%"></div>
                         </div>
@@ -95,15 +94,15 @@
                             <b class="h5 text-bold">{{ $Totprogress }}%</b>
                         </span>
                     </div>
+                    {{-- Desk Evaluation --}}
                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                         <div class="col-lg-6">
                             <span class="info-box-text">Total Pengungkit Desk-Evaluation </span>
                             @php
-                                $tot_soal_terjawab = App\Models\DeskEvaluation::where('rekapitulasi_id', $rekap->id)->count('jawaban_dl');
+                                $tot_soal_terjawab = $DeskEvaluation;
                                 $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
                             @endphp
                             <div class="progress ">
-
                                 <div class="progress-bar" style="width: {{ $Totprogress }}%"></div>
                             </div>
                             <span class="info-box-number d-flex justify-content-end ">
@@ -138,137 +137,109 @@
                                 <div class="col-lg-4">
                                     {{-- Jika Evaluator Prov Koreksi --}}
                                     @can('EvalProv')
-                                        <a href="/prov/evaluasi/{{ $rekap->id }}/{{ $value->id }}">
-                                            <div class="info-box bg-warning">
-                                                <div class="info-box-content">
-                                                    <span class="info-box-text text-bold mb-3 text-center">
-
-                                                        {{ wordwrap($value->pilar, '15', "\n") }}
-                                                    </span>
-
-                                                    @php
-                                                        // Ambil Nilai
-                                                        $nilai = App\Models\RekapPilar::where('rekapitulasi_id', $rekap->id)
-                                                            ->where('pilar_id', $value->id)
-                                                            ->first();
-                                                    @endphp
-                                                    <span class="info-box-number">
-                                                        {{-- Jika nilai ada di database --}}
-                                                        @if ($nilai !== null)
-                                                            {{ round($nilai->nilai_sa, 2) }}
-                                                        @else
-                                                            0
-                                                        @endif /
-                                                        {{ $value->bobot }}
-                                                    </span>
-                                                    <div class="progress ">
-                                                        <div class="progress-bar" style="width: {{ $progress }}% ">
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between">
-                                                        <small>Menjawab {{ $soal_terjawab }} dari {{ $jumlah_soal }} Soal
-                                                        </small>
-                                                        <small class="info-box-number">{{ $progress }}%</small>
-                                                    </div>
-
-
-                                                </div>
-                                                <!-- /.info-box-content -->
-                                            </div>
-                                        </a>
+                                        @php
+                                            $link = '/prov/evaluasi';
+                                        @endphp
                                     @endcan
                                     {{-- Jika PIC sedang self --}}
                                     @can('pic')
-                                        <a href="/lke/{{ $rekap->id }}/{{ $value->id }}">
-                                            <div class="info-box bg-warning">
-                                                <div class="info-box-content">
-                                                    <span class="info-box-text text-bold mb-3 text-center">
-
-                                                        {{ wordwrap($value->pilar, '15', "\n") }}
-                                                    </span>
-
-                                                    @php
-                                                        // Ambil Nilai
-                                                        $nilai = App\Models\RekapPilar::where('rekapitulasi_id', $rekap->id)
-                                                            ->where('pilar_id', $value->id)
-                                                            ->first();
-                                                    @endphp
-                                                    <div class="row">
-                                                        {{-- Self Assessment --}}
+                                        @php
+                                            $link = '/lke';
+                                        @endphp
+                                    @endcan
+                                    <a href="{{ $link }}/{{ $rekap->id }}/{{ $value->id }}">
+                                        @php
+                                            if ($progress >= 0 && $progress <= 25) {
+                                                $warna = 'orange';
+                                            } elseif ($progress >= 25 && $progress <= 50) {
+                                                $warna = 'warning';
+                                            } elseif ($progress >= 50 && $progress <= 75) {
+                                                $warna = 'teal';
+                                            } elseif ($progress >= 75 && $progress <= 100) {
+                                                $warna = 'success';
+                                            }
+                                        @endphp
+                                        <div class="info-box bg-{{ $warna }}">
+                                            <div class="info-box-content">
+                                                <span class="info-box-text text-bold mb-3 text-center">
+                                                    {{ $value->pilar }}
+                                                </span>
+                                                @php
+                                                    // Ambil Nilai
+                                                    $nilai = $RekapPilar->where('pilar_id', $value->id)->first();
+                                                @endphp
+                                                <div class="row">
+                                                    {{-- Self Assessment --}}
+                                                    <div class="col-lg-12">
+                                                        <span class="info-box-text  text-bold   text-center">
+                                                            Self-Assessment
+                                                        </span>
+                                                        <span class="info-box-number">
+                                                            {{-- Jika nilai ada di database --}}
+                                                            @if ($nilai !== null)
+                                                                {{ round($nilai->nilai_sa, 2) }}
+                                                            @else
+                                                                0
+                                                            @endif /
+                                                            {{ $value->bobot }}
+                                                        </span>
+                                                        <div class="progress ">
+                                                            <div class="progress-bar" style="width: {{ $progress }}% ">
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between">
+                                                            <small>Menjawab {{ $soal_terjawab }} dari {{ $jumlah_soal }}
+                                                                Soal
+                                                            </small>
+                                                            <small class="info-box-number">{{ $progress }}%</small>
+                                                        </div>
+                                                    </div>
+                                                    {{-- Desk-Evaluation --}}
+                                                    @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                         <div class="col-lg-12">
-                                                            <span class="info-box-text  text-bold   text-center">
-                                                                Self-Assessment
+                                                            <span class="info-box-text text-bold  text-center">
+                                                                Desk-Evaluation
                                                             </span>
                                                             <span class="info-box-number">
                                                                 {{-- Jika nilai ada di database --}}
                                                                 @if ($nilai !== null)
-                                                                    {{ round($nilai->nilai_sa, 2) }}
+                                                                    @php
+                                                                        $nilai = $nilai->nilai_dl;
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                            ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->count('jawaban_dl'); //mengambil nilai
+                                                                    @endphp
+                                                                    @php
+                                                                        $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
+                                                                        
+                                                                    @endphp
+                                                                    {{ round($nilai, 2) }}
                                                                 @else
                                                                     0
                                                                 @endif /
                                                                 {{ $value->bobot }}
                                                             </span>
                                                             <div class="progress ">
-                                                                <div class="progress-bar" style="width: {{ $progress }}% ">
+                                                                <div class="progress-bar"
+                                                                    style="width: {{ $progress }}% ">
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex justify-content-between">
-                                                                <small>Menjawab {{ $soal_terjawab }} dari {{ $jumlah_soal }}
+                                                                <small>Menjawab {{ $soal_terjawab }} dari
+                                                                    {{ $jumlah_soal }}
                                                                     Soal
                                                                 </small>
                                                                 <small class="info-box-number">{{ $progress }}%</small>
                                                             </div>
                                                         </div>
-                                                        {{-- Desk-Evaluation --}}
-                                                        @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
-                                                            <div class="col-lg-12">
-                                                                <span class="info-box-text text-bold  text-center">
-                                                                    Desk-Evaluation
-                                                                </span>
-                                                                <span class="info-box-number">
-                                                                    {{-- Jika nilai ada di database --}}
-                                                                    @if ($nilai !== null)
-                                                                        @php
-                                                                            $nilai = $nilai->nilai_dl;
-                                                                            $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
-                                                                                ->where('rekapitulasi_id', $rekap->id)
-                                                                                ->count('jawaban_dl'); //mengambil nilai
-                                                                        @endphp
-                                                                        @php
-                                                                            $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
-                                                                            
-                                                                        @endphp
-                                                                        {{ round($nilai, 2) }}
-                                                                    @else
-                                                                        0
-                                                                    @endif /
-                                                                    {{ $value->bobot }}
-                                                                </span>
-                                                                <div class="progress ">
-                                                                    <div class="progress-bar"
-                                                                        style="width: {{ $progress }}% ">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between">
-                                                                    <small>Menjawab {{ $soal_terjawab }} dari
-                                                                        {{ $jumlah_soal }}
-                                                                        Soal
-                                                                    </small>
-                                                                    <small class="info-box-number">{{ $progress }}%</small>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
+                                                    @endif
                                                 </div>
-                                                <!-- /.info-box-content -->
                                             </div>
-                                        </a>
-                                    @endcan
-
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                    </a>
                                 </div>
                             @endforeach
-
                         </div>
                     </div>
                 </div>
@@ -285,14 +256,13 @@
                     <div class="row">
                         @foreach ($rincianhasil as $value)
                             <div class="col-lg-4">
-                                {{-- <a href="/prov/evaluasi/{{ $rekap->id }}/{{ $value->id }}"> --}}
-                                <div class="info-box bg-warning">
+                                <div class="info-box bg-info">
                                     <div class="info-box-content" style="height: 150px">
                                         <span class="info-box-number text-bold mb-3 text-center">
                                             {{ $value->pilar }}
                                         </span>
                                         @php
-                                            $nilaiHasil = App\Models\RekapHasil::where('satker_id', $rekap->satker_id)
+                                            $nilaiHasil = $nilaiHasil
                                                 ->where('pilar_id', $value->id)
                                                 ->where('tahun', date('Y'))
                                                 ->first();
@@ -308,9 +278,7 @@
                                             {{ $value->bobot }}
                                         </span>
                                     </div>
-                                    <!-- /.info-box-content -->
                                 </div>
-                                {{-- </a> --}}
                             </div>
                         @endforeach
                     </div>
@@ -318,9 +286,6 @@
             </div>
         </div>
     </div>
-
-
-
     {{-- Jika yang akses Tim Evaluator Provinsi --}}
     @can('EvalProv')
         <a href="/prov/evaluasi" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
@@ -331,8 +296,6 @@
         <a href="/lke" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
             Kembali</a>
     @endcan
-
-
     {{-- Kirim LKE --}}
     <div class="modal fade" id="simpan">
         <div class="modal-dialog">
@@ -354,8 +317,6 @@
                         <p>Harap Periksa Kembali Isian anda , apakah sudah lengkap atau tidak , jika LKE
                             sudah dikirim maka
                             tidak akan bisa diisi kembali. LKE akan dikirim dan di cek oleh validator Provinsi</p>
-
-
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

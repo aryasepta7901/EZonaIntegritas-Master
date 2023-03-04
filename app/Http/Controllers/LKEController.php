@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeskEvaluation;
 use App\Models\Persyaratan;
+use App\Models\Pertanyaan;
+use App\Models\SelfAssessment;
 use App\Models\Pilar;
 use App\Models\Rekapitulasi;
 use App\Models\RekapPilar;
@@ -58,7 +61,7 @@ class LKEController extends Controller
 
         Rekapitulasi::create($data);
 
-        return redirect('/lke')->with('success', 'Pengajuan Berhasil di Buat');
+        return redirect()->back()->with('success', 'Pengajuan Berhasil di Buat');
     }
 
     /**
@@ -76,10 +79,14 @@ class LKEController extends Controller
             'link' => 'lke/',
             'title' => 'Lembar Kerja Evaluasi: ' . $lke->predikat,
             'rekap' => $lke,
+            'pertanyaan' => Pertanyaan::count(),
             'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
+            'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $lke->id)->count(),
+            'RekapPilar' => RekapPilar::where('rekapitulasi_id', $lke->id)->get(),
+            'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->count('jawaban_dl'),
             'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
             'nilaiPilar' => RekapPilar::where('rekapitulasi_id', $lke->id)->get(),
-            'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->sum('nilai'),
+            'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->get(),
 
 
         ]);
