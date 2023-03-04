@@ -121,8 +121,10 @@ class LKEController extends Controller
      */
     public function update(Request $request, Rekapitulasi $rekapitulasi)
     {
+
         $id = $request->id;
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
+
         return redirect('/lke')->with('success', 'LKE Berhasil Di Kirim');
     }
 

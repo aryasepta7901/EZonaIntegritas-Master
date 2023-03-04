@@ -9,12 +9,19 @@
                     $jml_pertanyaan = $value->pertanyaan->count();
                     $penimbang = $value->bobot / $jml_pertanyaan;
                     $total_sa = 0;
+                    $total_dl = 0;
                 @endphp
                 @foreach ($value->pertanyaan as $p)
                     @php
                         $nilai = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
                         $total_sa += $nilai * $penimbang;
                     @endphp
+                    @foreach ($p->SelfAssessment->where('rekapitulasi_id', $rekap->id) as $s)
+                        @php
+                            $nilai_dl = $s->DeskEvaluation->sum('nilai_dl');
+                            $total_dl += $nilai_dl * $penimbang;
+                        @endphp
+                    @endforeach
                 @endforeach
                 <div class="card">
                     <div class="card-header p-0" id="heading{{ $loop->iteration }}">
@@ -52,6 +59,17 @@
                                                             {{ round($total_sa, 2) }}</button>
                                                     </div>
                                                 </th>
+                                                @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
+                                                    <th>
+                                                        <div class="d-flex justify-content-between">
+                                                            Desk-Evaluation
+                                                            <button class="badge badge-info btn-sm">Nilai :
+                                                                {{ round($total_dl, 2) }}</button>
+                                                        </div>
+
+                                                    </th>
+                                                @endif
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -62,7 +80,7 @@
                                                             ->where('rekapitulasi_id', $rekap->id)
                                                             ->get();
                                                     @endphp
-                                                    {{-- Update --}}
+                                                    {{-- Self Assessment --}}
                                                     @if ($selfAssessment->count() != 0)
                                                         @foreach ($selfAssessment as $self)
                                                             <form method="POST"
@@ -293,15 +311,7 @@
 
 
                                                                 </td>
-                                                                <td style="min-width: 150px;">
-                                                                    <p>Bukti Dukung:</p>
-                                                                    <ul>
-                                                                        @foreach ($value->dokumen as $item)
-                                                                            <li>{{ $item->dokumen }}</li>
-                                                                        @endforeach
-                                                                    </ul>
-                                                                    {!! $value->info !!}
-                                                                </td>
+
                                                             </form>
                                                             {{-- Modal Delete File Utama --}}
                                                             @foreach ($value->file as $item)
@@ -504,20 +514,118 @@
                                                                             </button>
                                                                         @endif
                                                                     @endcan
-
                                                                 </div>
-                                                            </td>
-                                                            <td style="min-width: 150px;">
-                                                                <p>Bukti Dukung:</p>
-                                                                <ul>
-                                                                    @foreach ($value->dokumen as $item)
-                                                                        <li>{{ $item->dokumen }}</li>
-                                                                    @endforeach
-                                                                </ul>
-                                                                {!! $value->info !!}
                                                             </td>
                                                         </form>
                                                     @endif
+                                                    {{-- Desk Evaluation --}}
+                                                    @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
+                                                        <td style="min-width: 380px;">
+                                                            @php
+                                                                $id = date('Y') . $rekap->satker_id . $value->id;
+                                                                $deskEvaluation = App\Models\deskEvaluation::where('id', $id)->get();
+                                                            @endphp
+                                                            {{-- Pengendali Teknis --}}
+                                                            @if ($deskEvaluation->count() != 0)
+                                                                @foreach ($deskEvaluation as $desk)
+                                                                    <div class="card-body"
+                                                                        @if ($desk->nilai_dl == 0) style="background-color: red" @endif>
+                                                                        <form action="/tpi/evaluasi/{{ $desk->id }}"
+                                                                            method="post">
+                                                                            @method('put')
+                                                                            @csrf
+                                                                            <div class="form-group">
+                                                                                <label for="anggota">Pengendali
+                                                                                    Teknis
+                                                                                </label>
+                                                                                @foreach ($value->opsi as $item)
+                                                                                    @if ($item->type == 'checkbox')
+                                                                                        <div class="form-check ml-4">
+                                                                                            <input class="form-check-input"
+                                                                                                type="radio"
+                                                                                                name="jawaban_dl"
+                                                                                                value="{{ $item->id }}"
+                                                                                                @if ($desk->jawaban_dl == $item->id) checked @endif>
+
+                                                                                            <label
+                                                                                                class="form-check-label">{{ $item->rincian }}</label>
+                                                                                        </div>
+                                                                                    @elseif($item->type == 'input')
+                                                                                        <p for="input">
+                                                                                            {{ $item->rincian }}
+                                                                                        </p>
+                                                                                        <input type="number"
+                                                                                            min="0"
+                                                                                            class="form-control"
+                                                                                            name="jawaban_dl">
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="catatan">Catatan</label>
+                                                                                <textarea class="form-control @error('catatan_dl') is-invalid  @enderror" rows="4" name="catatan_dl">{{ old('catatan_dl', $desk->catatan_dl) }}  </textarea>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                @endforeach
+                                                            @else
+                                                                {{-- Create --}}
+                                                                <div class="card-body">
+                                                                    <form action="/tpi/evaluasi" method="post">
+                                                                        @csrf
+                                                                        <div class="form-group">
+                                                                            <label for="anggota">Pengendali
+                                                                                Teknis</label>
+                                                                            @foreach ($value->opsi as $item)
+                                                                                @if ($item->type == 'checkbox')
+                                                                                    <div class="form-check ml-4">
+                                                                                        <input class="form-check-input"
+                                                                                            type="radio"
+                                                                                            name="jawaban_dl"
+                                                                                            value="{{ $item->id }}">
+                                                                                        <label
+                                                                                            class="form-check-label">{{ $item->rincian }}</label>
+                                                                                    </div>
+                                                                                @elseif($item->type == 'input')
+                                                                                    <p for="input">
+                                                                                        {{ $item->rincian }}
+                                                                                    </p>
+                                                                                    <input type="number" min="0"
+                                                                                        class="form-control"
+                                                                                        name="jawaban_dl">
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="catatan">Catatan</label>
+                                                                            <textarea class="form-control " rows="4" name="catatan_dl">{{ old('catatan_dl') }} </textarea>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            @endif
+                                                            <hr>
+                                                            <p>Bukti Dukung:</p>
+                                                            <ul>
+                                                                @foreach ($value->dokumen as $item)
+                                                                    <li>{{ $item->dokumen }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                            {!! $value->info !!}
+                                                        </td>
+                                                    @else
+                                                        <td style="min-width: 150px;">
+                                                            <p>Bukti Dukung:</p>
+                                                            <ul>
+                                                                @foreach ($value->dokumen as $item)
+                                                                    <li>{{ $item->dokumen }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                            {!! $value->info !!}
+
+                                                        </td>
+                                                    @endif
+
+
                                                 </tr>
                                             @endforeach
                                         </tbody>

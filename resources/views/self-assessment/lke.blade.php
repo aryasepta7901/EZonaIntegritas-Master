@@ -378,7 +378,6 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
                 <form method="post" action="/lke/{{ $rekap->id }}">
                     @method('put')
                     @csrf

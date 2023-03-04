@@ -8,6 +8,8 @@ use App\Models\RekapHasil;
 use App\Models\Pilar;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
+use App\Models\Pengawasan;
+
 use Illuminate\Http\Request;
 
 
@@ -113,7 +115,10 @@ class EvaluatorProvinsiController extends Controller
         $id = $request->id;
 
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
-        if ($evaluasi->status == 4) {
+        if ($request->pengawasan_id) {
+            Pengawasan::where('id', $request->pengawasan_id)->update(['status' => $request->statusPengawasan]);
+        }
+        if ($evaluasi->status == 4 || $evaluasi->status == 5) {
             // Jika dilakukan TPI
             return redirect('/tpi/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
         } else {

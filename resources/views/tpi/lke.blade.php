@@ -118,8 +118,8 @@
         {{-- Pengendali Teknis --}}
         @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                <button class="btn btn-success m-2" data-toggle="modal" data-target="#setuju"><i class="fa fa-save">
-                        Setuju</i></button>
+                <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
+                        Setuju</i></a>
                 <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
                         Revisi</i></button>
                 <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
@@ -154,6 +154,7 @@
                                 <button type="submit" class="btn btn-primary">Kirim</button>
                             </div>
                         </form>
+
                     </div>
                     <!-- /.modal-content -->
                 </div>
@@ -169,13 +170,17 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-
+                        @php
+                            $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
+                        @endphp
                         <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
                             @method('put')
                             @csrf
                             <div class="modal-body">
                                 <input type="hidden" name="id" value="{{ $rekap->id }}">
                                 <input type="hidden" name="status" value="5">
+                                <input type="hidden" name="statusPengawasan" value="0">
+                                <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
                                 <p> <b> Note:</b> <br></p>
                                 <p>LKE akan dikembalikan ke {{ $rekap->satker->nama_satker }} untuk diperbaiki kembali</p>
                             </div>
@@ -183,6 +188,7 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">Kirim</button>
                             </div>
+
                         </form>
                     </div>
                     <!-- /.modal-content -->
