@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RekapPilar extends Model
+class RekapPengungkit extends Model
 {
     use HasFactory;
-    protected $table = 'rekappilar';
+    protected $table = 'rekappengungkit';
     public $incrementing = false;
     public $timestamps = true;
     use HasFactory;
@@ -25,5 +25,9 @@ class RekapPilar extends Model
     public function Rekapitulasi()
     {
         return $this->belongsTo(Rekapitulasi::class, 'rekapitulasi_id');
+    }
+    public function Pilar()
+    {
+        return $this->belongsTo(Pilar::class, 'pilar_id');
     }
 }

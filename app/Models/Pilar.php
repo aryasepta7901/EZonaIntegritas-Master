@@ -28,4 +28,8 @@ class Pilar extends Model
     {
         return $this->hasMany(Opsi::class, 'pertanyaan_id');
     }
+    public function RekapPengungkit()
+    {
+        return $this->hasMany(RekapPengungkit::class, 'pilar_id');
+    }
 }

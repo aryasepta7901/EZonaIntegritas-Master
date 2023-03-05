@@ -23,9 +23,9 @@ class Rekapitulasi extends Model
     {
         return $this->belongsTo(Satker::class, 'satker_id');
     }
-    public function RekapPilar()
+    public function RekapPengungkit()
     {
-        return $this->hasMany(RekapPilar::class, 'rekapitulasi_id');
+        return $this->hasMany(RekapPengungkit::class, 'rekapitulasi_id');
     }
     public function StatusRekap()
     {

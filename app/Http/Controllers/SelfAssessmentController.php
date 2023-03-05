@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Opsi;
-use App\Models\RekapPilar;
+use App\Models\RekapPengungkit;
 use App\Models\SelfAssessment;
 use App\Models\UploadDokumen;
 use Illuminate\Http\Request;
@@ -71,22 +71,22 @@ class SelfAssessmentController extends Controller
         ];
         $data['nilai'] = Opsi::where('id', $data['opsi_id'])->first()->bobot;
         SelfAssessment::create($data);
-        // Dokumen 
+        // Dokumen Wajib
         if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
             foreach ($request->dokumen as $key => $dokumen) {
                 $id = date('Y') .  $request->input('id' . $key) .  $data['satker_id'];
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $dokumen->store('dokumen'),
-                        'name' => $dokumen->getClientOriginalName(),
+                        'file' =>  $dokumen->store('dokumen/' . $satker_id . '/' . $pertanyaan_id),
+                        'name' => pathinfo($dokumen->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->input('id' . $key),
                         'selfassessment_id' => $data['id'],
                     ]
                 );
             }
         }
-        // file tambahan Create
+        // Dokumen Tambahan
         if ($request->file('fileCreate')) { //cek apakah ada dokumen yang di upload
 
             foreach ($request->fileCreate as $key => $file) {
@@ -102,8 +102,9 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $file->store('dokumen'),
-                        'name' => $file->getClientOriginalName(),
+                        'file' =>  $file->store('dokumen/' . $satker_id . '/' . $pertanyaan_id),
+
+                        'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->pertanyaan_id,
                         'selfassessment_id' => $data['id'],
                     ]
@@ -111,12 +112,12 @@ class SelfAssessmentController extends Controller
             }
         }
 
-        // RekapPilar ->nilai
+        // RekapPengungkit ->nilai
         $rekapitulasi_id = $request->rekapitulasi_id;
         $pilar_id = $request->pilar_id;
         $id = $pilar_id . $rekapitulasi_id;
         // Cek apakah ada nilai lama
-        $nilaiLama = RekapPilar::where('id', $id)->first();
+        $nilaiLama = RekapPengungkit::where('id', $id)->first();
         $penimbang = $request->penimbang;
         if ($nilaiLama !== null)
             $total = $data['nilai'] * $penimbang + $nilaiLama->nilai_sa;
@@ -124,7 +125,7 @@ class SelfAssessmentController extends Controller
             $total = $data['nilai'] * $penimbang;
         }
         // dd($total);
-        RekapPilar::updateOrCreate(
+        RekapPengungkit::updateOrCreate(
             ['id' => $id],
             [
                 'rekapitulasi_id' => $rekapitulasi_id,
@@ -186,7 +187,7 @@ class SelfAssessmentController extends Controller
         $data['nilai'] = Opsi::where('id', $data['opsi_id'])->first()->bobot;
         SelfAssessment::where('id', $selfAssessment->id)->update($data);
 
-        // Dokumen
+        // Dokumen Wajib
         if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
             foreach ($request->dokumen as $key => $dokumen) {
                 $id = date('Y') . $request->input('id' . $key) . $selfAssessment->satker_id;
@@ -200,8 +201,8 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $dokumen->store('dokumen'),
-                        'name' => $dokumen->getClientOriginalName(),
+                        'file' =>  $dokumen->store('dokumen/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
+                        'name' => pathinfo($dokumen->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->input('id' . $key),
                         'selfassessment_id' => $selfAssessment->id,
                     ]
@@ -212,7 +213,6 @@ class SelfAssessmentController extends Controller
         if ($request->file('fileUpdate')) { //cek apakah ada dokumen yang di upload
             foreach ($request->fileUpdate as $key => $fileUpdate) {
                 $id =  $request->input('upload_id' . $key);
-
                 // Ambil File lamanya
                 $oldFile = UploadDokumen::where('id', $id)->first();
                 if ($oldFile) {
@@ -222,8 +222,8 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $fileUpdate->store('dokumen'),
-                        'name' => $fileUpdate->getClientOriginalName(),
+                        'file' =>  $fileUpdate->store('dokumen/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
+                        'name' => pathinfo($fileUpdate->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->pertanyaan_id,
                         'selfassessment_id' => $selfAssessment->id,
                     ]
@@ -247,8 +247,8 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $file->store('dokumen'),
-                        'name' => $file->getClientOriginalName(),
+                        'file' =>  $file->store('dokumen/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
+                        'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->pertanyaan_id,
                         'selfassessment_id' => $selfAssessment->id,
                     ]
@@ -256,19 +256,19 @@ class SelfAssessmentController extends Controller
             }
         }
 
-        // RekapPilar ->nilai
+        // RekapPengungkit ->nilai
         $rekapitulasi_id = $request->rekapitulasi_id;
         $pilar_id = $request->pilar_id;
         $id = $pilar_id . $rekapitulasi_id;
         // Cek apakah ada nilai lama pada rekappilar
-        $nilaiLama = RekapPilar::where('id', $id)->first(); //ambil nilai lama
+        $nilaiLama = RekapPengungkit::where('id', $id)->first(); //ambil nilai lama
         $penimbang = $request->penimbang;
         // Cek apakah melakukan update atau create
         if ($selfAssessment) {
             // Jika Update
             $total = $data['nilai'] * $penimbang + $nilaiLama->nilai_sa - $selfAssessment->nilai * $penimbang;
         }
-        RekapPilar::updateOrCreate(
+        RekapPengungkit::updateOrCreate(
             ['id' => $id],
             [
                 'rekapitulasi_id' => $rekapitulasi_id,

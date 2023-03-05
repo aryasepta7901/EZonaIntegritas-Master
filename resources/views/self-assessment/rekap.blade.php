@@ -43,9 +43,9 @@
                                 <td>{{ $value->predikat }}</td>
                                 <td>
                                     {{-- Cek apakah data rekappilar ada didatabase --}}
-                                    @if ($value->RekapPilar->count() != 0)
+                                    @if ($value->RekapPengungkit->count() != 0)
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
-                                        @foreach ($value->RekapPilar as $item)
+                                        @foreach ($value->RekapPengungkit as $item)
                                             @php
                                                 $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
                                                 $nilai_sa = 0;

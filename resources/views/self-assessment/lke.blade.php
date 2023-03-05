@@ -37,11 +37,10 @@
                     $nilai_sa = 0;
                     $nilai_dl = 0;
                 @endphp
-                @foreach ($nilaiPilar as $n)
+                @foreach ($nilaiPengungkit as $n)
                     @php
                         $nilai_sa += round($n->nilai_sa, 2);
                         $nilai_dl += round($n->nilai_dl, 2);
-                        
                     @endphp
                 @endforeach
                 @php
@@ -117,7 +116,7 @@
     </div>
     {{-- Rincian Pengungkit --}}
     <b class="mb-3">Rincian Pengungkit</b>
-    @foreach ($subrincian as $value)
+    @foreach ($rincianPengungkit as $value)
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
@@ -166,7 +165,7 @@
                                                 </span>
                                                 @php
                                                     // Ambil Nilai
-                                                    $nilai = $RekapPilar->where('pilar_id', $value->id)->first();
+                                                    $nilai = $value->RekapPengungkit->first();
                                                 @endphp
                                                 <div class="row">
                                                     {{-- Self Assessment --}}
@@ -254,7 +253,7 @@
             <div class="card-body">
                 <div class="card-body">
                     <div class="row">
-                        @foreach ($rincianhasil as $value)
+                        @foreach ($rincianHasil as $value)
                             <div class="col-lg-4">
                                 <div class="info-box bg-info">
                                     <div class="info-box-content" style="height: 150px">

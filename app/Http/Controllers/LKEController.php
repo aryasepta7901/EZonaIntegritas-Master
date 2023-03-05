@@ -8,7 +8,7 @@ use App\Models\Pertanyaan;
 use App\Models\SelfAssessment;
 use App\Models\Pilar;
 use App\Models\Rekapitulasi;
-use App\Models\RekapPilar;
+use App\Models\RekapPengungkit;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
 use App\Models\RekapHasil;
@@ -80,12 +80,11 @@ class LKEController extends Controller
             'title' => 'Lembar Kerja Evaluasi: ' . $lke->predikat,
             'rekap' => $lke,
             'pertanyaan' => Pertanyaan::count(),
-            'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
+            'rincianPengungkit' => SubRincian::where('rincian_id', 'p')->get(),
+            'rincianHasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $lke->id)->count(),
-            'RekapPilar' => RekapPilar::where('rekapitulasi_id', $lke->id)->get(),
             'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->count('jawaban_dl'),
-            'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
-            'nilaiPilar' => RekapPilar::where('rekapitulasi_id', $lke->id)->get(),
+            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $lke->id)->get(),
             'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->get(),
 
 
@@ -101,6 +100,7 @@ class LKEController extends Controller
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
+            'deskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->first(),
             'rekap' => $lke,
 
 
