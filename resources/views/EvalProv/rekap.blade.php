@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-end">
-                    <a href="/prov/surat" class="btn btn-primary  "><i class="fa fa-print">
+                    <a href="/prov/surat" class="btn btn-primary"><i class="fa fa-print">
                             Cetak Surat Persetujuan</i></a>
                 </div>
             </div>
@@ -29,17 +29,17 @@
                                 <td>{{ $value->satker->nama_satker }}</td>
                                 <td>{{ $value->predikat }}</td>
                                 <td>
-                                    {{-- Cek apakah data rekappilar ada didatabase --}}
-                                    @if ($value->RekapPilar->count() != 0)
+                                    {{-- Cek apakah satker sudah melakukan self-assessment --}}
+                                    @if ($value->RekapPengungkit->count() != 0)
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
-                                        @foreach ($value->RekapPilar as $item)
+                                        @foreach ($value->RekapPengungkit as $item)
                                             @php
                                                 $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
                                                 $nilai_sa = 0;
                                             @endphp
-                                            @foreach ($nilaiRekap as $r)
+                                            @foreach ($nilaiRekap as $n)
                                                 @php
-                                                    $nilai_sa += round($r->nilai_sa, 2);
+                                                    $nilai_sa += round($n->nilai_sa, 2);
                                                 @endphp
                                             @endforeach
                                         @endforeach
@@ -49,26 +49,24 @@
                                 <td>
                                     {{-- Hitung jumlah nilai rincian hasil --}}
                                     @php
-                                        $nilaiHasil = App\Models\RekapHasil::where('satker_id', $value->satker_id)
-                                            ->where('tahun', date('Y'))
-                                            ->get();
+                                        $nilai = $nilaiHasil->where('satker_id', $value->satker_id);
                                     @endphp
-                                    @if ($nilaiHasil->count() != 0)
-                                        @foreach ($nilaiHasil as $item)
+                                    {{-- Jika Rincian Hasil sudah diupload oleh Admin --}}
+                                    @if ($nilai->count() != 0)
+                                        @foreach ($nilai as $item)
                                             @php
-                                                $nilaiHasil = $item->where('satker_id', $value->satker_id)->sum('nilai');
+                                                $nilai = $item->where('satker_id', $value->satker_id)->sum('nilai');
                                             @endphp
                                         @endforeach
-                                        {{ $nilaiHasil }}
+                                        {{ $nilai }}
                                     @else
+                                        {{-- Jika Rincian Hasil belum diupload oleh admin --}}
                                         @php
-                                            $nilaiHasil = 0;
+                                            $nilai = 0;
                                         @endphp
-                                        {{ $nilaiHasil }} (Data Nilai Hasil Belum di Upload Inspektorat Utama)
+                                        {{ $nilai }} (Data Nilai Hasil Belum di Upload Inspektorat Utama)
                                     @endif
-
                                 </td>
-
                                 <td class="text-center">
                                     <a type="button" href="/prov/evaluasi/{{ $value->id }}"
                                         class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>

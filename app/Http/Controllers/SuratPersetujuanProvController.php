@@ -45,10 +45,11 @@ class SuratPersetujuanProvController extends Controller
         //
         $request->validate(
             [
-                'surat.*' => 'mimes:pdf|max:2048',
+                'surat' => 'required|mimes:pdf|max:2048',
 
             ],
             [
+                'required' => ':attribute  harus di Upload',
                 'mimes' => 'Dokumen hanya boleh format :values,',
                 'max' => 'Dokumen hanya boleh Berukuran :max,'
             ]
@@ -70,7 +71,7 @@ class SuratPersetujuanProvController extends Controller
                 );
             }
         }
-        return redirect()->back()->with('success', 'Surat Rekomendai Berhasil di Simpan');
+        return redirect()->back()->with('success', 'Surat Rekomendasi Berhasil di Simpan');
     }
 
     /**
@@ -130,6 +131,6 @@ class SuratPersetujuanProvController extends Controller
                 ]
             );
         }
-        return redirect()->back()->with('success', 'Surat Rekomendai Berhasil di Simpan');
+        return redirect()->back()->with('success', 'Surat Rekomendai Berhasil di hapus');
     }
 }

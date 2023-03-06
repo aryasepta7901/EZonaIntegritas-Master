@@ -85,213 +85,259 @@
                                             @foreach ($value->pertanyaan as $value)
                                                 <tr>
                                                     @php
-                                                        $selfAssessment = App\Models\selfAssessment::where('pertanyaan_id', $value->id)
-                                                            ->where('rekapitulasi_id', $rekap->id)
-                                                            ->get();
+                                                        $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
                                                     @endphp
                                                     {{-- Self Assessment --}}
-                                                    {{-- Sudah Diisi --}}
-                                                    @if ($selfAssessment->count() != 0)
-                                                        @foreach ($selfAssessment as $self)
-                                                            {{-- Data RekapPilar --}}
-                                                            <form action="">
-                                                                <td style="min-width:500px;">
-                                                                    <div class="card-body">
-                                                                        <div class="form-group">
-                                                                            <div class="d-flex justify-content-around">
-                                                                                <label
-                                                                                    for="pertanyaan">{{ $value->pertanyaan }}</label>
-
-                                                                                <button type="button" data-toggle="modal"
-                                                                                    data-target="#info{{ $value->id }}"
-                                                                                    class="btn btn-sm btn-info"> <i
-                                                                                        class="fas fa-info"></i></button>
-                                                                            </div>
-
-                                                                            @foreach ($value->opsi as $item)
-                                                                                @if ($item->type == 'checkbox')
-                                                                                    <div class="form-check ml-4">
-                                                                                        <input
-                                                                                            @if ($self->opsi_id == $item->id) checked @endif
-                                                                                            class="form-check-input"
-                                                                                            type="radio" name="opsi_id"
-                                                                                            value="{{ $item->id }}">
-                                                                                        <label
-                                                                                            class="form-check-label">{{ $item->rincian }}</label>
-                                                                                    </div>
-                                                                                @elseif($item->type == 'input')
-                                                                                    <p for="input">{{ $item->rincian }}
-                                                                                    </p>
-                                                                                    <input type="number" min="0"
-                                                                                        class="form-control" name="opsi_id">
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </div>
-
-                                                                        <div class="form-group">
-                                                                            <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control" rows="4" name="catatan">{{ old('catatan', $self->catatan) }} </textarea>
-
-                                                                        </div>
-                                                                        {{-- File Utama --}}
-                                                                        <label for="catatan">Upload Dokumen</label>
-                                                                        <table class="table table-bordered table-striped">
-                                                                            <thead>
-                                                                                <tr class="text-center">
-                                                                                    <th>No</th>
-                                                                                    <th>Nama Dokumen</th>
-                                                                                    <th>File</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @foreach ($value->dokumen as $item)
-                                                                                    <tr>
-                                                                                        <td>{{ $loop->iteration }}</td>
-                                                                                        <td style="min-width: 200px"
-                                                                                            class="text-center">
-                                                                                            {{ $item->dokumen }}
-                                                                                            <input type="hidden"
-                                                                                                name="id{{ $loop->index }}"
-                                                                                                value="{{ $item->id }}">
-                                                                                        </td>
-                                                                                        <td class="text-center">
-                                                                                            @php
-                                                                                                $file = $item->file->where('selfassessment_id', $self->id);
-                                                                                            @endphp
-                                                                                            @if ($file->count() != 0)
-                                                                                                @foreach ($file as $f)
-                                                                                                    <a target="__self"
-                                                                                                        href="{{ asset('storage/' . $f->file) }}"><i
-                                                                                                            class="fas fa-file"></i></a>
-                                                                                                @endforeach
-                                                                                            @else
-                                                                                                <small>No Data</small>
-                                                                                            @endif
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                @endforeach
-
-                                                                            </tbody>
-                                                                        </table>
-                                                                        {{-- File Utama --}}
-                                                                        {{-- File Tambahan --}}
-                                                                        <label for="catatan">Upload Dokumen
-                                                                            Tambahan</label>
-
-                                                                        <table
-                                                                            class="table table-bordered table-striped mt-3">
-                                                                            <thead>
-                                                                                <tr class="text-center">
-                                                                                    <th>No</th>
-                                                                                    <th>Nama Dokumen</th>
-                                                                                    <th>File</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @foreach ($value->file->where('selfassessment_id', $self->id) as $item)
-                                                                                    <tr>
-                                                                                        <td>{{ $loop->iteration }}</td>
-                                                                                        <td class="text-center"
-                                                                                            style="min-width: 200px">
-                                                                                            {{ $item->name }}
-                                                                                            <input type="hidden"
-                                                                                                name="upload_id{{ $loop->index }}"
-                                                                                                value="{{ $item->id }}">
-                                                                                        </td>
-
-                                                                                        <td class="text-center">
-                                                                                            <a target="__self"
-                                                                                                href="{{ asset('storage/' . $item->file) }}"><i
-                                                                                                    class="fas fa-file"></i></a>
-                                                                                        </td>
-
-                                                                                    </tr>
-                                                                                @endforeach
-                                                                            </tbody>
-                                                                        </table>
-                                                                        {{-- File Tambahan --}}
-                                                                    </div>
-                                                                    <hr>
-                                                                </td>
-                                                            </form>
-                                                        @endforeach
-                                                        {{-- Belum diisi --}}
-                                                    @else
-                                                        {{-- Data RekapPilar --}}
-                                                        <td style="min-width:500px;">
-                                                            <div class="card-body">
-                                                                <div class="form-group">
-                                                                    <div class="d-flex justify-content-around">
+                                                    @if ($selfAssessment != null)
+                                                        {{-- Update --}}
+                                                        <form method="POST">
+                                                            <td style="min-width: 500px;">
+                                                                <div class="card-body">
+                                                                    <div class="form-group">
                                                                         <label
                                                                             for="pertanyaan">{{ $value->pertanyaan }}</label>
-
-                                                                        <button type="button" data-toggle="modal"
-                                                                            data-target="#info{{ $value->id }}"
-                                                                            class="btn btn-sm btn-info"> <i
-                                                                                class="fas fa-info"></i></button>
+                                                                        @foreach ($value->opsi as $item)
+                                                                            @if ($item->type == 'checkbox')
+                                                                                <div class="form-check ml-4">
+                                                                                    <input
+                                                                                        @if ($selfAssessment->opsi_id == $item->id) checked @endif
+                                                                                        class="form-check-input"
+                                                                                        type="radio" name="opsi_id"
+                                                                                        value="{{ $item->id }}">
+                                                                                    <label
+                                                                                        class="form-check-label">{{ $item->rincian }}</label>
+                                                                                </div>
+                                                                            @elseif($item->type == 'input')
+                                                                                <p for="input">{{ $item->rincian }}
+                                                                                </p>
+                                                                                <input type="number" min="0"
+                                                                                    class="form-control" name="opsi_id">
+                                                                            @endif
+                                                                        @endforeach
                                                                     </div>
 
+                                                                    <div class="form-group">
+                                                                        <label for="catatan">Catatan</label>
+                                                                        <textarea class="form-control" rows="4" name="catatan">{{ old('catatan', $selfAssessment->catatan) }} </textarea>
+                                                                    </div>
+                                                                    {{-- File Utama --}}
+                                                                    <label for="catatan">Upload Dokumen</label>
+                                                                    <table class="table table-bordered table-striped">
+                                                                        <thead>
+                                                                            <tr class="text-center">
+                                                                                <th>No</th>
+                                                                                <th>Nama Dokumen</th>
+                                                                                <th>File</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach ($value->dokumen as $item)
+                                                                                <tr>
+                                                                                    <td>{{ $loop->iteration }}</td>
+                                                                                    <td style="min-width: 200px">
+                                                                                        {{ $item->dokumen }}
+                                                                                        <input type="hidden"
+                                                                                            name="id{{ $loop->index }}"
+                                                                                            value="{{ $item->id }}">
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        @php
+                                                                                            $file = $item->file->where('selfassessment_id', $selfAssessment->id);
+                                                                                        @endphp
+                                                                                        @if ($file->count() != 0)
+                                                                                            @foreach ($file as $f)
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-info btn-sm"
+                                                                                                    data-toggle="modal"
+                                                                                                    data-target="#view{{ $f->id }}"><i
+                                                                                                        class="fas fa-file"></i></button>
+                                                                                                {{-- Modal View File Utama --}}
+                                                                                                <div class="modal fade"
+                                                                                                    id="view{{ $f->id }}">
+                                                                                                    <div
+                                                                                                        class="modal-dialog modal-lg">
+                                                                                                        <div
+                                                                                                            class="modal-content">
+                                                                                                            <div
+                                                                                                                class="modal-header">
+                                                                                                                <h4
+                                                                                                                    class="modal-title">
+                                                                                                                    {{ $f->name }}
+                                                                                                                </h4>
+                                                                                                                <button
+                                                                                                                    type="button"
+                                                                                                                    class="close"
+                                                                                                                    data-dismiss="modal"
+                                                                                                                    aria-label="Close">
+                                                                                                                    <span
+                                                                                                                        aria-hidden="true">&times;</span>
+                                                                                                                </button>
+                                                                                                            </div>
+                                                                                                            <div
+                                                                                                                class="modal-body">
+                                                                                                                <div
+                                                                                                                    class="embed-responsive embed-responsive-16by9">
+                                                                                                                    <iframe
+                                                                                                                        class="embed-responsive-item"
+                                                                                                                        src="{{ asset('storage/' . $f->file) }}"
+                                                                                                                        allowfullscreen></iframe>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div
+                                                                                                                class="modal-footer justify-content-between">
+                                                                                                                <button
+                                                                                                                    type="button"
+                                                                                                                    class="btn btn-default"
+                                                                                                                    data-dismiss="modal">Close</button>
 
-                                                                    @foreach ($value->opsi as $item)
-                                                                        @if ($item->type == 'checkbox')
-                                                                            <div class="form-check ml-4">
-                                                                                <input class="form-check-input"
-                                                                                    type="radio" name="opsi_id"
-                                                                                    value="{{ $item->id }}">
-                                                                                <label
-                                                                                    class="form-check-label">{{ $item->rincian }}</label>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <!-- /.modal-content -->
+                                                                                                    </div>
+                                                                                                    <!-- /.modal-dialog -->
+                                                                                                </div>
+                                                                                            @endforeach
+                                                                                        @else
+                                                                                            <small>No Data</small>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                    {{-- File Utama --}}
+                                                                    {{-- File Tambahan --}}
+                                                                    <label for="catatan">Upload Dokumen
+                                                                        Tambahan</label>
+                                                                    <table class="table table-bordered table-striped mt-3">
+                                                                        <thead>
+                                                                            <tr class="text-center">
+                                                                                <th>No</th>
+                                                                                <th>Nama Dokumen</th>
+                                                                                <th>File</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach ($value->file->where('selfassessment_id', $selfAssessment->id) as $item)
+                                                                                <tr>
+                                                                                    <td>{{ $loop->iteration }}</td>
+                                                                                    <td style="min-width: 200px">
+                                                                                        {{ $item->name }}
+                                                                                        <input type="hidden"
+                                                                                            name="upload_id{{ $loop->index }}"
+                                                                                            value="{{ $item->id }}">
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-info btn-sm"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#view{{ $item->id }}"><i
+                                                                                                class="fas fa-file"></i></button>
+                                                                                        {{-- Modal View File Tambahan --}}
+                                                                                        <div class="modal fade"
+                                                                                            id="view{{ $item->id }}">
+                                                                                            <div
+                                                                                                class="modal-dialog modal-lg">
+                                                                                                <div class="modal-content">
+                                                                                                    <div
+                                                                                                        class="modal-header">
+                                                                                                        <h4
+                                                                                                            class="modal-title">
+                                                                                                            {{ $item->name }}
+                                                                                                        </h4>
+                                                                                                        <button
+                                                                                                            type="button"
+                                                                                                            class="close"
+                                                                                                            data-dismiss="modal"
+                                                                                                            aria-label="Close">
+                                                                                                            <span
+                                                                                                                aria-hidden="true">&times;</span>
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="modal-body">
+                                                                                                        <div
+                                                                                                            class="embed-responsive embed-responsive-16by9">
+                                                                                                            <iframe
+                                                                                                                class="embed-responsive-item"
+                                                                                                                src="{{ asset('storage/' . $item->file) }}"
+                                                                                                                allowfullscreen></iframe>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="modal-footer justify-content-between">
+                                                                                                        <button
+                                                                                                            type="button"
+                                                                                                            class="btn btn-default"
+                                                                                                            data-dismiss="modal">Close</button>
+
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <!-- /.modal-content -->
+                                                                                            </div>
+                                                                                            <!-- /.modal-dialog -->
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                    {{-- File Tambahan --}}
+                                                                </div>
+                                                                <hr>
+                                                            </td>
+
+                                                        </form>
+                                                    @else
+                                                        {{-- Create --}}
+                                                        <form method="POST">
+                                                            @csrf
+
+                                                            {{-- Data RekapPengungkit --}}
+                                                            <td style="min-width: 500px;">
+                                                                <div class="card-body">
+                                                                    <div class="form-group">
+                                                                        <label
+                                                                            for="pertanyaan">{{ $value->pertanyaan }}</label>
+                                                                        <input type="hidden" name="pertanyaan_id"
+                                                                            value="{{ $value->id }}">
+                                                                        @foreach ($value->opsi as $item)
+                                                                            @if ($item->type == 'checkbox')
+                                                                                <div class="form-check ml-4">
+                                                                                    <input class="form-check-input"
+                                                                                        type="radio" name="opsi_id"
+                                                                                        value="{{ $item->id }}">
+                                                                                    <label
+                                                                                        class="form-check-label">{{ $item->rincian }}</label>
+                                                                                </div>
+                                                                            @elseif($item->type == 'input')
+                                                                                <p for="input">{{ $item->rincian }}
+                                                                                </p>
+                                                                                <input type="number" min="0"
+                                                                                    class="form-control" name="opsi_id">
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="catatan">Catatan</label>
+                                                                        <textarea class="form-control @error('catatan') is-invalid  @enderror" rows="4" name="catatan">{{ old('catatan') }} </textarea>
+                                                                        @error('catatan')
+                                                                            <div class="invalid-feedback">
+                                                                                {{ $message }}
                                                                             </div>
-                                                                        @elseif($item->type == 'input')
-                                                                            <p for="input">{{ $item->rincian }}
-                                                                            </p>
-                                                                            <input type="number" min="0"
-                                                                                class="form-control" name="opsi_id">
-                                                                        @endif
-                                                                    @endforeach
+                                                                        @enderror
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="catatan">Catatan</label>
-                                                                    <textarea class="form-control  " rows="4" name="catatan">{{ old('catatan') }} </textarea>
-                                                                </div>
-                                                            </div>
-
-                                                            <label for="catatan">Upload Dokumen</label>
-                                                            <table class="table table-bordered table-striped">
-                                                                <thead>
-                                                                    <tr class="text-center">
-                                                                        <th>No</th>
-                                                                        <th>Nama Dokumen</th>
-                                                                        <th>File</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach ($value->dokumen as $item)
-                                                                        <tr>
-                                                                            <td>{{ $loop->iteration }}</td>
-                                                                            <td style="min-width: 200px">
-                                                                                {{ $item->dokumen }}
-                                                                                <input type="hidden"
-                                                                                    name="id{{ $loop->index }}"
-                                                                                    value="{{ $item->id }}">
-                                                                            </td>
-                                                                            <td class="text-center"> <small>No Data</small>
-                                                                            </td>
-
-                                                                        </tr>
-                                                                    @endforeach
-                                                                </tbody>
-
-                                                            </table>
-                                                            <hr>
-                                                        </td>
+                                                            </td>
+                                                        </form>
                                                     @endif
-
                                                     {{-- Desk Evaluation TPI --}}
                                                     @php
                                                         $id = date('Y') . $rekap->satker_id . $value->id;
                                                         $deskEvaluation = App\Models\deskEvaluation::where('id', $id)->get();
                                                     @endphp
-
                                                     @if ($rekap->status == 4 || $rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                         <td style="min-width:500px;">
                                                             {{-- Anggota Tim --}}

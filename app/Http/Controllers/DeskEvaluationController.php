@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\anggota_tpi;
 use App\Models\TPI;
-use App\Models\DeskEvaluation;
-use App\Models\Pengawasan;
-use App\Models\Pilar;
-use App\Models\SubRincian;
-use App\Models\Rekappilar;
-use App\Models\Rekaphasil;
-use App\Models\Rekapitulasi;
-use App\Models\SubPilar;
 use App\Models\Opsi;
+use App\Models\Pilar;
+use App\Models\SubPilar;
+use App\Models\Pengawasan;
+use App\Models\Pertanyaan;
+use App\Models\Rekaphasil;
+use App\Models\SubRincian;
+use App\Models\anggota_tpi;
+use App\Models\Rekapitulasi;
 use Illuminate\Http\Request;
+use App\Models\DeskEvaluation;
+use App\Models\SelfAssessment;
+use App\Models\RekapPengungkit;
+use App\Http\Controllers\Controller;
 
 class DeskEvaluationController extends Controller
 {
@@ -31,7 +34,9 @@ class DeskEvaluationController extends Controller
                 'title' => 'Desk-Evaluation Zona Integritas',
                 'ketua' => TPI::where('ketua_tim', auth()->user()->id)->first(),
                 'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
+                'pengawasan' => Pengawasan::get(),
                 'dalnis' => TPI::where('dalnis', auth()->user()->id)->get(),
+                'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
             ]
 
 
@@ -84,12 +89,12 @@ class DeskEvaluationController extends Controller
 
                 ]
             );
-            // RekapPilar ->nilai_at
+            // RekapPengungkit ->nilai_at
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
             $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPilar::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('id', $id)->first();
 
             $penimbang = $request->penimbang;
             if ($nilaiLama->nilai_at !== null)
@@ -97,7 +102,7 @@ class DeskEvaluationController extends Controller
             else {
                 $total = round($nilai * $penimbang, 3);
             }
-            RekapPilar::updateOrCreate(
+            RekapPengungkit::updateOrCreate(
                 ['id' => $id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
@@ -126,11 +131,14 @@ class DeskEvaluationController extends Controller
             'link' => 'tpi/evaluasi',
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $evaluasi,
-            'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
-            'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-            'nilaiPilar' => Rekappilar::where('rekapitulasi_id', $evaluasi->id)->get(),
+            'pertanyaan' => Pertanyaan::count(),
+            'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $evaluasi->id)->count(),
+            'deskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id),
+            'evaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id),
+            'rincianPengungkit' => SubRincian::where('rincian_id', 'p')->get(),
+            'rincianHasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
+            'nilaiPilar' => RekapPengungkit::where('rekapitulasi_id', $evaluasi->id)->get(),
             'nilaiHasil' => Rekaphasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
-            'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
             'pengawasan' => Pengawasan::where('satker_id', $evaluasi->satker_id)->first(),
 
 
@@ -198,18 +206,18 @@ class DeskEvaluationController extends Controller
                     'pengawasan_id' => $request->pengawasan,
                 ]
             );
-            // RekapPilar ->nilai_at
+            // RekapPengungkit ->nilai_at
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
             $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPilar::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('id', $id)->first();
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
                 $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_at -  round($evaluasi->nilai_at * $penimbang, 3);
             }
-            RekapPilar::updateOrCreate(
+            RekapPengungkit::updateOrCreate(
                 ['id' => $id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
@@ -243,18 +251,18 @@ class DeskEvaluationController extends Controller
                     'pengawasan_id' => $request->pengawasan,
                 ]
             );
-            // RekapPilar ->nilai_kt
+            // RekapPengungkit ->nilai_kt
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
             $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPilar::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('id', $id)->first();
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
                 $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_kt -  round($evaluasi->nilai_kt * $penimbang, 3);
             }
-            RekapPilar::updateOrCreate(
+            RekapPengungkit::updateOrCreate(
                 ['id' => $id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
@@ -288,18 +296,18 @@ class DeskEvaluationController extends Controller
                     'pengawasan_id' => $request->pengawasan,
                 ]
             );
-            // RekapPilar ->nilai_dl
+            // RekapPengungkit ->nilai_dl
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
             $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPilar::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('id', $id)->first();
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
                 $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_dl -  round($evaluasi->nilai_dl * $penimbang, 3);
             }
-            RekapPilar::updateOrCreate(
+            RekapPengungkit::updateOrCreate(
                 ['id' => $id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,

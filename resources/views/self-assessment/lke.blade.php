@@ -163,9 +163,10 @@
                                                 <span class="info-box-text text-bold mb-3 text-center">
                                                     {{ $value->pilar }}
                                                 </span>
+
                                                 @php
-                                                    // Ambil Nilai
-                                                    $nilai = $value->RekapPengungkit->first();
+                                                    // Ambil Nilai Pengungkit
+                                                    $nilai = $value->RekapPengungkit->where('rekapitulasi_id', $rekap->id)->first();
                                                 @endphp
                                                 <div class="row">
                                                     {{-- Self Assessment --}}
@@ -261,15 +262,12 @@
                                             {{ $value->pilar }}
                                         </span>
                                         @php
-                                            $nilaiHasil = $nilaiHasil
-                                                ->where('pilar_id', $value->id)
-                                                ->where('tahun', date('Y'))
-                                                ->first();
+                                            $nilaiHasil = $value->RekapHasil->where('satker_id', $rekap->satker_id)->first();
                                         @endphp
                                         <span class="info-box-number text-center">
                                             {{-- Jika nilai ada di database --}}
                                             Nilai :
-                                            @if ($nilaiHasil !== null)
+                                            @if ($nilaiHasil != null)
                                                 {{ $nilaiHasil->nilai }}
                                             @else
                                                 0
@@ -316,7 +314,8 @@
                         <p> <b> Note:</b> <br></p>
                         <p>Harap Periksa Kembali Isian anda , apakah sudah lengkap atau tidak , jika LKE
                             sudah dikirim maka
-                            tidak akan bisa diisi kembali. LKE akan dikirim dan di cek oleh validator Provinsi</p>
+                            tidak akan bisa diisi kembali. LKE akan dikirim dan di cek oleh <b>Validator Provinsi</b></p>
+                        <button class="btn btn-sm btn-info">Total Nilai : {{ $nilai_sa }}</button>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -383,8 +382,6 @@
                         <input type="hidden" name="status" value="4">
                         <p> <b> Note:</b> <br></p>
                         <p>LKE yang telah disetujui akan dikirimkan ke TPI Inspektorat Utama</p>
-
-
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -28,4 +28,8 @@ class RekapHasil extends Model
     {
         return $this->belongsTo(Opsi::class, 'opsi_id');
     }
+    public function Pilar()
+    {
+        return $this->belongsTo(Pilar::class, 'pilar_id');
+    }
 }

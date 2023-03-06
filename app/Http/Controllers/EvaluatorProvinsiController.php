@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rekapitulasi;
-use App\Models\RekapPilar;
-use App\Models\RekapHasil;
 use App\Models\Pilar;
 use App\Models\SubPilar;
-use App\Models\SubRincian;
 use App\Models\Pengawasan;
-
+use App\Models\Pertanyaan;
+use App\Models\RekapHasil;
+use App\Models\SubRincian;
+use App\Models\Rekapitulasi;
 use Illuminate\Http\Request;
+
+use App\Models\SelfAssessment;
+use App\Models\RekapPengungkit;
+use App\Http\Controllers\Controller;
 
 
 class EvaluatorProvinsiController extends Controller
@@ -28,6 +31,8 @@ class EvaluatorProvinsiController extends Controller
         return view('EvalProv.rekap', [
             'title' => 'Rekapitulasi Pengajuan Zona Integritas',
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->get(),
+            'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
+
         ]);
     }
 
@@ -69,10 +74,12 @@ class EvaluatorProvinsiController extends Controller
             'link' => 'prov/evaluasi',
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $evaluasi,
-            'subrincian' => SubRincian::where('rincian_id', 'p')->get(),
-            'rincianhasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-            'nilaiPilar' => RekapPilar::where('rekapitulasi_id', $evaluasi->id)->get(),
-            'nilaiHasil' => RekapHasil::where('satker_id', $evaluasi->satker_id)->sum('nilai'),
+            'pertanyaan' => Pertanyaan::count(),
+            'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $evaluasi->id)->count(),
+            'rincianPengungkit' => SubRincian::where('rincian_id', 'p')->get(),
+            'rincianHasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
+            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $evaluasi->id)->get(),
+            'nilaiHasil' => RekapHasil::where('satker_id', $evaluasi->satker_id)->where('tahun', date('Y'))->get(),
 
         ]);
     }
@@ -118,7 +125,7 @@ class EvaluatorProvinsiController extends Controller
         if ($request->pengawasan_id) {
             Pengawasan::where('id', $request->pengawasan_id)->update(['status' => $request->statusPengawasan]);
         }
-        if ($evaluasi->status == 4 || $evaluasi->status == 5) {
+        if ($evaluasi->status == 4 || $evaluasi->status == 5) { //hanya bisa diakses ketika statusnya adalah penilaian tpi dan revisi tpi
             // Jika dilakukan TPI
             return redirect('/tpi/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
         } else {

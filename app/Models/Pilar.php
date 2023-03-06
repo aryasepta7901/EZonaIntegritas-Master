@@ -32,4 +32,8 @@ class Pilar extends Model
     {
         return $this->hasMany(RekapPengungkit::class, 'pilar_id');
     }
+    public function RekapHasil()
+    {
+        return $this->hasMany(RekapHasil::class, 'pilar_id');
+    }
 }

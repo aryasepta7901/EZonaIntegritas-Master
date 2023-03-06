@@ -73,10 +73,9 @@ class LKEController extends Controller
     public function show(Rekapitulasi $lke)
     {
         $this->authorize('pic');
-
         return view('self-assessment.lke', [
-            'master' => 'Rekapitulasi ',
-            'link' => 'lke/',
+            'master' => 'Rekapitulasi',
+            'link' => 'lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $lke->predikat,
             'rekap' => $lke,
             'pertanyaan' => Pertanyaan::count(),
@@ -85,7 +84,7 @@ class LKEController extends Controller
             'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $lke->id)->count(),
             'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->count('jawaban_dl'),
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $lke->id)->get(),
-            'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->get(),
+            'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->where('tahun', date('Y'))->get(),
 
 
         ]);

@@ -10,7 +10,6 @@
                     {{ $error }}
                     <br>
                 @endforeach
-
             </div>
         @endif
         @if (session()->has('success'))
@@ -20,16 +19,7 @@
                 {{ session('success') }}
             </div>
         @endif
-
-
-
         <div class="card">
-
-            <!-- /.card-header -->
-            <div class="card-header d-flex justify-content-end">
-
-
-            </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -42,10 +32,10 @@
                             <th>Surat Rekomendasi</th>
                             <th>LKE</th>
                             <th>Status</th>
-
                         </tr>
                     </thead>
                     <tbody>
+                        {{-- Ambil data pengawasan TPI --}}
                         @if (auth()->user()->level_id == 'AT')
                             @php
                                 $data = $anggota->pengawasan;
@@ -53,14 +43,14 @@
                         @elseif(auth()->user()->level_id == 'KT')
                             @php
                                 $tpi = $ketua->id;
-                                $data = App\Models\Pengawasan::where('tpi_id', $tpi)->get();
+                                $data = $pengawasan->where('tpi_id', $tpi);
                             @endphp
                         @elseif(auth()->user()->level_id == 'DL')
                             @foreach ($dalnis as $d)
                                 @php
                                     $tpi[] = $d->id;
                                     
-                                    $data = App\Models\Pengawasan::whereIn('tpi_id', $tpi)->get();
+                                    $data = $pengawasan->whereIn('tpi_id', $tpi);
                                     
                                 @endphp
                             @endforeach
@@ -69,44 +59,54 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->satker->nama_satker }}</td>
+                                {{-- Cek apakah satker sudah mengajukan ZI --}}
                                 @if ($value->rekapitulasi->count() != 0)
                                     @foreach ($value->rekapitulasi as $item)
                                         <td>{{ $item->predikat }}</td>
                                         <td>
                                             {{-- Hitung jumlah nilai rincian pengungkit --}}
-                                            @foreach ($item->RekapPilar as $P)
-                                                @php
-                                                    $nilaiRekap = $P->where('rekapitulasi_id', $item->id)->get();
-                                                    $nilai_sa = 0;
-                                                @endphp
-                                                @foreach ($nilaiRekap as $n)
+                                            @if ($item->RekapPengungkit->count() != 0)
+                                                @foreach ($item->RekapPengungkit as $P)
                                                     @php
-                                                        $nilai_sa += round($n->nilai_sa, 2);
+                                                        $nilaiRekap = $P->where('rekapitulasi_id', $item->id)->get();
+                                                        $nilai_sa = 0;
                                                     @endphp
+                                                    @foreach ($nilaiRekap as $n)
+                                                        @php
+                                                            $nilai_sa += round($n->nilai_sa, 2);
+                                                        @endphp
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
-                                            {{ $nilai_sa }}
+                                                {{ $nilai_sa }}
+                                            @endif
                                         </td>
                                         <td>
                                             {{-- Hitung jumlah nilai rincian hasil --}}
                                             @php
-                                                $nilaiHasil = App\Models\RekapHasil::where('satker_id', $item->satker_id)
-                                                    ->where('tahun', date('Y'))
-                                                    ->get();
+                                                $nilai = $nilaiHasil->where('satker_id', $item->satker_id);
                                             @endphp
-                                            @foreach ($nilaiHasil as $H)
+                                            @foreach ($nilai as $n)
                                                 @php
-                                                    $nilaiHasil = $H->where('satker_id', $item->satker_id)->sum('nilai');
+                                                    $nilai = $n->where('satker_id', $item->satker_id)->sum('nilai');
                                                 @endphp
                                             @endforeach
-                                            {{ $nilaiHasil }}
+                                            {{ $nilai }}
                                         </td>
-                                        <td class="text-center">
-                                            <button class="btn btn-info btn-sm m-2" data-toggle="modal"
-                                                data-target="#surat_rekomendasi{{ $item->satker_id }}"><i
-                                                    class="fas fa-file">
-                                                </i></button>
-                                        </td>
+
+                                        {{-- Cek Apakah Surat Rekomendasi ada --}}
+                                        @if ($item->surat_rekomendasi != '')
+                                            <td class="text-center">
+                                                <button class="btn btn-info btn-sm m-2" data-toggle="modal"
+                                                    data-target="#surat_rekomendasi{{ $item->satker_id }}"><i
+                                                        class="fas fa-file">
+                                                    </i></button>
+                                            </td>
+                                        @else
+                                            <td class="text-center">
+                                                <button class="btn btn-info btn-sm">No Dokumen</button>
+                                            </td>
+                                        @endif
+
                                         <td class="text-center">
                                             <a type="button" href="/tpi/evaluasi/{{ $item->id }}"
                                                 class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
@@ -148,8 +148,6 @@
                                     <td colspan="6" class="text-center"><button class="btn btn-info">Satker Belum
                                             Mengajukan Zona Integritas </button></td>
                                 @endif
-
-
                             </tr>
                         @endforeach
                     </tbody>
@@ -159,7 +157,4 @@
         </div>
         <!-- /.card -->
     </div>
-
-
-
 @endsection

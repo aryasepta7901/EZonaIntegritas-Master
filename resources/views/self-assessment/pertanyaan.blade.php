@@ -602,11 +602,10 @@
                                                     {{-- Desk Evaluation --}}
                                                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                         <td style="min-width: 380px;">
-
                                                             {{-- Pengendali Teknis --}}
                                                             @if ($deskEvaluation != null)
                                                                 <div class="card-body"
-                                                                    @if ($desk->nilai_dl == 0) style="background-color: red" @endif>
+                                                                    @if ($deskEvaluation->nilai_dl == 0) style="background-color: red" @endif>
                                                                     <form action="/tpi/evaluasi/{{ $deskEvaluation->id }}"
                                                                         method="post">
                                                                         @method('put')
