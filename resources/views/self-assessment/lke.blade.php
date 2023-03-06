@@ -295,6 +295,7 @@
         <a href="/lke" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
             Kembali</a>
     @endcan
+    {{-- PIC Satker --}}
     {{-- Kirim LKE --}}
     <div class="modal fade" id="simpan">
         <div class="modal-dialog">
@@ -327,7 +328,6 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-
     {{-- Kirim LKE ke TPI --}}
     <div class="modal fade" id="kirimTPI">
         <div class="modal-dialog">
@@ -363,6 +363,7 @@
         <!-- /.modal-dialog -->
     </div>
 
+    {{-- Evaluasi Provinsi --}}
     {{-- Setuju LKE --}}
     <div class="modal fade" id="setuju">
         <div class="modal-dialog">

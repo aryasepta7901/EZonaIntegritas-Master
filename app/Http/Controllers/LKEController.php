@@ -128,7 +128,7 @@ class LKEController extends Controller
      */
     public function update(Request $request, Rekapitulasi $rekapitulasi)
     {
-
+        // Kirim LKE
         $id = $request->id;
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
 
