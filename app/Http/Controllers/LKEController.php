@@ -99,7 +99,7 @@ class LKEController extends Controller
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
-            'deskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->first(),
+            'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->get(),
             'rekap' => $lke,
 
 

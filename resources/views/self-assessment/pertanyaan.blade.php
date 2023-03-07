@@ -600,6 +600,10 @@
                                                         </form>
                                                     @endif
                                                     {{-- Desk Evaluation --}}
+                                                    @php
+                                                        $id = date('Y') . $rekap->satker_id . $value->id;
+                                                        $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
+                                                    @endphp
                                                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                         <td style="min-width: 380px;">
                                                             {{-- Pengendali Teknis --}}
@@ -643,38 +647,13 @@
                                                                     </form>
                                                                 </div>
                                                             @else
-                                                                {{-- Create --}}
-                                                                <div class="card-body">
-                                                                    <form action="/tpi/evaluasi" method="post">
-                                                                        @csrf
-                                                                        <div class="form-group">
-                                                                            <label for="anggota">Pengendali
-                                                                                Teknis</label>
-                                                                            @foreach ($value->opsi as $item)
-                                                                                @if ($item->type == 'checkbox')
-                                                                                    <div class="form-check ml-4">
-                                                                                        <input class="form-check-input"
-                                                                                            type="radio"
-                                                                                            name="jawaban_dl"
-                                                                                            value="{{ $item->id }}">
-                                                                                        <label
-                                                                                            class="form-check-label">{{ $item->rincian }}</label>
-                                                                                    </div>
-                                                                                @elseif($item->type == 'input')
-                                                                                    <p for="input">
-                                                                                        {{ $item->rincian }}
-                                                                                    </p>
-                                                                                    <input type="number" min="0"
-                                                                                        class="form-control"
-                                                                                        name="jawaban_dl">
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control " rows="4" name="catatan_dl">{{ old('catatan_dl') }} </textarea>
-                                                                        </div>
-                                                                    </form>
+                                                                <div class="col-lg-12">
+                                                                    <div class="alert alert-info alert-dismissible">
+                                                                        <h5><i class="icon fas fa-info"></i> Informasi!
+                                                                        </h5>
+                                                                        Tim Penilai Internal Belum Melakukan Penilaian pada
+                                                                        pertanyaan ini!
+                                                                    </div>
                                                                 </div>
                                                             @endif
                                                             <hr>

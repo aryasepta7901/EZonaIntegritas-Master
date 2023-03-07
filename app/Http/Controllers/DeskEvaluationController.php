@@ -125,7 +125,7 @@ class DeskEvaluationController extends Controller
     public function show(Rekapitulasi $evaluasi)
     {
         $this->authorize('TPI');
-
+        // dd(DeskEvaluation::where('rekapitulasi_id', $evaluasi->id)->where('id', 'LIKE', '%' . 'PPC' . '%')->count('jawaban_at'));
         return view('tpi.lke', [
             'master' => 'Desk-Evaluation ',
             'link' => 'tpi/evaluasi',
@@ -134,7 +134,6 @@ class DeskEvaluationController extends Controller
             'pertanyaan' => Pertanyaan::count(),
             'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $evaluasi->id)->count(),
             'deskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id),
-            'evaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id),
             'rincianPengungkit' => SubRincian::where('rincian_id', 'p')->get(),
             'rincianHasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'nilaiPilar' => RekapPengungkit::where('rekapitulasi_id', $evaluasi->id)->get(),
@@ -154,6 +153,7 @@ class DeskEvaluationController extends Controller
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
+            'DeskEvaluation' => DeskEvaluation::get(),
             'rekap' => $evaluasi,
             'pengawasan' => Pengawasan::where('satker_id', $evaluasi->satker_id)->first(),
 

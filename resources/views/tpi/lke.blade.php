@@ -408,6 +408,9 @@
                                                         <span class="info-box-number">
                                                             {{-- Jika nilai ada di database --}}
                                                             @if ($nilai !== null)
+                                                                @php
+                                                                    $evaluation = App\Models\DeskEvaluation::where('rekapitulasi_id', $rekap->id);
+                                                                @endphp
                                                                 @if (auth()->user()->level_id == 'AT')
                                                                     @php
                                                                         $nilai = $nilai->nilai_at;
