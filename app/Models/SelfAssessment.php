@@ -31,4 +31,8 @@ class SelfAssessment extends Model
     {
         return $this->hasMany(DeskEvaluation::class, 'id', 'id');
     }
+    public function InputField()
+    {
+        return $this->hasMany(InputField::class, 'selfassessment_id');
+    }
 }

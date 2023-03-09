@@ -6,6 +6,7 @@ use App\Models\Opsi;
 use App\Models\RekapPengungkit;
 use App\Models\SelfAssessment;
 use App\Models\UploadDokumen;
+use App\Models\InputField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,38 +40,79 @@ class SelfAssessmentController extends Controller
      */
     public function store(Request $request)
     {
+        // Field dengan input value
+        if ($request->input) {
 
-        // validasi
-        $request->validate(
-            [
-                'opsi_id' => 'required',
-                'catatan'  => 'required',
-                'dokumen.*' => 'mimes:pdf|max:2048',
-                'fileCreate.*' => 'mimes:pdf|max:2048',
+            foreach ($request->input as $key => $input) {
+                $total = $key + 1;
+            }
+            if ($total == 2) {
+                $nilai1 = $request->input[0];
+                $nilai2 = $request->input[1];
+                $nilai = $nilai2 / $nilai1;
+            } else {
+            }
 
-            ],
-            [
-                'opsi_id.required' => 'Silahkan Pilih Jawaban,',
-                'catatan.required' => 'Catatan Wajib di Isi,',
-                'mimes' => 'Dokumen hanya boleh format :values,',
-                'max' => 'Dokumen hanya boleh Berukuran :max,'
-            ]
-        );
-        // SelfAssessment
-        $tahun = date('Y');
-        $satker_id = auth()->user()->satker_id;
-        $pertanyaan_id = $request->pertanyaan_id;
-        $data = [
-            'id' => $tahun . $satker_id . $pertanyaan_id,
-            'tahun' => $tahun,
-            'opsi_id' => $request->opsi_id,
-            'catatan' => $request->catatan,
-            'rekapitulasi_id' => $request->rekapitulasi_id,
-            'satker_id' => $satker_id,
-            'pertanyaan_id' => $pertanyaan_id,
-        ];
-        $data['nilai'] = Opsi::where('id', $data['opsi_id'])->first()->bobot;
-        SelfAssessment::create($data);
+            $tahun = date('Y');
+            $satker_id = auth()->user()->satker_id;
+            $pertanyaan_id = $request->pertanyaan_id;
+            $data = [
+                'id' => $tahun . $satker_id . $pertanyaan_id,
+                'tahun' => $tahun,
+                'opsi_id' => '-',
+                'catatan' => $request->catatan,
+                'rekapitulasi_id' => $request->rekapitulasi_id,
+                'satker_id' => $satker_id,
+                'pertanyaan_id' => $pertanyaan_id,
+            ];
+            $data['nilai'] = $nilai;
+            SelfAssessment::create($data);
+            foreach ($request->input as $key => $input) {
+                $opsi = $request->input('opsi' . $key);
+                InputField::updateOrCreate(
+                    ['id' => $opsi . $data['id']],
+                    [
+                        'input_sa' => $input,
+                        'opsi_id' => $opsi,
+                        'selfassessment_id' => $data['id'],
+                    ]
+                );
+            }
+        } else {
+            // validasi
+            $request->validate(
+                [
+                    'opsi_id' => 'required',
+                    'catatan'  => 'required',
+                    'dokumen.*' => 'mimes:pdf|max:2048',
+                    'fileCreate.*' => 'mimes:pdf|max:2048',
+
+                ],
+                [
+                    'opsi_id.required' => 'Silahkan Pilih Jawaban,',
+                    'catatan.required' => 'Catatan Wajib di Isi,',
+                    'mimes' => 'Dokumen hanya boleh format :values,',
+                    'max' => 'Dokumen hanya boleh Berukuran :max,'
+                ]
+            );
+
+            // SelfAssessment
+
+            $tahun = date('Y');
+            $satker_id = auth()->user()->satker_id;
+            $pertanyaan_id = $request->pertanyaan_id;
+            $data = [
+                'id' => $tahun . $satker_id . $pertanyaan_id,
+                'tahun' => $tahun,
+                'opsi_id' => $request->opsi_id,
+                'catatan' => $request->catatan,
+                'rekapitulasi_id' => $request->rekapitulasi_id,
+                'satker_id' => $satker_id,
+                'pertanyaan_id' => $pertanyaan_id,
+            ];
+            $data['nilai'] = Opsi::where('id', $data['opsi_id'])->first()->bobot;
+            SelfAssessment::create($data);
+        }
         // Dokumen Wajib
         if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
             foreach ($request->dokumen as $key => $dokumen) {

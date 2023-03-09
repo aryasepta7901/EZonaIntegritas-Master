@@ -117,10 +117,14 @@
                                                                                         class="form-check-label">{{ $item->rincian }}</label>
                                                                                 </div>
                                                                             @elseif($item->type == 'input')
+                                                                                @php
+                                                                                    $self = $selfAssessment->InputField->where('opsi_id', $item->id)->first();
+                                                                                @endphp
                                                                                 <p for="input">{{ $item->rincian }}
                                                                                 </p>
                                                                                 <input type="number" min="0"
-                                                                                    class="form-control" name="opsi_id">
+                                                                                    class="form-control" name="opsi_id"
+                                                                                    value="{{ $self->input_sa }}">
                                                                             @endif
                                                                         @endforeach
                                                                     </div>
@@ -520,8 +524,11 @@
                                                                             @elseif($item->type == 'input')
                                                                                 <p for="input">{{ $item->rincian }}
                                                                                 </p>
+                                                                                <input type="hidden"
+                                                                                    value="{{ $item->id }}"
+                                                                                    name="opsi{{ $loop->index }}">
                                                                                 <input type="number" min="0"
-                                                                                    class="form-control" name="opsi_id">
+                                                                                    class="form-control" name="input[]">
                                                                             @endif
                                                                         @endforeach
                                                                     </div>
