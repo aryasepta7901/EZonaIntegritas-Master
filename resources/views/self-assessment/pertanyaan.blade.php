@@ -122,8 +122,13 @@
                                                                                 @endphp
                                                                                 <p for="input">{{ $item->rincian }}
                                                                                 </p>
+
+                                                                                <input type="hidden"
+                                                                                    value="{{ $item->id }}"
+                                                                                    name="opsi{{ $loop->index }}">
                                                                                 <input type="number" min="0"
-                                                                                    class="form-control" name="opsi_id"
+                                                                                    class="form-control" name="input[]"
+                                                                                    @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1') readonly @endif
                                                                                     value="{{ $self->input_sa }}">
                                                                             @endif
                                                                         @endforeach
@@ -528,7 +533,8 @@
                                                                                     value="{{ $item->id }}"
                                                                                     name="opsi{{ $loop->index }}">
                                                                                 <input type="number" min="0"
-                                                                                    class="form-control" name="input[]">
+                                                                                    class="form-control" name="input[]"
+                                                                                    @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1') readonly @endif>
                                                                             @endif
                                                                         @endforeach
                                                                     </div>
