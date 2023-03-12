@@ -8,6 +8,7 @@ use App\Models\SelfAssessment;
 use App\Models\UploadDokumen;
 use App\Models\InputField;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class SelfAssessmentController extends Controller
@@ -50,13 +51,23 @@ class SelfAssessmentController extends Controller
                 // Logika 1
                 $nilai1 = $request->input[0];
                 $nilai2 = $request->input[1];
-                $nilai = $nilai2 / $nilai1;
+                $nilai = $nilai1 == 0 ? 0 : ($nilai2 / $nilai1);
             } elseif ($total == 5) {
                 $nilai1 = $request->input[1];
                 $nilai2 = $request->input[2];
                 $nilai3 = $request->input[3];
                 $nilai4 = $request->input[4];
-                $nilai = $nilai4 / ($nilai1 + $nilai2 + $nilai3);
+                $penimbang = $nilai1 + $nilai2 + $nilai3;
+                if ($penimbang < $nilai4) {
+                    return back()->withErrors('Cek Ulang');
+                } else {
+                    $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
+                }
+            } elseif ($total == 3) {
+                $nilai1 = $request->input[1];
+                $nilai2 = $request->input[2];
+                $nilai0 = $nilai1 + $nilai2;
+                $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
             }
         }
         // validasi
@@ -105,6 +116,14 @@ class SelfAssessmentController extends Controller
                         'selfassessment_id' => $data['id'],
                     ]
                 );
+            }
+            $opsi0 = $request->input('opsi0');
+            $dataPertama = $opsi0 . $data['id'];
+
+            if ($opsi0 == 'PRE3A1' || $opsi0 == 'PRE3B1') {
+                InputField::where('id', $dataPertama)->update(['input_sa' => $nilai * 100]);
+            } elseif ($opsi0 == 'PRE2A1') {
+                InputField::where('id', $dataPertama)->update(['input_sa' => $nilai0]);
             }
         } else {
             // Jika field berbentuk Checkbox
@@ -217,13 +236,26 @@ class SelfAssessmentController extends Controller
                 // Logika 1
                 $nilai1 = $request->input[0];
                 $nilai2 = $request->input[1];
-                $nilai = $nilai2 / $nilai1;
+                $nilai = $nilai1 == 0 ? 0 : ($nilai2 / $nilai1);
+                if ($nilai > 1) {
+                    $nilai = 1;
+                }
             } elseif ($total == 5) {
                 $nilai1 = $request->input[1];
                 $nilai2 = $request->input[2];
                 $nilai3 = $request->input[3];
                 $nilai4 = $request->input[4];
-                $nilai = $nilai4 / ($nilai1 + $nilai2 + $nilai3);
+                $penimbang = $nilai1 + $nilai2 + $nilai3;
+                if ($penimbang < $nilai4) {
+                    return back()->withErrors('Cek Ulang');
+                } else {
+                    $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
+                }
+            } elseif ($total == 3) {
+                $nilai1 = $request->input[1];
+                $nilai2 = $request->input[2];
+                $nilai0 = $nilai1 + $nilai2;
+                $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
             }
         }
         $request->validate(
@@ -257,9 +289,15 @@ class SelfAssessmentController extends Controller
                     ]
                 );
             }
+            // Update data pertama
+            $opsi0 = $request->input('opsi0');
+            $dataPertama = $opsi0 .  $selfAssessment->id;
 
-            $dataPertama = $request->input('opsi0') . $selfAssessment->id;
-            InputField::where('id', $dataPertama)->update(['input_sa' => $nilai * 100]);
+            if ($opsi0 == 'PRE3A1' || $opsi0 == 'PRE3B1') {
+                InputField::where('id', $dataPertama)->update(['input_sa' => $nilai * 100]);
+            } elseif ($opsi0 == 'PRE2A1') {
+                InputField::where('id', $dataPertama)->update(['input_sa' => $nilai0]);
+            }
         } else {
             // Jika field berbentuk Checkbox
             $data = [
