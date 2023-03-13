@@ -55,7 +55,7 @@ class RekapitulasiController extends Controller
     public function show(Rekapitulasi $rekapitulasi)
     {
         $this->authorize('pic');
-        return view('self-assessment.test', [
+        return view('self-assessment.cetak', [
             'master' => 'Rekapitulasi',
             'link' => 'lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
@@ -65,7 +65,7 @@ class RekapitulasiController extends Controller
             'rincianHasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $rekapitulasi->id)->count(),
             'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $rekapitulasi->id)->count('jawaban_dl'),
-            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id)->get(),
+            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
             'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', date('Y'))->get(),
 
             'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),

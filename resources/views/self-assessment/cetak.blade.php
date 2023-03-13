@@ -27,7 +27,11 @@
                                 <td class="text-center">{{ $r->bobot }}</td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                @php
+                                    // Ambil Nilai Pengungkit
+                                    $nilai = $nilaiPengungkit->sum('nilai_sa');
+                                @endphp
+                                <td class="text-center">{{ round($nilai, 2) }}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -40,8 +44,25 @@
                                     <td colspan="5">{{ $s->subRincian }}</td>
                                     <td class="text-center">{{ $s->bobot }}</td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td> {{ $s->id }}
+                                    </td>
+                                    @php
+                                        // Ambil Nilai
+                                        // $nilai = $nilaiPengungkit->where('pilar_id', 'LIKE', '%' . $s->id . '%')->get();
+                                        $nilai = App\Models\RekapPengungkit::where('rekapitulasi_id', $rekap->id)
+                                            ->where('pilar_id', 'LIKE', '%' . $s->id . '%')
+                                            ->get();
+                                        
+                                    @endphp
+                                    {{ $nilai }}
+                                    <td class="text-center">
+                                        {{-- Jika nilai ada di database --}}
+                                        {{-- @if ($nilai !== null)
+                                            {{ round($nilai->nilai_sa, 2) }}
+                                        @else
+                                            0
+                                        @endif --}}
+                                    </td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -55,7 +76,19 @@
                                         <td class="text-center">{{ $p->bobot }}</td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
+                                        @php
+                                            // Ambil Nilai Pengungkit
+                                            $nilai = $p->RekapPengungkit->where('rekapitulasi_id', $rekap->id)->first();
+                                        @endphp
+                                        {{-- {{ $nilai }} --}}
+                                        <td class="text-center">
+                                            {{-- Jika nilai ada di database --}}
+                                            @if ($nilai !== null)
+                                                {{ round($nilai->nilai_sa, 2) }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -73,7 +106,19 @@
                                             <td class="text-center">{{ $sp->bobot }}</td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            @php
+                                                $total_sa = 0;
+                                                $jml_pertanyaan = $sp->pertanyaan->count();
+                                                $penimbang = $sp->bobot / $jml_pertanyaan;
+                                            @endphp
+                                            @foreach ($sp->pertanyaan as $p)
+                                                @php
+                                                    // Self Assessment
+                                                    $nilai = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
+                                                    $total_sa += $nilai * $penimbang;
+                                                @endphp
+                                            @endforeach
+                                            <td class="text-center">{{ $total_sa }}</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -151,19 +196,27 @@
                                                     @php
                                                         $SelfAssessment = $pt->SelfAssessment->where('rekapitulasi_id', $rekap->id);
                                                     @endphp
-                                                    @foreach ($SelfAssessment as $self)
-                                                        <td>{{ $self->nilai * 100 }}%</td>
-                                                        <td>{{ $self->nilai }}</td>
-                                                        <td style="min-width: 400px">{{ $self->catatan }}</td>
-                                                        <td>
-                                                            @foreach ($self->dokumen as $d)
-                                                                <ul>
-                                                                    <li> <a href="{{ asset('storage/' . $d->file) }}"
-                                                                            target="__blank">{{ $d->name }}</a></li>
-                                                                </ul>
-                                                            @endforeach
-                                                        </td>
-                                                    @endforeach
+                                                    @if ($SelfAssessment->count() != 0)
+                                                        @foreach ($SelfAssessment as $self)
+                                                            <td>{{ $self->nilai * 100 }}%</td>
+                                                            <td>{{ $self->nilai }}</td>
+                                                            <td style="min-width: 400px">{{ $self->catatan }}</td>
+                                                            <td>
+                                                                @foreach ($self->dokumen as $d)
+                                                                    <ul>
+                                                                        <li> <a href="{{ asset('storage/' . $d->file) }}"
+                                                                                target="__blank">{{ $d->name }}</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                @endforeach
+                                                            </td>
+                                                        @endforeach
+                                                    @else
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    @endif
                                                 @endif
 
                                             </tr>

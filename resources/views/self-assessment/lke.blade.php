@@ -37,16 +37,12 @@
         <div class="info-box bg-light">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-bold mb-3">{{ $rekap->satker->nama_satker }}</span>
+                {{-- Rincian Pengungkit --}}
                 @php
-                    $nilai_sa = 0;
-                    $nilai_dl = 0;
+                    $nilai_sa = $nilaiPengungkit->sum('nilai_sa');
+                    $nilai_dl = $nilaiPengungkit->sum('nilai_dl');
                 @endphp
-                @foreach ($nilaiPengungkit as $n)
-                    @php
-                        $nilai_sa += round($n->nilai_sa, 2);
-                        $nilai_dl += round($n->nilai_dl, 2);
-                    @endphp
-                @endforeach
+                {{-- Rincian Hasil --}}
                 @php
                     $nilai_sa += $nilaiHasil->sum('nilai');
                     $nilai_dl += $nilaiHasil->sum('nilai');
@@ -63,13 +59,13 @@
                     @endif
                     {{-- Self-Assessment --}}
                     <div class="{{ $lg }}">
-                        <span class="info-box-number text-center text-muted mb-3">{{ $nilai_sa }}</span>
+                        <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_sa, 2) }}</span>
                         <span class="info-box-text text-center text-muted mb-0">Nilai Zona Integritas</span>
                     </div>
                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                         {{-- Desk-Evaluation --}}
                         <div class="col-lg-6">
-                            <span class="info-box-number text-center text-muted mb-3">{{ $nilai_dl }}</span>
+                            <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_dl, 2) }}</span>
                             <span class="info-box-text text-center text-muted mb-0">Nilai Desk-Evaluation </span>
                         </div>
                     @endif
