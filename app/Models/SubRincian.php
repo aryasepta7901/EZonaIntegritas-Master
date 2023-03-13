@@ -23,4 +23,8 @@ class SubRincian extends Model
     {
         return $this->hasMany(Pilar::class, 'subrincian_id');
     }
+    public function Rincian()
+    {
+        return $this->belongsTo(Rincian::class, 'rincian_id');
+    }
 }

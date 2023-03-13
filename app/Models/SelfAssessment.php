@@ -35,4 +35,8 @@ class SelfAssessment extends Model
     {
         return $this->hasMany(InputField::class, 'selfassessment_id');
     }
+    public function opsi()
+    {
+        return $this->belongsTo(Opsi::class, 'opsi_id');
+    }
 }

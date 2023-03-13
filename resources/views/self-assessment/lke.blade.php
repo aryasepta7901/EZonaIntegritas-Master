@@ -8,6 +8,10 @@
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
                         Kirim LKE</i></button>
             </div>
+            <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#cetak"><i class="fa fa-save">
+                        Cetak</i></button>
+            </div>
         @elseif($rekap->status == 5)
             {{-- Jika status rekapitulasi dikembalikan dari TPI --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
@@ -322,6 +326,42 @@
                         <button type="submit" class="btn btn-primary">Kirim</button>
                     </div>
                 </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="cetak">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Rekapitulasi LKE</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="example1" class="table table-bordered table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Penilaian</th>
+                                <th>Bobot</th>
+                                <th>Penjelasan</th>
+                                <th>Pilihan Jawaban</th>
+                                <th>Jawaban</th>
+                                <th>Nilai</th>
+                                <th>Uraian Bukti Dukung</th>
+                                <th>Link Bukti Dukung</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+
+                    </table>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Kirim</button>
+                </div>
             </div>
             <!-- /.modal-content -->
         </div>

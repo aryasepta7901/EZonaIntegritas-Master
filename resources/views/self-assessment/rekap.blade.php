@@ -67,6 +67,10 @@
                                     <a type="button" href="/lke/{{ $value->id }}" class="btn btn-sm btn-success"><i
                                             class="fa fa-file"></i> LKE</a>
                                 </td>
+                                <td class="text-center">
+                                    <a type="button" href="/satker/rekapitulasi/{{ $value->id }}"
+                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i> Rekap</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

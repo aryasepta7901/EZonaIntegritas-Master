@@ -32,4 +32,8 @@ class Opsi extends Model
     {
         return $this->belongsTo(RekapHasil::class, 'opsi_id');
     }
+    public function selfAssessment()
+    {
+        return $this->hasMany(SelfAssessment::class, 'opsi_id');
+    }
 }

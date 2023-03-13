@@ -18,4 +18,8 @@ class Rincian extends Model
         'rincian',
         'bobot',
     ];
+    public function SubRincian()
+    {
+        return $this->hasMany(SubRincian::class, 'rincian_id');
+    }
 }

@@ -37,7 +37,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 </head>
 
-<body class="hold-transition sidebar-mini {{ Request::is('tpi*') || Request::is('lke*') ? 'sidebar-collapse' : '' }}">
+<body
+    class="hold-transition sidebar-mini {{ Request::is('tpi*') || Request::is('satker*') || Request::is('lke*') ? 'sidebar-collapse' : '' }}">
     <div class="wrapper">
 
         {{-- Navbar --}}
@@ -169,14 +170,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             $('#example2').DataTable({
-                "paging": true,
+                "paging": false,
                 "lengthChange": false,
                 "searching": false,
-                "ordering": true,
-                "info": true,
+                "ordering": false,
+                "info": false,
                 "autoWidth": false,
+                "buttons": ["csv", "excel"],
+
                 "responsive": true,
-            });
+            }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
         });
     </script>
     {{-- Dropdown pertanyaan --}}

@@ -24,6 +24,10 @@ class Pilar extends Model
     {
         return $this->belongsTo(SubRincian::class, 'subrincian_id');
     }
+    public function SubPilar()
+    {
+        return $this->hasMany(SubPilar::class, 'pilar_id');
+    }
     public function Opsi()
     {
         return $this->hasMany(Opsi::class, 'pertanyaan_id');

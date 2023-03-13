@@ -89,6 +89,7 @@ class LKEController extends Controller
 
         ]);
     }
+
     public function show2(Rekapitulasi $lke, Pilar $pilar)
     {
         $this->authorize('pic');
