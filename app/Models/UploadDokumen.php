@@ -28,4 +28,8 @@ class UploadDokumen extends Model
     {
         return $this->belongsTo(Pertanyaan::class, 'dokumenlke_id');
     }
+    public function SelfAssessment()
+    {
+        return $this->belongsTo(SelfAssessment::class, 'selfassessment_id');
+    }
 }

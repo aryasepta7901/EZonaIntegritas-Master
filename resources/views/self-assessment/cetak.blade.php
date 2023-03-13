@@ -5,7 +5,8 @@
         <div class="card">
 
             <div class="card-body">
-                <table id="example2" class="table table-bordered table-striped">
+
+                <table id="example2" class="table table-bordered table-striped table-responsive">
                     <thead>
                         <tr>
                             <th colspan="7">Penilaian</th>
@@ -26,6 +27,10 @@
                                 <td class="text-center">{{ $r->bobot }}</td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
 
                             </tr>
                             @foreach ($r->SubRincian as $s)
@@ -36,8 +41,10 @@
                                     <td class="text-center">{{ $s->bobot }}</td>
                                     <td></td>
                                     <td></td>
-
-
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 @foreach ($s->Pilar as $p)
                                     <tr>
@@ -48,6 +55,11 @@
                                         <td class="text-center">{{ $p->bobot }}</td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
 
 
                                     </tr>
@@ -61,6 +73,10 @@
                                             <td class="text-center">{{ $sp->bobot }}</td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
 
 
                                         </tr>
@@ -72,7 +88,6 @@
                                                 <td></td>
                                                 <td>{{ chr(64 + $loop->iteration) }}</td>
                                                 <td colspan="2">{{ $pt->pertanyaan }}</td>
-
                                                 <td></td>
                                                 @if ($pt->opsi->first()->type == 'checkbox')
                                                     <td>
@@ -99,6 +114,7 @@
                                                             @break
                                                         @endswitch
                                                     </td>
+
                                                     @php
                                                         $SelfAssessment = $pt->SelfAssessment->where('rekapitulasi_id', $rekap->id);
                                                     @endphp
@@ -110,17 +126,44 @@
                                                                 <td>{{ substr($self->opsi->rincian, 0, 2) }}</td>
                                                             @endif
                                                             <td class="text-center">{{ $self->nilai }}</td>
+                                                            <td style="min-width: 400px">{{ $self->catatan }}</td>
+                                                            <td>
+                                                                @foreach ($self->dokumen as $d)
+                                                                    <ul>
+                                                                        <li> <a href="{{ asset('storage/' . $d->file) }}"
+                                                                                target="__blank">{{ $d->name }}</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                @endforeach
+                                                            </td>
                                                         @endforeach
                                                     @else
-                                                        <td>Belum Diisi</td>
-                                                        <td>Belum Diisi</td>
+                                                        <td>-</td>
+                                                        <td>-</td>
+                                                        <td>-</td>
+                                                        <td>-</td>
                                                     @endif
                                                 @else
                                                     {{-- Buat FIeld Input --}}
 
                                                     <td></td>
                                                     <td>%</td>
-                                                    <td>xx</td>
+                                                    @php
+                                                        $SelfAssessment = $pt->SelfAssessment->where('rekapitulasi_id', $rekap->id);
+                                                    @endphp
+                                                    @foreach ($SelfAssessment as $self)
+                                                        <td>{{ $self->nilai * 100 }}%</td>
+                                                        <td>{{ $self->nilai }}</td>
+                                                        <td style="min-width: 400px">{{ $self->catatan }}</td>
+                                                        <td>
+                                                            @foreach ($self->dokumen as $d)
+                                                                <ul>
+                                                                    <li> <a href="{{ asset('storage/' . $d->file) }}"
+                                                                            target="__blank">{{ $d->name }}</a></li>
+                                                                </ul>
+                                                            @endforeach
+                                                        </td>
+                                                    @endforeach
                                                 @endif
 
                                             </tr>
@@ -140,16 +183,21 @@
                                                         @php
                                                             $SelfAssessment = $pt->SelfAssessment->where('rekapitulasi_id', $rekap->id);
                                                         @endphp
-
-                                                        @foreach ($SelfAssessment as $self)
-                                                            @php
-                                                                $id = $o->id . $self->id;
-                                                            @endphp
-
-                                                            @foreach ($self->InputField->where('id', $id) as $input)
-                                                                <td> {{ $input->input_sa }}</td>
+                                                        @if ($SelfAssessment->count() != 0)
+                                                            @foreach ($SelfAssessment as $self)
+                                                                @php
+                                                                    $id = $o->id . $self->id;
+                                                                @endphp
+                                                                @foreach ($self->InputField->where('id', $id) as $input)
+                                                                    <td> {{ $input->input_sa }}</td>
+                                                                @endforeach
                                                             @endforeach
-                                                        @endforeach
+                                                        @else
+                                                            <td>-</td>
+                                                        @endif
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
                                                     </tr>
                                                 @endforeach
                                             @endif

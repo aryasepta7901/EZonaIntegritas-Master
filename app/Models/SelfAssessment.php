@@ -39,4 +39,8 @@ class SelfAssessment extends Model
     {
         return $this->belongsTo(Opsi::class, 'opsi_id');
     }
+    public function dokumen()
+    {
+        return $this->hasMany(UploadDokumen::class, 'selfassessment_id');
+    }
 }
