@@ -55,7 +55,7 @@ class RekapitulasiController extends Controller
     public function show(Rekapitulasi $rekapitulasi)
     {
         $this->authorize('pic');
-        return view('self-assessment.cetak', [
+        return view('self-assessment.rekap.rekap', [
             'master' => 'Rekapitulasi',
             'link' => 'lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
@@ -73,7 +73,36 @@ class RekapitulasiController extends Controller
 
         ]);
     }
+    public function rekap2(Rekapitulasi $rekapitulasi)
+    {
+        $this->authorize('pic');
+        return view('self-assessment.rekap.rekap2', [
+            'master' => 'Rekapitulasi',
+            'link' => 'lke',
+            'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
+            'rekap' => $rekapitulasi,
+            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
 
+            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+
+
+        ]);
+    }
+    public function rekap3(Rekapitulasi $rekapitulasi)
+    {
+        $this->authorize('pic');
+        return view('self-assessment.rekap.test', [
+            'master' => 'Rekapitulasi',
+            'link' => 'lke',
+            'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
+            'rekap' => $rekapitulasi,
+            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
+
+            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+
+
+        ]);
+    }
     /**
      * Show the form for editing the specified resource.
      *

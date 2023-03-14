@@ -33,6 +33,7 @@
                             <th>Nilai</th>
                             <th>Status</th>
                             <th>Dokumen</th>
+                            <th>Info</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,6 +71,10 @@
                                 <td class="text-center">
                                     <a type="button" href="/satker/rekapitulasi/{{ $value->id }}"
                                         class="btn btn-sm btn-success"><i class="fa fa-file"></i> Rekap</a>
+                                    <a type="button" href="/satker/rekap2/{{ $value->id }}"
+                                        class="btn btn-sm btn-primary"><i class="fa fa-file"></i> Rekap 2</a>
+                                    <a type="button" href="/satker/rekap3/{{ $value->id }}"
+                                        class="btn btn-sm btn-warning"><i class="fa fa-file"></i> Rekap 3</a>
                                 </td>
                             </tr>
                         @endforeach

@@ -133,7 +133,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('template') }}/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="{{ asset('template') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
+    {{-- Export to excel -> https://docs.sheetjs.com/ --}}
+    <script script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script>
+        function exportFile() {
+            var wb = XLSX.utils.table_to_book(document.getElementById('excel'));
+            XLSX.writeFile(wb, 'sample.xlsx');
 
+        }
+    </script>
     <script>
         var Toast = Swal.mixin({
             toast: true,
@@ -176,10 +184,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 "ordering": false,
                 "info": false,
                 "autoWidth": false,
-                "buttons": ["csv", "excel"],
+                "buttons": ["csv", "excel", "pdf"],
 
                 "responsive": true,
+
             }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+
         });
     </script>
     {{-- Dropdown pertanyaan --}}
