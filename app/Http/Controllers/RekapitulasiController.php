@@ -13,6 +13,7 @@ use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
 use App\Http\Controllers\Controller;
 use App\Models\Rincian;
+use Illuminate\Support\Facades\Storage;
 
 class RekapitulasiController extends Controller
 {
@@ -44,6 +45,35 @@ class RekapitulasiController extends Controller
     public function store(Request $request)
     {
         //
+
+        $request->validate(
+            [
+                'surat' => 'required|mimes:pdf|max:2048',
+
+            ],
+            [
+                'required' => ':attribute  harus di Upload',
+                'mimes' => 'Dokumen hanya boleh format :values,',
+                'max' => 'Dokumen hanya boleh Berukuran :max,'
+            ]
+        );
+        // Rekapitulasi
+        if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
+            // Ambil File lamanya
+            $rekap = Rekapitulasi::where('id', $request->id)->first();
+            if ($rekap->surat_pengantar_kabkota) {
+                // jika ada file lama maka hapus
+                Storage::delete($rekap->surat_pengantar_kabkota);
+            }
+            Rekapitulasi::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'surat_pengantar_kabkota' =>  $request->file('surat')->store('surat_pengantar/kabkota'),
+                    'status' => 1,
+                ]
+            );
+        }
+        return redirect('lke')->with('success', 'Surat Rekomendasi Berhasil di Simpan');
     }
 
     /**
@@ -103,6 +133,21 @@ class RekapitulasiController extends Controller
 
         ]);
     }
+    // View Surat Persetujuan BPS Kab/Kota
+    public function surat(Rekapitulasi $rekapitulasi)
+    {
+
+        return view('self-assessment.surat', [
+            'master' => 'lke',
+            'link' => 'lke/' . $rekapitulasi->id,
+            'title' => 'Surat Pengantar BPS Kabupaten/Kota',
+            'rekap' => $rekapitulasi,
+            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
+            'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', date('Y'))->sum('nilai'),
+
+            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+        ]);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -134,6 +179,5 @@ class RekapitulasiController extends Controller
      */
     public function destroy(Rekapitulasi $rekapitulasi)
     {
-        //
     }
 }

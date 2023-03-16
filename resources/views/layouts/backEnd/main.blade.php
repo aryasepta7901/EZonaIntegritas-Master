@@ -141,6 +141,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             XLSX.writeFile(wb, 'sample.xlsx');
 
         }
+
+        function exportFile2() {
+            var wb = XLSX.utils.table_to_book(document.getElementById('excel2'));
+            XLSX.writeFile(wb, 'sample.xlsx');
+
+        }
     </script>
     <script>
         var Toast = Swal.mixin({

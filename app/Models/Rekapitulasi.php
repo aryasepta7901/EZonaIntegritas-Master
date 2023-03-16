@@ -17,7 +17,8 @@ class Rekapitulasi extends Model
         'predikat',
         'status',
         'satker_id',
-        'surat_rekomendasi',
+        'surat_pengantar_kabkota',
+        'surat_pengantar_prov',
     ];
     public function satker()
     {

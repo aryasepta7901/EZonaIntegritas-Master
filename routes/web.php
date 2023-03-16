@@ -76,6 +76,7 @@ Route::get('lke/{lke}/{pilar}', [LKEController::class, 'show2'])->name('lke.show
 Route::resource('satker/rekapitulasi', RekapitulasiController::class)->middleware('auth');
 Route::get('satker/rekap2/{rekapitulasi}', [RekapitulasiController::class, 'rekap2'])->middleware('auth');
 Route::get('satker/rekap3/{rekapitulasi}', [RekapitulasiController::class, 'rekap3'])->middleware('auth');
+Route::get('satker/surat/{rekapitulasi}', [RekapitulasiController::class, 'surat'])->middleware('auth');
 
 // Self Assessment
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
