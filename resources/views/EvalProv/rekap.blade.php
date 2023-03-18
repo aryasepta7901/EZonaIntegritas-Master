@@ -18,6 +18,7 @@
                             <th>Predikat</th>
                             <th>Nilai Pengungkit</th>
                             <th>Nilai Hasil</th>
+                            <th>Surat Pengantar</th>
                             <th>Dokumen</th>
                             <th>Status</th>
                         </tr>
@@ -34,14 +35,8 @@
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
                                         @foreach ($value->RekapPengungkit as $item)
                                             @php
-                                                $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
-                                                $nilai_sa = 0;
+                                                $nilai_sa = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                             @endphp
-                                            @foreach ($nilaiRekap as $n)
-                                                @php
-                                                    $nilai_sa += round($n->nilai_sa, 2);
-                                                @endphp
-                                            @endforeach
                                         @endforeach
                                         {{ $nilai_sa }}
                                     @endif
@@ -49,22 +44,23 @@
                                 <td>
                                     {{-- Hitung jumlah nilai rincian hasil --}}
                                     @php
-                                        $nilai = $nilaiHasil->where('satker_id', $value->satker_id);
+                                        $nilai = $nilaiHasil->where('satker_id', $value->satker_id)->sum('nilai');
                                     @endphp
-                                    {{-- Jika Rincian Hasil sudah diupload oleh Admin --}}
-                                    @if ($nilai->count() != 0)
-                                        @foreach ($nilai as $item)
-                                            @php
-                                                $nilai = $item->where('satker_id', $value->satker_id)->sum('nilai');
-                                            @endphp
-                                        @endforeach
-                                        {{ $nilai }}
-                                    @else
-                                        {{-- Jika Rincian Hasil belum diupload oleh admin --}}
-                                        @php
-                                            $nilai = 0;
-                                        @endphp
-                                        {{ $nilai }} (Data Nilai Hasil Belum di Upload Inspektorat Utama)
+                                    {{ $nilai }}
+                                </td>
+                                <td class="text-center">
+                                    @if ($value->surat_pengantar_kabkota)
+                                        <button type="button" class="btn btn-info btn-sm " data-toggle="modal"
+                                            data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
+                                                class="fas fa-file">
+                                            </i> Kab/Kota</button>
+                                        <button type="button" class="btn btn-info btn-sm mt-2 " data-toggle="modal"
+                                            data-target="#surat_pengantar_prov{{ $value->id }}"><i class="fas fa-file">
+                                            </i> Provinsi</button>
+                                    @elseif($value->surat_pengantar_prov)
+                                        <button type="button" class="btn btn-info btn-sm " data-toggle="modal"
+                                            data-target="#surat_pengantar_prov{{ $value->id }}"><i class="fas fa-file">
+                                            </i> Provinsi</button>
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -83,4 +79,63 @@
         </div>
         <!-- /.card -->
     </div>
+
+    {{-- View Surat Pengantar --}}
+
+    {{-- Surat Pengantar kab/kota --}}
+    @foreach ($rekap as $value)
+        <div class="modal fade" id="surat_pengantar_kabkota{{ $value->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Surat Pengantar Kab/Kota
+                            {{ $value->satker->nama_satker }}({{ $value->tahun }})
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item"
+                                src="{{ asset('storage/' . $value->surat_pengantar_kabkota) }}" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" id="surat_pengantar_prov{{ $value->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Surat Pengantar
+                            {{ $value->satker->nama_satker }}({{ $value->tahun }})-Provinsi
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item"
+                                src="{{ asset('storage/' . $value->surat_pengantar_prov) }}" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endforeach
 @endsection

@@ -29,7 +29,7 @@
                             <th>Predikat</th>
                             <th>Nilai Pengungkit</th>
                             <th>Nilai Hasil</th>
-                            <th>Surat Rekomendasi</th>
+                            <th>Surat Pengantar</th>
                             <th>LKE</th>
                             <th>Status</th>
                         </tr>
@@ -68,14 +68,8 @@
                                             @if ($item->RekapPengungkit->count() != 0)
                                                 @foreach ($item->RekapPengungkit as $P)
                                                     @php
-                                                        $nilaiRekap = $P->where('rekapitulasi_id', $item->id)->get();
-                                                        $nilai_sa = 0;
+                                                        $nilai_sa = $P->where('rekapitulasi_id', $item->id)->sum('nilai_sa');
                                                     @endphp
-                                                    @foreach ($nilaiRekap as $n)
-                                                        @php
-                                                            $nilai_sa += round($n->nilai_sa, 2);
-                                                        @endphp
-                                                    @endforeach
                                                 @endforeach
                                                 {{ $nilai_sa }}
                                             @endif
@@ -83,21 +77,17 @@
                                         <td>
                                             {{-- Hitung jumlah nilai rincian hasil --}}
                                             @php
-                                                $nilai = $nilaiHasil->where('satker_id', $item->satker_id);
+                                                $nilai = $nilaiHasil->where('satker_id', $item->satker_id)->sum('nilai');
                                             @endphp
-                                            @foreach ($nilai as $n)
-                                                @php
-                                                    $nilai = $n->where('satker_id', $item->satker_id)->sum('nilai');
-                                                @endphp
-                                            @endforeach
+
                                             {{ $nilai }}
                                         </td>
 
                                         {{-- Cek Apakah Surat Rekomendasi ada --}}
-                                        @if ($item->surat_rekomendasi != '')
+                                        @if ($item->surat_pengantar_prov != '')
                                             <td class="text-center">
-                                                <button class="btn btn-info btn-sm m-2" data-toggle="modal"
-                                                    data-target="#surat_rekomendasi{{ $item->satker_id }}"><i
+                                                <button class="btn btn-info btn-sm" data-toggle="modal"
+                                                    data-target="#surat_pengantar_prov{{ $item->satker_id }}"><i
                                                         class="fas fa-file">
                                                     </i></button>
                                             </td>
@@ -114,11 +104,12 @@
 
                                         <td>{{ $item->StatusRekap->status }}</td>
 
-                                        <div class="modal fade" id="surat_rekomendasi{{ $item->satker_id }}">
+                                        {{-- View Surat Pengantar --}}
+                                        <div class="modal fade" id="surat_pengantar_prov{{ $item->satker_id }}">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Surat Rekomendasi
+                                                        <h4 class="modal-title">Surat Pengantar
                                                             {{ $item->satker->nama_satker }}</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
@@ -129,7 +120,7 @@
                                                     <div class="modal-body">
                                                         <div class="embed-responsive embed-responsive-16by9">
                                                             <iframe class="embed-responsive-item"
-                                                                src="{{ asset('storage/' . $item->surat_rekomendasi) }}"
+                                                                src="{{ asset('storage/' . $item->surat_pengantar_prov) }}"
                                                                 allowfullscreen></iframe>
                                                         </div>
                                                     </div>

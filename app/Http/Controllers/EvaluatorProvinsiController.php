@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
 use App\Http\Controllers\Controller;
-
+use App\Models\DeskEvaluation;
 
 class EvaluatorProvinsiController extends Controller
 {
@@ -92,6 +92,7 @@ class EvaluatorProvinsiController extends Controller
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
+            'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id)->get(),
             'rekap' => $evaluasi,
 
 

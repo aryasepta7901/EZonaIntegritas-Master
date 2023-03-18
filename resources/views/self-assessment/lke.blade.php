@@ -2,14 +2,14 @@
 
 @section('content')
     @can('pic')
-        @if ($rekap->status == 0)
+        @if ($rekap->status == 0 && substr(auth()->user()->satker_id, -1) != 0)
             {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <a href="/satker/surat/{{ $rekap->id }}" class="btn btn-primary"><i class="fa fa-save">
                         Kirim LKE</i></a>
             </div>
-        @elseif ($rekap->status == 2)
-            {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi --}}
+        @elseif ($rekap->status == 2 || substr(auth()->user()->satker_id, -1) == 0)
+            {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi atau ketika BPS Provinsi mengajukan LKE --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
                         Kirim LKE</i></button>

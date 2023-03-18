@@ -18,36 +18,16 @@
                                     {{-- Hitung jumlah nilai rincian pengungkit --}}
                                     @foreach ($value->RekapPengungkit as $item)
                                         @php
-                                            $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
-                                            $nilai_sa = 0;
+                                            $nilai_sa = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                         @endphp
-                                        @foreach ($nilaiRekap as $n)
-                                            @php
-                                                $nilai_sa += round($n->nilai_sa, 2);
-                                            @endphp
-                                        @endforeach
                                     @endforeach
                                 @endif
                                 {{-- Hitung jumlah nilai rincian hasil --}}
                                 @php
-                                    $nilaiHasil = App\Models\RekapHasil::where('satker_id', $value->satker_id)
-                                        ->where('tahun', date('Y'))
-                                        ->get();
+                                    $nilai = $nilaiHasil->where('satker_id', $value->satker_id)->sum('nilai');
                                 @endphp
-                                @if ($nilaiHasil->count() != 0)
-                                    @foreach ($nilaiHasil as $item)
-                                        @php
-                                            $nilaiHasil = $item->where('satker_id', $value->satker_id)->sum('nilai');
-                                        @endphp
-                                    @endforeach
-                                @else
-                                    {{-- Nilai Hasil Belum di Upload Oleh Admin --}}
-                                    @php
-                                        $nilaiHasil = 0;
-                                    @endphp
-                                @endif
                                 @php
-                                    $total = $nilai_sa + $nilaiHasil;
+                                    $total = $nilai_sa + $nilai;
                                 @endphp
                                 <p>Nilai ZI: {{ $total }}</p>
 
@@ -95,7 +75,7 @@
                                 Upload</label>
                         </div>
 
-                        @if ($rekap->first()->surat_rekomendasi)
+                        @if ($rekap->first()->surat_pengantar_prov)
                             <table class="table table-bordered table-striped mt-3">
                                 <thead>
                                     <tr class="text-center">
@@ -107,7 +87,7 @@
                                     <tr>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-info btn-sm m-2" data-toggle="modal"
-                                                data-target="#surat_rekomendasi"><i class="fas fa-file">
+                                                data-target="#surat_pengantar_prov"><i class="fas fa-file">
                                                 </i></button>
                                         </td>
                                         <td class="text-center">
@@ -161,42 +141,42 @@
 
     {{-- Hapus Surat --}}
     @if ($rekap->count() != 0)
-        @foreach ($rekap as $value)
-            <div class="modal fade" id="hapus">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">
-                                Hapus</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-danger">
-                                Apakah Anda
-                                Yakin untuk
-                                Menghapus
-                                Surat Rekomendasi dari {{ auth()->user()->satker->nama_satker }}</p>
-
-                        </div>
-                        <form action="/prov/surat/{{ $value->id }}" method="POST" class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <input type="hidden" value="{{ $value->id }}" name="id[]">
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Delete</button>
-                            </div>
-                        </form>
+        <div class="modal fade" id="hapus">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Hapus</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-        @endforeach
+                    <div class="modal-body">
+                        <p class="text-danger">
+                            Apakah Anda
+                            Yakin untuk
+                            Menghapus
+                            Surat Rekomendasi dari {{ auth()->user()->satker->nama_satker }}</p>
 
-        <div class="modal fade" id="surat_rekomendasi">
+                    </div>
+                    <form action="/prov/surat/{{ $value->id }}" method="POST" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        @foreach ($rekap as $value)
+                            <input type="hidden" value="{{ $value->id }}" name="id[]">
+                        @endforeach
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" id="surat_pengantar_prov">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -209,7 +189,7 @@
                     <div class="modal-body">
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item"
-                                src="{{ asset('storage/' . $rekap->first()->surat_rekomendasi) }}"
+                                src="{{ asset('storage/' . $rekap->first()->surat_pengantar_prov) }}"
                                 allowfullscreen></iframe>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RekapHasil;
 use App\Models\rekapitulasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,6 +23,9 @@ class SuratPersetujuanProvController extends Controller
             'link' => 'prov/evaluasi',
             'title' => 'Surat Persetujuan',
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7])->get(),
+            'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
+
+
         ]);
     }
 
@@ -66,12 +70,12 @@ class SuratPersetujuanProvController extends Controller
                 Rekapitulasi::updateOrCreate(
                     ['id' => $id],
                     [
-                        'surat_rekomendasi' =>  $request->file('surat')->store('surat_rekomendasi_prov'),
+                        'surat_pengantar_prov' =>  $request->file('surat')->store('surat_pengantar/prov'),
                     ]
                 );
             }
         }
-        return redirect()->back()->with('success', 'Surat Rekomendasi Berhasil di Simpan');
+        return redirect()->back()->with('success', 'Surat Pengantar Berhasil di Simpan');
     }
 
     /**
@@ -119,18 +123,18 @@ class SuratPersetujuanProvController extends Controller
         $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
 
 
-        if ($rekap->surat_rekomendasi) {
+        if ($rekap->surat_pengantar_prov) {
             // jika ada file lama maka hapus
-            Storage::delete($rekap->surat_rekomendasi);
+            Storage::delete($rekap->surat_pengantar_prov);
         }
         foreach ($request->id as $key => $id) {
             Rekapitulasi::updateOrCreate(
                 ['id' => $id],
                 [
-                    'surat_rekomendasi' =>  '',
+                    'surat_pengantar_prov' =>  '',
                 ]
             );
         }
-        return redirect()->back()->with('success', 'Surat Rekomendai Berhasil di hapus');
+        return redirect()->back()->with('success', 'Surat Pengantar Berhasil di hapus');
     }
 }
