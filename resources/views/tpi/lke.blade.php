@@ -244,28 +244,28 @@
                         $nilai_dl += round($n->nilai_dl, 2);
                     @endphp
                 @endforeach
-                @php
+                {{-- @php
                     $nilai_sa += $nilaiHasil;
-                @endphp
+                @endphp --}}
                 <div class="row">
                     {{-- Self-Assessment --}}
                     <div class="col-lg-6">
                         <span class="info-box-number text-center text-muted mb-3">{{ $nilai_sa }}</span>
-                        <span class="info-box-text text-center text-muted mb-0">Nilai Zona Integritas</span>
+                        <span class="info-box-text text-center text-muted mb-0">Nilai Self Assessment</span>
                     </div>
                     {{-- Desk-Evaluation --}}
                     <div class="col-lg-6">
                         @if (auth()->user()->level_id == 'AT')
                             @php
-                                $total = $nilai_at + $nilaiHasil;
+                                $total = $nilai_at;
                             @endphp
                         @elseif(auth()->user()->level_id == 'KT')
                             @php
-                                $total = $nilai_kt + $nilaiHasil;
+                                $total = $nilai_kt;
                             @endphp
                         @elseif(auth()->user()->level_id == 'DL')
                             @php
-                                $total = $nilai_dl + $nilaiHasil;
+                                $total = $nilai_dl;
                             @endphp
                         @endif
                         <span class="info-box-number text-center text-muted mb-3">{{ $total }}</span>
@@ -411,6 +411,7 @@
                                                                 @php
                                                                     $evaluation = App\Models\DeskEvaluation::where('rekapitulasi_id', $rekap->id);
                                                                 @endphp
+
                                                                 @if (auth()->user()->level_id == 'AT')
                                                                     @php
                                                                         $nilai = $nilai->nilai_at;

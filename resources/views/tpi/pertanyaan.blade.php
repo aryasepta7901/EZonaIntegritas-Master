@@ -65,7 +65,7 @@
                                                     </div>
                                                 </th>
                                                 @if ($rekap->status == 4 || $rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
-                                                    @if ($rekap->surat_rekomendasi != '')
+                                                    @if ($rekap->surat_pengantar_prov != '')
                                                         <th>
                                                             <div class="d-flex justify-content-between">
                                                                 Desk-Evaluation
@@ -385,11 +385,19 @@
                                                                                         <p for="input">
                                                                                             {{ $item->rincian }}
                                                                                         </p>
+                                                                                        @php
+                                                                                            $desk = $deskEvaluation->InputField->where('opsi_id', $item->id)->first();
+                                                                                        @endphp
+                                                                                        <input type="hidden"
+                                                                                            value="{{ $item->id }}"
+                                                                                            name="opsi{{ $loop->index }}">
                                                                                         <input type="number"
-                                                                                            min="0"
+                                                                                            min="0" required
                                                                                             class="form-control"
-                                                                                            name="jawaban_at"
-                                                                                            @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif>
+                                                                                            name="input[]"
+                                                                                            @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
+                                                                                            @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif
+                                                                                            value="{{ $desk->input_at }}">
                                                                                     @endif
                                                                                 @endforeach
                                                                             </div>
@@ -424,7 +432,8 @@
                                                                         <form action="/tpi/evaluasi" method="post">
                                                                             @csrf
                                                                             <div class="form-group">
-                                                                                <label for="anggota">Anggota Tim</label>
+                                                                                <label for="anggota">Anggota
+                                                                                    Tim</label>
                                                                                 <input type="hidden"
                                                                                     value="{{ $rekap->satker_id }}"
                                                                                     name="satker_id">
@@ -458,10 +467,14 @@
                                                                                         <p for="input">
                                                                                             {{ $item->rincian }}
                                                                                         </p>
+                                                                                        <input type="hidden"
+                                                                                            value="{{ $item->id }}"
+                                                                                            name="opsi{{ $loop->index }}">
                                                                                         <input type="number"
-                                                                                            min="0"
+                                                                                            min="0" required
                                                                                             class="form-control"
-                                                                                            name="jawaban_at"
+                                                                                            name="input[]"
+                                                                                            @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
                                                                                             @if ($pengawasan->status != 0 || auth()->user()->level_id != 'AT') disabled @endif>
                                                                                     @endif
                                                                                 @endforeach

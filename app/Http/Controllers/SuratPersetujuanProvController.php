@@ -63,14 +63,16 @@ class SuratPersetujuanProvController extends Controller
             $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
             if ($rekap) {
                 // jika ada file lama maka hapus
-                Storage::delete($rekap->surat_rekomendasi);
+                Storage::delete($rekap->surat_pengantar_prov);
             }
+            $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
+
             foreach ($request->id as $key => $id) {
 
                 Rekapitulasi::updateOrCreate(
                     ['id' => $id],
                     [
-                        'surat_pengantar_prov' =>  $request->file('surat')->store('surat_pengantar/prov'),
+                        'surat_pengantar_prov' =>  $request->file('surat')->storeAs('surat_pengantar/prov/' . date('Y') . '/', $customName),
                     ]
                 );
             }

@@ -38,7 +38,7 @@
                                                 $nilai_sa = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                             @endphp
                                         @endforeach
-                                        {{ $nilai_sa }}
+                                        {{ round($nilai_sa, 2) }}
                                     @endif
                                 </td>
                                 <td>

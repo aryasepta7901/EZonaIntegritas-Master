@@ -155,7 +155,7 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $dokumen->store('dokumen/' . $satker_id . '/' . $pertanyaan_id),
+                        'file' =>  $dokumen->store('dokumen/' . date('Y') . '/' . $satker_id . '/' . $pertanyaan_id),
                         'name' => pathinfo($dokumen->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->input('id' . $key),
                         'selfassessment_id' => $data['id'],
@@ -179,7 +179,7 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $file->store('dokumen/' . $satker_id . '/' . $pertanyaan_id),
+                        'file' =>  $file->store('dokumen/' . date('Y') . '/' . $satker_id . '/' . $pertanyaan_id),
 
                         'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->pertanyaan_id,
@@ -338,7 +338,7 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $dokumen->store('dokumen/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
+                        'file' =>  $dokumen->store('dokumen/' . date('Y') . '/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
                         'name' => pathinfo($dokumen->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->input('id' . $key),
                         'selfassessment_id' => $selfAssessment->id,
@@ -359,7 +359,7 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $fileUpdate->store('dokumen/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
+                        'file' =>  $fileUpdate->store('dokumen/' . date('Y') . '/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
                         'name' => pathinfo($fileUpdate->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->pertanyaan_id,
                         'selfassessment_id' => $selfAssessment->id,
@@ -384,7 +384,7 @@ class SelfAssessmentController extends Controller
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
-                        'file' =>  $file->store('dokumen/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
+                        'file' =>  $file->store('dokumen/' . date('Y') . '/' . $selfAssessment->satker_id . '/' . $selfAssessment->pertanyaan_id),
                         'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                         'dokumenlke_id' => $request->pertanyaan_id,
                         'selfassessment_id' => $selfAssessment->id,

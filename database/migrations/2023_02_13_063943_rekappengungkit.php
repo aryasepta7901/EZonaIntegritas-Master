@@ -18,7 +18,7 @@ class RekapPengungkit extends Migration
             $table->double('nilai_sa', 6, 3);
             $table->double('nilai_at', 6, 3)->nullable();
             $table->double('nilai_kt', 6, 3)->nullable();
-            $table->double('nilai_pt', 6, 3)->nullable();
+            $table->double('nilai_dl', 6, 3)->nullable();
             $table->char('rekapitulasi_id', 12);
             $table->char('pilar_id', 3);
             $table->timestamps();

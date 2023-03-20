@@ -146,6 +146,8 @@
                                                                     </div>
                                                                     {{-- File Utama --}}
                                                                     <label for="catatan">Upload Dokumen</label>
+                                                                    <small class="text-danger">Dokumen maksimal 2MB, dengan
+                                                                        extensi *PDF</small>
                                                                     <table class="table table-bordered table-striped">
                                                                         <thead>
                                                                             <tr class="text-center">
@@ -284,115 +286,124 @@
                                                                             Dokumen Tambahan</label>
 
                                                                     </div>
-                                                                    <table class="table table-bordered table-striped mt-3">
-                                                                        <thead>
-                                                                            <tr class="text-center">
-                                                                                <th>No</th>
-                                                                                <th>Nama Dokumen</th>
-                                                                                <th>File</th>
-                                                                                <th>Upload</th>
-                                                                                {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri atau revisi dari provinsi dan TPI: --}}
-                                                                                @can('pic')
-                                                                                    @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
-                                                                                        <th>Delete</th>
-                                                                                    @endif
-                                                                                @endcan
-
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            @foreach ($value->file->where('selfassessment_id', $selfAssessment->id) as $item)
-                                                                                <tr>
-                                                                                    <td>{{ $loop->iteration }}</td>
-                                                                                    <td style="min-width: 200px">
-                                                                                        {{ $item->name }}
-                                                                                        <input type="hidden"
-                                                                                            name="upload_id{{ $loop->index }}"
-                                                                                            value="{{ $item->id }}">
-                                                                                    </td>
-                                                                                    <td class="text-center">
-                                                                                        <button type="button"
-                                                                                            class="btn btn-info btn-sm"
-                                                                                            data-toggle="modal"
-                                                                                            data-target="#view{{ $item->id }}"><i
-                                                                                                class="fas fa-file"></i></button>
-                                                                                        {{-- Modal View File Tambahan --}}
-                                                                                        <div class="modal fade"
-                                                                                            id="view{{ $item->id }}">
-                                                                                            <div
-                                                                                                class="modal-dialog modal-lg">
-                                                                                                <div class="modal-content">
-                                                                                                    <div
-                                                                                                        class="modal-header">
-                                                                                                        <h4
-                                                                                                            class="modal-title">
-                                                                                                            {{ $item->name }}
-                                                                                                        </h4>
-                                                                                                        <button
-                                                                                                            type="button"
-                                                                                                            class="close"
-                                                                                                            data-dismiss="modal"
-                                                                                                            aria-label="Close">
-                                                                                                            <span
-                                                                                                                aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div
-                                                                                                        class="modal-body">
-                                                                                                        <div
-                                                                                                            class="embed-responsive embed-responsive-16by9">
-                                                                                                            <iframe
-                                                                                                                class="embed-responsive-item"
-                                                                                                                src="{{ asset('storage/' . $item->file) }}"
-                                                                                                                allowfullscreen></iframe>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div
-                                                                                                        class="modal-footer justify-content-between">
-                                                                                                        <button
-                                                                                                            type="button"
-                                                                                                            class="btn btn-default"
-                                                                                                            data-dismiss="modal">Close</button>
-
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <!-- /.modal-content -->
-                                                                                            </div>
-                                                                                            <!-- /.modal-dialog -->
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <div class="custom-file">
-                                                                                            <input type="file"
-                                                                                                class="custom-file-input"
-                                                                                                id="customFile"
-                                                                                                name="fileUpdate[]"
-                                                                                                accept="application/pdf">
-                                                                                            <label
-                                                                                                class="custom-file-label"
-                                                                                                for="customFile">Update
-                                                                                                File</label>
-
-                                                                                        </div>
-                                                                                    </td>
+                                                                    @php
+                                                                        $file = $value->file->where('selfassessment_id', $selfAssessment->id);
+                                                                    @endphp
+                                                                    @if ($file->count() != 0)
+                                                                        {{-- Jika ada file tambahan --}}
+                                                                        <table
+                                                                            class="table table-bordered table-striped mt-3">
+                                                                            <thead>
+                                                                                <tr class="text-center">
+                                                                                    <th>No</th>
+                                                                                    <th>Nama Dokumen</th>
+                                                                                    <th>File</th>
+                                                                                    <th>Upload</th>
                                                                                     {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri atau revisi dari provinsi dan TPI: --}}
                                                                                     @can('pic')
                                                                                         @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
-                                                                                            <td class="text-center">
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-sm btn-danger"
-                                                                                                    data-toggle="modal"
-                                                                                                    data-target="#hapus{{ $item->id }}"><i
-                                                                                                        class="fa fa-trash"></i></button>
-                                                                                            </td>
+                                                                                            <th>Delete</th>
                                                                                         @endif
                                                                                     @endcan
 
-
                                                                                 </tr>
-                                                                            @endforeach
-                                                                        </tbody>
-                                                                    </table>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach ($file as $item)
+                                                                                    <tr>
+                                                                                        <td>{{ $loop->iteration }}</td>
+                                                                                        <td style="min-width: 200px">
+                                                                                            {{ $item->name }}
+                                                                                            <input type="hidden"
+                                                                                                name="upload_id{{ $loop->index }}"
+                                                                                                value="{{ $item->id }}">
+                                                                                        </td>
+                                                                                        <td class="text-center">
+                                                                                            <button type="button"
+                                                                                                class="btn btn-info btn-sm"
+                                                                                                data-toggle="modal"
+                                                                                                data-target="#view{{ $item->id }}"><i
+                                                                                                    class="fas fa-file"></i></button>
+                                                                                            {{-- Modal View File Tambahan --}}
+                                                                                            <div class="modal fade"
+                                                                                                id="view{{ $item->id }}">
+                                                                                                <div
+                                                                                                    class="modal-dialog modal-lg">
+                                                                                                    <div
+                                                                                                        class="modal-content">
+                                                                                                        <div
+                                                                                                            class="modal-header">
+                                                                                                            <h4
+                                                                                                                class="modal-title">
+                                                                                                                {{ $item->name }}
+                                                                                                            </h4>
+                                                                                                            <button
+                                                                                                                type="button"
+                                                                                                                class="close"
+                                                                                                                data-dismiss="modal"
+                                                                                                                aria-label="Close">
+                                                                                                                <span
+                                                                                                                    aria-hidden="true">&times;</span>
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="modal-body">
+                                                                                                            <div
+                                                                                                                class="embed-responsive embed-responsive-16by9">
+                                                                                                                <iframe
+                                                                                                                    class="embed-responsive-item"
+                                                                                                                    src="{{ asset('storage/' . $item->file) }}"
+                                                                                                                    allowfullscreen></iframe>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="modal-footer justify-content-between">
+                                                                                                            <button
+                                                                                                                type="button"
+                                                                                                                class="btn btn-default"
+                                                                                                                data-dismiss="modal">Close</button>
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <!-- /.modal-content -->
+                                                                                                </div>
+                                                                                                <!-- /.modal-dialog -->
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div class="custom-file">
+                                                                                                <input type="file"
+                                                                                                    class="custom-file-input"
+                                                                                                    id="customFile"
+                                                                                                    name="fileUpdate[]"
+                                                                                                    accept="application/pdf">
+                                                                                                <label
+                                                                                                    class="custom-file-label"
+                                                                                                    for="customFile">Update
+                                                                                                    File</label>
+
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri atau revisi dari provinsi dan TPI: --}}
+                                                                                        @can('pic')
+                                                                                            @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
+                                                                                                <td class="text-center">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-sm btn-danger"
+                                                                                                        data-toggle="modal"
+                                                                                                        data-target="#hapus{{ $item->id }}"><i
+                                                                                                            class="fa fa-trash"></i></button>
+                                                                                                </td>
+                                                                                            @endif
+                                                                                        @endcan
+
+
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            </tbody>
+                                                                        </table>
+                                                                    @endif
+
                                                                     {{-- File Tambahan --}}
                                                                 </div>
                                                                 <hr>
@@ -552,6 +563,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <label for="catatan">Upload Dokumen</label>
+                                                                <small class="text-danger">Dokumen maksimal 2MB, dengan
+                                                                    extensi *PDF</small>
                                                                 <table class="table table-bordered table-striped">
                                                                     <thead>
                                                                         <tr class="text-center">
@@ -624,7 +637,7 @@
                                                             {{-- Pengendali Teknis --}}
                                                             @if ($deskEvaluation != null)
                                                                 <div class="card-body"
-                                                                    @if ($deskEvaluation->nilai_dl == 0) style="background-color: red" @endif>
+                                                                    @if ($deskEvaluation->nilai_dl === 0) style="background-color: red" @endif>
                                                                     <form action="/tpi/evaluasi/{{ $deskEvaluation->id }}"
                                                                         method="post">
                                                                         @method('put')
@@ -678,7 +691,9 @@
                                                                     <li>{{ $item->dokumen }}</li>
                                                                 @endforeach
                                                             </ul>
-                                                            {!! $value->info !!}
+                                                            Link :
+                                                            <a target="__self"
+                                                                href="{{ $value->info }}">{{ $value->info }}</a>
                                                         </td>
                                                     @else
                                                         <td style="min-width: 150px;">
@@ -688,7 +703,9 @@
                                                                     <li>{{ $item->dokumen }}</li>
                                                                 @endforeach
                                                             </ul>
-                                                            {!! $value->info !!}
+                                                            Link :
+                                                            <a target="__self"
+                                                                href="{{ $value->info }}">{{ $value->info }}</a>
 
                                                         </td>
                                                     @endif

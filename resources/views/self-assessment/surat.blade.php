@@ -10,10 +10,11 @@
                     <li class="list-group-item">
                         <b>{{ $rekap->satker->nama_satker }}</b> <a class="float-right">{{ $rekap->predikat }}</a>
 
-                        @php
+                        {{-- Sepertinya cukup nilai pengungkit saja yang ditampilkan --}}
+                        {{-- @php 
                             $total = round($nilaiPengungkit->sum('nilai_sa'), 2) + $nilaiHasil;
-                        @endphp
-                        <p>Nilai ZI: {{ $total }}</p>
+                        @endphp --}}
+                        <p>Nilai Self Assessment: {{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}</p>
                     </li>
                 </ul>
             </div>

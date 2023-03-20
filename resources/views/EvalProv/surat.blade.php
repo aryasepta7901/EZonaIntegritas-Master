@@ -60,7 +60,7 @@
             @endif
             <div class="card">
                 <div class="card-header">
-                    Upload Surat Rekomendasi
+                    Upload Surat Pengantar
                 </div>
                 <div class="card-body">
                     <form action="/prov/surat" method="POST" enctype="multipart/form-data">
@@ -68,6 +68,7 @@
                         @foreach ($rekap as $value)
                             <input type="hidden" value="{{ $value->id }}" name="id[]">
                         @endforeach
+                        <input type="hidden" name="satker_id" value="{{ auth()->user()->satker_id }}">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="upload" name="surat"
                                 accept="application/pdf">
@@ -156,7 +157,7 @@
                             Apakah Anda
                             Yakin untuk
                             Menghapus
-                            Surat Rekomendasi dari {{ auth()->user()->satker->nama_satker }}</p>
+                            Surat Pengantar dari {{ auth()->user()->satker->nama_satker }}</p>
 
                     </div>
                     <form action="/prov/surat/{{ $value->id }}" method="POST" class="d-inline">
@@ -180,7 +181,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Surat Rekomendasi
+                        <h4 class="modal-title">Surat Pengantar
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
