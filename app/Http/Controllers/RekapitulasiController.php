@@ -65,15 +65,16 @@ class RekapitulasiController extends Controller
                 // jika ada file lama maka hapus
                 Storage::delete($rekap->surat_pengantar_kabkota);
             }
+            $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
             Rekapitulasi::updateOrCreate(
                 ['id' => $request->id],
                 [
-                    'surat_pengantar_kabkota' =>  $request->file('surat')->store('surat_pengantar/kabkota'),
+                    'surat_pengantar_kabkota' =>  $request->file('surat')->storeAs('surat_pengantar/kabkota/' . date('Y') . '/', $customName),
                     'status' => 1,
                 ]
             );
         }
-        return redirect('lke')->with('success', 'Surat Rekomendasi Berhasil di Simpan');
+        return redirect('satker/lke')->with('success', 'Surat Rekomendasi Berhasil di Simpan');
     }
 
     /**
@@ -87,7 +88,7 @@ class RekapitulasiController extends Controller
         $this->authorize('pic');
         return view('self-assessment.rekap.rekap', [
             'master' => 'Rekapitulasi',
-            'link' => 'lke',
+            'link' => 'satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
             'rekap' => $rekapitulasi,
             'pertanyaan' => Pertanyaan::count(),
@@ -108,7 +109,7 @@ class RekapitulasiController extends Controller
         $this->authorize('pic');
         return view('self-assessment.rekap.rekap2', [
             'master' => 'Rekapitulasi',
-            'link' => 'lke',
+            'link' => 'satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
             'rekap' => $rekapitulasi,
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
@@ -123,7 +124,7 @@ class RekapitulasiController extends Controller
         $this->authorize('pic');
         return view('self-assessment.rekap.test', [
             'master' => 'Rekapitulasi',
-            'link' => 'lke',
+            'link' => 'satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
             'rekap' => $rekapitulasi,
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
@@ -139,7 +140,7 @@ class RekapitulasiController extends Controller
 
         return view('self-assessment.surat', [
             'master' => 'lke',
-            'link' => 'lke/' . $rekapitulasi->id,
+            'link' => 'satker/lke/' . $rekapitulasi->id,
             'title' => 'Surat Pengantar BPS Kabupaten/Kota',
             'rekap' => $rekapitulasi,
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),

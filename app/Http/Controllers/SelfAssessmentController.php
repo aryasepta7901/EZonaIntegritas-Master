@@ -43,6 +43,19 @@ class SelfAssessmentController extends Controller
     {
         // Field dengan input value
         if ($request->input) {
+            $request->validate(
+                [
+                    'catatan'  => 'required',
+                    'dokumen.*' => 'mimes:pdf|max:2048',
+                    'fileCreate.*' => 'mimes:pdf|max:2048',
+
+                ],
+                [
+                    'catatan.required' => 'Catatan Wajib di Isi,',
+                    'mimes' => 'Dokumen hanya boleh format :values,',
+                    'max' => 'Dokumen hanya boleh Berukuran :max,'
+                ]
+            );
 
             foreach ($request->input as $key => $input) {
                 $total = $key + 1;
@@ -52,6 +65,9 @@ class SelfAssessmentController extends Controller
                 $nilai1 = $request->input[0];
                 $nilai2 = $request->input[1];
                 $nilai = $nilai1 == 0 ? 0 : ($nilai2 / $nilai1);
+                if ($nilai > 1) {
+                    $nilai = 1;
+                }
             } elseif ($total == 5) {
                 $nilai1 = $request->input[1];
                 $nilai2 = $request->input[2];
@@ -69,24 +85,24 @@ class SelfAssessmentController extends Controller
                 $nilai0 = $nilai1 + $nilai2;
                 $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
             }
+        } else {
+            // validasi
+            $request->validate(
+                [
+                    'opsi_id' => 'required',
+                    'catatan'  => 'required',
+                    'dokumen.*' => 'mimes:pdf|max:2048',
+                    'fileCreate.*' => 'mimes:pdf|max:2048',
+
+                ],
+                [
+                    'opsi_id.required' => 'Silahkan Pilih Jawaban,',
+                    'catatan.required' => 'Catatan Wajib di Isi,',
+                    'mimes' => 'Dokumen hanya boleh format :values,',
+                    'max' => 'Dokumen hanya boleh Berukuran :max,'
+                ]
+            );
         }
-        // validasi
-        $request->validate(
-            [
-
-                // 'opsi_id' => 'required',
-                'catatan'  => 'required',
-                'dokumen.*' => 'mimes:pdf|max:2048',
-                'fileCreate.*' => 'mimes:pdf|max:2048',
-
-            ],
-            [
-                // 'opsi_id.required' => 'Silahkan Pilih Jawaban,',
-                'catatan.required' => 'Catatan Wajib di Isi,',
-                'mimes' => 'Dokumen hanya boleh format :values,',
-                'max' => 'Dokumen hanya boleh Berukuran :max,'
-            ]
-        );
 
         // SelfAssessment
 

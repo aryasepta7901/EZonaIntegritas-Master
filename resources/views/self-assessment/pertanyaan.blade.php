@@ -232,7 +232,7 @@
                                                                                             <small>No Data</small>
                                                                                         @endif
                                                                                     </td>
-                                                                                    <td>
+                                                                                    <td style="min-width: 250px">
                                                                                         <div class="custom-file">
                                                                                             <input type="file"
                                                                                                 class="custom-file-input"
@@ -534,7 +534,8 @@
                                                                                     value="{{ $item->id }}"
                                                                                     name="opsi{{ $loop->index }}">
                                                                                 <input type="number" min="0"
-                                                                                    class="form-control" name="input[]"
+                                                                                    required class="form-control"
+                                                                                    name="input[]"
                                                                                     @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif>
                                                                             @endif
                                                                         @endforeach
@@ -571,7 +572,7 @@
                                                                                         value="{{ $item->id }}">
                                                                                 </td>
 
-                                                                                <td>
+                                                                                <td style="min-width: 250px">
                                                                                     <div class="custom-file">
                                                                                         <input type="file"
                                                                                             class="custom-file-input"
@@ -713,7 +714,7 @@
         {{-- Jika yang akses  PIC --}}
 
         @can('pic')
-            <a href="/lke/{{ $rekap->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+            <a href="/satker/lke/{{ $rekap->id }}" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
                 Kembali</a>
         @endcan
 

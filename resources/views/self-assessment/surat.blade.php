@@ -41,6 +41,7 @@
                 <form action="/satker/rekapitulasi" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" value="{{ $rekap->id }}" name="id">
+                    <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="upload" name="surat"
                             accept="application/pdf">

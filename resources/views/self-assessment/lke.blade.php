@@ -8,7 +8,13 @@
                 <a href="/satker/surat/{{ $rekap->id }}" class="btn btn-primary"><i class="fa fa-save">
                         Kirim LKE</i></a>
             </div>
-        @elseif ($rekap->status == 2 || substr(auth()->user()->satker_id, -1) == 0)
+        @elseif($rekap->status == 0 && substr(auth()->user()->satker_id, -1) == 0)
+            {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi atau ketika BPS Provinsi mengajukan LKE --}}
+            <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
+                        Kirim LKE</i></button>
+            </div>
+        @elseif ($rekap->status == 2)
             {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi atau ketika BPS Provinsi mengajukan LKE --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
@@ -44,31 +50,31 @@
                     $nilai_sa = $nilaiPengungkit->sum('nilai_sa');
                     $nilai_dl = $nilaiPengungkit->sum('nilai_dl');
                 @endphp
-                {{-- Rincian Hasil --}}
-                @php
-                    $nilai_sa += $nilaiHasil->sum('nilai');
+                {{-- Rincian Hasil -> sepertinya ini tidak digunakan --}}
+                {{-- @php
+                    $total_sa += $nilaiHasil->sum('nilai');
                     $nilai_dl += $nilaiHasil->sum('nilai');
-                @endphp
+                @endphp --}}
                 <div class="row">
                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
+                        {{-- Jika sudah ada penilaian dari TPI --}}
                         @php
                             $lg = 'col-lg-6';
                         @endphp
-                    @else
-                        @php
-                            $lg = 'col-lg-12';
-                        @endphp
-                    @endif
-                    {{-- Self-Assessment --}}
-                    <div class="{{ $lg }}">
-                        <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_sa, 2) }}</span>
-                        <span class="info-box-text text-center text-muted mb-0">Nilai Zona Integritas</span>
-                    </div>
-                    @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                         {{-- Desk-Evaluation --}}
                         <div class="col-lg-6">
                             <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_dl, 2) }}</span>
                             <span class="info-box-text text-center text-muted mb-0">Nilai Desk-Evaluation </span>
+                        </div>
+                    @else
+                        {{-- Jika belum ada penilaian dari TPI --}}
+                        @php
+                            $lg = 'col-lg-12';
+                        @endphp
+                        {{-- Self-Assessment --}}
+                        <div class="{{ $lg }}">
+                            <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_sa, 2) }}</span>
+                            <span class="info-box-text text-center text-muted mb-0">Nilai Zona Integritas</span>
                         </div>
                     @endif
                 </div>
@@ -145,7 +151,7 @@
                                     {{-- Jika PIC sedang self --}}
                                     @can('pic')
                                         @php
-                                            $link = '/lke';
+                                            $link = '/satker/lke';
                                         @endphp
                                     @endcan
                                     <a href="{{ $link }}/{{ $rekap->id }}/{{ $value->id }}">
@@ -165,7 +171,6 @@
                                                 <span class="info-box-text text-bold mb-3 text-center">
                                                     {{ $value->pilar }}
                                                 </span>
-
                                                 @php
                                                     // Ambil Nilai Pengungkit
                                                     $nilai = $value->RekapPengungkit->where('rekapitulasi_id', $rekap->id)->first();
@@ -292,7 +297,7 @@
     @endcan
     {{-- Jika yang akses  PIC --}}
     @can('pic')
-        <a href="/lke" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
+        <a href="/satker/lke" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
             Kembali</a>
     @endcan
     {{-- PIC Satker --}}
@@ -307,7 +312,7 @@
                     </button>
                 </div>
 
-                <form method="post" action="/lke/{{ $rekap->id }}">
+                <form method="post" action="/satker/lke/{{ $rekap->id }}">
                     @method('put')
                     @csrf
                     <div class="modal-body">
@@ -340,7 +345,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="/lke/{{ $rekap->id }}">
+                <form method="post" action="/satker/lke/{{ $rekap->id }}">
                     @method('put')
                     @csrf
                     <div class="modal-body">

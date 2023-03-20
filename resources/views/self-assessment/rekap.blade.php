@@ -49,16 +49,10 @@
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
                                         @foreach ($value->RekapPengungkit as $item)
                                             @php
-                                                $nilaiRekap = $item->where('rekapitulasi_id', $value->id)->get();
-                                                $nilai_sa = 0;
+                                                $nilai_sa = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                             @endphp
                                         @endforeach
-                                        @foreach ($nilaiRekap as $r)
-                                            @php
-                                                $nilai_sa += round($r->nilai_sa, 2);
-                                            @endphp
-                                        @endforeach
-                                        {{ $nilai_sa }}
+                                        {{ round($nilai_sa, 2) }}
                                     @else
                                         {{-- Jika data rekappilar belum ada didatabase --}}
                                         0
@@ -76,8 +70,8 @@
                                     <td class="text-center">-</td>
                                 @endif
                                 <td class="text-center">
-                                    <a type="button" href="/lke/{{ $value->id }}" class="btn btn-sm btn-success"><i
-                                            class="fa fa-file"></i> LKE</a>
+                                    <a type="button" href="/satker/lke/{{ $value->id }}"
+                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                 </td>
                                 <td class="text-center">
                                     <a type="button" href="/satker/rekapitulasi/{{ $value->id }}"
@@ -111,7 +105,7 @@
                 </div>
                 {{-- Cek apakah persyaratan sudah diisi oleh admin atau tidak --}}
                 @if ($persyaratan)
-                    <form method="post" action="/lke">
+                    <form method="post" action="/satker/lke">
                         @csrf
                         <input type="hidden" name="satker_id" value="{{ auth()->user()->satker_id }}">
                         @if ($persyaratan->wbbm == 1)

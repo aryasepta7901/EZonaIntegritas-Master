@@ -54,13 +54,6 @@
                                             data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
                                                 class="fas fa-file">
                                             </i> Kab/Kota</button>
-                                        <button type="button" class="btn btn-info btn-sm mt-2 " data-toggle="modal"
-                                            data-target="#surat_pengantar_prov{{ $value->id }}"><i class="fas fa-file">
-                                            </i> Provinsi</button>
-                                    @elseif($value->surat_pengantar_prov)
-                                        <button type="button" class="btn btn-info btn-sm " data-toggle="modal"
-                                            data-target="#surat_pengantar_prov{{ $value->id }}"><i class="fas fa-file">
-                                            </i> Provinsi</button>
                                     @endif
                                 </td>
                                 <td class="text-center">

@@ -52,7 +52,7 @@
                 {{-- PIC Satker --}}
                 @can('pic')
                     <li class="nav-item">
-                        <a href="/lke" class="nav-link {{ Request::is('lke*') ? 'active' : '' }}">
+                        <a href="/satker/lke" class="nav-link {{ Request::is('satker*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Self Assessment LKE

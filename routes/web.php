@@ -71,8 +71,8 @@ Route::post('login', [GoogleController::class, 'login'])->name('login');
 Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
 
 // LKE
-Route::resource('/lke', LKEController::class)->middleware('auth');
-Route::get('lke/{lke}/{pilar}', [LKEController::class, 'show2'])->name('lke.show2')->middleware('auth');
+Route::resource('satker/lke', LKEController::class)->middleware('auth');
+Route::get('satker/lke/{lke}/{pilar}', [LKEController::class, 'show2'])->name('lke.show2')->middleware('auth');
 Route::resource('satker/rekapitulasi', RekapitulasiController::class)->middleware('auth');
 Route::get('satker/rekap2/{rekapitulasi}', [RekapitulasiController::class, 'rekap2'])->middleware('auth');
 Route::get('satker/rekap3/{rekapitulasi}', [RekapitulasiController::class, 'rekap3'])->middleware('auth');

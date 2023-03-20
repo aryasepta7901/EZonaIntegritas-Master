@@ -74,7 +74,7 @@ class LKEController extends Controller
         $this->authorize('pic');
         return view('self-assessment.lke', [
             'master' => 'Rekapitulasi',
-            'link' => 'lke',
+            'link' => 'satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $lke->predikat,
             'rekap' => $lke,
             'pertanyaan' => Pertanyaan::count(),
@@ -95,7 +95,7 @@ class LKEController extends Controller
 
         return view('self-assessment.pertanyaan', [
             'master' => 'LKE ',
-            'link' => 'lke/' . $lke->id,
+            'link' => 'satker/lke/' . $lke->id,
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
@@ -131,7 +131,7 @@ class LKEController extends Controller
         $id = $request->id;
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
 
-        return redirect('/lke')->with('success', 'LKE Berhasil Di Kirim');
+        return redirect('/satker/lke')->with('success', 'LKE Berhasil Di Kirim');
     }
 
     /**
