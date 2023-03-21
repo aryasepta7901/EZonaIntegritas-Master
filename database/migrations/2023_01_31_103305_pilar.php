@@ -15,7 +15,7 @@ class Pilar extends Migration
     {
         Schema::create('pilar', function (Blueprint $table) {
             $table->char('id', 3)->primary();
-            $table->string('pilar', 100);
+            $table->string('pilar');
             $table->double('bobot', 6, 2);
             $table->double('min_wbk', 6, 2);
             $table->double('min_wbbm', 6, 2);

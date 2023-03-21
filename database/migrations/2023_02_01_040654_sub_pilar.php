@@ -15,7 +15,7 @@ class SubPilar extends Migration
     {
         Schema::create('subpilar', function (Blueprint $table) {
             $table->char('id', 4)->primary();
-            $table->string('subPilar', 100);
+            $table->string('subPilar');
             $table->double('bobot', 6, 2);
             $table->char('pilar_id', 3);
         });

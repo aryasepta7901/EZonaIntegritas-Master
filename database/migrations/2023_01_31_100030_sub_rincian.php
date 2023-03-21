@@ -15,7 +15,7 @@ class SubRincian extends Migration
     {
         Schema::create('subRincian', function (Blueprint $table) {
             $table->char('id', 2)->primary();
-            $table->string('subRincian', 100);
+            $table->string('subRincian');
             $table->double('bobot', 6, 2);
             $table->char('rincian_id', 1);
         });

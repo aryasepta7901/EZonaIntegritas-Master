@@ -14,13 +14,13 @@ class SelfAssessment extends Migration
     public function up()
     {
         Schema::create('self_assessment', function (Blueprint $table) {
-            $table->char('id', 15)->primary();
+            $table->char('id', 15)->primary(); //tahun.satker_id.pertanyaan_id
             $table->year('tahun');
             $table->char('opsi_id', 6);
             $table->text('catatan');
             $table->double('nilai', 6, 2);
             $table->char('rekapitulasi_id', 12);
-            $table->char('satker_id', 4);
+            $table->integer('satker_id', 4);
             $table->char('pertanyaan_id', 5);
             $table->timestamps();
             $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');

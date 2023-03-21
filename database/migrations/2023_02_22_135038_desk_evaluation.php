@@ -14,7 +14,7 @@ class DeskEvaluation extends Migration
     public function up()
     {
         Schema::create('desk_evaluation', function (Blueprint $table) {
-            $table->char('id', 15)->primary();
+            $table->char('id', 15)->primary(); // one to one id_selfassessment
             $table->char('rekapitulasi_id', 12);
 
             // Anggota Tim
@@ -29,7 +29,7 @@ class DeskEvaluation extends Migration
             $table->char('jawaban_dl', 6)->nullable();
             $table->text('catatan_dl')->nullable();
             $table->double('nilai_dl', 6, 2)->nullable();
-            $table->char('pengawasan_id');
+            $table->bigInteger('pengawasan_id', 19);
             $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
             $table->timestamps();
         });

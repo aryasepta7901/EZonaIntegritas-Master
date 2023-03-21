@@ -14,12 +14,11 @@ class InputField extends Migration
     public function up()
     {
         Schema::create('inputField', function (Blueprint $table) {
-            $table->char('id', 20)->primary();
-            $table->char('input_sa', 3)->nullable();
-            $table->char('input_kt', 3)->nullable();
-            $table->char('input_dl', 3)->nullable();
+            $table->char('id', 20)->primary(); //opsi_id.selfAssessment_id
+            $table->double('input_sa', 6, 2)->nullable();
+            $table->double('input_kt', 6, 2)->nullable();
+            $table->double('input_dl', 6, 2)->nullable();
             $table->char('opsi_id', 6);
-
             $table->char('selfassessment_id', 15);
             $table->timestamps();
             $table->foreign('selfassessment_id')->references('id')->on('self_assessment')->onDelete('cascade');

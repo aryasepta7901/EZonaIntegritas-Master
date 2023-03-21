@@ -14,10 +14,10 @@ class PengawasanSatker extends Migration
     public function up()
     {
         Schema::create('pengawasan_satker', function (Blueprint $table) {
-            $table->id()->unique();
-            $table->string('satker_id', 4);
-            $table->string('tpi_id', 15);
-            $table->string('anggota_id', 15);
+            $table->id()->unique(); //anggota_id.satker_id
+            $table->integer('satker_id', 4);
+            $table->char('tpi_id', 15);
+            $table->bigInteger('anggota_id', 15);
             $table->char('status', 1);
         });
     }

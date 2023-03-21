@@ -14,9 +14,9 @@ class Persyaratan extends Migration
     public function up()
     {
         Schema::create('persyaratan', function (Blueprint $table) {
-            $table->id()->unique();
+            $table->id()->unique(); //satker_id.tahun
             $table->year('tahun');
-            $table->integer('satker_id');
+            $table->integer('satker_id', 4);
             $table->boolean('wbk')->default(0);
             $table->boolean('wbbm')->default(0);
         });

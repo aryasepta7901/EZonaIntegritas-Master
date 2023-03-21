@@ -17,7 +17,7 @@ class UploadDokumen extends Migration
             $table->char('id', 14)->primary();
             $table->string('file');
             $table->string('name');
-            $table->char('dokumenlke_id', 7);
+            $table->char('dokumenlke_id', 6);
             $table->char('selfassessment_id', 15);
             $table->timestamps();
             $table->foreign('selfassessment_id')->references('id')->on('self_assessment')->onDelete('cascade');

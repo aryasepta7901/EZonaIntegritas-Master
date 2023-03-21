@@ -14,7 +14,7 @@ class RekapPengungkit extends Migration
     public function up()
     {
         Schema::create('rekappengungkit', function (Blueprint $table) {
-            $table->char('id', 15)->primary();
+            $table->char('id', 15)->primary(); //pilar_id.rekapitulasi_id
             $table->double('nilai_sa', 6, 3);
             $table->double('nilai_at', 6, 3)->nullable();
             $table->double('nilai_kt', 6, 3)->nullable();

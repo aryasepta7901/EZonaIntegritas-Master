@@ -15,7 +15,7 @@ class Rincian extends Migration
     {
         Schema::create('rincian', function (Blueprint $table) {
             $table->char('id', 1)->primary();
-            $table->string('rincian', 100);
+            $table->string('rincian');
             $table->double('bobot', 6, 2);
         });
     }
