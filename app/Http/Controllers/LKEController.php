@@ -77,11 +77,11 @@ class LKEController extends Controller
             'link' => 'satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $lke->predikat,
             'rekap' => $lke,
-            'pertanyaan' => Pertanyaan::count(),
+            'pertanyaan' => Pertanyaan::count(), //hitung jumlah soal
+            'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $lke->id)->count(), //total soal yang terjawab oleh PIC satker
+            'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->count('jawaban_dl'), // total soal yang terjawab oleh TPI
             'rincianPengungkit' => SubRincian::where('rincian_id', 'p')->get(),
             'rincianHasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-            'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $lke->id)->count(),
-            'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $lke->id)->count('jawaban_dl'),
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $lke->id)->get(),
             'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->where('tahun', date('Y'))->get(),
 
@@ -89,13 +89,13 @@ class LKEController extends Controller
         ]);
     }
 
-    public function show2(Rekapitulasi $lke, Pilar $pilar)
+    public function pertanyaan(Rekapitulasi $lke, Pilar $pilar)
     {
         $this->authorize('pic');
 
         return view('self-assessment.pertanyaan', [
             'master' => 'LKE ',
-            'link' => 'satker/lke/' . $lke->id,
+            'link' => '/satker/lke/' . $lke->id,
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),

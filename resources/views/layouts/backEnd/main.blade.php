@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
                                 @isset($master)
-                                    <li class="breadcrumb-item"><a href="/{{ $link }}">{{ $master }}</a>
+                                    <li class="breadcrumb-item"><a href="{{ $link }}">{{ $master }}</a>
                                     </li>
                                 @endisset
                                 <li class="breadcrumb-item active">{{ $title }}</li>
@@ -393,7 +393,70 @@ scratch. This page gets rid of all links and provides the needed markup only.
         };
     </script>
 
+    {{-- <script>
+        // Menambahkan event listener pada tombol submit di setiap kartu accordion
+        var submitButtons = document.querySelectorAll('.collapse .submit-button');
+        submitButtons.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                // Menyimpan ID kartu yang di-submit ke localStorage
+                var cardId = e.target.closest('.collapse').getAttribute('id');
+                localStorage.setItem('submittedCardId', cardId);
+            });
+        });
 
+        // Memeriksa localStorage setelah halaman dimuat ulang
+        window.onload = function() {
+            var submittedCardId = localStorage.getItem('submittedCardId');
+            if (submittedCardId !== null) {
+                // Menemukan elemen kartu yang sesuai dengan ID yang disimpan
+                var card = document.getElementById(submittedCardId);
+                if (card !== null) {
+                    // Mengaktifkan kartu yang sesuai dan mempertahankan posisi scroll
+                    card.classList.add('show');
+                    var cardPosition = card.getBoundingClientRect().top + window.scrollY;
+                    window.scrollTo(0, cardPosition);
+                }
+                localStorage.removeItem('submittedCardId');
+            }
+        };
+    </script> --}}
+
+    {{-- <script>
+        // Menambahkan event listener pada tombol submit di setiap kartu accordion
+        var submitButtons = document.querySelectorAll('.collapse .submit-button');
+        submitButtons.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                // Mendapatkan ID kartu dan ID baris yang ingin dipertahankan posisi scroll-nya
+                var cardId = e.target.closest('.collapse').getAttribute('id');
+                var rowId = e.target.closest('.rowAccordion').getAttribute('id');
+
+                // Menambahkan hash URL pada URL dengan ID kartu dan ID baris
+                window.location.hash = cardId + '-' + rowId;
+            });
+        });
+
+        // Memeriksa hash URL setelah halaman dimuat ulang
+        window.onload = function() {
+            var hash = window.location.hash.substr(1);
+            if (hash !== "") {
+                // Mendapatkan ID kartu dan ID baris dari hash URL
+                var ids = hash.split('-');
+                var cardId = ids[0];
+                var rowId = ids[1];
+
+
+                // Menemukan elemen kartu dan elemen baris yang sesuai dengan ID yang diberikan
+                var card = document.getElementById(cardId);
+                var row = document.getElementById(rowId);
+                if (card !== null && row !== null) {
+                    // Mengaktifkan kartu yang sesuai dan mempertahankan posisi scroll pada elemen baris
+                    card.classList.add('show');
+                    var rowPosition = row.getBoundingClientRect().top + window.scrollY;
+                    window.scrollTo(0, rowPosition);
+                }
+            }
+        };
+    </script> --}}
 
 </body>
 

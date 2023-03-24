@@ -3,19 +3,19 @@
 @section('content')
     @can('pic')
         @if ($rekap->status == 0 && substr(auth()->user()->satker_id, -1) != 0)
-            {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri maka: --}}
+            {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri dan yang mengajukan BPS Kab/kota: --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <a href="/satker/surat/{{ $rekap->id }}" class="btn btn-primary"><i class="fa fa-save">
                         Kirim LKE</i></a>
             </div>
         @elseif($rekap->status == 0 && substr(auth()->user()->satker_id, -1) == 0)
-            {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi atau ketika BPS Provinsi mengajukan LKE --}}
+            {{-- - Jika status rekapitulasi masih dalam tahap penilaian mandiri dan yang mengajukan adalah BPS Provinsi --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
                         Kirim LKE</i></button>
             </div>
         @elseif ($rekap->status == 2)
-            {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi atau ketika BPS Provinsi mengajukan LKE --}}
+            {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
                         Kirim LKE</i></button>
@@ -62,7 +62,7 @@
                             $lg = 'col-lg-6';
                         @endphp
                         {{-- Desk-Evaluation --}}
-                        <div class="col-lg-6">
+                        <div class="{{ $lg }}">
                             <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_dl, 2) }}</span>
                             <span class="info-box-text text-center text-muted mb-0">Nilai Desk-Evaluation </span>
                         </div>
@@ -148,7 +148,7 @@
                                             $link = '/prov/evaluasi';
                                         @endphp
                                     @endcan
-                                    {{-- Jika PIC sedang self --}}
+                                    {{-- Jika PIC sedang self assessment --}}
                                     @can('pic')
                                         @php
                                             $link = '/satker/lke';
@@ -301,7 +301,7 @@
             Kembali</a>
     @endcan
     {{-- PIC Satker --}}
-    {{-- Kirim LKE --}}
+    {{-- Kirim LKE oleh PIC BPS Provinsi --}}
     <div class="modal fade" id="simpan">
         <div class="modal-dialog">
             <div class="modal-content">

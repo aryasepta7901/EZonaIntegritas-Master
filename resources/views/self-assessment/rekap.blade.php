@@ -34,7 +34,7 @@
                             <th>Status</th>
                             <th>Surat Pengantar</th>
                             <th>Dokumen</th>
-                            <th>Info</th>
+                            <th>Informasi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +43,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->tahun }}</td>
                                 <td>{{ $value->predikat }}</td>
-                                <td>
+                                <td class="text-center">
                                     {{-- Cek apakah data rekappilar ada didatabase --}}
                                     @if ($value->RekapPengungkit->count() != 0)
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
@@ -59,23 +59,24 @@
                                     @endif
                                 </td>
                                 <td>{{ $value->StatusRekap->status }}</td>
-                                @if ($value->surat_pengantar_kabkota)
-                                    <td class="text-center">
+                                <td class="text-center">
+                                    {{-- Cek Apakah Surat pengantar kabkota sudah diupload/belum --}}
+                                    @if ($value->surat_pengantar_kabkota)
                                         <button type="button" class="btn btn-info btn-sm " data-toggle="modal"
                                             data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
                                                 class="fas fa-file">
                                             </i> Kab/Kota</button>
-                                    </td>
-                                @else
-                                    <td class="text-center">-</td>
-                                @endif
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <a type="button" href="/satker/lke/{{ $value->id }}"
                                         class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                 </td>
                                 <td class="text-center">
                                     <a type="button" href="/satker/rekapitulasi/{{ $value->id }}"
-                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i> Rekap</a>
+                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i> Rekap 1</a>
                                     <a type="button" href="/satker/rekap2/{{ $value->id }}"
                                         class="btn btn-sm btn-primary"><i class="fa fa-file"></i> Rekap 2</a>
                                     <a type="button" href="/satker/rekap3/{{ $value->id }}"
@@ -150,7 +151,8 @@
                 @else
                     {{-- Jika Persyaratan belum diisi oleh admin --}}
                     <div class="modal-body">
-                        <p>Persyaratan Belum Diisi Oleh Admin </p>
+                        <p class="text-info">Persyaratan Belum Diisi Oleh Admin, Silahkan Hubungi Inspektorat Utama untuk
+                            mendapatkan akses terhadap LKE</p>
                     </div>
                 @endif
 
