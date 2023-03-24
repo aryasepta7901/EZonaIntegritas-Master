@@ -381,83 +381,48 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </script>
     <!-- Stay In Position when refresh -->
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-            var scrollpos = localStorage.getItem('scrollpos');
-
-            if (scrollpos) window.scrollTo(0, scrollpos);
-        });
-
-        window.onbeforeunload = function(e) {
-            localStorage.setItem('scrollpos', window.scrollY);
-
-        };
-    </script>
-
-    {{-- <script>
         // Menambahkan event listener pada tombol submit di setiap kartu accordion
         var submitButtons = document.querySelectorAll('.collapse .submit-button');
         submitButtons.forEach(function(button) {
             button.addEventListener('click', function(e) {
-                // Menyimpan ID kartu yang di-submit ke localStorage
+                // Menyimpan ID kartu dan indeks baris yang di-submit ke localStorage
                 var cardId = e.target.closest('.collapse').getAttribute('id');
+                var rowIndex = e.target.closest('.rowAccordion').rowIndex;
                 localStorage.setItem('submittedCardId', cardId);
+                localStorage.setItem('submittedRowIndex', rowIndex - 1);
+
             });
         });
-
         // Memeriksa localStorage setelah halaman dimuat ulang
         window.onload = function() {
             var submittedCardId = localStorage.getItem('submittedCardId');
-            if (submittedCardId !== null) {
+            var submittedRowIndex = localStorage.getItem('submittedRowIndex');
+            if (submittedCardId !== null && submittedRowIndex !== null) {
                 // Menemukan elemen kartu yang sesuai dengan ID yang disimpan
                 var card = document.getElementById(submittedCardId);
                 if (card !== null) {
-                    // Mengaktifkan kartu yang sesuai dan mempertahankan posisi scroll
+                    // Mengaktifkan kartu yang sesuai
                     card.classList.add('show');
-                    var cardPosition = card.getBoundingClientRect().top + window.scrollY;
-                    window.scrollTo(0, cardPosition);
+                    // Ambil elemen card accordion
+                    var cards = document.querySelector(".mycard");
+                    alert(cards);
+
+                    // Set nilai atribut aria-expanded pada card menjadi true
+                    cards.setAttribute("aria-expanded", "true");
+
+                    // Menemukan elemen baris yang sesuai dengan indeks yang disimpan
+                    var rows = card.querySelectorAll('.rowAccordion');
+                    if (submittedRowIndex >= 0 && submittedRowIndex < rows.length) {
+                        var row = rows[submittedRowIndex];
+                        // Mempertahankan posisi scroll pada baris yang sesuai
+                        row.scrollIntoView();
+                    }
                 }
                 localStorage.removeItem('submittedCardId');
+                localStorage.removeItem('submittedRowIndex');
             }
         };
-    </script> --}}
-
-    {{-- <script>
-        // Menambahkan event listener pada tombol submit di setiap kartu accordion
-        var submitButtons = document.querySelectorAll('.collapse .submit-button');
-        submitButtons.forEach(function(button) {
-            button.addEventListener('click', function(e) {
-                // Mendapatkan ID kartu dan ID baris yang ingin dipertahankan posisi scroll-nya
-                var cardId = e.target.closest('.collapse').getAttribute('id');
-                var rowId = e.target.closest('.rowAccordion').getAttribute('id');
-
-                // Menambahkan hash URL pada URL dengan ID kartu dan ID baris
-                window.location.hash = cardId + '-' + rowId;
-            });
-        });
-
-        // Memeriksa hash URL setelah halaman dimuat ulang
-        window.onload = function() {
-            var hash = window.location.hash.substr(1);
-            if (hash !== "") {
-                // Mendapatkan ID kartu dan ID baris dari hash URL
-                var ids = hash.split('-');
-                var cardId = ids[0];
-                var rowId = ids[1];
-
-
-                // Menemukan elemen kartu dan elemen baris yang sesuai dengan ID yang diberikan
-                var card = document.getElementById(cardId);
-                var row = document.getElementById(rowId);
-                if (card !== null && row !== null) {
-                    // Mengaktifkan kartu yang sesuai dan mempertahankan posisi scroll pada elemen baris
-                    card.classList.add('show');
-                    var rowPosition = row.getBoundingClientRect().top + window.scrollY;
-                    window.scrollTo(0, rowPosition);
-                }
-            }
-        };
-    </script> --}}
-
+    </script>
 </body>
 
 </html>
