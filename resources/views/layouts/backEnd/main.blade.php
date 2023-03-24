@@ -40,6 +40,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body
     class="hold-transition sidebar-mini {{ Request::is('tpi*') || Request::is('satker*') || Request::is('lke*') ? 'sidebar-collapse' : '' }}">
     <div class="wrapper">
+        <!-- Preloader -->
+        <div id="my-element" class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake" src="{{ asset('template') }}/dist/img/AdminLTELogo.png" alt="AdminLTELogo"
+                height="60" width="60">
+        </div>
 
         {{-- Navbar --}}
         @include('layouts.backEnd.navbar')
@@ -403,13 +408,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 if (card !== null) {
                     // Mengaktifkan kartu yang sesuai
                     card.classList.add('show');
-                    // Ambil elemen card accordion
-                    var cards = document.querySelector(".mycard");
-                    alert(cards);
-
-                    // Set nilai atribut aria-expanded pada card menjadi true
-                    cards.setAttribute("aria-expanded", "true");
-
                     // Menemukan elemen baris yang sesuai dengan indeks yang disimpan
                     var rows = card.querySelectorAll('.rowAccordion');
                     if (submittedRowIndex >= 0 && submittedRowIndex < rows.length) {

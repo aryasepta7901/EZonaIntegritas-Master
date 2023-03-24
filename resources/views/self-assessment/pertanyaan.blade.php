@@ -2,29 +2,29 @@
 
 @section('content')
     <div class="col-md-8 col-lg-12">
-        <div id="accordion" class="myaccordion w-100" aria-multiselectable="true">
-            @foreach ($subPilar as $value)
+        @foreach ($subPilar as $value)
+            @php
+                // Perhitungan Nilai setiap Pertanyaan
+                $jml_pertanyaan = $value->pertanyaan->count();
+                $penimbang = $value->bobot / $jml_pertanyaan;
+                $total_sa = 0;
+                $total_dl = 0;
+            @endphp
+            @foreach ($value->pertanyaan as $p)
                 @php
-                    // Perhitungan Nilai setiap Pertanyaan
-                    $jml_pertanyaan = $value->pertanyaan->count();
-                    $penimbang = $value->bobot / $jml_pertanyaan;
-                    $total_sa = 0;
-                    $total_dl = 0;
+                    // Self Assessment
+                    $nilai = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
+                    $total_sa += $nilai * $penimbang;
                 @endphp
-                @foreach ($value->pertanyaan as $p)
+                @foreach ($p->SelfAssessment->where('rekapitulasi_id', $rekap->id) as $s)
                     @php
-                        // Self Assessment
-                        $nilai = $p->SelfAssessment->where('rekapitulasi_id', $rekap->id)->sum('nilai');
-                        $total_sa += $nilai * $penimbang;
+                        // Desk Evaluation
+                        $nilai_dl = $s->DeskEvaluation->sum('nilai_dl');
+                        $total_dl += $nilai_dl * $penimbang;
                     @endphp
-                    @foreach ($p->SelfAssessment->where('rekapitulasi_id', $rekap->id) as $s)
-                        @php
-                            // Desk Evaluation
-                            $nilai_dl = $s->DeskEvaluation->sum('nilai_dl');
-                            $total_dl += $nilai_dl * $penimbang;
-                        @endphp
-                    @endforeach
                 @endforeach
+            @endforeach
+            <div class="myaccordion w-100" id="accordion" aria-multiselectable="true">
                 <div class="card">
                     <div class="card-header p-0" id="heading{{ $loop->iteration }}">
                         <h2 class="mb-0">
@@ -723,8 +723,8 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
 
         {{-- Jika yang akses Tim Evaluator Provinsi --}}
         @can('EvalProv')
@@ -742,14 +742,21 @@
     </div>
 
     <script script src="{{ asset('template') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
+
     <script>
         var Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 10000
+            timer: 10000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'animate__animated animate__bounceIn', // Tambahkan animasi bounceIn
+            }
         });
     </script>
+
+
     @if ($errors->any())
         <script>
             Toast.fire({
