@@ -163,6 +163,7 @@ class SelfAssessmentController extends Controller
                 );
             }
         }
+
         // Dokumen Tambahan
         if ($request->file('fileCreate')) { //cek apakah ada dokumen yang di upload
 
@@ -429,6 +430,6 @@ class SelfAssessmentController extends Controller
             Storage::delete($selfAssessment->file);
         }
         UploadDokumen::destroy($selfAssessment->id);
-        return redirect()->back()->with('success', ' Dokumen Has Ben Deleted');
+        return redirect()->back()->with('success', ' Dokumen Berhasil di Hapus');
     }
 }

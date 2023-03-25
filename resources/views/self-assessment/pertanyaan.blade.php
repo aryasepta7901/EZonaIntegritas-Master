@@ -254,7 +254,7 @@
                                                                                                 @foreach ($file as $f)
                                                                                                     <td class="text-center">
                                                                                                         <button type="button"
-                                                                                                            class="btn btn-sm btn-danger"
+                                                                                                            class="submit-button btn btn-sm btn-danger"
                                                                                                             data-toggle="modal"
                                                                                                             data-target="#hapus{{ $f->id }}"><i
                                                                                                                 class="fa fa-trash"></i></button>
@@ -389,7 +389,7 @@
                                                                                             @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                                                 <td class="text-center">
                                                                                                     <button type="button"
-                                                                                                        class="btn btn-sm btn-danger"
+                                                                                                        class="submit-button btn btn-sm btn-danger"
                                                                                                         data-toggle="modal"
                                                                                                         data-target="#hapus{{ $item->id }}"><i
                                                                                                             class="fa fa-trash"></i></button>
@@ -556,7 +556,7 @@
 
                                                                     <div class="form-group">
                                                                         <label for="catatan">Catatan</label>
-                                                                        <textarea class="form-control @error('catatan') is-invalid  @enderror" rows="4" name="catatan">{{ old('catatan') }} </textarea>
+                                                                        <textarea required class="form-control @error('catatan') is-invalid  @enderror" rows="4" name="catatan">{{ old('catatan') }} </textarea>
                                                                         @error('catatan')
                                                                             <div class="invalid-feedback">
                                                                                 {{ $message }}
@@ -673,7 +673,7 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control @error('catatan_dl') is-invalid  @enderror" rows="4" name="catatan_dl">{{ old('catatan_dl', $deskEvaluation->catatan_dl) }}  </textarea>
+                                                                            <textarea class="form-control" rows="4" name="catatan_dl">{{ old('catatan_dl', $deskEvaluation->catatan_dl) }}  </textarea>
                                                                         </div>
                                                                     </form>
                                                                 </div>
@@ -745,22 +745,19 @@
 
     <script>
         var Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 10000,
+            // toast: true,
+            // position: 'top-end',
+            // showConfirmButton: false,
+            timer: 10000, // waktu dalam milidetik
             timerProgressBar: true,
-            customClass: {
-                popup: 'animate__animated animate__bounceIn', // Tambahkan animasi bounceIn
-            }
         });
     </script>
-
 
     @if ($errors->any())
         <script>
             Toast.fire({
                 icon: 'error',
+
                 title: "{{ __('Error in form request!') }}",
                 text: "{{ implode('', $errors->all()) }}",
                 type: "error"
