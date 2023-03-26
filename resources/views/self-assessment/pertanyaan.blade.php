@@ -126,8 +126,8 @@
                                                                                     value="{{ $item->id }}"
                                                                                     name="opsi{{ $loop->index }}">
                                                                                 <input type="number" min="0"
-                                                                                    required class="form-control"
-                                                                                    name="input[]"
+                                                                                    max="4" required
+                                                                                    class="form-control" name="input[]"
                                                                                     @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
                                                                                     value="{{ $self->input_sa }}">
                                                                             @endif

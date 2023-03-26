@@ -80,10 +80,21 @@ class SelfAssessmentController extends Controller
                     $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
                 }
             } elseif ($total == 3) {
-                $nilai1 = $request->input[1];
-                $nilai2 = $request->input[2];
-                $nilai0 = $nilai1 + $nilai2;
-                $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
+                if ($request->pertanyaan_id == "PRC3A") {
+                    // Khusus pertanyaan Penurunan pelanggaran disiplin pegawai
+                    // Khusus pertanyaan Penurunan pelanggaran disiplin pegawai
+                    $nilai1 = $request->input[0];
+                    $nilai2 = $request->input[1];
+                    $nilai = $nilai1 == 0 ? 0 : ($nilai2 / ($nilai1));
+                    if ($nilai > 1) {
+                        $nilai = 1;
+                    }
+                } else {
+                    $nilai1 = $request->input[1];
+                    $nilai2 = $request->input[2];
+                    $nilai0 = $nilai1 + $nilai2;
+                    $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
+                }
             }
         } else {
             // validasi
@@ -152,6 +163,7 @@ class SelfAssessmentController extends Controller
         if ($request->file('dokumen')) { //cek apakah ada dokumen yang di upload
             foreach ($request->dokumen as $key => $dokumen) {
                 $id = date('Y') .  $request->input('id' . $key) .  $data['satker_id'];
+
                 UploadDokumen::updateOrCreate(
                     ['id' => $id],
                     [
@@ -269,10 +281,20 @@ class SelfAssessmentController extends Controller
                     $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
                 }
             } elseif ($total == 3) {
-                $nilai1 = $request->input[1];
-                $nilai2 = $request->input[2];
-                $nilai0 = $nilai1 + $nilai2;
-                $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
+                if ($request->pertanyaan_id == "PRC3A") {
+                    // Khusus pertanyaan Penurunan pelanggaran disiplin pegawai
+                    $nilai1 = $request->input[0];
+                    $nilai2 = $request->input[1];
+                    $nilai = $nilai1 == 0 ? 0 : ($nilai2 / ($nilai1));
+                    if ($nilai > 1) {
+                        $nilai = 1;
+                    }
+                } else {
+                    $nilai1 = $request->input[1];
+                    $nilai2 = $request->input[2];
+                    $nilai0 = $nilai1 + $nilai2;
+                    $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
+                }
             }
         }
         $request->validate(
