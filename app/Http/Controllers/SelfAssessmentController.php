@@ -276,7 +276,7 @@ class SelfAssessmentController extends Controller
                 $nilai4 = $request->input[4];
                 $penimbang = $nilai1 + $nilai2 + $nilai3;
                 if ($penimbang < $nilai4) {
-                    return back()->withErrors('Cek Ulang');
+                    return back()->withErrors('Cek Ulang:' . $penimbang);
                 } else {
                     $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
                 }

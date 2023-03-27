@@ -126,8 +126,8 @@
                                                                                     value="{{ $item->id }}"
                                                                                     name="opsi{{ $loop->index }}">
                                                                                 <input type="number" min="0"
-                                                                                    max="4" required
-                                                                                    class="form-control" name="input[]"
+                                                                                    required class="form-control"
+                                                                                    id="{{ $item->id }}" name="input[]"
                                                                                     @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
                                                                                     value="{{ $self->input_sa }}">
                                                                             @endif
@@ -413,7 +413,7 @@
                                                                     @if ($rekap->status == 0 || $rekap->status == 2 || $rekap->status == 5)
                                                                         <div class="d-flex justify-content-end mr-3">
 
-                                                                            <button type="submit"
+                                                                            <button type="submit" id="updateButton"
                                                                                 class="submit-button btn btn-primary"><i
                                                                                     class="fas fa-save"></i>
                                                                                 Update

@@ -111,7 +111,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
-
     <!-- jQuery -->
     <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
@@ -420,6 +419,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 localStorage.removeItem('submittedRowIndex');
             }
         };
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(".submit-button").on("click", function() {
+                // const A = $("#PRE3A2").val();
+                // const B = $("#PRE3A3").val();
+                // const C = $("#PRE3A4").val();
+                // const D = $("#PRE3A5");
+
+                // D.attr('max', A + B + C);
+                console.log('berhasil');
+            });
+            $("#createButton").on("click", function() {
+                const A = $("#PRE3A2").val();
+                const B = $("#PRE3A3").val();
+                const C = $("#PRE3A4").val();
+                const D = $("#PRE3A5");
+
+                D.attr('max', A + B + C);
+            });
+        })
     </script>
 </body>
 
