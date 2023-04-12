@@ -129,7 +129,7 @@ class DeskEvaluationController extends Controller
         // dd(DeskEvaluation::where('rekapitulasi_id', $evaluasi->id)->where('id', 'LIKE', '%' . 'PPC' . '%')->count('jawaban_at'));
         return view('tpi.lke', [
             'master' => 'Desk-Evaluation ',
-            'link' => 'tpi/evaluasi',
+            'link' => '/tpi/evaluasi',
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $evaluasi,
             'pertanyaan' => Pertanyaan::count(),
@@ -150,7 +150,7 @@ class DeskEvaluationController extends Controller
         $this->authorize('TPI');
         return view('tpi.pertanyaan', [
             'master' => 'LKE ',
-            'link' => 'tpi/evaluasi/' . $evaluasi->id,
+            'link' => '/tpi/evaluasi/' . $evaluasi->id,
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),

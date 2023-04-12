@@ -5,6 +5,7 @@ use App\Http\Controllers\EvaluatorProvinsiController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\LheController;
 use App\Http\Controllers\LKEController;
+use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TpiController;
 use App\Http\Controllers\UserController;
@@ -94,3 +95,8 @@ Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('a
 Route::get('/tpi/evaluasi/{evaluasi}/{pilar}', [DeskEvaluationController::class, 'show2'])->name('evaluasi.show2')->middleware('auth');
 // LHE
 Route::resource('/tpi/lhe', LheController::class)->middleware('auth');
+
+
+// Monitoring
+Route::resource('/monitoring', MonitoringController::class)->middleware('auth')->only(['index']);
+Route::get('/monitoring/lhe', [MonitoringController::class, 'lhe'])->middleware('auth');

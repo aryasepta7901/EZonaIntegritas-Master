@@ -110,6 +110,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- ./wrapper -->
 
+    {{-- Font Awesome updated --}}
+    <script src="https://kit.fontawesome.com/48de642077.js" crossorigin="anonymous"></script>
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
     <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
@@ -182,7 +184,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 focus: true // set focus to editable area after initializing summe
             });
             $("#example1").DataTable({
-                "responsive": true,
+                "responsive": false,
                 "lengthChange": true,
                 "autoWidth": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
