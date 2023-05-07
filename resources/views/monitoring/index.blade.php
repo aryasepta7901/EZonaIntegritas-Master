@@ -9,9 +9,11 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th style="width: 200px">Satker</th>
+                            <th>Tahun</th>
+                            <th>Predikat</th>
                             <th>LHE</th>
                             <th>Catatan</th>
-                            <th>Satker</th>
                             <th>Nilai Pengungkit</th>
                             <th>Nilai Hasil</th>
                             <th>Mengisi LKE</th>
@@ -24,14 +26,17 @@
                         @foreach ($rekap as $value)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $value->satker->nama_satker }}</td>
+                                <td>{{ $value->tahun }}</td>
+                                <td>{{ $value->predikat }}</td>
                                 <td class="text-center">
-                                    <a href="/monitoring/lhe" type="button" class="btn btn-info btn-sm"><i
+                                    <a href="/monitoring/lhe/{{ $value->id }}" type="button" class="btn btn-info btn-sm"><i
                                             class="fas fa-file"></i></a>
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-info btn-sm"><i class="fas fa-file"></i></button>
+                                    <a href="/monitoring/catatan/{{ $value->id }}" type="button"
+                                        class="btn btn-info btn-sm"><i class="fas fa-file"></i></a>
                                 </td>
-                                <td>{{ $value->satker->nama_satker }}</td>
                                 <td class="text-center">
                                     @php
                                         $nilai_sa = $nilaiPengungkit->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
@@ -40,7 +45,10 @@
                                 </td>
                                 <td class="text-center">
                                     @php
-                                        $nilai = $nilaiHasil->where('satker_id', $value->satker_id)->sum('nilai');
+                                        $nilai = $nilaiHasil
+                                            ->where('tahun', substr($value->id, 0, 4))
+                                            ->where('satker_id', $value->satker_id)
+                                            ->sum('nilai');
                                     @endphp
                                     {{ $nilai }}
                                 </td>

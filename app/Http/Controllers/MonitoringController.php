@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\rekapitulasi;
+use App\Models\Rincian;
+use App\Models\Pertanyaan;
 use App\Models\RekapHasil;
-use App\Models\RekapPengungkit;
+use App\Models\SubRincian;
+use App\Models\rekapitulasi;
 use Illuminate\Http\Request;
+use App\Models\RekapPengungkit;
+use App\Http\Controllers\Controller;
+use App\Models\DeskEvaluation;
+use App\Models\Pilar;
+use App\Models\SelfAssessment;
 
 class MonitoringController extends Controller
 {
@@ -19,19 +26,47 @@ class MonitoringController extends Controller
         return view(
             'monitoring.index',
             [
-                'title' => 'Usulan ZI Tahun ' . date('Y'),
+                'title' => 'Usulan Zona Integritas',
                 'rekap' => rekapitulasi::all(),
+                // Filtering akan ada di View
                 'nilaiPengungkit' => RekapPengungkit::all(),
-                'nilaiHasil' => Rekaphasil::where('tahun', date('Y'))->get(),
+                'nilaiHasil' => Rekaphasil::all(),
 
             ]
 
 
         );
     }
-    public function lhe()
+    public function lhe(Rekapitulasi $rekapitulasi)
     {
-        dd('Hai');
+        return view(
+            'monitoring.lhe',
+            [
+                'master' => 'Monitoring ',
+                'link' => '/monitoring',
+                'title' => 'Laporan Hasil Evaluasi: ',
+                'rekap' => $rekapitulasi,
+                'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
+                'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', substr($rekapitulasi->id, 0, 4))->get(),
+                'rincianPengungkit' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+                'rincianHasil' => Rincian::where('id', 'H')->orderBy('bobot', 'DESC')->get(),
+
+            ]
+        );
+    }
+    public function catatan(Rekapitulasi $rekapitulasi)
+    {
+        return view('monitoring.catatan', [
+            'master' => 'Monitoring',
+            'link' => '/monitoring',
+            'title' => 'Catatan Reviu',
+            'rekap' => $rekapitulasi,
+            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+            'DeskEvaluation' => DeskEvaluation::all(),
+
+
+
+        ]);
     }
 
     /**

@@ -99,4 +99,5 @@ Route::resource('/tpi/lhe', LheController::class)->middleware('auth');
 
 // Monitoring
 Route::resource('/monitoring', MonitoringController::class)->middleware('auth')->only(['index']);
-Route::get('/monitoring/lhe', [MonitoringController::class, 'lhe'])->middleware('auth');
+Route::get('/monitoring/lhe/{rekapitulasi}', [MonitoringController::class, 'lhe'])->middleware('auth');
+Route::get('/monitoring/catatan/{rekapitulasi}', [MonitoringController::class, 'catatan'])->middleware('auth');

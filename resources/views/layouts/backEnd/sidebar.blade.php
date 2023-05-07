@@ -136,7 +136,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="/monitoring" class="nav-link {{ Request::is('monitoring') ? 'active' : '' }}">
+                        <a href="/monitoring" class="nav-link {{ Request::is('monitoring*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-list"></i>
                             <p>
                                 Monitoring Progress
