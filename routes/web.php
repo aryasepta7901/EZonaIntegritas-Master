@@ -46,6 +46,8 @@ Route::get('/dashboard', function () {
 
 // users
 Route::resource('/users', UserController::class)->middleware('auth');
+Route::post('/users/import', [UserController::class, 'import'])->name('import.import');
+
 // Wilayah TPI
 Route::resource('/tim', TpiController::class)->middleware('auth');
 // pengawasan satker

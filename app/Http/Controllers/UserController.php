@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UsersImport;
 use App\Models\Level;
 use App\Models\Satker;
 use App\Models\User;
@@ -51,6 +52,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
+
         $validatedData = $request->validate([
             'id' => 'required|unique:users', //nip
             'name'  => 'required|min:5',
@@ -59,16 +61,29 @@ class UserController extends Controller
             'satker_id' => 'required',
             'level_id' => 'required',
 
+        ], [
+            'required' => ':Attribute Wajib Diisi',
+            'unique' => ':Attribute Sudah Terdaftar',
+            'min' => ':Attribute minimal :min karakter',
+            'email' => ':Attribute harus menggunakan format Email yang benar',
         ]);
 
-
-
-        $validatedData['password'] = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
         User::create($validatedData);
 
-        return redirect('/users')->with('success', 'New Users Has Ben Added');
+        return redirect('/users')->with('success', 'User Berhasil di Tambahkan');
     }
+    public function import(Request $request)
+    {
+        $file = $request->file('excel')->store('public/import');
 
+        $import = new UsersImport;
+        $import->import($file);
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
+        }
+
+        return redirect('/users')->with('success', 'Data Berhasil di Import');
+    }
     /**
      * Display the specified resource.
      *
@@ -105,9 +120,12 @@ class UserController extends Controller
             'satker_id' => 'required',
             'level_id' => 'required',
 
+        ], [
+            'required' => ':Attribute Wajib Diisi',
+            'min' => ':Attribute minimal :min karakter',
         ]);
         User::where('id', $user->id)->update($validatedData);
-        return redirect('/users')->with('success', 'User Has Ben Updated');
+        return redirect('/users')->with('success', 'User Berhasil di Ubah');
     }
 
     /**
@@ -118,8 +136,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
         User::destroy($user->id);
-        return redirect('/users')->with('success', 'User Has Ben Deleted');
+        return redirect('/users')->with('success', 'User Berhasil di Hapus');
     }
 }

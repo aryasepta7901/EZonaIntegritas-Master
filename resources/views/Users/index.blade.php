@@ -20,17 +20,43 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session()->has('failures'))
+            <table class="table table-warning">
+                <tr>
+                    <th>Baris</th>
+                    <th>Attribute</th>
+                    <th>Error</th>
+                    <th>Value</th>
+                </tr>
+                @foreach (session()->get('failures') as $validasi)
+                    <tr>
+                        <td>{{ $validasi->row() - 1 }}</td>
+                        <td>{{ $validasi->attribute() }}</td>
+                        <td>
+                            <ul>
+                                @foreach ($validasi->errors() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td>{{ $validasi->values()[$validasi->attribute()] }}</td>
+                    </tr>
+                @endforeach
 
+            </table>
+        @endif
 
 
         <div class="card">
 
             <!-- /.card-header -->
-            <div class="card-header d-flex justify-content-end">
+            <div class="card-header d-flex justify-content-between">
 
-
-                <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"> Tambah
-                        User</i></button>
+                <button class="btn btn-primary " data-toggle="modal" data-target="#import"><i class="fa fa-file-import">
+                    </i> Import Data</button>
+                <button class="btn btn-primary ml-auto" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
+                    </i> Tambah
+                    User</button>
             </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -316,4 +342,47 @@
             <!-- /.modal-dialog -->
         </div>
     @endforeach
+
+    {{-- Import --}}
+    <div class="modal fade" id="import">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Import Data User</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form method="post" action="/users/import" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="catatan">Upload Dokumen
+                            Tambahan</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" name="excel"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                            <label class="custom-file-label" for="customFile">File Excel</label>
+                        </div>
+
+                        <p class="text-info"> Note: Silahkan Download Template Excel
+                            File Yang diupload</p>
+                        <p class="text-danger">format .xlsx / .csv</p>
+                        <div class="d-flex justify-content-center">
+                            <a type="button" href="{{ asset('excel/users.xlsx') }}" class="btn btn-sm btn-info my-2"><i
+                                    class="fas fa-file"></i> Download
+                                Template</a>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Import Data</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection
