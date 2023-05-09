@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\TpiImport;
 use App\Models\anggota_tpi;
 use App\Models\Pengawasan;
 use App\Models\Satker;
@@ -63,6 +64,7 @@ class TpiController extends Controller
             ],
             [
                 'required' => ':attribute Wajib di Isi',
+                'unique' => ':Attribute Sudah Terdaftar',
             ]
         );
 
@@ -91,10 +93,21 @@ class TpiController extends Controller
                 ]
             );
         }
-
         return redirect()->back()->with('success', 'TPI Berhasil di Tambahkan');
     }
 
+    public function import(Request $request)
+    {
+        $file = $request->file('excel')->store('public/import');
+
+        $import = new TpiImport;
+        $import->import($file);
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
+        }
+
+        return redirect('/tim')->with('success', 'Data Berhasil di Import');
+    }
     /**
      * Display the specified resource.
      *
@@ -108,7 +121,7 @@ class TpiController extends Controller
             'tim.pengawasan',
             [
                 'master' => 'Mengelola Wilayah Tugas',
-                'link' => 'tim',
+                'link' => '/tim',
                 'title' => ' Wilayah pengawasan ' . $tim->nama,
                 'tpi' => $tim,
                 'pengawasan' => Pengawasan::where('tpi_id', $tim->id)->get(),

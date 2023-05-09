@@ -357,8 +357,6 @@
                 <form method="post" action="/users/import" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                        <label for="catatan">Upload Dokumen
-                            Tambahan</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="customFile" name="excel"
                                 accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">

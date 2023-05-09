@@ -25,8 +25,6 @@ class TPI extends Model
     {
         return $this->hasMany(anggota_tpi::class, 'tpi_id');
     }
-
-
     public function user() //dalnis
     {
         return $this->belongsTo(User::class, 'dalnis');

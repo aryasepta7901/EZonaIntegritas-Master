@@ -50,6 +50,8 @@ Route::post('/users/import', [UserController::class, 'import'])->name('import.im
 
 // Wilayah TPI
 Route::resource('/tim', TpiController::class)->middleware('auth');
+Route::post('/tim/import', [TpiController::class, 'import'])->name('import.import');
+
 // pengawasan satker
 Route::resource('/pengawasan', PengawasanController::class)->middleware('auth');
 // Persyarataan
