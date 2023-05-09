@@ -393,7 +393,7 @@
                             File Yang diupload</p>
                         <p class="text-danger">format .xlsx / .csv</p>
                         <div class="d-flex justify-content-center">
-                            <a type="button" href="{{ asset('excel/users.xlsx') }}" class="btn btn-sm btn-info my-2"><i
+                            <a type="button" href="{{ asset('excel/tpi.xlsx') }}" class="btn btn-sm btn-info my-2"><i
                                     class="fas fa-file"></i> Download
                                 Template</a>
                         </div>
