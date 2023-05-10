@@ -23,11 +23,7 @@ class RincianHasilController extends Controller
             'lke.hasil.index',
             [
                 'title' => 'Upload Rincian Hasil ',
-                'pilar' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-                'satker' => RekapHasil::select('satker_id')->groupBy('satker_id')->get(), //ambil satker yang sudah digroupBy
-                'hasil' => RekapHasil::all(), //ambil semua nilai hasil
-
-
+                'pilar' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get()
             ]
         );
     }
