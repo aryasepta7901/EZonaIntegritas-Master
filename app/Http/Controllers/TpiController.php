@@ -98,6 +98,8 @@ class TpiController extends Controller
 
     public function import(Request $request)
     {
+
+
         $file = $request->file('excel')->store('public/import');
 
         $import = new TpiImport;

@@ -253,10 +253,12 @@
                                     <div class="form-group">
                                         <label for="wilayah">Wilayah</label>
                                         <select class="form-control" name="wilayah">
-                                            <option value="{{ $value->wilayah }}"> Wilayah {{ $value->wilayah }}</option>
-                                            <option value="1">Wilayah 1</option>
-                                            <option value="2">Wilayah 2</option>
-                                            <option value="3">Wilayah 3</option>
+                                            <option value="1" @if ($value->wilayah == 1) ? selected @endif>
+                                                Wilayah 1</option>
+                                            <option value="2" @if ($value->wilayah == 2) ? selected @endif>
+                                                Wilayah 2</option>
+                                            <option value="3" @if ($value->wilayah == 3) ? selected @endif>
+                                                Wilayah 3</option>
                                         </select>
 
                                     </div>

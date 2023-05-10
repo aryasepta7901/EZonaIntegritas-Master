@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\PersyaratanImport;
 use App\Models\persyaratan;
 use App\Models\Satker;
 use Illuminate\Http\Request;
+use Persyaratan as GlobalPersyaratan;
 
 class PersyaratanController extends Controller
 {
@@ -24,7 +26,6 @@ class PersyaratanController extends Controller
                 'title' => 'Mengelola Persyaratan WBK/WBBM',
                 'persyaratan' => Persyaratan::all(),
                 'satker' => Satker::doesntHave('persyaratan')->get(),
-
             ]
         );
     }
@@ -47,27 +48,50 @@ class PersyaratanController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'satker_id' => 'required',
-        ]);
-        $validatedData['tahun'] = date('Y');
+        $request->validate(
+            [
+                'satker_id' => 'required',
+                'persyaratan' => 'required'
+            ],
+            ['required' => ':Attribute Wajib Diisi',],
+        );
 
-        $validatedData['id'] = $validatedData['satker_id'] . $validatedData['tahun'];
-
-        if ($request->wbk == null) {
-            $validatedData['wbk'] = 0;
-        } else {
-            $validatedData['wbk'] = $request->wbk;
+        // Satker_id
+        foreach ($request->satker_id as $key => $satker_id) {
+            $tahun = date('Y');
+            $id = $satker_id . $tahun;
+            if ($request->persyaratan == 'wbk') {
+                // Jika yang dipilih WBK
+                $wbk = 1;
+                $wbbm = 0;
+            } else {
+                // Jika yang dipilih WBBM , maka bisa mengajukan keduanya
+                $wbk = 1;
+                $wbbm = 1;
+            }
+            persyaratan::updateOrCreate(
+                ['id' => $id],
+                [
+                    'tahun' =>  $tahun,
+                    'satker_id' => $satker_id,
+                    'wbk' => $wbk,
+                    'wbbm' => $wbbm,
+                ]
+            );
         }
-        if ($request->wbbm == null) {
-            $validatedData['wbbm'] = 0;
-        } else {
-            $validatedData['wbbm'] = $request->wbbm;
+        return redirect('/persyaratan')->with('success', 'Persyaratan Berhasil di Tambahkan');
+    }
+    public function import(Request $request)
+    {
+        $file = $request->file('excel')->store('public/import');
+
+        $import = new PersyaratanImport;
+        $import->import($file);
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
         }
 
-        persyaratan::create($validatedData);
-
-        return redirect('/persyaratan')->with('success', 'New Persyaratan Has Ben Added');
+        return redirect('/persyaratan')->with('success', 'Data Berhasil di Import');
     }
 
     /**
@@ -105,20 +129,19 @@ class PersyaratanController extends Controller
 
         $validatedData['id'] = $validatedData['satker_id'] . $validatedData['tahun'];
 
-        if ($request->wbk == null) {
-            $validatedData['wbk'] = 0;
-        } else {
-            $validatedData['wbk'] = $request->wbk;
-        }
-        if ($request->wbbm == null) {
+        if ($request->persyaratan == 'wbk') {
+            // Jika yang dipilih WBK
+            $validatedData['wbk'] = 1;
             $validatedData['wbbm'] = 0;
         } else {
-            $validatedData['wbbm'] = $request->wbbm;
+            // Jika yang dipilih WBBM , maka bisa mengajukan keduanya
+            $validatedData['wbk'] = 1;
+            $validatedData['wbbm'] = 1;
         }
 
         persyaratan::where('id', $persyaratan->id)->update($validatedData);
 
-        return redirect('/persyaratan')->with('success', 'New Persyaratan Has Ben Updated');
+        return redirect('/persyaratan')->with('success', 'Persyaratan Berhasil Di Update');
     }
 
     /**
@@ -130,7 +153,6 @@ class PersyaratanController extends Controller
     public function destroy(persyaratan $persyaratan)
     {
         persyaratan::destroy($persyaratan->id);
-
-        return redirect('/persyaratan')->with('success', 'Persyaratan Has Ben Deleted');
+        return redirect('/persyaratan')->with('success', 'Persyaratan Berhasil di Hapus');
     }
 }

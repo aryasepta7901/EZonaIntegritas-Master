@@ -20,12 +20,39 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session()->has('failures'))
+            <table class="table table-warning">
+                <tr>
+                    <th>Baris</th>
+                    <th>Attribute</th>
+                    <th>Error</th>
+                    <th>Value</th>
+                </tr>
+                @foreach (session()->get('failures') as $validasi)
+                    <tr>
+                        <td>{{ $validasi->row() - 1 }}</td>
+                        <td>{{ $validasi->attribute() }}</td>
+                        <td>
+                            <ul>
+                                @foreach ($validasi->errors() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td>{{ $validasi->values()[$validasi->attribute()] }}</td>
+                    </tr>
+                @endforeach
+
+            </table>
+        @endif
+
         <div class="card">
             <!-- /.card-header -->
 
             <div class="card-header d-flex justify-content-end">
-
-                <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
+                <button class="btn btn-primary " data-toggle="modal" data-target="#import"><i class="fa fa-file-import">
+                    </i> Import Data</button>
+                <button class="btn btn-primary ml-auto" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
                     </i> Tambah</button>
             </div>
             <div class="card-body">
@@ -93,8 +120,8 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="satker">Satker</label>
-                            <select class="form-control select2bs4" name="satker_id">
-                                <option value=''>Pilih Salah Satu </option>
+                            <select class="form-control select2bs4" multiple="multiple"
+                                data-placeholder="Pilih Satuan Kerja " name="satker_id[]">
                                 @foreach ($satker as $s)
                                     @if (old('satker_id') == $s->id)
                                         <option value="{{ $s->id }}" selected>{{ $s->nama_satker }}
@@ -106,6 +133,14 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="persyaratan">Persyaratan</label>
+                            <select class="form-control" name="persyaratan">
+                                <option value="">-- Pilih --</option>
+                                <option value="wbk">Wilayah Bebas dari Korupsi (WBK)</option>
+                                <option value="wbbm">Wilayah Birokrasi Bersih dan Melayani (WBBM)</option>
+                            </select>
+                        </div>
+                        {{-- <div class="form-group">
                             <label for="persyaratan">Persyaratan</label>
                             <div class="row">
                                 <div class="col-lg-6">
@@ -124,7 +159,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -161,6 +196,20 @@
                             </div>
                             <div class="form-group">
                                 <label for="persyaratan">Persyaratan</label>
+
+                                <select class="form-control" name="persyaratan">
+                                    <option value="wbk" @if ($value->wbk == 1 && $value->wbbm == 0) ? selected @endif>Wilayah
+                                        Bebas
+                                        dari Korupsi (WBK)</option>
+                                    <option value="wbbm" @if ($value->wbk == 1 && $value->wbbm == 1) ? selected @endif>Wilayah
+                                        Birokrasi
+                                        Bersih dan Melayani
+                                        (WBBM)
+                                    </option>
+                                </select>
+                            </div>
+                            {{-- <div class="form-group">
+                                <label for="persyaratan">Persyaratan</label>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="custom-control custom-checkbox">
@@ -181,7 +230,7 @@
                                     </div>
                                 </div>
 
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -224,4 +273,44 @@
             <!-- /.modal-dialog -->
         </div>
     @endforeach
+    {{-- Import --}}
+    <div class="modal fade" id="import">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Import Data Persyaratan</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form method="post" action="/persyaratan/import" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" name="excel"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                            <label class="custom-file-label" for="customFile">File Excel</label>
+                        </div>
+
+                        <p class="text-info"> Note: Silahkan Download Template Excel
+                            File Yang diupload</p>
+                        <p class="text-danger">format .xlsx / .csv</p>
+                        <div class="d-flex justify-content-center">
+                            <a type="button" href="{{ asset('excel/persyaratan.xlsx') }}"
+                                class="btn btn-sm btn-info my-2"><i class="fas fa-file"></i> Download
+                                Template</a>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Import Data</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection

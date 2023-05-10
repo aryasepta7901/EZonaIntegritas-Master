@@ -6,8 +6,6 @@
         <!-- Profile Image -->
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
-
-
                 <h3 class="profile-username text-center">{{ $tpi->nama }}</h3>
 
                 <p class="text-muted text-center">Wilayah {{ $tpi->wilayah }}</p>
@@ -64,8 +62,8 @@
             <div class="card-header d-flex justify-content-end">
 
                 <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
-                        Tambah
-                        Pengawasan</i></button>
+                    </i>Tambah
+                    Pengawasan </button>
             </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">

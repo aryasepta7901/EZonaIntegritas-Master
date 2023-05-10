@@ -22,9 +22,10 @@ class TpiImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailu
      */
     public function model(array $row)
     {
-        if (!empty($row['wilayah'])) {
+        $id = strtoupper(str_replace(' ', '', $row['nama'] . $row['tahun'] .  'wil' . $row['wilayah']));
+        if (TPI::where('id', $id)->doesntExist()) {
             $tpi = new TPI([
-                'id' => $row['id'],
+                'id' => $id,
                 'tahun' => $row['tahun'],
                 'nama' => $row['nama'],
                 'dalnis' => $row['dalnis'],
@@ -44,8 +45,8 @@ class TpiImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailu
 
             for ($i = 1; $i <= $no; $i++) {
                 $anggota_tpi = new anggota_tpi([
-                    'id' => $row['id'] . $row['anggota_' . $i],
-                    'tpi_id' => $row['id'],
+                    'id' => $id . $row['anggota_' . $i],
+                    'tpi_id' => $id,
                     'anggota_id' => $row['anggota_' . $i],
                 ]);
                 $anggota_tpi->save();

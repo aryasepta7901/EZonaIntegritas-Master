@@ -56,6 +56,7 @@ Route::post('/tim/import', [TpiController::class, 'import'])->name('import.impor
 Route::resource('/pengawasan', PengawasanController::class)->middleware('auth');
 // Persyarataan
 Route::resource('/persyaratan', PersyaratanController::class)->middleware('auth');
+Route::post('/persyaratan/import', [PersyaratanController::class, 'import'])->name('import.import');
 
 // CRUD LKE
 // rincian
