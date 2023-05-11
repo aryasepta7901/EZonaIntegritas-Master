@@ -88,6 +88,7 @@ Route::get('satker/surat/{rekapitulasi}', [RekapitulasiController::class, 'surat
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
 // Upload Rincian hasil
 Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
+Route::post('/hasil/import', [RincianHasilController::class, 'import'])->name('import.import');
 
 // Evaluator Provinsi
 Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middleware('auth');
