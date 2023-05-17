@@ -56,7 +56,7 @@
                     <form action="/tpi/lhe" method="post">
                         @csrf
                         <input type="hidden" name="satker" value="{{ $rekap->satker->nama_satker }}">
-                        <input type="hidden" name="prov" value="{{ substr($prov->nama_satker, 3) }}">
+                        <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                         <input type="hidden" name="wilayah" value="{{ $rekap->satker->wilayah }}">
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
                         <input type="hidden" name="nilai" value="{{ $nilai->sum('nilai_dl') }}">

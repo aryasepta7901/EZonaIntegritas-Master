@@ -49,6 +49,23 @@ class LheController extends Controller
         // Creating the new document...
         $phpWord = new TemplateProcessor('template_lhe.docx');
 
+
+        if (substr($request->satker_id, -1) != 0) //cek apakah levelnya adalah bps provinsi
+        // Jika levelnya bps kab/kota maka
+        {
+            // ambil data provinsi
+            $prov = substr($request->satker_id, 0, 3) . '0';
+            $nama_prov = Satker::where('id', $prov)->first()->nama_satker;
+        } else {
+            $nama_prov = '';
+        }
+        // Pecah teks menjadi array kata
+        $words = explode(" ", $request->satker);
+        // Mengambil nama daerah
+        $nama_daerah = implode(" ", array_slice($words, 2, 5));
+
+
+
         // Edit String
         $phpWord->setValues([
             'y' => date('Y'),
@@ -61,28 +78,46 @@ class LheController extends Controller
             'id_kt' => $request->id_kt,
             'dalnis' => $request->dalnis,
             'id_dl' => $request->id_dl,
-            'prov' => $request->prov,
+            'prov' => $nama_prov,
+            'nama_daerah' => $nama_daerah,
         ]);
 
-        // Table
-        $pilar = Pilar::where('subrincian_id', 'PP')->get(); //ambil data pilar
-        $dataTable = [];
+        // Table Pemenuhan
+        $pilar = Pilar::where('subrincian_id', 'PP')->get(); //ambil data Pengungkit bagian pemenuhan
+        $dataTableP = [];
+        $i = 0;
         foreach ($pilar as $p) {
             // Ambil Nilai Pengungkit
             $nilai_sa = $p->RekapPengungkit->where('rekapitulasi_id', $request->id)->sum('nilai_sa');
             $nilai_dl = $p->RekapPengungkit->where('rekapitulasi_id', $request->id)->sum('nilai_dl');
-            $dataTable[] = [
+            $dataTableP[] = [
+                'no' => $i++,
                 'hasil_sa' =>     round($nilai_sa, 2),
                 'hasil_dl' => round($nilai_dl, 2),
                 'pilar' => $p->pilar,
                 'bb' => number_format($p->bobot, 2),
             ];
         }
+        $phpWord->cloneRowAndSetValues('hasil_dl', $dataTableP);
 
-
-
+        // Table Reform
+        $pilar = Pilar::where('subrincian_id', 'PR')->get(); //ambil data Pengungkit bagian reform
+        $dataTableR = [];
+        $i = 1;
+        foreach ($pilar as $p) {
+            // Ambil Nilai Pengungkit
+            $nilai_sa = $p->RekapPengungkit->where('rekapitulasi_id', $request->id)->sum('nilai_sa');
+            $nilai_dl = $p->RekapPengungkit->where('rekapitulasi_id', $request->id)->sum('nilai_dl');
+            $dataTableR[] = [
+                'no' => $i++,
+                'hasil_sa' =>  round($nilai_sa, 2),
+                'hasil_dl' => round($nilai_dl, 2),
+                'pilar' => $p->pilar,
+                'bb' => number_format($p->bobot, 2),
+            ];
+        }
         // Populate the table in the template
-        $phpWord->cloneRowAndSetValues('hasil_dl', $dataTable);
+        $phpWord->cloneRowAndSetValues('hasil_dl', $dataTableR);
 
         // Simpan hasil proses ke file Word sementara
         $phpWord->saveAs($id . '.docx');
@@ -100,19 +135,13 @@ class LheController extends Controller
 
         $this->authorize('TPI');
         $rekap = Rekapitulasi::where('id', $lhe->id)->first(); //data rekap
-        if (substr($rekap->satker_id, -1) != 0) //cek apakah levelnya adalah bps provinsi
-        // Jika levelnya bps kab/kota maka
-        {
-            // ambil data provinsi
-            $prov = substr($rekap->satker_id, 0, 3) . '0';
-        }
+
         $pengawasan = Pengawasan::where('satker_id', $rekap->satker_id)->first(); //data pengawasan
         $tpi = TPI::where('id', $pengawasan->tpi_id)->first();
         return view('tpi.lhe', [
             'master' => 'LKE',
             'link' => 'tpi/evaluasi/' . $lhe->id,
             'rekap' => $rekap,
-            'prov' => Satker::where('id', $prov)->first(),
             'anggota' => User::where('id', $pengawasan->anggota_id)->first(),
             'ketua' => User::where('id', $tpi->ketua_tim)->first(),
             'dalnis' => User::where('id', $tpi->dalnis)->first(),
