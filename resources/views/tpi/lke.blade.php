@@ -119,11 +119,11 @@
         @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
-                        Setuju</i></a>
+                    </i> Setuju</a>
                 <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
-                        Revisi</i></button>
+                    </i> Revisi</button>
                 <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
-                        Tolak</i></button>
+                    </i> Tolak</button>
             </div>
             {{-- Setuju LKE --}}
             <div class="modal fade" id="setuju">

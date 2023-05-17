@@ -42,7 +42,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="wrapper">
         <!-- Preloader -->
         <div id="my-element" class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{ asset('template') }}/dist/img/AdminLTELogo.png" alt="AdminLTELogo"
+            <img class="animation__shake" src="{{ asset('landingPage/img/reformasi.png') }}" alt="AdminLTELogo"
                 height="60" width="60">
         </div>
 
@@ -101,8 +101,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <footer class="main-footer">
             <!-- To the right -->
             <div class="float-right d-none d-sm-inline">
-                <a href="https://adminlte.io">Evaluasi Zona
-                    Integritas</a>.
+                <b href="https://adminlte.io">Evaluasi Zona
+                    Integritas</b>.
             </div>
             <!-- Default to the left -->
             <strong>Copyright &copy; {{ date('Y') }} </strong>

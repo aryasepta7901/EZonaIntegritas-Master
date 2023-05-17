@@ -34,6 +34,9 @@ use App\Http\Controllers\SuratPersetujuanProvController;
 
 // login
 Route::get('/', function () {
+    return view('landingPage.index');
+})->name('landingPage')->middleware('guest');
+Route::get('/login', function () {
     return view('login');
 })->name('login')->middleware('guest');
 // dashboard

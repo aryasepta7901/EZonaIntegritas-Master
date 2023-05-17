@@ -22,7 +22,7 @@
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="{{ asset('template') }}/index2.html" class="h1"><b>E-</b>Zona Integritas</a>
+                <a href="/" class="h1"><b>E-</b>Zona Integritas</a>
             </div>
             <div class="card-body">
 
