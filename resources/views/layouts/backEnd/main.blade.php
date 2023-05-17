@@ -43,7 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Preloader -->
         <div id="my-element" class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__shake" src="{{ asset('landingPage/img/reformasi.png') }}" alt="AdminLTELogo"
-                height="60" width="60">
+                height="150" width="150">
         </div>
 
         {{-- Navbar --}}

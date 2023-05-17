@@ -45,3 +45,22 @@ font-style: normal; }
 button[aria-expanded="true"] {
 background-color: #42dca3;
 color: #fff !important; }
+
+/*--------------------------------------------------------------
+# Sidebar
+--------------------------------------------------------------*/
+.sidebar-light-lightblue .nav-sidebar>.nav-item>.nav-link.active{
+    background-color: #717ff5;
+}
+
+/*--------------------------------------------------------------
+# Navbar
+--------------------------------------------------------------*/
+
+.navbar-light{
+    background-color: #717ff5;
+}
+
+.content-wrapper{
+    background-color: #f0f0f0;
+}

@@ -59,7 +59,8 @@
                         <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                         <input type="hidden" name="wilayah" value="{{ $rekap->satker->wilayah }}">
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
-                        <input type="hidden" name="nilai" value="{{ $nilai->sum('nilai_dl') }}">
+                        <input type="hidden" name="nilaisa" value="{{ $nilai->sum('nilai_sa') }}">
+                        <input type="hidden" name="nilaidl" value="{{ $nilai->sum('nilai_dl') }}">
                         {{-- Data TPI --}}
                         <input type="hidden" name="at" value="{{ $anggota->name }}">
                         <input type="hidden" name="id_at" value="{{ $anggota->id }}">
