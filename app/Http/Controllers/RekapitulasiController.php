@@ -13,7 +13,9 @@ use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
 use App\Http\Controllers\Controller;
 use App\Models\Rincian;
+use App\Models\Satker;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class RekapitulasiController extends Controller
 {
@@ -88,7 +90,7 @@ class RekapitulasiController extends Controller
         $this->authorize('pic');
         return view('self-assessment.rekap.rekap', [
             'master' => 'Rekapitulasi',
-            'link' => 'satker/lke',
+            'link' => '/satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
             'rekap' => $rekapitulasi,
             'pertanyaan' => Pertanyaan::count(),
@@ -109,7 +111,7 @@ class RekapitulasiController extends Controller
         $this->authorize('pic');
         return view('self-assessment.rekap.rekap2', [
             'master' => 'Rekapitulasi',
-            'link' => 'satker/lke',
+            'link' => '/satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
             'rekap' => $rekapitulasi,
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
@@ -124,7 +126,7 @@ class RekapitulasiController extends Controller
         $this->authorize('pic');
         return view('self-assessment.rekap.test', [
             'master' => 'Rekapitulasi',
-            'link' => 'satker/lke',
+            'link' => '/satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,
             'rekap' => $rekapitulasi,
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
@@ -180,5 +182,70 @@ class RekapitulasiController extends Controller
      */
     public function destroy(Rekapitulasi $rekapitulasi)
     {
+    }
+    public function cetak(Request $request)
+    {
+        // Script PhpWord
+        // Creating the new document...
+        $phpWord = new TemplateProcessor('template_kab.docx');
+        // Edit String
+        // ambil data provinsi
+        $prov = substr($request->satker_id, 0, 3) . '0';
+        $nama_prov = Satker::where('id', $prov)->first()->nama_satker;
+        $bps_prov = $nama_prov;
+        $phpWord->setValues([
+            'y' => date('Y'),
+            'tanggal' => date('d F Y'),
+            'total_sa' => $request->nilaisa,
+            'satker' => substr($request->satker, 3),
+            'bps_prov' => $bps_prov,
+
+        ]);
+        // Table Pemenuhan
+        $pilar = Pilar::where('subrincian_id', 'PP')->get(); //ambil data Pengungkit bagian pemenuhan
+        $dataTableP = [];
+        $i = 1;
+        $nilaiP_sa = 0;
+        foreach ($pilar as $p) {
+            // Ambil Nilai Pengungkit
+            $nilai_sa = $p->RekapPengungkit->where('rekapitulasi_id', $request->id)->sum('nilai_sa');
+            $nilaiP_sa += $nilai_sa;
+            $dataTableP[] = [
+                'no' => $i++,
+                'hasil_sa' =>     round($nilai_sa, 2),
+                'pilar' => $p->pilar,
+                'bb' => number_format($p->bobot, 2),
+            ];
+        }
+        $phpWord->setValues([
+            'nilaiP_sa' => round($nilaiP_sa, 2),
+        ]);
+        $phpWord->cloneRowAndSetValues('hasil_sa', $dataTableP);
+
+        // Table Reform
+        $pilar = Pilar::where('subrincian_id', 'PR')->get(); //ambil data Pengungkit bagian reform
+        $dataTableR = [];
+        $i = 1;
+        $nilaiR_sa = 0;
+        foreach ($pilar as $p) {
+            // Ambil Nilai Pengungkit
+            $nilai_sa = $p->RekapPengungkit->where('rekapitulasi_id', $request->id)->sum('nilai_sa');
+            $nilaiR_sa += $nilai_sa;
+            $dataTableR[] = [
+                'no' => $i++,
+                'hasil_sa' =>  round($nilai_sa, 2),
+                'pilar' => $p->pilar,
+                'bb' => number_format($p->bobot, 2),
+            ];
+        }
+        $phpWord->setValues([
+            'nilaiR_sa' => round($nilaiR_sa, 2),
+        ]);
+        // Populate the table in the template
+        $phpWord->cloneRowAndSetValues('hasil_sa', $dataTableR);
+        // Simpan hasil proses ke file Word sementara
+        $fileName = 'pengantar_' . $request->satker . '.docx';
+        $phpWord->saveAs($fileName);
+        return response()->download($fileName)->deleteFileAfterSend(true);
     }
 }

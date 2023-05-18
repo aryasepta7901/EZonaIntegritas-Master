@@ -6,6 +6,7 @@ use App\Models\RekapHasil;
 use App\Models\rekapitulasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class SuratPersetujuanProvController extends Controller
 {
@@ -21,7 +22,7 @@ class SuratPersetujuanProvController extends Controller
         return view('EvalProv.surat', [
             'master' => 'Rekapitulasi',
             'link' => 'prov/evaluasi',
-            'title' => 'Surat Persetujuan',
+            'title' => 'Surat Pengantar',
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7])->get(),
             'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
 
@@ -138,5 +139,45 @@ class SuratPersetujuanProvController extends Controller
             );
         }
         return redirect()->back()->with('success', 'Surat Pengantar Berhasil di hapus');
+    }
+    // Cetak Template Surat
+    public function cetak(Request $request)
+    {
+        // Script PhpWord
+        // Creating the new document...
+        $phpWord = new TemplateProcessor('template_prov.docx');
+
+        $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7])->get();
+
+        $phpWord->setValues([
+            'y' => date('Y'),
+            'tanggal' => date('d F Y'),
+            'daerah' => substr($request->satker, 3),
+        ]);
+        $dataSatker = [];
+        $i = 1;
+        foreach ($rekap as $value) {
+            $dataSatker[] = [
+                'no' => $i++,
+                'satker' =>   $value->satker->nama_satker,
+                'predikat' =>   $value->predikat,
+            ];
+        }
+        $i = 2;
+        $phpWord->cloneRowAndSetValues('satker', $dataSatker);
+        $tembusanSatker = [];
+        foreach ($rekap as $value) {
+            $tembusanSatker[] = [
+                'no' => $i++,
+                'satker' =>   $value->satker->nama_satker,
+            ];
+        }
+        $phpWord->cloneRowAndSetValues('satker', $tembusanSatker);
+
+
+        // Simpan hasil proses ke file Word sementara
+        $fileName = 'Usulan_WBK-WBBM_' . $request->satker . '.docx';
+        $phpWord->saveAs($fileName);
+        return response()->download($fileName)->deleteFileAfterSend(true);
     }
 }

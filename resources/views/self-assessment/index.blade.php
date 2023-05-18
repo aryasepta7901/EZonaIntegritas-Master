@@ -19,12 +19,12 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-primary  " data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
-                                Pengajuan WBK / WBBM</i></button>
+                            </i> Pengajuan WBK / WBBM</button>
                     </div>
                 </div>
             @endif
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-responsive-md table-bordered table-striped table- ">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -123,7 +123,6 @@
                             <input type="hidden" name="predikat" value="{{ $nilai }}">
                         @endisset
                         <div class="modal-body">
-
                             @if ($persyaratan->wbk == 1 || $persyaratan->wbbm == 1)
                                 <p>Satuan Kerja Anda Berhak mengajukan: <button type="button"
                                         class="badge badge-sm badge-info">

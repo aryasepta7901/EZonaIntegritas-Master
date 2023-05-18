@@ -75,7 +75,17 @@
                 </div>
             </div>
             <div class="card-body">
-                <p>Ini Templete Surat Untuk DiDownload</p>
+                <p>Berikut dilampirkan template Laporan Hasil Evaluasi</p>
+                <p>Langkah-Langkah:</p>
+                <ol>
+                    <li>Download Templete <badge class="text-info">.docx</badge>
+                    </li>
+                    <li>Sesuaikan dan ubah kalimat yang <badge class="text-danger">warna merah</badge>
+                    </li>
+                    <li>Print surat dan berikan tanda tangan stakeholder terkait</li>
+                    <li>Scan surat dan upload ke website kembali dengan format <badge class="text-info">.pdf</badge>
+                    </li>
+                </ol>
             </div>
             <!-- /.card-body -->
         </div>

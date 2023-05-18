@@ -6,25 +6,25 @@
             {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri dan yang mengajukan BPS Kab/kota: --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <a href="/satker/surat/{{ $rekap->id }}" class="btn btn-primary"><i class="fa fa-save">
-                        Kirim LKE</i></a>
+                    </i> Kirim LKE</a>
             </div>
         @elseif($rekap->status == 0 && substr(auth()->user()->satker_id, -1) == 0)
             {{-- - Jika status rekapitulasi masih dalam tahap penilaian mandiri dan yang mengajukan adalah BPS Provinsi --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
-                        Kirim LKE</i></button>
+                    </i> Kirim LKE</button>
             </div>
         @elseif ($rekap->status == 2)
             {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
-                        Kirim LKE</i></button>
+                    </i> Kirim LKE</button>
             </div>
         @elseif($rekap->status == 5)
             {{-- Jika status rekapitulasi dikembalikan dari TPI --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#kirimTPI"><i class="fa fa-save">
-                        Kirim LKE</i></button>
+                    </i> Kirim LKE</button>
             </div>
         @endif
     @endcan
@@ -269,16 +269,13 @@
                                             {{ $value->pilar }}
                                         </span>
                                         @php
-                                            $nilaiHasil = $value->RekapHasil->where('satker_id', $rekap->satker_id)->first();
+                                            $nilaiHasil = $value->RekapHasil->where('satker_id', $rekap->satker_id)->sum('nilai');
                                         @endphp
                                         <span class="info-box-number text-center">
                                             {{-- Jika nilai ada di database --}}
                                             Nilai :
-                                            @if ($nilaiHasil != null)
-                                                {{ $nilaiHasil->nilai }}
-                                            @else
-                                                0
-                                            @endif /
+                                            {{ $nilaiHasil }}
+                                            /
                                             {{ $value->bobot }}
                                         </span>
                                     </div>

@@ -86,6 +86,7 @@ Route::resource('satker/rekapitulasi', RekapitulasiController::class)->middlewar
 Route::get('satker/rekap2/{rekapitulasi}', [RekapitulasiController::class, 'rekap2'])->middleware('auth');
 Route::get('satker/rekap3/{rekapitulasi}', [RekapitulasiController::class, 'rekap3'])->middleware('auth');
 Route::get('satker/surat/{rekapitulasi}', [RekapitulasiController::class, 'surat'])->middleware('auth');
+Route::post('satker/surat/cetak', [RekapitulasiController::class, 'cetak'])->middleware('auth');
 
 // Self Assessment
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
@@ -98,6 +99,8 @@ Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middlewar
 Route::get('/prov/evaluasi/{evaluasi}/{pilar}', [EvaluatorProvinsiController::class, 'show2'])->name('evaluasi.show2')->middleware('auth');
 // Surat Persetujuan BPS Provinsi
 Route::resource('/prov/surat', SuratPersetujuanProvController::class)->middleware('auth');
+Route::post('/prov/surat/cetak', [SuratPersetujuanProvController::class, 'cetak'])->name('cetak.cetak')->middleware('auth');
+
 
 // Desk Evaluation
 Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('auth');

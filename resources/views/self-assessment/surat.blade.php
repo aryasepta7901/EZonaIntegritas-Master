@@ -89,11 +89,28 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <b>{{ auth()->user()->satker->nama_satker }}</b>
-                    <button class="btn btn-primary"><i class="fas fa-download"></i></button>
+                    <form action="/satker/surat/cetak" method="post">
+                        @csrf
+                        <input type="hidden" value="{{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}" name="nilaisa">
+                        <input type="hidden" value="{{ $rekap->satker->nama_satker }}" name="satker">
+                        <input type="hidden" value="{{ $rekap->satker_id }}" name="satker_id">
+                        <input type="hidden" value="{{ $rekap->id }}" name="id">
+                        <button class="btn btn-primary"><i class="fas fa-download"></i></button>
+                    </form>
                 </div>
             </div>
             <div class="card-body">
-                <p>Ini Templete Surat Untuk DiDownload</p>
+                <p>Berikut dilampirkan template surat pengantar BPS Kab/Kota</p>
+                <p>Langkah-Langkah:</p>
+                <ol>
+                    <li>Download Templete <badge class="text-info">.docx</badge>
+                    </li>
+                    <li>Sesuaikan dan ubah kalimat yang <badge class="text-danger">warna merah</badge>
+                    </li>
+                    <li>Print surat dan berikan tanda tangan kepala BPS Kab/Kota</li>
+                    <li>Scan surat dan upload ke website kembali dengan format <badge class="text-info">.pdf</badge>
+                    </li>
+                </ol>
             </div>
             <!-- /.card-body -->
         </div>
@@ -123,7 +140,7 @@
                     <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel"
                         aria-labelledby="custom-tabs-three-home-tab">
                         <button class="btn btn-primary" onclick="exportFile()">
-                            <i class="fas fa-download"> Excel</i>
+                            <i class="fas fa-download"> </i>Excel
                         </button>
                         <hr>
                         <table id="excel" class="table table-bordered  table-responsive ">
@@ -204,7 +221,7 @@
                     <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel"
                         aria-labelledby="custom-tabs-three-profile-tab">
                         <button class="btn btn-primary" onclick="exportFile2()">
-                            <i class="fas fa-download"> Excel</i>
+                            <i class="fas fa-download"> </i>Excel
                         </button>
                         <hr>
                         <table id="excel2" class="table table-bordered  table-responsive ">

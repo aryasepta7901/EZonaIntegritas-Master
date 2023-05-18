@@ -92,7 +92,7 @@ class LheController extends Controller
         // Table Pemenuhan
         $pilar = Pilar::where('subrincian_id', 'PP')->get(); //ambil data Pengungkit bagian pemenuhan
         $dataTableP = [];
-        $i = 0;
+        $i = 1;
         $nilaiP_sa = 0;
         $nilaiP_dl = 0;
         foreach ($pilar as $p) {
@@ -190,7 +190,7 @@ class LheController extends Controller
             'dalnis' => User::where('id', $tpi->dalnis)->first(),
             'nilai' => RekapPengungkit::where('rekapitulasi_id', $lhe->id),
 
-            'title' => 'Lembar Hasil Evaluasi',
+            'title' => 'Laporan Hasil Evaluasi',
 
         ]);
     }

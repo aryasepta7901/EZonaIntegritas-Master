@@ -26,7 +26,7 @@ class LKEController extends Controller
 
         $this->authorize('pic');
 
-        return view('self-assessment.rekap', [
+        return view('self-assessment.index', [
             'title' => 'Rekapitulasi Lembar Kerja Evaluasi',
             'persyaratan' => Persyaratan::where('satker_id', auth()->user()->satker_id)->where('tahun', date('Y'))->first(),
             'rekap' => Rekapitulasi::where('satker_id', auth()->user()->satker_id)->get(),
