@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header">
                 <button class="btn btn-primary" onclick="exportFile()">
-                    <i class="fas fa-download"> Excel</i>
+                    <i class="fas fa-download"> </i> Excel
                 </button>
 
             </div>

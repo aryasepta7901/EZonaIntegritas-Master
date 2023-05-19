@@ -141,6 +141,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('template') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
     {{-- Export to excel -> https://docs.sheetjs.com/ --}}
     <script script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    {{-- Export File by excel --}}
     <script>
         function exportFile() {
             var wb = XLSX.utils.table_to_book(document.getElementById('excel'));
@@ -154,6 +155,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         }
     </script>
+    {{-- toast --}}
     <script>
         var Toast = Swal.mixin({
             toast: true,
@@ -169,12 +171,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
     </script>
     {{-- Accordion --}}
+    {{-- Accordion --}}
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993"
         integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA=="
         data-cf-beacon='{"rayId":"796cb3b09d786bff","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2022.11.3","si":100}'
         crossorigin="anonymous"></script>
     <!-- Page specific script -->
-
+    {{-- AdminLTE Costumize --}}
     <script>
         $(function() {
             $('#summernote').summernote({
@@ -268,23 +271,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 $("#input").show();
             else
                 $("#input").hide();
-
-            // if ($("#type").val() === "checkbox1")
-            //     $("#checkbox1").show();
-            // else
-            //     $("#checkbox1").hide();
-            // if ($("#type").val() === "checkbox2")
-            //     $("#checkbox2").show();
-            // else
-            //     $("#checkbox2").hide();
-            // if ($("#type").val() === "checkbox3")
-            //     $("#checkbox3").show();
-            // else
-            //     $("#checkbox3").hide();
-            // if ($("#type").val() === "checkbox4")
-            //     $("#checkbox4").show();
-            // else
-            //     $("#checkbox4").hide();
         }
     </script>
 
@@ -421,27 +407,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 localStorage.removeItem('submittedRowIndex');
             }
         };
-    </script>
-    <script>
-        $(document).ready(function() {
-            $(".submit-button").on("click", function() {
-                // const A = $("#PRE3A2").val();
-                // const B = $("#PRE3A3").val();
-                // const C = $("#PRE3A4").val();
-                // const D = $("#PRE3A5");
-
-                // D.attr('max', A + B + C);
-                console.log('berhasil');
-            });
-            $("#createButton").on("click", function() {
-                const A = $("#PRE3A2").val();
-                const B = $("#PRE3A3").val();
-                const C = $("#PRE3A4").val();
-                const D = $("#PRE3A5");
-
-                D.attr('max', A + B + C);
-            });
-        })
     </script>
 </body>
 

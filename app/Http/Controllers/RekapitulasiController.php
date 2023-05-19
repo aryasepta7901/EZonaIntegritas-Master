@@ -124,7 +124,7 @@ class RekapitulasiController extends Controller
     public function rekap3(Rekapitulasi $rekapitulasi)
     {
         $this->authorize('pic');
-        return view('self-assessment.rekap.test', [
+        return view('self-assessment.rekap.rekap3', [
             'master' => 'Rekapitulasi',
             'link' => '/satker/lke',
             'title' => 'Lembar Kerja Evaluasi: ' . $rekapitulasi->predikat,

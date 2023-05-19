@@ -75,13 +75,12 @@ class SelfAssessmentController extends Controller
                 $nilai4 = $request->input[4];
                 $penimbang = $nilai1 + $nilai2 + $nilai3;
                 if ($penimbang < $nilai4) {
-                    return back()->withErrors('Cek Ulang');
+                    return back()->withErrors('Silahkan Cek Ulang, Isian tidak boleh melebihi' . $penimbang);
                 } else {
                     $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
                 }
             } elseif ($total == 3) {
                 if ($request->pertanyaan_id == "PRC3A") {
-                    // Khusus pertanyaan Penurunan pelanggaran disiplin pegawai
                     // Khusus pertanyaan Penurunan pelanggaran disiplin pegawai
                     $nilai1 = $request->input[0];
                     $nilai2 = $request->input[1];
@@ -276,7 +275,7 @@ class SelfAssessmentController extends Controller
                 $nilai4 = $request->input[4];
                 $penimbang = $nilai1 + $nilai2 + $nilai3;
                 if ($penimbang < $nilai4) {
-                    return back()->withErrors('Cek Ulang:' . $penimbang);
+                    return back()->withErrors('Silahkan Cek Ulang, Isian tidak boleh melebihi: ' . $penimbang);
                 } else {
                     $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
                 }

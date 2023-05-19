@@ -319,7 +319,7 @@
                         <p>Harap Periksa Kembali Isian anda , apakah sudah lengkap atau tidak , jika LKE
                             sudah dikirim maka
                             tidak akan bisa diisi kembali. LKE akan dikirim dan di cek oleh <b>Validator Provinsi</b></p>
-                        <button class="btn btn-sm btn-info">Total Nilai : {{ $nilai_sa }}</button>
+                        <button class="btn btn-sm btn-info">Total Nilai : {{ round($nilai_sa, 2) }}</button>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

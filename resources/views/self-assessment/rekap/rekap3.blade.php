@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header">
                 <button class="btn btn-primary" onclick="exportFile()">
-                    <i class="fas fa-download"> Excel</i>
+                    <i class="fas fa-download"> </i> Excel
                 </button>
 
             </div>
@@ -23,7 +23,7 @@
                     <tbody>
                         {{-- Rincian --}}
                         @foreach ($rincian as $r)
-                            <tr>
+                            <tr style="background-color: red">
                                 <th>{{ chr(64 + $loop->iteration) }}</th>
                                 <th colspan="3">{{ Str::upper($r->rincian) }}</th>
                                 <td class="text-center">{{ $r->bobot }}</td>
