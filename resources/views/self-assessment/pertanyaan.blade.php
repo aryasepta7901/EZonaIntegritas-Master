@@ -63,6 +63,7 @@
                                                 </th>
                                                 {{-- Desk Evaluation --}}
                                                 @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
+                                                    {{-- Jika statusnya sudah melewati tahapan TPI, maka bisa diakses --}}
                                                     <th>
                                                         <div class="d-flex justify-content-between">
                                                             Desk-Evaluation
@@ -265,8 +266,6 @@
                                                                                             @endif
                                                                                         @endif
                                                                                     @endcan
-
-
                                                                                 </tr>
                                                                             @endforeach
 
@@ -403,7 +402,6 @@
                                                                             </tbody>
                                                                         </table>
                                                                     @endif
-
                                                                     {{-- File Tambahan --}}
                                                                 </div>
 

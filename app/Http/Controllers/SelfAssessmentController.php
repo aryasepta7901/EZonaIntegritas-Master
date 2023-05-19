@@ -101,7 +101,7 @@ class SelfAssessmentController extends Controller
             $request->validate(
                 [
                     'opsi_id' => 'required',
-                    'catatan'  => 'required',
+                    'catatan.*'  => 'required',
                     'dokumen.*' => 'mimes:pdf|max:2048',
                     'fileCreate.*' => 'mimes:pdf|max:2048',
 
@@ -116,7 +116,6 @@ class SelfAssessmentController extends Controller
         }
 
         // SelfAssessment
-
         $tahun = date('Y');
         $satker_id = auth()->user()->satker_id;
         $pertanyaan_id = $request->pertanyaan_id;
@@ -186,6 +185,7 @@ class SelfAssessmentController extends Controller
                     $id = substr($dataLama->id, -1, 1); //ambil angka 
                     $id += 1; //tambahkan satu
                 } else {
+                    //jika belum ada data yang masuk
                     $id = 1;
                 }
                 $id =    $data['id'] . $id;
@@ -210,11 +210,11 @@ class SelfAssessmentController extends Controller
         $nilaiLama = RekapPengungkit::where('id', $id)->first();
         $penimbang = $request->penimbang;
         if ($nilaiLama !== null)
+            // Jika terdapat nilai lama
             $total = $data['nilai'] * $penimbang + $nilaiLama->nilai_sa;
         else {
             $total = $data['nilai'] * $penimbang;
         }
-        // dd($total);
         RekapPengungkit::updateOrCreate(
             ['id' => $id],
             [
