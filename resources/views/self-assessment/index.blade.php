@@ -52,7 +52,7 @@
                                                 $nilai_sa = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                             @endphp
                                         @endforeach
-                                        {{ round($nilai_sa, 2) }}
+                                        <button class="badge badge-info"> {{ round($nilai_sa, 2) }}</button>
                                     @else
                                         {{-- Jika data rekappilar belum ada didatabase --}}
                                         0

@@ -21,7 +21,7 @@ class SuratPersetujuanProvController extends Controller
 
         return view('EvalProv.surat', [
             'master' => 'Rekapitulasi',
-            'link' => 'prov/evaluasi',
+            'link' => '/prov/evaluasi',
             'title' => 'Surat Pengantar',
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7])->get(),
             'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),

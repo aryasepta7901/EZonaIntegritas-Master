@@ -33,11 +33,11 @@
         @if ($rekap->status == 1)
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-success m-2" data-toggle="modal" data-target="#setuju"><i class="fa fa-save">
-                        Setuju</i></button>
+                    </i> Setuju</button>
                 <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
-                        Revisi</i></button>
+                    </i> Revisi</button>
                 <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
-                        Tolak</i></button>
+                    </i> Tolak</button>
             </div>
         @endif
     @endcan
@@ -386,7 +386,8 @@
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
                         <input type="hidden" name="status" value="4">
                         <p> <b> Note:</b> <br></p>
-                        <p>LKE yang telah disetujui akan dikirimkan ke TPI Inspektorat Utama</p>
+                        <p>LKE yang telah disetujui akan dikirimkan ke TPI Inspektorat Utama, setelah menyetujui LKE
+                            silahkan cetak surat pengantar untuk di Upload ke sistem </p>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

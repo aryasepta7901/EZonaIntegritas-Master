@@ -2,228 +2,232 @@
 
 @section('content')
     @if ($rekap->status == 4)
-        {{-- Anggota Tim --}}
-        @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
-            <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                <button class="btn btn-primary m-2" data-toggle="modal" data-target="#at"><i class="fa fa-save">
-                        Simpan</i></button>
-            </div>
-            {{-- Simpan AT --}}
-            <div class="modal fade" id="at">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirim LKE?</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        @php
-                            $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
-                        @endphp
-                        <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
-                            @method('put')
-                            @csrf
-                            <div class="modal-body">
-                                <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
-                                <input type="hidden" name="status" value="1">
-                                <p> <b> Note:</b> <br></p>
-                                <p>LKE akan dilanjutkan kepada Ketua Tim</p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Kirim</button>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.modal-content -->
+        @if ($rekap->surat_pengantar_prov != '')
+            {{-- Anggota Tim --}}
+            @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
+                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <button class="btn btn-primary m-2" data-toggle="modal" data-target="#at"><i class="fa fa-save">
+                            Simpan</i></button>
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
-        @endif
-        {{-- Ketua Tim --}}
-        @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
-            <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                <button class="btn btn-warning m-2" data-toggle="modal" data-target="#at"><i class="fa fa-backward">
-                        Kembalikan ke AT</i></button>
-                <button class="btn btn-primary m-2" data-toggle="modal" data-target="#kt"><i class="fa fa-save">
-                        Simpan</i></button>
-
-            </div>
-            {{-- Simpan KT(Teruskan ke DL) --}}
-            <div class="modal fade" id="kt">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirim LKE?</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                {{-- Simpan AT --}}
+                <div class="modal fade" id="at">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirim LKE?</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            @php
+                                $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
+                            @endphp
+                            <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
+                                @method('put')
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
+                                    <input type="hidden" name="status" value="1">
+                                    <p> <b> Note:</b> <br></p>
+                                    <p>LKE akan dilanjutkan kepada Ketua Tim</p>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Kirim</button>
+                                </div>
+                            </form>
                         </div>
-                        @php
-                            $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
-                        @endphp
-                        <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
-                            @method('put')
-                            @csrf
-                            <div class="modal-body">
-                                <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
-                                <input type="hidden" name="status" value="2">
-                                <p> <b> Note:</b> <br></p>
-                                <p>LKE akan dilanjutkan kepada Pengendali Teknis </p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Kirim</button>
-                            </div>
-                        </form>
+                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
-            {{-- Kembalikan ke AT --}}
-            <div class="modal fade" id="at">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirim LKE?</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+            @endif
+            {{-- Ketua Tim --}}
+            @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
+                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <button class="btn btn-warning m-2" data-toggle="modal" data-target="#at"><i class="fa fa-backward">
+                            Kembalikan ke AT</i></button>
+                    <button class="btn btn-primary m-2" data-toggle="modal" data-target="#kt"><i class="fa fa-save">
+                            Simpan</i></button>
+
+                </div>
+                {{-- Simpan KT(Teruskan ke DL) --}}
+                <div class="modal fade" id="kt">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirim LKE?</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            @php
+                                $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
+                            @endphp
+                            <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
+                                @method('put')
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
+                                    <input type="hidden" name="status" value="2">
+                                    <p> <b> Note:</b> <br></p>
+                                    <p>LKE akan dilanjutkan kepada Pengendali Teknis </p>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Kirim</button>
+                                </div>
+                            </form>
                         </div>
-                        @php
-                            $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
-                        @endphp
-                        <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
-                            @method('put')
-                            @csrf
-                            <div class="modal-body">
-                                <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
-                                <input type="hidden" name="status" value="0">
-                                <p> <b> Note:</b> <br></p>
-                                <p>LKE akan dikembalikan kepada Anggota Tim </p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Kirim</button>
-                            </div>
-                        </form>
+                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
-        @endif
-        {{-- Pengendali Teknis --}}
-        @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
-            <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
-                    </i> Setuju</a>
-                <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
-                    </i> Revisi</button>
-                <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
-                    </i> Tolak</button>
-            </div>
-            {{-- Setuju LKE --}}
-            <div class="modal fade" id="setuju">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Apakah Kamu Yakin untuk Menyetujui LKE?</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                {{-- Kembalikan ke AT --}}
+                <div class="modal fade" id="at">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirim LKE?</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            @php
+                                $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
+                            @endphp
+                            <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
+                                @method('put')
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
+                                    <input type="hidden" name="status" value="0">
+                                    <p> <b> Note:</b> <br></p>
+                                    <p>LKE akan dikembalikan kepada Anggota Tim </p>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Kirim</button>
+                                </div>
+                            </form>
                         </div>
-
-                        <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
-                            @method('put')
-                            @csrf
-                            <div class="modal-body">
-                                <input type="hidden" name="id" value="{{ $rekap->id }}">
-                                <input type="hidden" name="status" value="6">
-                                <p> <b> Note:</b> <br></p>
-                                <p>LKE yang telah disetujui akan menjadi rekomendasi dalam pengajuan ZI kepada KemenpanRB
-                                </p>
-
-
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Kirim</button>
-                            </div>
-                        </form>
-
+                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
-            {{-- Revisi --}}
-            <div class="modal fade" id="revisi">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirimkan Kembali LKE?</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+            @endif
+            {{-- Pengendali Teknis --}}
+            @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
+                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
+                        </i> Setuju</a>
+                    <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
+                        </i> Revisi</button>
+                    <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
+                        </i> Tolak</button>
+                </div>
+                {{-- Setuju LKE --}}
+                <div class="modal fade" id="setuju">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Apakah Kamu Yakin untuk Menyetujui LKE?</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
+                                @method('put')
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="id" value="{{ $rekap->id }}">
+                                    <input type="hidden" name="status" value="6">
+                                    <p> <b> Note:</b> <br></p>
+                                    <p>LKE yang telah disetujui akan menjadi rekomendasi dalam pengajuan ZI kepada
+                                        KemenpanRB
+                                    </p>
+
+
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Kirim</button>
+                                </div>
+                            </form>
+
                         </div>
-                        @php
-                            $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
-                        @endphp
-                        <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
-                            @method('put')
-                            @csrf
-                            <div class="modal-body">
-                                <input type="hidden" name="id" value="{{ $rekap->id }}">
-                                <input type="hidden" name="status" value="5">
-                                <input type="hidden" name="statusPengawasan" value="0">
-                                <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
-                                <p> <b> Note:</b> <br></p>
-                                <p>LKE akan dikembalikan ke {{ $rekap->satker->nama_satker }} untuk diperbaiki kembali</p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Kirim</button>
-                            </div>
-
-                        </form>
+                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
-            {{-- Tolak --}}
-            <div class="modal fade" id="tolak">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Apakah Kamu Yakin untuk Menolak LKE?</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                {{-- Revisi --}}
+                <div class="modal fade" id="revisi">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Apakah Kamu Yakin untuk Mengirimkan Kembali LKE?</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            @php
+                                $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
+                            @endphp
+                            <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
+                                @method('put')
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="id" value="{{ $rekap->id }}">
+                                    <input type="hidden" name="status" value="5">
+                                    <input type="hidden" name="statusPengawasan" value="0">
+                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
+                                    <p> <b> Note:</b> <br></p>
+                                    <p>LKE akan dikembalikan ke {{ $rekap->satker->nama_satker }} untuk diperbaiki kembali
+                                    </p>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Kirim</button>
+                                </div>
+
+                            </form>
                         </div>
-
-                        <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
-                            @method('put')
-                            @csrf
-                            <div class="modal-body">
-                                <input type="hidden" name="id" value="{{ $rekap->id }}">
-                                <input type="hidden" name="status" value="7">
-                                <p> <b> Note:</b> <br></p>
-                                <p>LKE : {{ $rekap->satker->nama_satker }} akan ditolak dan dilakukan pembinaan</p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Kirim</button>
-                            </div>
-                        </form>
+                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
+                {{-- Tolak --}}
+                <div class="modal fade" id="tolak">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Apakah Kamu Yakin untuk Menolak LKE?</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <form method="post" action="/prov/evaluasi/{{ $rekap->id }}">
+                                @method('put')
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="id" value="{{ $rekap->id }}">
+                                    <input type="hidden" name="status" value="7">
+                                    <p> <b> Note:</b> <br></p>
+                                    <p>LKE : {{ $rekap->satker->nama_satker }} akan ditolak dan dilakukan pembinaan</p>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Kirim</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+            @endif
         @endif
     @endif
     <div class="col-lg-4">

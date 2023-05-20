@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 
 <body
-    class="hold-transition sidebar-mini {{ Request::is('tpi*') || Request::is('satker*') || Request::is('lke*') ? 'sidebar-collapse' : '' }}">
+    class="hold-transition sidebar-mini {{ Request::is('tpi*') || Request::is('satker*') || Request::is('lke*') || Request::is('prov/evaluasi*') ? 'sidebar-collapse' : '' }}">
     <div class="wrapper">
         <!-- Preloader -->
         <div id="my-element" class="preloader flex-column justify-content-center align-items-center">

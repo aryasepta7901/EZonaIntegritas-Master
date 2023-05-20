@@ -96,7 +96,7 @@ Route::post('/hasil/import', [RincianHasilController::class, 'import'])->name('i
 
 // Evaluator Provinsi
 Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middleware('auth');
-Route::get('/prov/evaluasi/{evaluasi}/{pilar}', [EvaluatorProvinsiController::class, 'show2'])->name('evaluasi.show2')->middleware('auth');
+Route::get('/prov/evaluasi/{evaluasi}/{pilar}', [EvaluatorProvinsiController::class, 'pertanyaan'])->name('evaluasi.pertanyaan')->middleware('auth');
 // Surat Persetujuan BPS Provinsi
 Route::resource('/prov/surat', SuratPersetujuanProvController::class)->middleware('auth');
 Route::post('/prov/surat/cetak', [SuratPersetujuanProvController::class, 'cetak'])->name('cetak.cetak')->middleware('auth');

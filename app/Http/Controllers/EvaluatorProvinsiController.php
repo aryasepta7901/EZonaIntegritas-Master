@@ -26,10 +26,8 @@ class EvaluatorProvinsiController extends Controller
     public function index()
     {
         $this->authorize('EvalProv');
-
-
-        return view('EvalProv.rekap', [
-            'title' => 'Rekapitulasi Pengajuan Zona Integritas',
+        return view('EvalProv.index', [
+            'title' => 'Pengajuan ZI ' . auth()->user()->satker->nama_satker,
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->orderBy('status', 'DESC')->get(),
             'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
         ]);
@@ -70,7 +68,7 @@ class EvaluatorProvinsiController extends Controller
 
         return view('self-assessment.lke', [
             'master' => 'Evaluasi Provinsi ',
-            'link' => 'prov/evaluasi',
+            'link' => '/prov/evaluasi',
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $evaluasi,
             'pertanyaan' => Pertanyaan::count(),
@@ -82,19 +80,17 @@ class EvaluatorProvinsiController extends Controller
 
         ]);
     }
-    public function show2(Rekapitulasi $evaluasi, Pilar $pilar)
+    public function pertanyaan(Rekapitulasi $evaluasi, Pilar $pilar)
     {
         $this->authorize('EvalProv');
         return view('self-assessment.pertanyaan', [
             'master' => 'LKE ',
-            'link' => 'prov/evaluasi/' . $evaluasi->id,
+            'link' => '/prov/evaluasi/' . $evaluasi->id,
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
             'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id)->get(),
             'rekap' => $evaluasi,
-
-
         ]);
     }
 
@@ -130,7 +126,7 @@ class EvaluatorProvinsiController extends Controller
             return redirect('/tpi/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
         } else {
             // Jika dilakukan provinsi 
-            return redirect('/prov/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
+            return redirect('/prov/evaluasi')->with('success', 'LKE Berhasil Di Setujui, Silahkan Cetak Surat Pengantar');
         }
     }
 

@@ -2,11 +2,19 @@
 
 @section('content')
     <div class="col-lg-12">
+        {{-- Session Sukses --}}
+        @if (session()->has('success'))
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Sukses!</h5>
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-end">
                     <a href="/prov/surat" class="btn btn-primary"><i class="fa fa-print">
-                            Cetak Surat Persetujuan</i></a>
+                        </i> Cetak Surat Pengantar</a>
                 </div>
             </div>
             <div class="card-body">
@@ -29,7 +37,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $value->satker->nama_satker }}</td>
                                 <td>{{ $value->predikat }}</td>
-                                <td>
+                                <td class="text-center">
                                     {{-- Cek apakah satker sudah melakukan self-assessment --}}
                                     @if ($value->RekapPengungkit->count() != 0)
                                         {{-- Hitung jumlah nilai rincian pengungkit --}}
@@ -38,22 +46,24 @@
                                                 $nilai_sa = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                             @endphp
                                         @endforeach
-                                        {{ round($nilai_sa, 2) }}
+                                        <button class="badge badge-info">{{ round($nilai_sa, 2) }}</button>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     {{-- Hitung jumlah nilai rincian hasil --}}
                                     @php
                                         $nilai = $nilaiHasil->where('satker_id', $value->satker_id)->sum('nilai');
                                     @endphp
-                                    {{ $nilai }}
+                                    <button class="badge badge-info"> {{ $nilai }} </button>
                                 </td>
                                 <td class="text-center">
                                     @if ($value->surat_pengantar_kabkota)
-                                        <button type="button" class="btn btn-info btn-sm " data-toggle="modal"
+                                        <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
                                             data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
                                                 class="fas fa-file">
                                             </i> Kab/Kota</button>
+                                    @else
+                                        -
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -74,7 +84,6 @@
     </div>
 
     {{-- View Surat Pengantar --}}
-
     {{-- Surat Pengantar kab/kota --}}
     @foreach ($rekap as $value)
         <div class="modal fade" id="surat_pengantar_kabkota{{ $value->id }}">

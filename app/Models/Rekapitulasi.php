@@ -9,7 +9,6 @@ class Rekapitulasi extends Model
 {
     protected $table = 'rekapitulasi';
     public $incrementing = false;
-    public $timestamps = false;
     use HasFactory;
     protected $fillable = [
         'id',
