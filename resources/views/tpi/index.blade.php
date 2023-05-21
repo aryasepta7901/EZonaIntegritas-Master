@@ -42,14 +42,13 @@
                             @endphp
                         @elseif(auth()->user()->level_id == 'KT')
                             @php
-                                $tpi = $ketua->id;
+                                $tpi = $ketua->id; //ambil id_ketua
                                 $data = $pengawasan->where('tpi_id', $tpi);
                             @endphp
                         @elseif(auth()->user()->level_id == 'DL')
                             @foreach ($dalnis as $d)
                                 @php
-                                    $tpi[] = $d->id;
-                                    
+                                    $tpi[] = $d->id; //ambil id_dalnis
                                     $data = $pengawasan->whereIn('tpi_id', $tpi);
                                     
                                 @endphp
@@ -63,7 +62,7 @@
                                 @if ($value->rekapitulasi->count() != 0)
                                     @foreach ($value->rekapitulasi as $item)
                                         <td>{{ $item->predikat }}</td>
-                                        <td>
+                                        <td class="text-center">
                                             {{-- Hitung jumlah nilai rincian pengungkit --}}
                                             @if ($item->RekapPengungkit->count() != 0)
                                                 @foreach ($item->RekapPengungkit as $P)
@@ -71,16 +70,16 @@
                                                         $nilai_sa = $P->where('rekapitulasi_id', $item->id)->sum('nilai_sa');
                                                     @endphp
                                                 @endforeach
-                                                {{ $nilai_sa }}
+                                                <button class="badge badge-info">{{ round($nilai_sa, 2) }}</button>
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             {{-- Hitung jumlah nilai rincian hasil --}}
                                             @php
                                                 $nilai = $nilaiHasil->where('satker_id', $item->satker_id)->sum('nilai');
                                             @endphp
 
-                                            {{ $nilai }}
+                                            <button class="badge badge-info"> {{ $nilai }} </button>
                                         </td>
 
                                         {{-- Cek Apakah Surat Rekomendasi ada --}}
@@ -96,14 +95,11 @@
                                                 <button class="btn btn-info btn-sm">No Dokumen</button>
                                             </td>
                                         @endif
-
                                         <td class="text-center">
                                             <a type="button" href="/tpi/evaluasi/{{ $item->id }}"
                                                 class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                         </td>
-
                                         <td>{{ $item->StatusRekap->status }}</td>
-
                                         {{-- View Surat Pengantar --}}
                                         <div class="modal fade" id="surat_pengantar_prov{{ $item->satker_id }}">
                                             <div class="modal-dialog modal-lg">

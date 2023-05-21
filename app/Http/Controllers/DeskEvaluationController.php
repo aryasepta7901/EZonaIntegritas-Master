@@ -32,10 +32,10 @@ class DeskEvaluationController extends Controller
             'tpi.index',
             [
                 'title' => 'Desk-Evaluation Zona Integritas',
-                'ketua' => TPI::where('ketua_tim', auth()->user()->id)->first(),
+                'ketua' => TPI::where('ketua_tim', auth()->user()->id)->first(), // satu ketua membawahi 2/3 anggota
                 'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
                 'pengawasan' => Pengawasan::get(),
-                'dalnis' => TPI::where('dalnis', auth()->user()->id)->get(),
+                'dalnis' => TPI::where('dalnis', auth()->user()->id)->get(), // satu dalnis bisa 2 tim
                 'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
             ]
 
@@ -126,7 +126,6 @@ class DeskEvaluationController extends Controller
     public function show(Rekapitulasi $evaluasi)
     {
         $this->authorize('TPI');
-        // dd(DeskEvaluation::where('rekapitulasi_id', $evaluasi->id)->where('id', 'LIKE', '%' . 'PPC' . '%')->count('jawaban_at'));
         return view('tpi.lke', [
             'master' => 'Desk-Evaluation ',
             'link' => '/tpi/evaluasi',
@@ -145,7 +144,7 @@ class DeskEvaluationController extends Controller
 
         ]);
     }
-    public function show2(Rekapitulasi $evaluasi, Pilar $pilar)
+    public function pertanyaan(Rekapitulasi $evaluasi, Pilar $pilar)
     {
         $this->authorize('TPI');
         return view('tpi.pertanyaan', [

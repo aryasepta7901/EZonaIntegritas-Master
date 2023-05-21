@@ -1,13 +1,30 @@
 @extends('layouts.backEnd.main')
 
 @section('content')
+    @php
+        $nilai_sa = 0;
+        $nilai_at = 0;
+        $nilai_kt = 0;
+        $nilai_dl = 0;
+    @endphp
+    @foreach ($nilaiPilar as $n)
+        @php
+            $nilai_sa += round($n->nilai_sa, 2);
+            $nilai_at += round($n->nilai_at, 2);
+            $nilai_kt += round($n->nilai_kt, 2);
+            $nilai_dl += round($n->nilai_dl, 2);
+        @endphp
+    @endforeach
+    {{-- @php
+    $nilai_sa += $nilaiHasil;
+    @endphp --}}
     @if ($rekap->status == 4)
         @if ($rekap->surat_pengantar_prov != '')
             {{-- Anggota Tim --}}
             @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
                 <div class="col-lg-12 mb-3 d-flex justify-content-end">
                     <button class="btn btn-primary m-2" data-toggle="modal" data-target="#at"><i class="fa fa-save">
-                            Simpan</i></button>
+                        </i> Simpan</button>
                 </div>
                 {{-- Simpan AT --}}
                 <div class="modal fade" id="at">
@@ -29,7 +46,9 @@
                                     <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
                                     <input type="hidden" name="status" value="1">
                                     <p> <b> Note:</b> <br></p>
-                                    <p>LKE akan dilanjutkan kepada Ketua Tim</p>
+                                    <p>LKE akan dilanjutkan kepada </p>
+                                    <p>Nilai Desk Evaluation Anggota Tim : <b class="badge badge-info">
+                                            {{ $nilai_sa }}</b> </p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -46,9 +65,9 @@
             @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
                 <div class="col-lg-12 mb-3 d-flex justify-content-end">
                     <button class="btn btn-warning m-2" data-toggle="modal" data-target="#at"><i class="fa fa-backward">
-                            Kembalikan ke AT</i></button>
+                        </i> Kembalikan ke AT</button>
                     <button class="btn btn-primary m-2" data-toggle="modal" data-target="#kt"><i class="fa fa-save">
-                            Simpan</i></button>
+                        </i> Simpan</button>
 
                 </div>
                 {{-- Simpan KT(Teruskan ke DL) --}}
@@ -234,23 +253,7 @@
         <div class="info-box bg-light">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-bold mb-3">{{ $rekap->satker->nama_satker }}</span>
-                @php
-                    $nilai_sa = 0;
-                    $nilai_at = 0;
-                    $nilai_kt = 0;
-                    $nilai_dl = 0;
-                @endphp
-                @foreach ($nilaiPilar as $n)
-                    @php
-                        $nilai_sa += round($n->nilai_sa, 2);
-                        $nilai_at += round($n->nilai_at, 2);
-                        $nilai_kt += round($n->nilai_kt, 2);
-                        $nilai_dl += round($n->nilai_dl, 2);
-                    @endphp
-                @endforeach
-                {{-- @php
-                    $nilai_sa += $nilaiHasil;
-                @endphp --}}
+
                 <div class="row">
                     {{-- Self-Assessment --}}
                     <div class="col-lg-6">
@@ -412,24 +415,20 @@
                                                         <span class="info-box-number">
                                                             {{-- Jika nilai ada di database --}}
                                                             @if ($nilai !== null)
-                                                                @php
-                                                                    $evaluation = App\Models\DeskEvaluation::where('rekapitulasi_id', $rekap->id);
-                                                                @endphp
-
                                                                 @if (auth()->user()->level_id == 'AT')
                                                                     @php
                                                                         $nilai = $nilai->nilai_at;
-                                                                        $soal_terjawab = $evaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_at'); //mengambil nilai
+                                                                        $soal_terjawab = $deskEvaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_at'); //mengambil nilai
                                                                     @endphp
                                                                 @elseif(auth()->user()->level_id == 'KT')
                                                                     @php
                                                                         $nilai = $nilai->nilai_kt;
-                                                                        $soal_terjawab = $evaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_kt'); //mengambil nilai
+                                                                        $soal_terjawab = $deskEvaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_kt'); //mengambil nilai
                                                                     @endphp
                                                                 @elseif(auth()->user()->level_id == 'DL')
                                                                     @php
                                                                         $nilai = $nilai->nilai_dl;
-                                                                        $soal_terjawab = $evaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_dl'); //mengambil nilai
+                                                                        $soal_terjawab = $deskEvaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_dl'); //mengambil nilai
                                                                     @endphp
                                                                 @endif
                                                                 @php

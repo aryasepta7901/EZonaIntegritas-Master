@@ -104,7 +104,7 @@ Route::post('/prov/surat/cetak', [SuratPersetujuanProvController::class, 'cetak'
 
 // Desk Evaluation
 Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('auth');
-Route::get('/tpi/evaluasi/{evaluasi}/{pilar}', [DeskEvaluationController::class, 'show2'])->name('evaluasi.show2')->middleware('auth');
+Route::get('/tpi/evaluasi/{evaluasi}/{pilar}', [DeskEvaluationController::class, 'pertanyaan'])->name('evaluasi.pertanyaan')->middleware('auth');
 // LHE
 Route::resource('/tpi/lhe', LheController::class)->middleware('auth');
 

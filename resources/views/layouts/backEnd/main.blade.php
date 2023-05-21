@@ -34,6 +34,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('template') }}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link href="{{ asset('landingPage') }}/img/bps.png" rel="icon">
+
 
 </head>
 
