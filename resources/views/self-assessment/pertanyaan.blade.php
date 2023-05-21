@@ -97,6 +97,8 @@
                                                                 value="{{ $pilar->id }}">
                                                             <input type="hidden" name="penimbang"
                                                                 value="{{ $penimbang }}">
+                                                            <input type="hidden" name="pertanyaan_id"
+                                                                value="{{ $value->id }}">
                                                             {{-- Data RekapPengungkit --}}
                                                             <td style="min-width: 650px;">
                                                                 <div class="card-body">

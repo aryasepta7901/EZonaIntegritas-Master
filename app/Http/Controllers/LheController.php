@@ -183,7 +183,7 @@ class LheController extends Controller
         $tpi = TPI::where('id', $pengawasan->tpi_id)->first();
         return view('tpi.lhe', [
             'master' => 'LKE',
-            'link' => 'tpi/evaluasi/' . $lhe->id,
+            'link' => '/tpi/evaluasi/' . $lhe->id,
             'rekap' => $rekap,
             'anggota' => User::where('id', $pengawasan->anggota_id)->first(),
             'ketua' => User::where('id', $tpi->ketua_tim)->first(),

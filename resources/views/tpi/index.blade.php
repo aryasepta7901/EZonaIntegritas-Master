@@ -99,7 +99,20 @@
                                             <a type="button" href="/tpi/evaluasi/{{ $item->id }}"
                                                 class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
                                         </td>
-                                        <td>{{ $item->StatusRekap->status }}</td>
+                                        <td>{{ $item->StatusRekap->status }}
+                                            @if ($item->status == 4)
+                                                @php
+                                                    $status_pengawasan = $pengawasan->where('satker_id', $value->satker_id)->first();
+                                                @endphp
+                                                @if ($status_pengawasan->status == 0)
+                                                    <button class="badge badge-info">Anggota Tim</button>
+                                                @elseif($status_pengawasan->status == 1)
+                                                    <button class="badge badge-info">Ketua Tim</button>
+                                                @else
+                                                    <button class="badge badge-info">Pengendali Teknis</button>
+                                                @endif
+                                            @endif
+                                        </td>
                                         {{-- View Surat Pengantar --}}
                                         <div class="modal fade" id="surat_pengantar_prov{{ $item->satker_id }}">
                                             <div class="modal-dialog modal-lg">

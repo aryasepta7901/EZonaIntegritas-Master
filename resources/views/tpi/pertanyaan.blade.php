@@ -345,7 +345,9 @@
                                                                                         <input type="hidden"
                                                                                             value="{{ $pengawasan->id }}"
                                                                                             name="pengawasan">
-
+                                                                                        <input type="hidden"
+                                                                                            name="pertanyaan_id"
+                                                                                            value="{{ $value->id }}">
 
                                                                                         @foreach ($value->opsi as $item)
                                                                                             @if ($item->type == 'checkbox')
@@ -519,6 +521,10 @@
                                                                                         <input type="hidden"
                                                                                             value="{{ $pengawasan->id }}"
                                                                                             name="pengawasan">
+                                                                                        <input type="hidden"
+                                                                                            name="pertanyaan_id"
+                                                                                            value="{{ $value->id }}">
+
 
                                                                                         @foreach ($value->opsi as $item)
                                                                                             @if ($item->type == 'checkbox')
@@ -539,11 +545,19 @@
                                                                                                 <p for="input">
                                                                                                     {{ $item->rincian }}
                                                                                                 </p>
+                                                                                                @php
+                                                                                                    $desk = $deskEvaluation->InputField->where('opsi_id', $item->id)->first();
+                                                                                                @endphp
+                                                                                                <input type="hidden"
+                                                                                                    value="{{ $item->id }}"
+                                                                                                    name="opsi{{ $loop->index }}">
                                                                                                 <input type="number"
-                                                                                                    min="0"
+                                                                                                    min="0" required
                                                                                                     class="form-control"
-                                                                                                    name="jawaban_kt"
-                                                                                                    @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>
+                                                                                                    name="input[]"
+                                                                                                    @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
+                                                                                                    @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif
+                                                                                                    value="{{ $desk->input_kt }}">
                                                                                             @endif
                                                                                         @endforeach
                                                                                     </div>
@@ -609,7 +623,7 @@
                                                                                                     <input
                                                                                                         class="form-check-input"
                                                                                                         type="radio"
-                                                                                                        name="jawaban_at"
+                                                                                                        name="jawaban_kt"
                                                                                                         value="{{ $item->id }}"
                                                                                                         @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>
                                                                                                     <label
@@ -619,10 +633,14 @@
                                                                                                 <p for="input">
                                                                                                     {{ $item->rincian }}
                                                                                                 </p>
+                                                                                                <input type="hidden"
+                                                                                                    value="{{ $item->id }}"
+                                                                                                    name="opsi{{ $loop->index }}">
                                                                                                 <input type="number"
-                                                                                                    min="0"
+                                                                                                    min="0" required
                                                                                                     class="form-control"
-                                                                                                    name="jawaban_at"
+                                                                                                    name="input[]"
+                                                                                                    @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
                                                                                                     @if ($pengawasan->status != 1 || auth()->user()->level_id != 'KT') disabled @endif>
                                                                                             @endif
                                                                                         @endforeach
@@ -680,6 +698,9 @@
                                                                                         <input type="hidden"
                                                                                             value="{{ $pengawasan->id }}"
                                                                                             name="pengawasan">
+                                                                                        <input type="hidden"
+                                                                                            name="pertanyaan_id"
+                                                                                            value="{{ $value->id }}">
 
                                                                                         @foreach ($value->opsi as $item)
                                                                                             @if ($item->type == 'checkbox')
@@ -700,11 +721,19 @@
                                                                                                 <p for="input">
                                                                                                     {{ $item->rincian }}
                                                                                                 </p>
+                                                                                                @php
+                                                                                                    $desk = $deskEvaluation->InputField->where('opsi_id', $item->id)->first();
+                                                                                                @endphp
+                                                                                                <input type="hidden"
+                                                                                                    value="{{ $item->id }}"
+                                                                                                    name="opsi{{ $loop->index }}">
                                                                                                 <input type="number"
-                                                                                                    min="0"
+                                                                                                    min="0" required
                                                                                                     class="form-control"
-                                                                                                    name="jawaban_dl"
-                                                                                                    @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
+                                                                                                    name="input[]"
+                                                                                                    @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
+                                                                                                    @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif
+                                                                                                    value="{{ $desk->input_dl }}">
                                                                                             @endif
                                                                                         @endforeach
                                                                                     </div>
@@ -780,10 +809,15 @@
                                                                                                 <p for="input">
                                                                                                     {{ $item->rincian }}
                                                                                                 </p>
+                                                                                               
+                                                                                                <input type="hidden"
+                                                                                                    value="{{ $item->id }}"
+                                                                                                    name="opsi{{ $loop->index }}">
                                                                                                 <input type="number"
-                                                                                                    min="0"
+                                                                                                    min="0" required
                                                                                                     class="form-control"
-                                                                                                    name="jawaban_dl"
+                                                                                                    name="input[]"
+                                                                                                    @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
                                                                                                     @if ($pengawasan->status != 2 || auth()->user()->level_id != 'DL') disabled @endif>
                                                                                             @endif
                                                                                         @endforeach
