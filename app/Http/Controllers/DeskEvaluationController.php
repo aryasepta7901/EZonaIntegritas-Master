@@ -17,6 +17,7 @@ use App\Models\DeskEvaluation;
 use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
 use App\Http\Controllers\Controller;
+use App\Models\InputField;
 
 class DeskEvaluationController extends Controller
 {
@@ -61,35 +62,113 @@ class DeskEvaluationController extends Controller
      */
     public function store(Request $request)
     {
-
+        // Field ini hanya untuk menyimpan DeskEvaluation dari anggota tim, dikarenakan AT perlu create table terlebih dahulu
         if ($request->submit_at) {
-            // validasi
-            $request->validate(
-                [
-                    'jawaban_at' => 'required',
-                    'catatan_at' => 'required',
-                ],
-                [
-                    'catatan*.required' => 'Silahkan Isi Catatan, ',
-                    'jawaban*.required' => 'Silahkan Pilih Jawaban, ',
+            // Jika field merupakan input
+            if ($request->input) {
+                $request->validate(
+                    [
+                        'catatan_at'  => 'required',
 
-                ]
-            );
-            $jawaban = $request->jawaban_at;
-            $nilai = Opsi::where('id', $jawaban)->first()->bobot;
+                    ],
+                    [
+                        'catatan.required' => 'Catatan Wajib di Isi,',
+                    ]
+                );
+
+                foreach ($request->input as $key => $input) {
+                    $total = $key + 1;
+                }
+                if ($total == 2) {
+                    // Logika 1
+                    $nilai1 = $request->input[0];
+                    $nilai2 = $request->input[1];
+                    $nilai = $nilai1 == 0 ? 0 : ($nilai2 / $nilai1);
+                    if ($nilai > 1) {
+                        $nilai = 1;
+                    }
+                } elseif ($total == 5) {
+                    $nilai1 = $request->input[1];
+                    $nilai2 = $request->input[2];
+                    $nilai3 = $request->input[3];
+                    $nilai4 = $request->input[4];
+                    $penimbang = $nilai1 + $nilai2 + $nilai3;
+                    if ($penimbang < $nilai4) {
+                        return back()->withErrors('Silahkan Cek Ulang, Isian tidak boleh melebihi' . $penimbang);
+                    } else {
+                        $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
+                    }
+                } elseif ($total == 3) {
+                    if ($request->pertanyaan_id == "PRC3A") {
+                        // Khusus pertanyaan Penurunan pelanggaran disiplin pegawai
+                        $nilai1 = $request->input[0];
+                        $nilai2 = $request->input[1];
+                        $nilai = $nilai1 == 0 ? 0 : ($nilai2 / ($nilai1));
+                        if ($nilai > 1) {
+                            $nilai = 1;
+                        }
+                    } else {
+                        $nilai1 = $request->input[1];
+                        $nilai2 = $request->input[2];
+                        $nilai0 = $nilai1 + $nilai2;
+                        $nilai = $nilai0 == 0 ? 0 : ($nilai2 / ($nilai0));
+                    }
+                }
+            } else {
+                // validasi untuk checkbox
+                $request->validate(
+                    [
+                        'jawaban_at' => 'required',
+                        'catatan_at' => 'required',
+                    ],
+                    [
+                        'catatan*.required' => 'Silahkan Isi Catatan, ',
+                        'jawaban*.required' => 'Silahkan Pilih Jawaban, ',
+
+                    ]
+                );
+            }
+
             $id = date('Y') . $request->satker_id . $request->pertanyaan_id;
 
-            DeskEvaluation::updateOrCreate(
-                ['id' => $id],
-                [
-                    'jawaban_at' => $jawaban,
-                    'catatan_at' => $request->catatan_at,
-                    'nilai_at' => $nilai,
-                    'pengawasan_id' => $request->pengawasan,
-                    'rekapitulasi_id' => $request->rekapitulasi_id,
+            $data = [
+                'id' => $id,
+                'catatan_at' => $request->catatan_at,
+                'pengawasan_id' => $request->pengawasan,
+                'rekapitulasi_id' => $request->rekapitulasi_id,
+            ];
 
-                ]
-            );
+            if ($request->input) {
+                $data['jawaban_at'] = '-';
+                $data['nilai_at'] = $nilai;
+                DeskEvaluation::create($data);
+                // Jika field berbentuk Input
+                foreach ($request->input as $key => $input) {
+                    $opsi = $request->input('opsi' . $key);
+                    InputField::updateOrCreate(
+                        ['id' => $opsi . $data['id']],
+                        [
+                            'input_at' => $input,
+                        ]
+                    );
+                }
+                $opsi0 = $request->input('opsi0');
+                $dataPertama = $opsi0 . $data['id'];
+
+                if ($opsi0 == 'PRE3A1' || $opsi0 == 'PRE3B1') {
+                    InputField::where('id', $dataPertama)->update(['input_sa' => $nilai * 100]);
+                } elseif ($opsi0 == 'PRE2A1') {
+                    InputField::where('id', $dataPertama)->update(['input_sa' => $nilai0]);
+                }
+            } else {
+                // Jika field berbentuk Checkbox
+                $data['jawaban_at'] =  $request->jawaban_at;
+                $data['nilai_at'] = Opsi::where('id', $data['jawaban_at'])->first()->bobot;
+                DeskEvaluation::create($data);
+            }
+
+
+
             // RekapPengungkit ->nilai_at
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
@@ -99,16 +178,16 @@ class DeskEvaluationController extends Controller
 
             $penimbang = $request->penimbang;
             if ($nilaiLama->nilai_at !== null)
-                $total = round($nilai * $penimbang, 3) + $nilaiLama->nilai_at;
+                $total = $data['nilai_at'] * $penimbang + $nilaiLama->nilai_at;
             else {
-                $total = round($nilai * $penimbang, 3);
+                $total = $data['nilai_at'] * $penimbang;
             }
             RekapPengungkit::updateOrCreate(
                 ['id' => $id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
-                    'nilai_at' => $total,
+                    'nilai_at' =>  round($total, 3),
                 ],
             );
         }
@@ -153,7 +232,7 @@ class DeskEvaluationController extends Controller
             'title' => $pilar->pilar,
             'pilar' => $pilar,
             'subPilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
-            'DeskEvaluation' => DeskEvaluation::get(),
+            'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id)->get(),
             'rekap' => $evaluasi,
             'pengawasan' => Pengawasan::where('satker_id', $evaluasi->satker_id)->first(),
 

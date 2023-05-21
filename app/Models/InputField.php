@@ -25,4 +25,8 @@ class InputField extends Model
     {
         return $this->belongsTo(SelfAssessment::class, 'selfassessment_id');
     }
+    public function DeskEvaluation()
+    {
+        return $this->belongsTo(DeskEvaluation::class, 'selfassessment_id', 'id');
+    }
 }

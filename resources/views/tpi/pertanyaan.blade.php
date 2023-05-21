@@ -97,9 +97,8 @@
                                                     @endphp
                                                     @if ($selfAssessment != null)
                                                         <tr class="rowAccordion">
-
                                                             {{-- Self Assessment --}}
-                                                            {{-- Update --}}
+                                                            {{-- View --}}
                                                             <form method="POST">
                                                                 <td style="min-width: 500px;">
                                                                     <div class="card-body">
@@ -109,7 +108,7 @@
                                                                             @foreach ($value->opsi as $item)
                                                                                 @if ($item->type == 'checkbox')
                                                                                     <div class="form-check ml-4">
-                                                                                        <input
+                                                                                        <input readonly
                                                                                             @if ($selfAssessment->opsi_id == $item->id) checked @endif
                                                                                             class="form-check-input"
                                                                                             type="radio" name="opsi_id"
@@ -118,17 +117,24 @@
                                                                                             class="form-check-label">{{ $item->rincian }}</label>
                                                                                     </div>
                                                                                 @elseif($item->type == 'input')
+                                                                                    @php
+                                                                                        $self = $selfAssessment->InputField->where('opsi_id', $item->id)->first();
+                                                                                    @endphp
                                                                                     <p for="input">{{ $item->rincian }}
                                                                                     </p>
-                                                                                    <input type="number" min="0"
-                                                                                        class="form-control" name="opsi_id">
+                                                                                    <input readonly type="number"
+                                                                                        min="0" class="form-control"
+                                                                                        id="{{ $item->id }}"
+                                                                                        name="input[]"
+                                                                                        @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
+                                                                                        value="{{ $self->input_sa }}">
                                                                                 @endif
                                                                             @endforeach
                                                                         </div>
 
                                                                         <div class="form-group">
                                                                             <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control" rows="4" name="catatan">{{ old('catatan', $selfAssessment->catatan) }} </textarea>
+                                                                            <textarea readonly class="form-control" rows="4" name="catatan">{{ old('catatan', $selfAssessment->catatan) }} </textarea>
                                                                         </div>
                                                                         {{-- File Utama --}}
                                                                         <label for="catatan">Dokumen</label>
@@ -360,6 +366,7 @@
                                                                                                 <p for="input">
                                                                                                     {{ $item->rincian }}
                                                                                                 </p>
+
                                                                                                 @php
                                                                                                     $desk = $deskEvaluation->InputField->where('opsi_id', $item->id)->first();
                                                                                                 @endphp

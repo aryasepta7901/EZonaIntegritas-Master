@@ -418,17 +418,23 @@
                                                                 @if (auth()->user()->level_id == 'AT')
                                                                     @php
                                                                         $nilai = $nilai->nilai_at;
-                                                                        $soal_terjawab = $deskEvaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_at'); //mengambil nilai
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                            ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->count('jawaban_at'); //mengambil nilai
                                                                     @endphp
                                                                 @elseif(auth()->user()->level_id == 'KT')
                                                                     @php
                                                                         $nilai = $nilai->nilai_kt;
-                                                                        $soal_terjawab = $deskEvaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_kt'); //mengambil nilai
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                            ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->count('jawaban_kt'); //mengambil nilai
                                                                     @endphp
                                                                 @elseif(auth()->user()->level_id == 'DL')
                                                                     @php
                                                                         $nilai = $nilai->nilai_dl;
-                                                                        $soal_terjawab = $deskEvaluation->where('id', 'LIKE', '%' . $value->id . '%')->count('jawaban_dl'); //mengambil nilai
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                            ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->count('jawaban_dl'); //mengambil nilai
                                                                     @endphp
                                                                 @endif
                                                                 @php

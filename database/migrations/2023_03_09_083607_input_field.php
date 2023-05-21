@@ -16,6 +16,7 @@ class InputField extends Migration
         Schema::create('inputField', function (Blueprint $table) {
             $table->char('id', 20)->primary(); //opsi_id.selfAssessment_id
             $table->double('input_sa', 6, 2)->nullable();
+            $table->double('input_at', 6, 2)->nullable();
             $table->double('input_kt', 6, 2)->nullable();
             $table->double('input_dl', 6, 2)->nullable();
             $table->char('opsi_id', 6);
