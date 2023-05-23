@@ -20,6 +20,7 @@ use App\Http\Controllers\RekapitulasiController;
 use App\Http\Controllers\RincianHasilController;
 use App\Http\Controllers\SelfAssessmentController;
 use App\Http\Controllers\SuratPersetujuanProvController;
+use App\Http\Controllers\Pertanyaan2Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +74,7 @@ Route::resource('/pilar', PilarController::class)->middleware('auth');
 Route::resource('/subpilar', SubPilarController::class)->middleware('auth');
 // // Pertanyaan
 Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
-Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
+// Route::resource('/pertanyaan', Pertanyaan2Controller::class)->middleware('auth');
 // Google 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');

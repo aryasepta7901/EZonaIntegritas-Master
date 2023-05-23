@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php;
 
-class PertanyaanController extends Controller
+class Pertanyaan2Controller extends Controller
 {
 
     /**

@@ -48,7 +48,6 @@
                                 <th data-toggle="collapse" data-target="#accordion{{ $value->id }}">{{ $value->bobot }}
                                 </th>
                                 <td class="text-center">
-
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
                                         data-target="#tambah{{ $value->id }}"><i class="fas fa-plus"></i></button>
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
@@ -69,8 +68,8 @@
                                         id="accordion{{ $sr->rincian_id }}">{{ $sr->bobot }}</th>
                                     <td class="collapse text-center" id="accordion{{ $sr->rincian_id }}">
 
-                                        {{-- <button class="btn btn-sm btn-success" data-toggle="modal"
-                                            data-target="#tambah{{ $sr->id }}"><i class="fas fa-plus"></i></button> --}}
+                                        <button class="btn btn-sm btn-success" data-toggle="modal"
+                                            data-target="#tambah{{ $sr->id }}"><i class="fas fa-plus"></i></button>
                                         <button class="btn btn-sm btn-success" data-toggle="modal"
                                             data-target="#edit{{ $sr->id }}"><i class="fas fa-pen"></i></button>
                                         <button class="btn btn-sm btn-danger" data-toggle="modal"
@@ -78,7 +77,7 @@
                                     </td>
                                 </tr>
                                 @foreach ($sr->pilar as $p)
-                                    <tr style="background-color: rgb(0, 255, 119)" id="accordion{{ $sr->rincian_id }}">
+                                    <tr style="background-color: rgb(0, 255, 119)">
                                         <td data-toggle="collapse" data-target="#accordion{{ $p->id }}"
                                             class="collapse" id="accordion{{ $p->subrincian_id }}">{{ $loop->iteration }}
                                             <i class="fa-solid fa-caret-down"></i>
@@ -89,9 +88,20 @@
                                         <td data-toggle="collapse" data-target="#accordion{{ $p->id }}"
                                             class="collapse" id="accordion{{ $p->subrincian_id }}">{{ $p->bobot }}
                                         </td>
+                                        <td class="collapse text-center" id="accordion{{ $p->subrincian_id }}">
+
+                                            <button class="btn btn-sm btn-success" data-toggle="modal"
+                                                data-target="#tambah{{ $p->id }}"><i
+                                                    class="fas fa-plus"></i></button>
+                                            <button class="btn btn-sm btn-success" data-toggle="modal"
+                                                data-target="#edit{{ $p->id }}"><i class="fas fa-pen"></i></button>
+                                            <button class="btn btn-sm btn-danger" data-toggle="modal"
+                                                data-target="#hapus{{ $p->id }}"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </td>
                                     </tr>
                                     @foreach ($p->subPilar as $sp)
-                                        <tr style="background-color: rgb(255, 166, 0)" id="accordion{{ $sr->rincian_id }}">
+                                        <tr style="background-color: rgb(255, 166, 0)">
                                             <td data-toggle="collapse" data-target="#accordion{{ $sp->id }}"
                                                 class="collapse" id="accordion{{ $sp->pilar_id }}">
                                                 {{ $loop->iteration }} <i class="fa-solid fa-caret-down"></i></td>
@@ -101,9 +111,20 @@
                                             <td data-toggle="collapse" data-target="#accordion{{ $sp->id }}"
                                                 class="collapse" id="accordion{{ $sp->pilar_id }}">{{ $sp->bobot }}
                                             </td>
+                                            <td class="collapse text-center" id="accordion{{ $sp->pilar_id }}">
+
+                                                <a href="/pertanyaan/{{ $sp->id }}"
+                                                    class="btn btn-sm btn-primary "><i class="fa fa-plus"> </i> </a>
+                                                <button class="btn btn-sm btn-success" data-toggle="modal"
+                                                    data-target="#edit{{ $sp->id }}"><i
+                                                        class="fas fa-pen"></i></button>
+                                                <button class="btn btn-sm btn-danger" data-toggle="modal"
+                                                    data-target="#hapus{{ $sp->id }}"><i
+                                                        class="fas fa-trash"></i></button>
+                                            </td>
                                         </tr>
                                         @foreach ($sp->pertanyaan as $p)
-                                            <tr id="accordion{{ $sr->rincian_id }}">
+                                            <tr style="background-color: rgb(178, 173, 163)">
                                                 <td class="collapse" id="accordion{{ $p->subpilar_id }}">
                                                     {{ $loop->iteration }}</td>
                                                 <td class="collapse" id="accordion{{ $p->subpilar_id }}">
@@ -111,7 +132,28 @@
                                                 <td class="collapse" id="accordion{{ $p->subpilar_id }}">
                                                     {{ $p->bobot }}
                                                 </td>
+
+                                                <td class="collapse text-center" id="accordion{{ $p->subpilar_id }}">
+                                                    <button class="btn btn-sm btn-success" data-toggle="modal"
+                                                        data-target="#info{{ $p->id }}"><i
+                                                            class="fas fa-eye"></i></button>
+                                                    <a href="/pertanyaan/{{ $p->id }}/edit"
+                                                        class="btn btn-sm btn-success"><i class="fa fa-pen">
+                                                        </i></a>
+                                                    <button class="btn btn-sm btn-danger" data-toggle="modal"
+                                                        data-target="#hapus{{ $p->id }}"><i
+                                                            class="fas fa-trash"></i></button>
+                                                </td>
+
                                             </tr>
+                                            {{-- Codingan Pemanis saja --}}
+                                            @foreach ($p->opsi as $o)
+                                                <tr>
+                                                    <td class="collapse" id="accordion{{ $o->pertanyaan_id }}">
+
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         @endforeach
                                     @endforeach
                                 @endforeach
@@ -162,7 +204,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create Rincian</button>
+                        <button type="submit" class="btn btn-primary">Tambah Rincian</button>
                     </div>
                 </form>
             </div>
@@ -247,55 +289,66 @@
     @endforeach
 
 
-    @foreach ($rincian as $r)
-        @foreach ($r->subRincian as $value)
-            {{-- Tambah --}}
-            <div class="modal fade" id="tambah{{ $r->id }}">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Tambah Sub Rincian</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
 
-                        <form method="post" action="/subrincian">
-                            @csrf
-                            <div class="modal-body">
-                                <div class="row">
-                                    <input type="hidden" name="rincian" value="{{ $r->id }}">
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="subRincian">Sub Rincian</label>
-                                            <input type="text"
-                                                class="form-control @error('subRincian') is-invalid  @enderror"
-                                                id="subRincian" name="subRincian" value="{{ old('subRincian') }}"
-                                                placeholder="Isi Nama Sub Rincian">
-                                            @error('subRincian')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
+    {{-- subRincian ,Pilar, SubPilar,Pertanyaan --}}
+    @foreach ($rincian as $r)
+        {{-- Subrincian --}}
+        {{-- Tambah --}}
+        <div class="modal fade" id="tambah{{ $r->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Tambah Sub Rincian</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form method="post" action="/subrincian">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <input type="hidden" name="rincian" value="{{ $r->id }}">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="Rincian">Rincian</label>
+
+                                        <input class="form-control" readonly type="text" name="rincian_name"
+                                            value="{{ $r->rincian }}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="subRincian">Sub Rincian</label>
+                                        <input type="text"
+                                            class="form-control @error('subRincian') is-invalid  @enderror"
+                                            id="subRincian" name="subRincian" value="{{ old('subRincian') }}"
+                                            placeholder="Isi Nama Sub Rincian">
+                                        @error('subRincian')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                 </div>
 
+                            </div>
 
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Create Sub Rincian</button>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.modal-content -->
+
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Tambah Sub Rincian</button>
+                        </div>
+                    </form>
                 </div>
-                <!-- /.modal-dialog -->
+                <!-- /.modal-content -->
             </div>
+            <!-- /.modal-dialog -->
+        </div>
+        @foreach ($r->subRincian as $sr)
             {{-- Edit --}}
-
-            <div class="modal fade" id="edit{{ $value->id }}">
+            <div class="modal fade" id="edit{{ $sr->id }}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -305,7 +358,7 @@
                             </button>
                         </div>
 
-                        <form method="post" action="/subrincian/{{ $value->id }}">
+                        <form method="post" action="/subrincian/{{ $sr->id }}">
                             @method('put')
                             @csrf
                             <div class="modal-body">
@@ -313,11 +366,18 @@
                                     <input type="hidden" name="rincian" value="{{ $r->id }}">
                                     <div class="col-lg-12">
                                         <div class="form-group">
+                                            <label for="Rincian">Rincian</label>
+                                            <input class="form-control" readonly type="text" name="rincian_name"
+                                                value="{{ $r->rincian }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
                                             <label for="subRincian">Sub Rincian</label>
                                             <input type="text"
                                                 class="form-control @error('subRincian') is-invalid  @enderror"
                                                 id="subRincian" name="subRincian"
-                                                value="{{ old('subRincian', $value->subRincian) }}"
+                                                value="{{ old('subRincian', $sr->subRincian) }}"
                                                 placeholder="Isi Nama Sub Rincian">
                                             @error('subRincian')
                                                 <div class="invalid-feedback">
@@ -341,8 +401,7 @@
                 <!-- /.modal-dialog -->
             </div>
             {{-- Hapus --}}
-
-            <div class="modal fade" id="hapus{{ $value->id }}">
+            <div class="modal fade" id="hapus{{ $sr->id }}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -353,10 +412,10 @@
                         </div>
                         <div class="modal-body">
                             <p class="text-danger">Apakah Anda Yakin untuk Menghapus SubRincian dengan Nama:</p>
-                            <b>{{ $value->subRincian }}
+                            <b>{{ $sr->subRincian }}
                                 ?</b>
                         </div>
-                        <form action="/subrincian/{{ $value->id }}" method="POST" class="d-inline">
+                        <form action="/subrincian/{{ $sr->id }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <div class="modal-footer justify-content-between">
@@ -369,6 +428,447 @@
                 </div>
                 <!-- /.modal-dialog -->
             </div>
+            {{-- Pilar --}}
+            {{-- Tambah --}}
+            <div class="modal fade" id="tambah{{ $sr->id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Tambah Pilar</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form method="post" action="/pilar">
+                            @csrf
+                            <div class="modal-body">
+                                <div class="row">
+                                    <input type="hidden" name="subrincian_id" value="{{ $sr->id }}">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="Rincian">Rincian</label>
+                                            <input class="form-control" readonly type="text" name="rincian_name"
+                                                value="{{ $r->rincian }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="SubRincian">Sub Rincian</label>
+                                            <input class="form-control" readonly type="text" name="subrincian_name"
+                                                value="{{ $sr->subRincian }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="pilar">Pilar</label>
+                                            <input type="text"
+                                                class="form-control @error('pilar') is-invalid  @enderror" id="pilar"
+                                                name="pilar" value="{{ old('pilar') }}" placeholder="Isi Nama Pilar">
+                                            @error('pilar')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="min_wbk">Minimal WBK</label>
+                                            <input type="number"
+                                                class="form-control @error('min_wbk') is-invalid  @enderror"
+                                                id="min_wbk" name="min_wbk" value="{{ old('min_wbk') }}"
+                                                placeholder="Isi Nilai Minimal WBK" min="0" step=".01">
+                                            @error('min_wbk')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="min_wbbm">Minimal WBBM</label>
+                                            <input type="number"
+                                                class="form-control @error('min_wbbm') is-invalid  @enderror"
+                                                id="min_wbbm" name="min_wbbm" value="{{ old('min_wbbm') }}"
+                                                placeholder="Isi Nilai min_wbbm" min="0" step=".01">
+                                            @error('min_wbbm')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Tambah Pilar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            @foreach ($sr->pilar as $p)
+                {{-- Edit --}}
+                <div class="modal fade" id="edit{{ $p->id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Pilar</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <form method="post" action="/pilar/{{ $p->id }}">
+                                @method('put')
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <input type="hidden" name="subrincian_id" value="{{ $sr->id }}">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="Rincian">Rincian</label>
+                                                <input class="form-control" readonly type="text" name="rincian_name"
+                                                    value="{{ $r->rincian }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="SubRincian">Sub Rincian</label>
+                                                <input class="form-control" readonly type="text"
+                                                    name="subrincian_name" value="{{ $sr->subRincian }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="pilar">Pilar</label>
+                                                <input type="text"
+                                                    class="form-control @error('pilar') is-invalid  @enderror"
+                                                    id="pilar" name="pilar" value="{{ old('pilar', $p->pilar) }}"
+                                                    placeholder="Isi Nama Pilar">
+                                                @error('pilar')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="min_wbk">Minimal WBK</label>
+                                                <input type="number"
+                                                    class="form-control @error('min_wbk') is-invalid  @enderror"
+                                                    id="min_wbk" name="min_wbk"
+                                                    value="{{ old('min_wbk', $p->min_wbk) }}"
+                                                    placeholder="Isi Nilai Minimal WBK" min="0" step=".01">
+                                                @error('min_wbk')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="min_wbbm">Minimal WBBM</label>
+                                                <input type="number"
+                                                    class="form-control @error('min_wbbm') is-invalid  @enderror"
+                                                    id="min_wbbm" name="min_wbbm"
+                                                    value="{{ old('min_wbbm', $p->min_wbbm) }}"
+                                                    placeholder="Isi Nilai min_wbbm" min="0" step=".01">
+                                                @error('min_wbbm')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Update Pilar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                {{-- Hapus --}}
+                <div class="modal fade" id="hapus{{ $p->id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Hapus</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="text-danger">Apakah Anda Yakin untuk Menghapus Pilar dengan Nama:</p>
+                                <b>{{ $p->pilar }}
+                                    ?</b>
+                            </div>
+                            <form action="/pilar/{{ $p->id }}" method="POST" class="d-inline">
+                                @method('delete')
+                                @csrf
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                {{-- SubPilar --}}
+                {{-- Tambah --}}
+                <div class="modal fade" id="tambah{{ $p->id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Tambah SubPilar</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <form method="post" action="/subpilar">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <input type="hidden" name="pilar_id" value="{{ $p->id }}">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="Rincian">Rincian</label>
+                                                <input class="form-control" readonly type="text" name="rincian_name"
+                                                    value="{{ $r->rincian }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="SubRincian">Sub Rincian</label>
+                                                <input class="form-control" readonly type="text"
+                                                    name="subrincian_name" value="{{ $sr->subRincian }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="Pilar">Pilar</label>
+                                                <input class="form-control" readonly type="text" name="pilar_name"
+                                                    value="{{ $p->pilar }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="subPilar">SubPilar</label>
+                                                <input type="text"
+                                                    class="form-control @error('subPilar') is-invalid  @enderror"
+                                                    id="subPilar" name="subPilar" value="{{ old('subPilar') }}"
+                                                    placeholder="Isi Nama subPilar">
+                                                @error('subPilar')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="bobot">Bobot</label>
+                                                <input type="number"
+                                                    class="form-control @error('bobot') is-invalid  @enderror"
+                                                    id="bobot" name="bobot" value="{{ old('bobot') }}"
+                                                    placeholder="Isi Nilai Bobot" min="0" step=".01">
+                                                @error('bobot')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Create SubPilar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                @foreach ($p->subPilar as $sp)
+                    {{-- Edit --}}
+                    <div class="modal fade" id="edit{{ $sp->id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Edit SubPilar</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form method="post" action="/subpilar/{{ $sp['id'] }}">
+                                    @method('put')
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <input type="hidden" name="pilar_id" value="{{ $p->id }}">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="subPilar">SubPilar</label>
+                                                    <input type="text"
+                                                        class="form-control @error('subPilar') is-invalid  @enderror"
+                                                        id="subPilar" name="subPilar"
+                                                        value="{{ old('subPilar', $sp->subPilar) }}"
+                                                        placeholder="Isi Nama subPilar">
+                                                    @error('subPilar')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="bobot">Bobot</label>
+                                                    <input type="number"
+                                                        class="form-control @error('bobot') is-invalid  @enderror"
+                                                        id="bobot" name="bobot"
+                                                        value="{{ old('bobot', $sp->bobot) }}"
+                                                        placeholder="Isi Nilai Bobot" min="0" step=".01">
+                                                    @error('bobot')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Edit SubPilar</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    {{-- Hapus --}}
+                    <div class="modal fade" id="hapus{{ $sp->id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Hapus</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-danger">Apakah Anda Yakin untuk Menghapus Sub Pilar dengan Nama:</p>
+                                    <b>{{ $sp->subPilar }}
+                                        ?</b>
+                                </div>
+                                <form action="/subpilar/{{ $sp->id }}" method="POST" class="d-inline">
+                                    @method('delete')
+                                    @csrf
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Delete</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    @foreach ($sp->pertanyaan as $p)
+                        {{-- Informasi --}}
+                        <div class="modal fade" id="info{{ $p->id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Informasi</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <b>Opsi Jawaban:</b>
+                                        <ul>
+                                            @foreach ($p->opsi as $item)
+                                                <li>{{ $item->rincian }} <button
+                                                        class="badge badge-info">{{ $item->bobot }}</button></li>
+                                            @endforeach
+                                        </ul>
+                                        <b>Bukti Dukung:</b>
+                                        <ul>
+                                            @foreach ($p->dokumen as $item)
+                                                <li>{{ $item->dokumen }}</li>
+                                            @endforeach
+                                        </ul>
+                                        {!! $p->info !!}
+                                    </div>
+
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        {{-- Hapus --}}
+                        <div class="modal fade" id="hapus{{ $p->id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Hapus</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-danger">Apakah Anda Yakin untuk Menghapus Pertanyaan dengan Isi:</p>
+                                        <b>{{ $p->pertanyaan }}
+                                            ?</b>
+                                    </div>
+                                    <form action="/pertanyaan/{{ $p->id }}" method="POST" class="d-inline">
+                                        @method('delete')
+                                        @csrf
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    @endforeach
+                @endforeach
+            @endforeach
         @endforeach
     @endforeach
 

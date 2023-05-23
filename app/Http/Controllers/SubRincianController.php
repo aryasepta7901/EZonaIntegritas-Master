@@ -47,7 +47,7 @@ class SubRincianController extends Controller
 
         SubRincian::create($validatedData);
 
-        return redirect()->back()->with('success', 'New SubRincian Has Ben Added');
+        return redirect()->back()->with('success', 'Subrincian Berhasil ditambahkan');
         // return redirect('/rincian/' . $request->rincian)->with('success', 'New SubRincian Has Ben Added');
     }
 
@@ -113,7 +113,7 @@ class SubRincianController extends Controller
     public function destroy(SubRincian $subrincian)
     {
         SubRincian::destroy($subrincian->id);
-        return redirect()->back()->with('success', 'New SubRincian Has Ben Deleted');
+        return redirect()->back()->with('success', 'SubRincian Berhasil diHapus');
         // return redirect('/rincian/' . $subrincian->rincian_id)->with('success', 'New SubRincian Has Ben Deleted');
     }
 }

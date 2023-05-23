@@ -100,9 +100,11 @@
                 @php
                     $kembali = substr($subPilar, 0, 4);
                 @endphp
-                <a href="/subpilar/{{ $kembali }}" class="btn btn-secondary"><i class="fa fa-backward"></i>
+                <a href="/pertanyaan" class="btn btn-secondary"><i class="fa fa-backward"></i>
                     Kembali</a>
-                <button type="submit" class="btn btn-primary">Create Pertanyaan</button>
+                {{-- <a href="/subpilar/{{ $kembali }}" class="btn btn-secondary"><i class="fa fa-backward"></i>
+                    Kembali</a> --}}
+                <button type="submit" class="btn btn-primary">Ubah Pertanyaan</button>
                 </form>
 
             </div>

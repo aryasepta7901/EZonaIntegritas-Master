@@ -58,7 +58,8 @@ class PilarController extends Controller
 
         Pilar::create($validatedData);
 
-        return redirect('/subrincian/' . $request->subrincian_id)->with('success', 'New Pilar Has Ben Added');
+        return redirect()->back()->with('success', 'Pilar Berhasil di Tambahkan');
+        // return redirect('/subrincian/' . $request->subrincian_id)->with('success', 'New Pilar Has Ben Added');
     }
 
     /**
@@ -112,7 +113,8 @@ class PilarController extends Controller
 
         Pilar::where('id', $pilar->id)->update($validatedData);
 
-        return redirect('/subrincian/' . $request->subrincian_id)->with('success', 'New Pilar Has Ben Updated');
+        return redirect()->back()->with('success', 'New Pilar Has Ben Updated');
+        // return redirect('/subrincian/' . $request->subrincian_id)->with('success', 'New Pilar Has Ben Updated');
     }
 
     /**
@@ -124,6 +126,7 @@ class PilarController extends Controller
     public function destroy(Pilar $pilar)
     {
         Pilar::destroy($pilar->id);
-        return redirect('/subrincian/' . $pilar->subrincian_id)->with('success', ' Pilar Has Ben Deleted');
+        return redirect()->back()->with('success', ' Pilar Has Ben Deleted');
+        // return redirect('/subrincian/' . $pilar->subrincian_id)->with('success', ' Pilar Has Ben Deleted');
     }
 }
