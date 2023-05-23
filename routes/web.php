@@ -32,10 +32,11 @@ use App\Http\Controllers\SuratPersetujuanProvController;
 |
 */
 
-// login
+// landingPage
 Route::get('/', function () {
     return view('landingPage.index');
 })->name('landingPage')->middleware('guest');
+// login
 Route::get('/login', function () {
     return view('login');
 })->name('login')->middleware('guest');
@@ -64,15 +65,15 @@ Route::post('/persyaratan/import', [PersyaratanController::class, 'import'])->na
 // CRUD LKE
 // rincian
 Route::resource('/rincian', RincianController::class)->middleware('auth');
-// Sub Rincian
+// // Sub Rincian
 Route::resource('/subrincian', SubRincianController::class)->middleware('auth');
-// Pilar
+// // Pilar
 Route::resource('/pilar', PilarController::class)->middleware('auth');
-// subpilar
+// // subpilar
 Route::resource('/subpilar', SubPilarController::class)->middleware('auth');
-// Pertanyaan
+// // Pertanyaan
 Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
-
+Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
 // Google 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');

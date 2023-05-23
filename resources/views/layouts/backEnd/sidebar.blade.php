@@ -121,7 +121,7 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/rincian"
+                                <a href="/pertanyaan"
                                     class="nav-link {{ Request::is('rincian*') | Request::is('subrincian*') | Request::is('pilar*') | Request::is('subpilar*') | Request::is('pertanyaan*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>LKE</p>

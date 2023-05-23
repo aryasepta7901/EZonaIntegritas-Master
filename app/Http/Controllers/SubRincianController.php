@@ -47,7 +47,8 @@ class SubRincianController extends Controller
 
         SubRincian::create($validatedData);
 
-        return redirect('/rincian/' . $request->rincian)->with('success', 'New SubRincian Has Ben Added');
+        return redirect()->back()->with('success', 'New SubRincian Has Ben Added');
+        // return redirect('/rincian/' . $request->rincian)->with('success', 'New SubRincian Has Ben Added');
     }
 
     /**
@@ -99,7 +100,8 @@ class SubRincianController extends Controller
 
         SubRincian::where('id', $subrincian->id)->update($validatedData);
 
-        return redirect('/rincian/' . $request->rincian)->with('success', 'New SubRincian Has Ben Updated');
+        return redirect()->back()->with('success', 'SubRincian Berhasil di Update');
+        // return redirect('/rincian/' . $request->rincian)->with('success', 'SubRincian Berhasil di Update');
     }
 
     /**
@@ -111,6 +113,7 @@ class SubRincianController extends Controller
     public function destroy(SubRincian $subrincian)
     {
         SubRincian::destroy($subrincian->id);
-        return redirect('/rincian/' . $subrincian->rincian_id)->with('success', 'New SubRincian Has Ben Deleted');
+        return redirect()->back()->with('success', 'New SubRincian Has Ben Deleted');
+        // return redirect('/rincian/' . $subrincian->rincian_id)->with('success', 'New SubRincian Has Ben Deleted');
     }
 }

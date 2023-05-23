@@ -56,7 +56,7 @@ class RincianController extends Controller
 
         Rincian::create($validatedData);
 
-        return redirect('/rincian')->with('success', 'New Rincian Has Ben Added');
+        return redirect('/pertanyaan')->with('success', 'Rincian Berhasil di Tambahkan');
     }
 
     /**
@@ -107,7 +107,7 @@ class RincianController extends Controller
 
         Rincian::where('id', $rincian->id)->update($validatedData);
 
-        return redirect('/rincian')->with('success', 'New Rincian Has Ben Updated');
+        return redirect('/pertanyaan')->with('success', 'Rincian Berhasil di Update');
     }
 
     /**
@@ -120,6 +120,6 @@ class RincianController extends Controller
     {
         //
         Rincian::destroy($rincian->id);
-        return redirect('/rincian')->with('success', 'New Rincian Has Ben Deleted');
+        return redirect('/pertanyaan')->with('success', 'Rincian Berhasil di Hapus');
     }
 }
