@@ -9,7 +9,6 @@ class SubPilar extends Model
 {
     protected $table = 'subpilar';
     public $incrementing = false;
-    public $timestamps = false;
     use HasFactory;
 
     protected $fillable = [

@@ -10,7 +10,6 @@ class Opsi extends Model
     use HasFactory;
     protected $table = 'opsi';
     public $incrementing = false;
-    public $timestamps = false;
     protected $fillable = [
         'id',
         'rincian',

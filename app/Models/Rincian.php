@@ -10,7 +10,6 @@ class Rincian extends Model
 
     protected $table = 'rincian';
     public $incrementing = false;
-    public $timestamps = false;
     use HasFactory;
 
     protected $fillable = [

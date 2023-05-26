@@ -59,18 +59,18 @@ class SubRincianController extends Controller
      */
     public function show(SubRincian $subrincian)
     {
-        $this->authorize('admin');
+        // $this->authorize('admin');
 
-        return view(
-            'lke.pilar',
-            [
-                'master' => 'SubRincian LKE ',
-                'link' => 'rincian/' . substr($subrincian->id, 0, 1),
-                'title' => 'Pilar LKE: ' . $subrincian->subRincian,
-                'subrincian' => $subrincian,
-                'pilar' => Pilar::where('subrincian_id', $subrincian->id)->get(),
-            ]
-        );
+        // return view(
+        //     'lke.pilar',
+        //     [
+        //         'master' => 'SubRincian LKE ',
+        //         'link' => 'rincian/' . substr($subrincian->id, 0, 1),
+        //         'title' => 'Pilar LKE: ' . $subrincian->subRincian,
+        //         'subrincian' => $subrincian,
+        //         'pilar' => Pilar::where('subrincian_id', $subrincian->id)->get(),
+        //     ]
+        // );
     }
 
     /**

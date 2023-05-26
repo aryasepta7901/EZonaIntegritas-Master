@@ -20,6 +20,9 @@ class Pilar extends Migration
             $table->double('min_wbk', 6, 2);
             $table->double('min_wbbm', 6, 2);
             $table->char('subrincian_id', 2);
+            $table->timestamps();
+
+            $table->foreign('subrincian_id')->references('id')->on('subRincian')->onDelete('cascade');
         });
     }
 

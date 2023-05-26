@@ -9,7 +9,6 @@ class dokumenLKE extends Model
 {
     protected $table = 'dokumenlke';
     public $incrementing = false;
-    public $timestamps = false;
     use HasFactory;
 
     protected $fillable = [

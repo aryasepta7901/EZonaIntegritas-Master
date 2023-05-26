@@ -18,6 +18,9 @@ class SubPilar extends Migration
             $table->string('subPilar');
             $table->double('bobot', 6, 2);
             $table->char('pilar_id', 3);
+            $table->timestamps();
+
+            $table->foreign('pilar_id')->references('id')->on('pilar')->onDelete('cascade');
         });
     }
 

@@ -18,6 +18,9 @@ class SubRincian extends Migration
             $table->string('subRincian');
             $table->double('bobot', 6, 2);
             $table->char('rincian_id', 1);
+            $table->timestamps();
+
+            $table->foreign('rincian_id')->references('id')->on('rincian')->onDelete('cascade');
         });
     }
 

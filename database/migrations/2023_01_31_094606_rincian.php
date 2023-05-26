@@ -17,6 +17,7 @@ class Rincian extends Migration
             $table->char('id', 1)->primary();
             $table->string('rincian');
             $table->double('bobot', 6, 2);
+            $table->timestamps();
         });
     }
 

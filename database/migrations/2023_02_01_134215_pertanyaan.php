@@ -19,6 +19,9 @@ class Pertanyaan extends Migration
             $table->text('info');
             $table->double('bobot', 6, 2);
             $table->char('subpilar_id', 4);
+            $table->timestamps();
+
+            $table->foreign('subpilar_id')->references('id')->on('subpilar')->onDelete('cascade');
         });
     }
 

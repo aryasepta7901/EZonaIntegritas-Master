@@ -58,7 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <div class="content-header">
+            <div id="header" class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
@@ -112,8 +112,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- ./wrapper -->
 
+    {{-- Scroll to Top --}}
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="fas fa-arrow-up"></i></a>
+    <script src="{{ asset('landingPage') }}/js/main.js"></script>
+
+
     {{-- Font Awesome updated --}}
     <script src="https://kit.fontawesome.com/48de642077.js" crossorigin="anonymous"></script>
+
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
     <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
@@ -234,8 +241,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<div class="input-group"><div class="input-group-prepend">' +
                     '<button class="btn btn-danger" id="DeleteRow" type="button">' +
                     '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                    '<input type="hidden" name="bobot2" value="1">' +
-                    '<input type="text" class="form-control" id="rincian" name="rincian[]"' +
+                    '<input type="text" class="form-control" id="rincian" name="input[]"' +
                     'placeholder="Isi Opsi"></div</div>';
                 $('#new').append(newData);
             });
@@ -245,18 +251,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             })
         </script>
     @endif
-
-
-
-    {{-- Select search --}}
-    <script>
-        $(function() {
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
-            })
-        });
-    </script>
-
     <script>
         $(document).ready(function() {
             toggleFields
@@ -275,7 +269,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 $("#input").hide();
         }
     </script>
-
+    {{-- checkbox --}}
     <script>
         const select = document.querySelector('#type');
         const inputContainer = document.querySelector('#inputContainer');
@@ -360,9 +354,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
                     'required placeholder = "Opsi E" >' +
                     '<input type="hidden" name="bobot5" value="0">  </div>';
+            } else {
+                inputContainer.innerHTML = '';
+
             }
         });
     </script>
+
+
+    {{-- Select search --}}
+    <script>
+        $(function() {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        });
+    </script>
+    {{-- Untuk Input Field pertanyaan --}}
+
+
     {{-- File input --}}
     <script>
         $('.custom-file input').change(function(e) {

@@ -55,18 +55,43 @@
 
                             </div>
                         </div>
-                        <div id="input" class="col-lg-12">
-                            <div class="form-group">
-                                <label for="opsi">Opsi</label>
-                                <input type="text" class="form-control" id="opsi" name="rincian[]"
-                                    placeholder="Isi  opsi">
+                        <div class="col-lg-12" id="inputContainer"></div>
+                        <div class="col-lg-12">
+                            <label for="opsi">Opsi</label>
+                            <button id="row" type="button" class="btn btn-dark">
+                                <span class="fa fa-plus">
+                                </span>
+                            </button>
 
-                            </div>
+                            <hr>
+
+
                         </div>
+                        @foreach ($opsi as $value)
+                            <div id="row" class="col-lg-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-danger" id="DeleteRow" type="button"><i
+                                                    class="bi bi-trash"></i>Delete</button>
+                                        </div>
+                                        <input type="hidden" name="type" value="{{ $value->first()->type }}">
+                                        <input type="text" class="form-control" id="opsi" name="input[]" required
+                                            placeholder="Isi  Nama Dokumen" value="{{ $value->rincian }}">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+
+
+                        <div id="new" class="col-lg-12"></div>
+
 
 
 
                     </div>
+
                     <div class="row">
                         <div class="col-lg-12">
                             <label for="dokumen">Dokumen</label>

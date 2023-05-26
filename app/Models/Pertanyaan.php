@@ -10,7 +10,6 @@ class Pertanyaan extends Model
 {
     protected $table = 'pertanyaan';
     public $incrementing = false;
-    public $timestamps = false;
     use HasFactory;
 
     protected $fillable = [

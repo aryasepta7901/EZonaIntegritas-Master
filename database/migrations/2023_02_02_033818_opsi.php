@@ -19,6 +19,10 @@ class Opsi extends Migration
             $table->double('bobot', 6, 2);
             $table->string('type', 100);
             $table->char('pertanyaan_id', 5);
+
+            $table->timestamps();
+
+            $table->foreign('pertanyaan_id')->references('id')->on('pertanyaan')->onDelete('cascade');
         });
     }
 

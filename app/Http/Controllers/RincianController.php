@@ -16,16 +16,16 @@ class RincianController extends Controller
 
     public function index()
     {
-        $this->authorize('admin');
+        // $this->authorize('admin');
 
-        return view(
-            'lke.rincian',
-            [
-                'title' => 'Rincian LKE',
-                'rincian' => Rincian::orderBy('id', 'DESC')->get(),
+        // return view(
+        //     'lke.rincian',
+        //     [
+        //         'title' => 'Rincian LKE',
+        //         'rincian' => Rincian::orderBy('id', 'DESC')->get(),
 
-            ]
-        );
+        //     ]
+        // );
     }
 
     /**
@@ -67,18 +67,18 @@ class RincianController extends Controller
      */
     public function show(Rincian $rincian)
     {
-        $this->authorize('admin');
+        // $this->authorize('admin');
 
-        return view(
-            'lke.subRincian',
-            [
-                'master' => 'Rincian LKE',
-                'link' => 'rincian',
-                'title' => 'SubRincian LKE : ' . $rincian->rincian,
-                'rincian' => $rincian,
-                'subRincian' => SubRincian::where('rincian_id', $rincian->id)->get(),
-            ]
-        );
+        // return view(
+        //     'lke.subRincian',
+        //     [
+        //         'master' => 'Rincian LKE',
+        //         'link' => 'rincian',
+        //         'title' => 'SubRincian LKE : ' . $rincian->rincian,
+        //         'rincian' => $rincian,
+        //         'subRincian' => SubRincian::where('rincian_id', $rincian->id)->get(),
+        //     ]
+        // );
     }
 
     /**

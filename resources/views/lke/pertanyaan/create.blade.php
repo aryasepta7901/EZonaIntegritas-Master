@@ -55,6 +55,7 @@
                         </div>
                         <div class="col-lg-12" id="inputContainer"></div>
 
+
                         <div id="input" class="col-lg-12">
                             <div class="form-group">
                                 <label for="opsi">Opsi</label>
@@ -63,8 +64,8 @@
                                     </span>
                                 </button>
                                 <hr>
-                                <input type="hidden" name="bobot1" value="1">
-                                <input type="text" class="form-control" id="opsi" name="rincian[]"
+
+                                <input type="text" class="form-control" id="opsi" name="input[]"
                                     placeholder="Isi  opsi">
                             </div>
                         </div>
@@ -98,9 +99,9 @@
                 @php
                     $kembali = $subPilar->id;
                 @endphp
-                <a href="/subpilar/{{ $kembali }}" class="btn btn-secondary"><i class="fa fa-backward"></i>
+                <a href="/pertanyaan" class="btn btn-secondary"><i class="fa fa-backward"></i>
                     Kembali</a>
-                <button type="submit" class="btn btn-primary">Create Pertanyaan</button>
+                <button type="submit" class="btn btn-primary">Buat Pertanyaan</button>
                 </form>
 
             </div>

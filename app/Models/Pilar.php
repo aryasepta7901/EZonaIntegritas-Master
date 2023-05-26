@@ -9,7 +9,6 @@ class Pilar extends Model
 {
     protected $table = 'pilar';
     public $incrementing = false;
-    public $timestamps = false;
     use HasFactory;
 
     protected $fillable = [

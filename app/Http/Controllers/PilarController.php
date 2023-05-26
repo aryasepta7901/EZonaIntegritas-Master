@@ -70,18 +70,18 @@ class PilarController extends Controller
      */
     public function show(Pilar $pilar)
     {
-        $this->authorize('admin');
+        // $this->authorize('admin');
 
-        return view(
-            'lke.SubPilar',
-            [
-                'master' => 'SubPilar LKE ',
-                'link' => 'subrincian/' . substr($pilar->id, 0, 2),
-                'title' => 'SubPilar LKE: ' . $pilar->pilar,
-                'pilar' => $pilar,
-                'subpilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
-            ]
-        );
+        // return view(
+        //     'lke.SubPilar',
+        //     [
+        //         'master' => 'SubPilar LKE ',
+        //         'link' => 'subrincian/' . substr($pilar->id, 0, 2),
+        //         'title' => 'SubPilar LKE: ' . $pilar->pilar,
+        //         'pilar' => $pilar,
+        //         'subpilar' => SubPilar::where('pilar_id', $pilar->id)->get(),
+        //     ]
+        // );
     }
 
     /**

@@ -10,7 +10,6 @@ class SubRincian extends Model
 
     protected $table = 'subrincian';
     public $incrementing = false;
-    public $timestamps = false;
     use HasFactory;
 
     protected $fillable = [

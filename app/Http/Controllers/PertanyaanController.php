@@ -73,26 +73,46 @@ class PertanyaanController extends Controller
         // Opsi
         $no = 1;
         $bobot = 1;
-        foreach ($request->rincian as $key => $rincian) {
-            if ($rincian != null) {
-                $data = new Opsi();
-                $data->id = $validatedData['id'] . $no++;
-                $data->rincian = $rincian;
-                $data->bobot = $request->input('bobot' . $bobot++);
-                $data->type = $request->type;
-                $data->pertanyaan_id = $validatedData['id'];
-                $data->save();
+
+        // Jika bentuk checbox
+        if ($request->rincian != null) {
+            foreach ($request->rincian as $key => $rincian) {
+                Opsi::updateOrCreate(
+                    ['id' => $validatedData['id'] . $no++],
+                    [
+                        'rincian' => $rincian,
+                        'bobot' => $request->input('bobot' . $bobot++),
+                        'type' => $request->type,
+                        'pertanyaan_id' => $validatedData['id'],
+                    ]
+                );
+            }
+        }
+        // Jika bentuk input field
+        if ($request->input != null) {
+            foreach ($request->input as $key => $input) {
+                Opsi::updateOrCreate(
+                    ['id' => $validatedData['id'] . $no++],
+                    [
+                        'rincian' => $input,
+                        'bobot' => 1,
+                        'type' => $request->type,
+                        'pertanyaan_id' => $validatedData['id'],
+                    ]
+                );
             }
         }
 
         // dokumen
         $no = 1;
         foreach ($request->dokumen as $key => $dokumen) {
-            $data = new dokumenLKE();
-            $data->id = $validatedData['id'] . $no++;
-            $data->dokumen = $dokumen;
-            $data->pertanyaan_id = $validatedData['id'];
-            $data->save();
+            dokumenLKE::updateOrCreate(
+                ['id' => $validatedData['id'] . $no++],
+                [
+                    'dokumen' => $dokumen,
+                    'pertanyaan_id' => $validatedData['id'],
+                ]
+            );
         }
         return redirect('pertanyaan')->with('success', 'Pertanyaan Berhasil ditambahkan');
     }
@@ -138,6 +158,7 @@ class PertanyaanController extends Controller
                 'title' => 'Update Pertanyaan: ',
                 'pertanyaan' => $pertanyaan,
                 'dokumen' => dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->get(),
+                'opsi' => Opsi::where('pertanyaan_id', $pertanyaan->id)->get(),
                 'subPilar' => $pertanyaan->subpilar_id,
 
             ]
@@ -160,19 +181,36 @@ class PertanyaanController extends Controller
         ]);
 
         Pertanyaan::where('id', $pertanyaan->id)->update($validatedData);
-        $subpilar = $pertanyaan->subpilar_id;
 
-
+        // Jika bentuk input field
+        Opsi::where('pertanyaan_id', $pertanyaan->id)->delete();
+        $no = 1;
+        if ($request->input != null) {
+            foreach ($request->input as $key => $input) {
+                Opsi::updateOrCreate(
+                    ['id' => $pertanyaan->id . $no++],
+                    [
+                        'rincian' => $input,
+                        'bobot' => 1,
+                        'type' => $request->type,
+                        'pertanyaan_id' => $pertanyaan->id,
+                    ]
+                );
+            }
+        }
 
         // dokumen
         dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->delete();
         $no = 1;
         foreach ($request->dokumen as $key => $dokumen) {
-            $data = new dokumenLKE();
-            $data->id = $pertanyaan->id . $no++;
-            $data->dokumen = $dokumen;
-            $data->pertanyaan_id = $pertanyaan->id;
-            $data->save();
+
+            dokumenLKE::updateOrCreate(
+                ['id' => $pertanyaan->id . $no++],
+                [
+                    'dokumen' => $dokumen,
+                    'pertanyaan_id' => $pertanyaan->id,
+                ]
+            );
         }
         return redirect('pertanyaan')->with('success', ' Pertanyaan Berhasil di Ubah');
         // return redirect('subpilar/' . $subpilar)->with('success', ' Pertanyaan Berhasil di Ubah');
