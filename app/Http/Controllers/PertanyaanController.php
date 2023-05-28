@@ -80,9 +80,8 @@ class PertanyaanController extends Controller
         // Opsi
         $no = 1;
         $bobot = 1;
-
         // Jika bentuk checbox
-        if ($request->rincian != null) {
+        if ($request->type == 'checkbox') {
             foreach ($request->rincian as $key => $rincian) {
                 Opsi::updateOrCreate(
                     ['id' => $validatedData['id'] . $no++],
@@ -94,9 +93,7 @@ class PertanyaanController extends Controller
                     ]
                 );
             }
-        }
-        // Jika bentuk input field
-        if ($request->input != null) {
+        } else {
             foreach ($request->input as $key => $input) {
                 Opsi::updateOrCreate(
                     ['id' => $validatedData['id'] . $no++],
@@ -139,7 +136,7 @@ class PertanyaanController extends Controller
             [
                 'master' => 'Pertanyaan LKE ',
                 'link' => '/pertanyaan',
-                'title' => 'Create Pertanyaan: ',
+                'title' => 'Create Pertanyaan',
                 'subPilar' => $pertanyaan,
 
 
@@ -167,6 +164,7 @@ class PertanyaanController extends Controller
                 'dokumen' => dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->get(),
                 'opsi' => Opsi::where('pertanyaan_id', $pertanyaan->id)->get(),
                 'opsiInput' => Opsi::where('pertanyaan_id', $pertanyaan->id)->where('type', 'input')->get(),
+                'opsiCheckbox' => Opsi::where('pertanyaan_id', $pertanyaan->id)->where('type', 'checkbox')->get(),
                 'subPilar' => $pertanyaan->subpilar_id,
 
             ]
@@ -194,7 +192,8 @@ class PertanyaanController extends Controller
         Opsi::where('pertanyaan_id', $pertanyaan->id)->delete();
         $no = 1;
         $bobot = 1;
-        if ($request->type == 'input') {
+        if ($request->type === 'input') {
+
             // Jika Bentukny adalah input
             foreach ($request->input as $key => $input) {
                 Opsi::updateOrCreate(
@@ -202,7 +201,7 @@ class PertanyaanController extends Controller
                     [
                         'rincian' => $input,
                         'bobot' => 1,
-                        'type' => $request->type,
+                        'type' => 'input',
                         'pertanyaan_id' => $pertanyaan->id,
                     ]
                 );
@@ -215,7 +214,7 @@ class PertanyaanController extends Controller
                     [
                         'rincian' => $rincian,
                         'bobot' => $request->input('bobot' . $bobot++),
-                        'type' => $request->type,
+                        'type' => 'checkbox',
                         'pertanyaan_id' =>  $pertanyaan->id,
                     ]
                 );

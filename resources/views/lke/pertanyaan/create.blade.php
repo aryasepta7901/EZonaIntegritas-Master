@@ -68,9 +68,8 @@
                                     </span>
                                 </button>
                                 <hr>
-
                                 <input type="text" class="form-control" id="opsi" name="input[]"
-                                    placeholder="Isi  opsi" required>
+                                    placeholder="Isi  opsi">
 
                             </div>
                         </div>
