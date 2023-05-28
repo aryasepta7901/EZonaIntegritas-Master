@@ -45,43 +45,50 @@
                             <div class="form-group">
                                 <label for="type">Type</label>
                                 <select id="type" class="form-control opsi" name="type">
+                                    @php
+                                        $type = $opsi->first()->type;
+                                    @endphp
+                                    @php
+                                        $jumlah = $opsi->count('type');
+                                    @endphp
+
                                     <option value="">Pilih Salah Satu </option>
                                     <option value="checkbox1">Ya/Tidak</option>
                                     <option value="checkbox2">A/B/C</option>
                                     <option value="checkbox3">A/B/C/D</option>
                                     <option value="checkbox4">A/B/C/D/E</option>
-                                    <option value="input">Input Value</option>
-                                </select>
+                                    <option @if ($type == 'input') selected @endif value="input">Input Value
+                                    </option>
 
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-12" id="inputContainer"></div>
-                        <div class="col-lg-12">
+                        <div id="input" class="col-lg-12">
                             <label for="opsi">Opsi</label>
                             <button id="row" type="button" class="btn btn-dark">
                                 <span class="fa fa-plus">
                                 </span>
                             </button>
-
                             <hr>
-
-
                         </div>
-                        @foreach ($opsi as $value)
-                            <div id="row" class="col-lg-12">
+
+                        {{-- Input --}}
+                        @foreach ($opsiInput as $value)
+                            <div id="input" class="col-lg-12">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <button class="btn btn-danger" id="DeleteRow" type="button"><i
+                                            <button id="row" class="btn btn-danger" id="DeleteRow" type="button"><i
                                                     class="bi bi-trash"></i>Delete</button>
                                         </div>
-                                        <input type="hidden" name="type" value="{{ $value->first()->type }}">
                                         <input type="text" class="form-control" id="opsi" name="input[]" required
                                             placeholder="Isi  Nama Dokumen" value="{{ $value->rincian }}">
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
 
 
 

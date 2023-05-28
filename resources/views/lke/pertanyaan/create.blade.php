@@ -14,7 +14,7 @@
                                 <label for="pertanyaan">Pertanyaan</label>
                                 <input type="text" class="form-control @error('pertanyaan') is-invalid  @enderror"
                                     id="pertanyaan" name="pertanyaan" value="{{ old('pertanyaan') }}"
-                                    placeholder="Isi  pertanyaan" required>
+                                    placeholder="Isi  pertanyaan">
                                 @error('pertanyaan')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -23,8 +23,12 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <label for="info">Informasi</label>
-                            <textarea id="summernote" name="info" required>{{ old('info') }} </textarea>
+                            <label class="@error('info') text-danger  @enderror" for="info">Informasi</label>
+                            @error('info')
+                                <small class="badge badge-danger"> *{{ $message }}
+                                </small>
+                            @enderror
+                            <textarea id="summernote" name="info">{{ old('info') }} </textarea>
 
                         </div>
                         <div class="col-lg-6">
@@ -32,7 +36,7 @@
                                 <label for="bobot">Bobot</label>
                                 <input type="number" class="form-control @error('bobot') is-invalid  @enderror"
                                     id="bobot" name="bobot" value="{{ old('bobot') }}" placeholder="Isi Nilai Bobot"
-                                    min="0" step=".01" required>
+                                    min="0" step=".01">
                                 @error('bobot')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -43,7 +47,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="type">Type</label>
-                                <select id="type" class="form-control opsi" name="type">
+                                <select id="type" class="form-control opsi" name="type" required>
                                     <option value="">Pilih Salah Satu</option>
                                     <option value="checkbox1">Ya/Tidak</option>
                                     <option value="checkbox2">A/B/C</option>
@@ -66,7 +70,8 @@
                                 <hr>
 
                                 <input type="text" class="form-control" id="opsi" name="input[]"
-                                    placeholder="Isi  opsi">
+                                    placeholder="Isi  opsi" required>
+
                             </div>
                         </div>
                         <div id="new" class="col-lg-12"></div>
@@ -82,13 +87,19 @@
                                 <span class="fa fa-plus">
                                 </span>
                             </button>
+
                         </div>
                         <div class="col-lg-12">
                             <hr>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="dokumen" name="dokumen[]" required
-                                    placeholder="Isi  Nama Dokumen">
+                                <input type="text" class="form-control" id="dokumen" name="dokumen[]"
+                                    placeholder="Isi  Nama Dokumen" value="{{ old('dokumen.0') }}">
+
+                                @if ($errors->has('dokumen*'))
+                                    <small class="text-danger">{{ $errors->first('dokumen*') }}</small>
+                                @endif
                             </div>
+
                         </div>
                         <div id="newinput" class="col-lg-12"></div>
                     </div>

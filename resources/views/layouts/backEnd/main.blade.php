@@ -225,7 +225,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<div class="input-group"><div class="input-group-prepend">' +
                     '<button class="btn btn-danger" id="DeleteRow" type="button">' +
                     '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                    '<input type="text" class="form-control" id="dokumen" name="dokumen[]"' +
+                    '<input required type="text" class="form-control" id="dokumen" name="dokumen[]"' +
                     'placeholder="Isi  Nama Dokumen"></div</div>';
                 $('#newinput').append(newData);
             });
@@ -241,7 +241,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<div class="input-group"><div class="input-group-prepend">' +
                     '<button class="btn btn-danger" id="DeleteRow" type="button">' +
                     '<i class="bi bi-trash"></i>Delete</button> </div>' +
-                    '<input type="text" class="form-control" id="rincian" name="input[]"' +
+                    '<input required type="text" class="form-control" id="rincian" name="input[]"' +
                     'placeholder="Isi Opsi"></div</div>';
                 $('#new').append(newData);
             });
@@ -264,9 +264,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // this toggles the visibility of other server
         function toggleFields() {
             if ($("#type").val() === "input")
-                $("#input").show();
+                $("#input*").show();
             else
-                $("#input").hide();
+                $("#input*").hide();
         }
     </script>
     {{-- checkbox --}}

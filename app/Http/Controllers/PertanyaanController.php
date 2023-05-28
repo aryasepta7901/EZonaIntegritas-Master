@@ -51,11 +51,18 @@ class PertanyaanController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'pertanyaan'  => 'required',
-            'info'  => 'required',
-            'bobot'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'pertanyaan'  => 'required',
+                'info'  => 'required',
+                'bobot'  => 'required',
+                'dokumen.*' => 'required',
+            ],
+            [
+                'required' => ':Attribute Wajib Diisi',
+
+            ]
+        );
         $subpilar = $request->subpilar_id;
         $pertanyaan =  Pertanyaan::where('subpilar_id', $subpilar)->orderBy('id', 'DESC')->first(); //mengambil data terakhir yang masuk
         if ($pertanyaan) { //cek apakah data tersebut data awal atau tidak?
@@ -159,6 +166,7 @@ class PertanyaanController extends Controller
                 'pertanyaan' => $pertanyaan,
                 'dokumen' => dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->get(),
                 'opsi' => Opsi::where('pertanyaan_id', $pertanyaan->id)->get(),
+                'opsiInput' => Opsi::where('pertanyaan_id', $pertanyaan->id)->where('type', 'input')->get(),
                 'subPilar' => $pertanyaan->subpilar_id,
 
             ]
@@ -185,7 +193,9 @@ class PertanyaanController extends Controller
         // Jika bentuk input field
         Opsi::where('pertanyaan_id', $pertanyaan->id)->delete();
         $no = 1;
-        if ($request->input != null) {
+        $bobot = 1;
+        if ($request->type == 'input') {
+            // Jika Bentukny adalah input
             foreach ($request->input as $key => $input) {
                 Opsi::updateOrCreate(
                     ['id' => $pertanyaan->id . $no++],
@@ -194,6 +204,19 @@ class PertanyaanController extends Controller
                         'bobot' => 1,
                         'type' => $request->type,
                         'pertanyaan_id' => $pertanyaan->id,
+                    ]
+                );
+            }
+        } else {
+            // Jika bentuknya checbox
+            foreach ($request->rincian as $key => $rincian) {
+                Opsi::updateOrCreate(
+                    ['id' => $pertanyaan->id . $no++],
+                    [
+                        'rincian' => $rincian,
+                        'bobot' => $request->input('bobot' . $bobot++),
+                        'type' => $request->type,
+                        'pertanyaan_id' =>  $pertanyaan->id,
                     ]
                 );
             }
@@ -225,8 +248,6 @@ class PertanyaanController extends Controller
     public function destroy(Pertanyaan $pertanyaan)
     {
         Pertanyaan::destroy($pertanyaan->id);
-        Opsi::where('pertanyaan_id', $pertanyaan->id)->delete();
-        dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->delete();
 
         return redirect('pertanyaan')->with('success', ' Pertanyaan Berhasil di Hapus');
     }
