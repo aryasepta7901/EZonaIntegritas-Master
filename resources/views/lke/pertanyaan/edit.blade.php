@@ -23,7 +23,11 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <label for="info">Informasi</label>
+                            <label class="@error('info') text-danger  @enderror" for="info">Informasi</label>
+                            @error('info')
+                                <small class="badge badge-danger"> *{{ $message }}
+                                </small>
+                            @enderror
                             <textarea id="summernote" name="info">
                                     {{ old('info', $pertanyaan->info) }}
                             </textarea>
@@ -71,15 +75,18 @@
                         </div>
 
 
-                        {{-- Input --}}
-                        <div id="input" class="col-lg-12">
+                        <div class="col-lg-12">
                             <label for="opsi">Opsi</label>
-                            <button id="row" type="button" class="btn btn-dark">
-                                <span class="fa fa-plus">
-                                </span>
-                            </button>
                             <hr>
                         </div>
+                        {{-- Input --}}
+                        <div id="input" class="col-lg-12 mb-2">
+                            <button id="row" type="button" class="btn btn-primary">
+                                <i class="fa fa-plus">
+                                </i> Tambah
+                            </button>
+                        </div>
+
                         @foreach ($opsiInput as $value)
                             <div id="input" class="col-lg-12">
                                 <div class="form-group">
@@ -96,13 +103,10 @@
                         @endforeach
                         <div id="new" class="col-lg-12"></div>
                         {{-- Checbox --}}
-                        <div id="checkbox{{ $jumlah - 1 }}" class="col-lg-12">
-                            <label for="opsi">Opsi</label>
-                        </div>
                         @foreach ($opsiCheckbox as $value)
                             <div id="checkbox{{ $jumlah - 1 }}" class="col-lg-12">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="opsi" name="rincian[]"
+                                    <input type="text" class="form-control" id="opsi" name="rinci[]"
                                         placeholder="Isi  Nama Dokumen" value="{{ $value->rincian }}">
                                     <input type="hidden" name="bobot{{ $loop->iteration }}" value="{{ $value->bobot }}">
                                     <span class="input-group-text">{{ $value->bobot }}</span>
@@ -113,6 +117,7 @@
 
 
                         {{-- Opsi Pilihan --}}
+
                         <div class="col-lg-12" id="inputContainer"></div>
 
 
@@ -136,8 +141,10 @@
                                             <button class="btn btn-danger" id="DeleteRow" type="button"><i
                                                     class="bi bi-trash"></i>Delete</button>
                                         </div>
-                                        <input type="text" class="form-control" id="dokumen" name="dokumen[]"
-                                            required placeholder="Isi  Nama Dokumen" value="{{ $value['dokumen'] }}">
+                                        <input required type="text" class="form-control" id="dokumen"
+                                            name="dokumen[]" placeholder="Isi  Nama Dokumen"
+                                            value="{{ $value->dokumen }}">
+
                                     </div>
                                 </div>
                             </div>

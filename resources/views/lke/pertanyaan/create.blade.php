@@ -57,17 +57,19 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-lg-12">
+                            <label for="opsi">Opsi</label> <small class="text-info">*Silahkan Pilih Type Opsi</small>
+                            <hr>
+                        </div>
                         <div class="col-lg-12" id="inputContainer"></div>
 
 
                         <div id="input" class="col-lg-12">
                             <div class="form-group">
-                                <label for="opsi">Opsi</label>
-                                <button id="row" type="button" class="btn btn-dark">
-                                    <span class="fa fa-plus">
-                                    </span>
+                                <button id="row" type="button" class="btn btn-primary mb-2">
+                                    <i class="fa fa-plus">
+                                    </i> Tambah
                                 </button>
-                                <hr>
                                 <input type="text" class="form-control" id="opsi" name="input[]"
                                     placeholder="Isi  opsi">
 

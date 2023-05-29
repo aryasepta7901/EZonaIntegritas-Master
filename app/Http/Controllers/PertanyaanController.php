@@ -180,11 +180,17 @@ class PertanyaanController extends Controller
      */
     public function update(Request $request, Pertanyaan $pertanyaan)
     {
-        $validatedData = $request->validate([
-            'pertanyaan'  => 'required',
-            'info'  => 'required',
-            'bobot'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'pertanyaan'  => 'required',
+                'info'  => 'required',
+                'bobot'  => 'required',
+            ],
+            [
+                'required' => ':Attribute Wajib Diisi',
+
+            ]
+        );
 
         Pertanyaan::where('id', $pertanyaan->id)->update($validatedData);
 
@@ -193,7 +199,6 @@ class PertanyaanController extends Controller
         $no = 1;
         $bobot = 1;
         if ($request->type === 'input') {
-
             // Jika Bentukny adalah input
             foreach ($request->input as $key => $input) {
                 Opsi::updateOrCreate(
@@ -208,16 +213,32 @@ class PertanyaanController extends Controller
             }
         } else {
             // Jika bentuknya checbox
-            foreach ($request->rincian as $key => $rincian) {
-                Opsi::updateOrCreate(
-                    ['id' => $pertanyaan->id . $no++],
-                    [
-                        'rincian' => $rincian,
-                        'bobot' => $request->input('bobot' . $bobot++),
-                        'type' => 'checkbox',
-                        'pertanyaan_id' =>  $pertanyaan->id,
-                    ]
-                );
+            if ($request->rincian != null) {
+                // Jika Mengubah rincian satu ke rincian lain
+                foreach ($request->rincian as $key => $rincian) {
+                    Opsi::updateOrCreate(
+                        ['id' => $pertanyaan->id . $no++],
+                        [
+                            'rincian' => $rincian,
+                            'bobot' => $request->input('bobot' . $bobot++),
+                            'type' => 'checkbox',
+                            'pertanyaan_id' =>  $pertanyaan->id,
+                        ]
+                    );
+                }
+            } else {
+                // Jika hanya mengubah isi rincian
+                foreach ($request->rinci as $key => $rinci) {
+                    Opsi::updateOrCreate(
+                        ['id' => $pertanyaan->id . $no++],
+                        [
+                            'rincian' => $rinci,
+                            'bobot' => $request->input('bobot' . $bobot++),
+                            'type' => 'checkbox',
+                            'pertanyaan_id' =>  $pertanyaan->id,
+                        ]
+                    );
+                }
             }
         }
 
@@ -225,7 +246,6 @@ class PertanyaanController extends Controller
         dokumenLKE::where('pertanyaan_id', $pertanyaan->id)->delete();
         $no = 1;
         foreach ($request->dokumen as $key => $dokumen) {
-
             dokumenLKE::updateOrCreate(
                 ['id' => $pertanyaan->id . $no++],
                 [

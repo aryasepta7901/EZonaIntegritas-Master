@@ -263,10 +263,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
         // this toggles the visibility of other server
         function toggleFields() {
+            // Checkbox ya/tidak
+            if ($("#type").val() === "checkbox1")
+                $("#checkbox1*").show();
+            else
+                $("#checkbox1*").hide();
+            // Checkbox a/b/c
             if ($("#type").val() === "checkbox2")
                 $("#checkbox2*").show();
             else
                 $("#checkbox2*").hide();
+            // Checkbox a/b/c/d
+            if ($("#type").val() === "checkbox3")
+                $("#checkbox3*").show();
+            else
+                $("#checkbox3*").hide();
+            // Checkbox a/b/c/d/e
+
+            if ($("#type").val() === "checkbox4")
+                $("#checkbox4*").show();
+            else
+                $("#checkbox4*").hide();
+            // Input Value
             if ($("#type").val() === "input")
                 $("#input*").show();
             else
@@ -283,7 +301,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             if (selectedValue === 'checkbox1') {
                 inputContainer.innerHTML =
-                    '<label>Opsi</label>' +
+
                     '<input type="hidden" name="type" value="checkbox">' +
                     // Ya
                     ' <div class="form-group">' +
@@ -296,7 +314,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<input type="hidden" name="bobot2" value="0">  </div>';
             } else if (selectedValue === 'checkbox2') {
                 inputContainer.innerHTML =
-                    '<label>Opsi</label>' +
+
                     '<input type="hidden" name="type" value="checkbox">' +
                     // A
                     '   <div class="form-group">' +
@@ -313,7 +331,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<input type="hidden" name="bobot3" value="0">  </div>';
             } else if (selectedValue === 'checkbox3') {
                 inputContainer.innerHTML =
-                    '<label>Opsi</label>' +
+
                     '<input type="hidden" name="type" value="checkbox">' +
                     // A
                     '   <div class="form-group">' +
@@ -335,7 +353,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             } else if (selectedValue === 'checkbox4') {
                 inputContainer.innerHTML =
 
-                    '<label>Opsi</label>' +
+
                     '<input type="hidden" name="type" value="checkbox">' +
                     // A
                     '   <div class="form-group">' +
