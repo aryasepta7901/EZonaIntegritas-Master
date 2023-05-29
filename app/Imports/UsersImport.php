@@ -36,7 +36,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
             'id' => 'required|unique:users',
             'name'  => 'required|min:5',
             'email'  => 'required|email:dns|unique:users',
-            'no_telp' => 'required|min:11',
+            'no_telp' => 'required|min:11|max:14',
             'satker_id' => 'required',
             'level_id' => 'required',
         ];

@@ -171,9 +171,13 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="level">Level</label>
-                                    <select class="form-control" name="level_id">
-                                        <option selected>Pilih Salah Satu </option>
+                                    <label class="@error('level_id') text-danger  @enderror" for="level">Level</label>
+                                    @error('level_id')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
+                                    <select class="form-control select2bs4" name="level_id">
+                                        <option value="">Pilih Salah Satu </option>
                                         @foreach ($level as $l)
                                             @if (old('level_id') == $l->id)
                                                 <option value="{{ $l->id }}" selected>{{ $l->name }}
@@ -187,9 +191,13 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="satker">Satker</label>
-                                    <select class="form-control" name="satker_id">
-                                        <option selected>Pilih Salah Satu </option>
+                                    <label class="@error('satker_id') text-danger  @enderror" for="satker">Satker</label>
+                                    @error('satker_id')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
+                                    <select class="form-control select2bs4" name="satker_id">
+                                        <option value="">Pilih Salah Satu </option>
                                         @foreach ($satker as $s)
                                             @if (old('satker_id') == $s->id)
                                                 <option value="{{ $s->id }}" selected>{{ $s->nama_satker }}
@@ -264,9 +272,13 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="level">Level</label>
-                                        <select class="form-control" name="level_id">
-                                            <option selected>Pilih Salah Satu </option>
+                                        <label class="@error('level_id') text-danger  @enderror"
+                                            for="level">Level</label>
+                                        @error('level_id')
+                                            <small class="badge badge-danger"> *{{ $message }}
+                                            </small>
+                                        @enderror
+                                        <select class="form-control select2bs4" name="level_id">
                                             @foreach ($level as $l)
                                                 @if (old('level_id', $user->level_id) == $l->id)
                                                     <option value="{{ $l->id }}" selected>{{ $l->name }}
@@ -280,9 +292,14 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="satker">Satker</label>
-                                        <select class="form-control" name="satker_id">
-                                            <option selected>Pilih Salah Satu </option>
+
+                                        <label class="@error('satker_id') text-danger  @enderror"
+                                            for="satker">Satker</label>
+                                        @error('satker_id')
+                                            <small class="badge badge-danger"> *{{ $message }}
+                                            </small>
+                                        @enderror
+                                        <select class="form-control select2bs4" name="satker_id">
                                             @foreach ($satker as $s)
                                                 @if (old('satker_id', $user->satker_id) == $s->id)
                                                     <option value="{{ $s->id }}" selected>

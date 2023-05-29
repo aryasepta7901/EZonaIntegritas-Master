@@ -57,7 +57,7 @@ class UserController extends Controller
             'id' => 'required|unique:users', //nip
             'name'  => 'required|min:5',
             'email'  => 'required|email:dns|unique:users',
-            'no_telp' => 'required|min:11',
+            'no_telp' => 'required|min:11|max:14',
             'satker_id' => 'required',
             'level_id' => 'required',
 
@@ -65,6 +65,8 @@ class UserController extends Controller
             'required' => ':Attribute Wajib Diisi',
             'unique' => ':Attribute Sudah Terdaftar',
             'min' => ':Attribute minimal :min karakter',
+            'max' => ':Attribute maksimal :max karakter',
+
             'email' => ':Attribute harus menggunakan format Email yang benar',
         ]);
 
@@ -74,7 +76,7 @@ class UserController extends Controller
     }
     public function import(Request $request)
     {
-        $file = $request->file('excel')->store('public/import');
+        $file = $request->file('excel');
 
         $import = new UsersImport;
         $import->import($file);
@@ -116,11 +118,12 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validatedData = $request->validate([
-            'no_telp' => 'required|min:11',
+            'no_telp' => 'required|min:11|max:14',
             'satker_id' => 'required',
             'level_id' => 'required',
 
         ], [
+            'max' => ':Attribute maksimal :max karakter',
             'required' => ':Attribute Wajib Diisi',
             'min' => ':Attribute minimal :min karakter',
         ]);
