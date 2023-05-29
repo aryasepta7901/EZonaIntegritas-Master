@@ -99,8 +99,7 @@ class TpiController extends Controller
     public function import(Request $request)
     {
 
-
-        $file = $request->file('excel')->store('public/import');
+        $file = $request->file('excel');
 
         $import = new TpiImport;
         $import->import($file);
@@ -154,13 +153,21 @@ class TpiController extends Controller
      */
     public function update(Request $request, TPI $tim)
     {
-        //TPI
-        $validatedData = $request->validate([
-            'nama' => 'required',
-            'wilayah'  => 'required',
-            'dalnis'  => 'required',
-            'ketua_tim'  => 'required',
-        ]);
+
+        $validatedData = $request->validate(
+            [
+                'id' => 'unique:tpi',
+                'nama' => 'required',
+                'wilayah'  => 'required',
+                'dalnis'  => 'required',
+                'ketua_tim'  => 'required',
+
+            ],
+            [
+                'required' => ':attribute Wajib di Isi',
+                'unique' => ':Attribute Sudah Terdaftar',
+            ]
+        );
         $validatedData['tahun'] = date('Y');
         $validatedData['id'] = strtoupper(str_replace(' ', '', $validatedData['nama']) . $validatedData['tahun'] .  'wil' . $validatedData['wilayah']);
 
@@ -168,9 +175,15 @@ class TpiController extends Controller
 
 
         // Anggota TPI
-
+        $request->validate(
+            [
+                'anggota'  => 'required',
+            ],
+            [
+                'required' => ':attribute Wajib di Isi',
+            ]
+        );
         $anggota = anggota_tpi::where('tpi_id', $tim->id)->delete();
-
         foreach ($request->anggota as $key => $anggota) {
             $id = $anggota . date('Y');
             anggota_tpi::updateOrCreate(
@@ -181,7 +194,7 @@ class TpiController extends Controller
                 ]
             );
         }
-        return redirect()->back()->with('success', ' TIM Has Ben Updated');
+        return redirect()->back()->with('success', ' TPI berhasil di Ubah');
     }
 
     /**
@@ -196,6 +209,6 @@ class TpiController extends Controller
         TPI::destroy($tim->id);
         anggota_tpi::where('tpi_id', $tim->id)->delete();
         Pengawasan::where('tpi_id', $tim->id)->delete();
-        return redirect()->back()->with('success', 'TPI Has Ben Deleted');
+        return redirect()->back()->with('success', 'TPI Berhasil di Hapus');
     }
 }

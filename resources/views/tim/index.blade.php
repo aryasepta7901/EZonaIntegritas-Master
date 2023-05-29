@@ -7,11 +7,14 @@
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                    <br>
-                @endforeach
-
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li> {{ $error }}</li>
+                    @endforeach
+                </ul>
+                <small class="badge badge-info"> <i class="icon fas fa-info"></i> Note : Silahkan Buka Kembali Pop Up untuk
+                    melakukan perubahan pada isian yang
+                    salah</small>
             </div>
         @endif
         @if (session()->has('success'))
@@ -22,7 +25,7 @@
             </div>
         @endif
         @if (session()->has('failures'))
-            <table class="table table-warning">
+            <table class="table  table-responsive table-warning">
                 <tr>
                     <th>Baris</th>
                     <th>Attribute</th>
@@ -58,7 +61,7 @@
                     TPI</button>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped table-responsive">
                     <thead>
                         <tr class="text-center">
                             <th>No</th>
@@ -141,12 +144,19 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="wilayah">Wilayah</label>
+                                    <label class="@error('wilayah') text-danger  @enderror" for="wilayah">Wilayah</label>
+                                    @error('wilayah')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
                                     <select class="form-control" name="wilayah">
                                         <option value="">Pilih Wilayah TPI </option>
-                                        <option value="1">Wilayah 1</option>
-                                        <option value="2">Wilayah 2</option>
-                                        <option value="3">Wilayah 3</option>
+                                        <option value="1" @if (old('wilayah') == 1) selected @endif>Wilayah 1
+                                        </option>
+                                        <option value="2" @if (old('wilayah') == 2) selected @endif>Wilayah 2
+                                        </option>
+                                        <option value="3" @if (old('wilayah') == 3) selected @endif>Wilayah 3
+                                        </option>
                                     </select>
 
                                 </div>
@@ -155,7 +165,11 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="dalnis">Pengendali Teknis</label>
+                                    <label class="@error('dalnis') text-danger  @enderror " for="dalnis">Dalnis</label>
+                                    @error('dalnis')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
                                     <select class="form-control" name="dalnis">
                                         <option value="">Pilih Dalnis</option>
                                         @foreach ($dalnis as $d)
@@ -171,7 +185,12 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="ketua_tim">Ketua Tim</label>
+                                    <label class="@error('ketua_tim') text-danger  @enderror" for="ketua_tim">Ketua
+                                        Tim</label>
+                                    @error('ketua_tim')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
                                     <select class="form-control" name="ketua_tim">
                                         <option value="">Pilih Ketua Tim </option>
                                         @foreach ($ketua_tim as $value)
@@ -190,7 +209,12 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label for="anggota">Anggota Tim </label>
+                                    <label class="@error('anggota') text-danger  @enderror" for="anggota">Anggota Tim
+                                    </label>
+                                    @error('anggota')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
                                     <div class="input-group">
                                         <select class="form-control select2bs4" multiple="multiple"
                                             data-placeholder="Pilih Anggota Tim " name="anggota[]">
@@ -211,7 +235,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create TPI</button>
+                        <button type="submit" class="btn btn-primary">Buat TPI</button>
                     </div>
                 </form>
             </div>
@@ -251,7 +275,12 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="wilayah">Wilayah</label>
+                                        <label class="@error('wilayah') text-danger  @enderror"
+                                            for="wilayah">Wilayah</label>
+                                        @error('satker_id')
+                                            <small class="badge badge-danger"> *{{ $message }}
+                                            </small>
+                                        @enderror
                                         <select class="form-control" name="wilayah">
                                             <option value="1" @if ($value->wilayah == 1) ? selected @endif>
                                                 Wilayah 1</option>
@@ -267,9 +296,13 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="dalnis">Pengendali Teknis</label>
+                                        <label class="@error('dalnis') text-danger  @enderror" for="dalnis">Pengendali
+                                            Teknis</label>
+                                        @error('dalnis')
+                                            <small class="badge badge-danger"> *{{ $message }}
+                                            </small>
+                                        @enderror
                                         <select class="form-control" name="dalnis">
-                                            <option selected>Pilih Dalnis</option>
                                             @foreach ($dalnis as $d)
                                                 @if (old('dalnis', $value->dalnis) == $d->id)
                                                     <option value="{{ $d->id }}" selected>{{ $d->name }}
@@ -283,7 +316,12 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="ketua_tim">Ketua Tim</label>
+                                        <label class="@error('ketua_tim') text-danger  @enderror" for="ketua_tim">Ketua
+                                            Tim</label>
+                                        @error('ketua_tim')
+                                            <small class="badge badge-danger"> *{{ $message }}
+                                            </small>
+                                        @enderror
                                         <select class="form-control" name="ketua_tim">
                                             <option value="{{ $value->ketua_tim }}">{{ $value->ketua->name }} </option>
                                             @foreach ($ketua_tim as $k)
@@ -302,8 +340,14 @@
                             </div>
 
                             <div class="row">
-                                <label for="anggota" class="m-3">Anggota Tim </label>
+
                                 <div class="col-lg-12">
+                                    <label class="@error('anggota') text-danger  @enderror" for="anggota">Anggota Tim
+                                    </label>
+                                    @error('anggota')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
                                     <div class="form-group">
                                         <div class="input-group">
                                             <select class="form-control select2bs4" multiple="multiple"
@@ -331,7 +375,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update TPI</button>
+                            <button type="submit" class="btn btn-primary">Ubah TPI</button>
                         </div>
                     </form>
                 </div>
@@ -361,7 +405,7 @@
                         @csrf
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="submit" class="btn btn-primary">Hapus</button>
                         </div>
                     </form>
                 </div>

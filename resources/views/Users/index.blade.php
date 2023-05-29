@@ -6,11 +6,14 @@
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                    <br>
-                @endforeach
-
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li> {{ $error }}</li>
+                    @endforeach
+                </ul>
+                <small class="badge badge-info"> <i class="icon fas fa-info"></i> Note : Silahkan Buka Kembali Pop Up untuk
+                    melakukan perubahan pada isian yang
+                    salah</small>
             </div>
         @endif
         @if (session()->has('success'))
@@ -21,7 +24,7 @@
             </div>
         @endif
         @if (session()->has('failures'))
-            <table class="table table-warning">
+            <table class="table table-warning  table-responsive">
                 <tr>
                     <th>Baris</th>
                     <th>Attribute</th>
@@ -213,7 +216,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create Users</button>
+                        <button type="submit" class="btn btn-primary">Buat Users</button>
                     </div>
                 </form>
             </div>
@@ -317,7 +320,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update Users</button>
+                            <button type="submit" class="btn btn-primary">Ubah User</button>
                         </div>
                     </form>
                 </div>
@@ -350,7 +353,7 @@
                         @csrf
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="submit" class="btn btn-primary">Hapus</button>
                         </div>
                     </form>
                 </div>
