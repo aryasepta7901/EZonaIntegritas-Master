@@ -92,7 +92,7 @@ Route::post('satker/surat/cetak', [RekapitulasiController::class, 'cetak'])->mid
 
 // Self Assessment
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
-// Upload Rincian hasil
+// Upload Rincian hasil -> admin
 Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
 Route::post('/hasil/import', [RincianHasilController::class, 'import'])->name('import.import');
 

@@ -25,7 +25,7 @@
             </div>
         @endif
         @if (session()->has('failures'))
-            <table class="table  table-responsive table-warning">
+            <table class="table  table-responsive table-warning table-responsive-lg">
                 <tr>
                     <th>Baris</th>
                     <th>Attribute</th>
@@ -61,7 +61,7 @@
                     TPI</button>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped table-responsive">
+                <table id="example1" class="table table-bordered table-striped table-responsive-lg">
                     <thead>
                         <tr class="text-center">
                             <th>No</th>

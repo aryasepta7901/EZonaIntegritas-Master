@@ -22,18 +22,32 @@ class PersyaratanImport implements ToModel, WithHeadingRow, WithValidation, Skip
      */
     public function model(array $row)
     {
-        return new Persyaratan([
-            'id' => $row['id'],
-            'tahun' => $row['tahun'],
-            'satker_id' => $row['satker_id'],
-            'wbk' => $row['wbk'],
-            'wbbm' => $row['wbbm'],
-        ]);
+        $id = $row['satker_id'] . $row['tahun'];
+        $persyaratan = Persyaratan::where('id', $id)->first();
+
+        if ($persyaratan) {
+            // Jika update
+            $persyaratan->tahun = $row['tahun'];
+            $persyaratan->satker_id = $row['satker_id'];
+            $persyaratan->wbk = $row['wbk'];
+            $persyaratan->wbbm = $row['wbbm'];
+            // Update kolom lain yang ingin Anda perbarui
+            $persyaratan->save();
+        } else {
+            // jika Create
+            $persyaratan = new Persyaratan([
+                'id' => $row['id'],
+                'tahun' => $row['tahun'],
+                'satker_id' => $row['satker_id'],
+                'wbk' => $row['wbk'],
+                'wbbm' => $row['wbbm'],
+            ]);
+            $persyaratan->save();
+        }
     }
     public function rules(): array
     {
         return [
-            'id' => 'unique:persyaratan',
             'tahun' => 'required',
             'satker_id' => 'required',
             'wbk'  => 'required',

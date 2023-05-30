@@ -6,11 +6,14 @@
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                    <br>
-                @endforeach
-
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li> {{ $error }}</li>
+                    @endforeach
+                </ul>
+                <small class="badge badge-info"> <i class="icon fas fa-info"></i> Note : Silahkan Buka Kembali Pop Up untuk
+                    melakukan perubahan pada isian yang
+                    salah</small>
             </div>
         @endif
         @if (session()->has('success'))
@@ -56,7 +59,7 @@
                     </i> Tambah</button>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped table-responsive-lg">
                     <thead>
                         <tr class="text-center">
                             <th>No</th>
@@ -85,7 +88,7 @@
                                         <button class="badge badge-danger">X</button>
                                     @endif
                                 </td>
-                                <td class="text-danger">
+                                <td class="text-center">
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
                                         data-target="#edit{{ $value->id }}"><i class="fa fa-pen"></i></button>
 
@@ -119,7 +122,11 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="satker">Satker</label>
+                            <label class="@error('satker_id') text-danger  @enderror " for="satker_id">Satker</label>
+                            @error('satker_id')
+                                <small class="badge badge-danger"> *{{ $message }}
+                                </small>
+                            @enderror
                             <select class="form-control select2bs4" multiple="multiple"
                                 data-placeholder="Pilih Satuan Kerja " name="satker_id[]">
                                 @foreach ($satker as $s)
@@ -133,33 +140,22 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="persyaratan">Persyaratan</label>
+                            <label class="@error('persyaratan') text-danger  @enderror "
+                                for="persyaratan">Persyaratan</label>
+                            @error('persyaratan')
+                                <small class="badge badge-danger"> *{{ $message }}
+                                </small>
+                            @enderror
                             <select class="form-control" name="persyaratan">
-                                <option value="">-- Pilih --</option>
-                                <option value="wbk">Wilayah Bebas dari Korupsi (WBK)</option>
-                                <option value="wbbm">Wilayah Birokrasi Bersih dan Melayani (WBBM)</option>
+                                <option value="">Pilih Salah Satu</option>
+                                <option value="wbk" @if (old('persyaratan') == 'wbk') selected @endif>Wilayah Bebas dari
+                                    Korupsi
+                                    (WBK)</option>
+                                <option value="wbbm" @if (old('persyaratan') == 'wbbm') selected @endif>Wilayah Birokrasi
+                                    Bersih dan Melayani (WBBM)</option>
                             </select>
                         </div>
-                        {{-- <div class="form-group">
-                            <label for="persyaratan">Persyaratan</label>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="wbk" value="1"
-                                            name="wbk">
-                                        <label for="wbk" class="custom-control-label">WBK</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="wbbm" value="1"
-                                            name="wbbm">
-                                        <label for="wbbm" class="custom-control-label">WBBM</label>
-                                    </div>
-                                </div>
-                            </div>
 
-                        </div> --}}
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -174,7 +170,7 @@
 
     {{-- edit --}}
     @foreach ($persyaratan as $value)
-        <div class="modal fade" id="edit{{ $value['id'] }}">
+        <div class="modal fade" id="edit{{ $value->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -208,29 +204,6 @@
                                     </option>
                                 </select>
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="persyaratan">Persyaratan</label>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox"
-                                                @if ($value->wbk == 1) ? checked @endif
-                                                id="wbk{{ $value->id }}" value="1" name="wbk">
-                                            <label for="wbk{{ $value->id }}" class="custom-control-label">WBK</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox"
-                                                @if ($value->wbbm == 1) ? checked @endif
-                                                id="wbbm{{ $value->id }}" value="1" name="wbbm">
-                                            <label for="wbbm{{ $value->id }}"
-                                                class="custom-control-label">WBBM</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div> --}}
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

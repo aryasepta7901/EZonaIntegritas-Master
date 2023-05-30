@@ -16,6 +16,7 @@ class Pengawasan extends Model
         'satker_id',
         'tpi_id',
         'anggota_id',
+        'tahap',
         'status',
 
     ];

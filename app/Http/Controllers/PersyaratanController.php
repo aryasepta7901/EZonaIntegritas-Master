@@ -79,11 +79,11 @@ class PersyaratanController extends Controller
                 ]
             );
         }
-        return redirect('/persyaratan')->with('success', 'Persyaratan Berhasil di Tambahkan');
+        return redirect()->back()->with('success', 'Persyaratan Berhasil di Tambahkan');
     }
     public function import(Request $request)
     {
-        $file = $request->file('excel')->store('public/import');
+        $file = $request->file('excel');
 
         $import = new PersyaratanImport;
         $import->import($file);
@@ -91,7 +91,7 @@ class PersyaratanController extends Controller
             return back()->withFailures($import->failures());
         }
 
-        return redirect('/persyaratan')->with('success', 'Data Berhasil di Import');
+        return redirect()->back()->with('success', 'Data Berhasil di Import');
     }
 
     /**
@@ -141,7 +141,7 @@ class PersyaratanController extends Controller
 
         persyaratan::where('id', $persyaratan->id)->update($validatedData);
 
-        return redirect('/persyaratan')->with('success', 'Persyaratan Berhasil Di Update');
+        return redirect()->back()->with('success', 'Persyaratan Berhasil Di Update');
     }
 
     /**
@@ -153,6 +153,6 @@ class PersyaratanController extends Controller
     public function destroy(persyaratan $persyaratan)
     {
         persyaratan::destroy($persyaratan->id);
-        return redirect('/persyaratan')->with('success', 'Persyaratan Berhasil di Hapus');
+        return redirect()->back()->with('success', 'Persyaratan Berhasil di Hapus');
     }
 }

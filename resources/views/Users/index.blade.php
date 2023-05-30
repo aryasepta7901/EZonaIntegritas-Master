@@ -62,7 +62,7 @@
                     User</button>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped table-responsive">
+                <table id="example1" class="table table-bordered table-striped table-responsive-lg">
                     <thead>
                         <tr>
                             <th>No</th>

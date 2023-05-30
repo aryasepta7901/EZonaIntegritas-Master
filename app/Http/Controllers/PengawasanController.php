@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\anggota_tpi;
 use App\Models\Pengawasan;
 use Illuminate\Http\Request;
 
@@ -60,6 +59,7 @@ class PengawasanController extends Controller
                     'tpi_id' =>  $request->tpi_id,
                     'anggota_id' => $validatedData['anggota_id'],
                     'satker_id' =>  $satker,
+                    'tahap' => 1,
                     'status' => 0,
                 ]
             );

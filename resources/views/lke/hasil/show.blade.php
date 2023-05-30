@@ -6,11 +6,14 @@
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                    <br>
-                @endforeach
-
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li> {{ $error }}</li>
+                    @endforeach
+                </ul>
+                <small class="badge badge-info"> <i class="icon fas fa-info"></i> Note : Silahkan Buka Kembali Pop Up untuk
+                    melakukan perubahan pada isian yang
+                    salah</small>
             </div>
         @endif
         @if (session()->has('success'))
@@ -26,9 +29,9 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
 
-                    <p>{{ $pilar->pilar }}</p>
+                    <b>{{ $pilar->pilar }}</b>
                     <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus">
-                            Tambah</i></button>
+                        </i>Tambah</button>
 
                 </div>
             </div>
@@ -91,7 +94,12 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label for="satker_id">Satuan Kerja</label>
+                                    <label class="@error('satker_id') text-danger  @enderror " for="satker_id">Satuan
+                                        Kerja</label>
+                                    @error('satker_id')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
                                     <div class="input-group">
                                         <select class="form-control  select2bs4" multiple="multiple"
                                             data-placeholder="Pilih Anggota Tim " name="satker_id[]">
@@ -112,14 +120,25 @@
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label for="pilar">{{ $pilar->pilar }}</label>
+                                    <label class="@error('opsi_id') text-danger  @enderror " for="opsi_id">
+                                        {{ $pilar->pilar }}</label>
+                                    @error('opsi_id')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
                                     <input type="hidden" name="pilar_id" value="{{ $pilar->id }}">
                                     <input type="hidden" name="bobot" value="{{ $pilar->bobot }}">
                                     @foreach ($pilar->opsi as $item)
                                         <div class="form-check ml-4">
-                                            <input class="form-check-input" type="radio" name="opsi_id"
-                                                value="{{ $item->id }}">
-                                            <label class="form-check-label">{{ $item->rincian }}</label>
+                                            @if (old('opsi_id') == $item->id)
+                                                <input class="form-check-input" type="radio" name="opsi_id"
+                                                    value="{{ $item->id }}" checked>
+                                                <label class="form-check-label">{{ $item->rincian }}</label>
+                                            @else
+                                                <input class="form-check-input" type="radio" name="opsi_id"
+                                                    value="{{ $item->id }}">
+                                                <label class="form-check-label">{{ $item->rincian }}</label>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>
@@ -131,7 +150,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create </button>
+                        <button type="submit" class="btn btn-primary">Buat </button>
                     </div>
                 </form>
             </div>
@@ -190,7 +209,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update </button>
+                            <button type="submit" class="btn btn-primary">Ubah </button>
                         </div>
                     </form>
                 </div>
@@ -222,7 +241,7 @@
                         @csrf
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="submit" class="btn btn-primary">Hapus</button>
                         </div>
                     </form>
                 </div>
@@ -231,5 +250,4 @@
             <!-- /.modal-dialog -->
         </div>
     @endforeach
-
 @endsection

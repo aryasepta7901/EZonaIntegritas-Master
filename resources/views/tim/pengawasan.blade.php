@@ -123,7 +123,7 @@
                             <select class="form-control select2bs4" name="anggota_id">
                                 <option value="">Pilih Anggota</option>
                                 @foreach ($anggota as $a)
-                                    @if (old('anggota_id') == $a->id)
+                                    @if (old('anggota_id') == $a->anggota_id)
                                         <option value="{{ $a->anggota_id }}" selected>{{ $a->user->name }}
                                         </option>
                                     @else

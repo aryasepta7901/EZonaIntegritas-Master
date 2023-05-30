@@ -18,6 +18,7 @@ class PengawasanSatker extends Migration
             $table->string('satker_id', 4);
             $table->string('tpi_id', 12);
             $table->bigInteger('anggota_id'); //15
+            $table->char('tahap', 1);
             $table->char('status', 1);
             $table->timestamps();
 
