@@ -19,6 +19,8 @@ class Tpi extends Migration
             $table->string('nama');
             $table->bigInteger('dalnis', 15);
             $table->bigInteger('ketua_tim', 15);
+            $table->timestamps();
+
             $table->char('wilayah', 1);
         });
     }

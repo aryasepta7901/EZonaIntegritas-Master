@@ -15,8 +15,11 @@ class AnggotaTpi extends Migration
     {
         Schema::create('anggota_tpi', function (Blueprint $table) {
             $table->id();
-            $table->char('tpi_id', 12);
-            $table->bigInteger('anggota_id', 15);
+            $table->string('tpi_id', 12);
+            $table->bigInteger('anggota_id');
+            $table->timestamps();
+
+            $table->foreign('tpi_id')->references('id')->on('TPI')->onDelete('cascade');
         });
     }
 

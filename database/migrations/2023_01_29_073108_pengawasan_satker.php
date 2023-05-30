@@ -15,10 +15,11 @@ class PengawasanSatker extends Migration
     {
         Schema::create('pengawasan_satker', function (Blueprint $table) {
             $table->id()->unique(); //anggota_id.satker_id
-            $table->integer('satker_id', 4);
-            $table->char('tpi_id', 15);
-            $table->bigInteger('anggota_id', 15);
+            $table->string('satker_id', 4);
+            $table->string('tpi_id', 12);
+            $table->bigInteger('anggota_id');
             $table->char('status', 1);
+            $table->foreign('tpi_id')->references('id')->on('TPI')->onDelete('cascade');
         });
     }
 
