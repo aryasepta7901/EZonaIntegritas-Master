@@ -11,9 +11,9 @@ class anggota_tpi extends Model
     use HasFactory;
     protected $table = 'anggota_tpi';
     public $incrementing = false;
-    public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'tpi_id',
         'anggota_id',
 

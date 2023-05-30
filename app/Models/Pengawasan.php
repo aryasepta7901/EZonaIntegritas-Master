@@ -10,7 +10,6 @@ class Pengawasan extends Model
     use HasFactory;
     protected $table = 'pengawasan_satker';
     public $incrementing = false;
-    public $timestamps = false;
 
     protected $fillable = [
         'id',

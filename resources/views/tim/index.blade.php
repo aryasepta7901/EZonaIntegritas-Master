@@ -170,7 +170,7 @@
                                         <small class="badge badge-danger"> *{{ $message }}
                                         </small>
                                     @enderror
-                                    <select class="form-control" name="dalnis">
+                                    <select class="form-control select2bs4" name="dalnis">
                                         <option value="">Pilih Dalnis</option>
                                         @foreach ($dalnis as $d)
                                             @if (old('dalnis') == $d->id)
@@ -191,7 +191,7 @@
                                         <small class="badge badge-danger"> *{{ $message }}
                                         </small>
                                     @enderror
-                                    <select class="form-control" name="ketua_tim">
+                                    <select class="form-control select2bs4" name="ketua_tim">
                                         <option value="">Pilih Ketua Tim </option>
                                         @foreach ($ketua_tim as $value)
                                             @if (old('ketua_tim') == $value->id)
@@ -302,7 +302,7 @@
                                             <small class="badge badge-danger"> *{{ $message }}
                                             </small>
                                         @enderror
-                                        <select class="form-control" name="dalnis">
+                                        <select class="form-control select2bs4" name="dalnis">
                                             @foreach ($dalnis as $d)
                                                 @if (old('dalnis', $value->dalnis) == $d->id)
                                                     <option value="{{ $d->id }}" selected>{{ $d->name }}
@@ -322,7 +322,7 @@
                                             <small class="badge badge-danger"> *{{ $message }}
                                             </small>
                                         @enderror
-                                        <select class="form-control" name="ketua_tim">
+                                        <select class="form-control select2bs4" name="ketua_tim">
                                             <option value="{{ $value->ketua_tim }}">{{ $value->ketua->name }} </option>
                                             @foreach ($ketua_tim as $k)
                                                 @if (old('ketua_tim', $value->ketua_tim) == $k->id)

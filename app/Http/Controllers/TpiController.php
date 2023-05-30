@@ -25,7 +25,7 @@ class TpiController extends Controller
             'tim.index',
             [
                 'title' => 'Mengelola Wilayah Tugas',
-                'tpi' => tpi::all(),
+                'tpi' => tpi::orderBy('wilayah', 'asc')->get(),
                 'dalnis' => User::where('level_id', 'DL')->get(),
                 'ketua_tim' => User::doesntHave('ketua')->where('level_id', 'KT')->get(),
                 'anggota' => User::doesntHave('anggota')->where('level_id', 'AT')->get(),
@@ -53,9 +53,10 @@ class TpiController extends Controller
     public function store(Request $request)
     {
         // validasi
+
+
         $request->validate(
             [
-                'id' => 'unique:tpi',
                 'nama' => 'required',
                 'wilayah'  => 'required',
                 'dalnis'  => 'required',
@@ -67,20 +68,26 @@ class TpiController extends Controller
                 'unique' => ':Attribute Sudah Terdaftar',
             ]
         );
-
         // TPI
-        $tahun = date('Y');
         $nama = $request->nama;
         $wilayah = $request->wilayah;
-        $data = [
-            'id' => strtoupper(str_replace(' ', '', $nama . $tahun .  'wil' . $wilayah)),
-            'tahun' => $tahun,
-            'nama' => $nama,
-            'dalnis' => $request->dalnis,
-            'ketua_tim' => $request->ketua_tim,
-            'wilayah' => $wilayah,
-        ];
-        TPI::create($data);
+        $tahun = date('Y');
+        $id = strtoupper(str_replace(' ', '', $nama . $tahun .  'wil' . $wilayah));
+        $tpi = TPI::where('id', $id)->first();
+
+        if ($tpi == null) {
+            $data = [
+                'id' =>  $id,
+                'tahun' => $tahun,
+                'nama' => $nama,
+                'dalnis' => $request->dalnis,
+                'ketua_tim' => $request->ketua_tim,
+                'wilayah' => $wilayah,
+            ];
+            TPI::create($data);
+        } else {
+            return back()->withErrors('ID Sudah Terdaftar');
+        }
 
         // Anggota TPI
         foreach ($request->anggota as $key => $anggota) {
@@ -207,8 +214,6 @@ class TpiController extends Controller
     {
 
         TPI::destroy($tim->id);
-        anggota_tpi::where('tpi_id', $tim->id)->delete();
-        Pengawasan::where('tpi_id', $tim->id)->delete();
         return redirect()->back()->with('success', 'TPI Berhasil di Hapus');
     }
 }

@@ -17,8 +17,10 @@ class PengawasanSatker extends Migration
             $table->id()->unique(); //anggota_id.satker_id
             $table->string('satker_id', 4);
             $table->string('tpi_id', 12);
-            $table->bigInteger('anggota_id');
+            $table->bigInteger('anggota_id'); //15
             $table->char('status', 1);
+            $table->timestamps();
+
             $table->foreign('tpi_id')->references('id')->on('TPI')->onDelete('cascade');
         });
     }

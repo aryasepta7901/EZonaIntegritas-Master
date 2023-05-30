@@ -10,7 +10,6 @@ class TPI extends Model
     use HasFactory;
     protected $table = 'TPI';
     public $incrementing = false;
-    public $timestamps = false;
 
     protected $fillable = [
         'id',

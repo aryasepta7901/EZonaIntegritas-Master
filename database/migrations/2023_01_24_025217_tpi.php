@@ -17,11 +17,10 @@ class Tpi extends Migration
             $table->string('id', 12)->primary(); //nama.tahun.wilayah
             $table->year('tahun');
             $table->string('nama');
-            $table->bigInteger('dalnis', 15);
-            $table->bigInteger('ketua_tim', 15);
-            $table->timestamps();
-
+            $table->bigInteger('dalnis'); //15
+            $table->bigInteger('ketua_tim'); //15
             $table->char('wilayah', 1);
+            $table->timestamps();
         });
     }
 

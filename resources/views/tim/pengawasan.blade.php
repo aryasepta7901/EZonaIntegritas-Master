@@ -43,11 +43,14 @@
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-ban"></i> Ada Kesalahan</h5>
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                    <br>
-                @endforeach
-
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li> {{ $error }}</li>
+                    @endforeach
+                </ul>
+                <small class="badge badge-info"> <i class="icon fas fa-info"></i> Note : Silahkan Buka Kembali Pop Up untuk
+                    melakukan perubahan pada isian yang
+                    salah</small>
             </div>
         @endif
         @if (session()->has('success'))
@@ -110,11 +113,14 @@
                 <form method="post" action="/pengawasan">
                     @csrf
                     <div class="modal-body">
-
                         <input type="hidden" name="tpi_id" value="{{ $tpi->id }}">
                         <div class="form-group">
-                            <label for="anggota_id">Anggota</label>
-                            <select class="form-control" name="anggota_id">
+                            <label class="@error('anggota_id') text-danger  @enderror" for="anggota_id">Anggota</label>
+                            @error('anggota_id')
+                                <small class="badge badge-danger"> *{{ $message }}
+                                </small>
+                            @enderror
+                            <select class="form-control select2bs4" name="anggota_id">
                                 <option value="">Pilih Anggota</option>
                                 @foreach ($anggota as $a)
                                     @if (old('anggota_id') == $a->id)
@@ -129,7 +135,12 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label for="satker_id">Satuan Kerja</label>
+                                    <label class="@error('satker_id') text-danger  @enderror" for="satker_id">Satuan Kerja
+                                    </label>
+                                    @error('satker_id')
+                                        <small class="badge badge-danger"> *{{ $message }}
+                                        </small>
+                                    @enderror
 
 
                                     <div class="input-group">
@@ -154,7 +165,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create Pengawasan</button>
+                        <button type="submit" class="btn btn-primary">Buat Pengawasan</button>
                     </div>
                 </form>
             </div>
@@ -184,7 +195,7 @@
                         @csrf
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="submit" class="btn btn-primary">Hapus</button>
                         </div>
                     </form>
                 </div>
