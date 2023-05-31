@@ -110,6 +110,8 @@ Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('a
 Route::get('/tpi/evaluasi/{evaluasi}/{pilar}', [DeskEvaluationController::class, 'pertanyaan'])->name('evaluasi.pertanyaan')->middleware('auth');
 // LHE dan cetak LHE
 Route::resource('/tpi/lhe', LheController::class)->middleware('auth');
+Route::post('/tpi/lhe/cetak', [LheController::class, 'cetak'])->name('cetak.cetak');
+
 
 
 // Monitoring

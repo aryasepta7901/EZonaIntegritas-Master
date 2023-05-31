@@ -1,6 +1,7 @@
 @extends('layouts.backEnd.main')
 
 @section('content')
+
     @if ($rekap->count() != 0)
         <div class="col-lg-4">
             <div class="card card-primary card-outline">
@@ -76,7 +77,7 @@
                                 Upload</label>
                         </div>
 
-                        @if ($rekap->first()->surat_pengantar_prov)
+                        @if ($rekap->first()->LHE->surat_pengantar_prov)
                             <table class="table table-bordered table-striped mt-3">
                                 <thead>
                                     <tr class="text-center">
@@ -205,7 +206,7 @@
                     <div class="modal-body">
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item"
-                                src="{{ asset('storage/' . $rekap->first()->surat_pengantar_prov) }}"
+                                src="{{ asset('storage/' . $rekap->first()->LHE->surat_pengantar_prov) }}"
                                 allowfullscreen></iframe>
                         </div>
                     </div>

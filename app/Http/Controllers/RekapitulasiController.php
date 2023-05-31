@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\DeskEvaluation;
 use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
+use App\Models\LHE;
 use App\Http\Controllers\Controller;
 use App\Models\Rincian;
 use App\Models\Satker;
@@ -62,17 +63,23 @@ class RekapitulasiController extends Controller
         // Rekapitulasi
         if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
             // Ambil File lamanya
+
             $rekap = Rekapitulasi::where('id', $request->id)->first();
-            if ($rekap->surat_pengantar_kabkota) {
+            if ($rekap->LHE->surat_pengantar_kabkota) {
                 // jika ada file lama maka hapus
-                Storage::delete($rekap->surat_pengantar_kabkota);
+                Storage::delete($rekap->LHE->surat_pengantar_kabkota);
             }
             $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
             Rekapitulasi::updateOrCreate(
                 ['id' => $request->id],
                 [
-                    'surat_pengantar_kabkota' =>  $request->file('surat')->storeAs('surat_pengantar/kabkota/' . date('Y') . '/', $customName),
                     'status' => 1,
+                ]
+            );
+            LHE::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'surat_pengantar_kabkota' =>  $request->file('surat')->storeAs('surat_pengantar/kabkota/' . date('Y') . '/', $customName),
                 ]
             );
         }

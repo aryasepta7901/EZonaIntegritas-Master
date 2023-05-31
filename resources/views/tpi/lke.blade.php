@@ -139,12 +139,11 @@
             @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
                 <div class="col-lg-12 mb-3 d-flex justify-content-end">
                     @if ($pengawasan->tahap == 1)
-                        <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
-                            </i> Revisi</button>
+                        <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-warning m-2"><i class="fa fa-save">
+                            </i> Revisi</a>
                     @elseif($pengawasan->tahap == 2)
                         <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
                             </i> Setuju</a>
-
                         <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i
                                 class="fa fa-save">
                             </i> Tolak</button>
@@ -188,7 +187,7 @@
                     <!-- /.modal-dialog -->
                 </div>
                 {{-- Revisi --}}
-                <div class="modal fade" id="revisi">
+                {{-- <div class="modal fade" id="revisi">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -222,9 +221,9 @@
                         <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
-                </div>
+                </div> --}}
                 {{-- Tolak --}}
-                <div class="modal fade" id="tolak">
+                {{-- <div class="modal fade" id="tolak">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -252,7 +251,7 @@
                         <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
-                </div>
+                </div> --}}
             @endif
         @endif
     @endif

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\LHEImport;
 use App\Models\Pengawasan;
 use App\Models\Pilar;
 use App\Models\Rekapitulasi;
@@ -14,6 +15,7 @@ use App\Models\Pertanyaan;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LheController extends Controller
 {
@@ -43,6 +45,41 @@ class LheController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+    {
+        //
+        $request->validate(
+            [
+                'surat' => 'required|mimes:pdf|max:2048',
+
+            ],
+            [
+                'required' => ':attribute  harus di Upload',
+                'mimes' => 'Dokumen hanya boleh format :values,',
+                'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
+            ]
+        );
+        if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
+            // Ambil File lamanya
+            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
+            if ($rekap) {
+                // jika ada file lama maka hapus
+                Storage::delete($rekap->surat_pengantar_prov);
+            }
+            $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
+
+            foreach ($request->id as $key => $id) {
+
+                Rekapitulasi::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'surat_pengantar_prov' =>  $request->file('surat')->storeAs('surat_pengantar/prov/' . date('Y') . '/', $customName),
+                    ]
+                );
+            }
+        }
+        return redirect()->back()->with('success', 'Surat Pengantar Berhasil di Simpan');
+    }
+    public function cetak(Request $request)
     {
         $satker = $request->satker;
         $id = $request->id;

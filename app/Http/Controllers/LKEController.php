@@ -12,6 +12,7 @@ use App\Models\RekapPengungkit;
 use App\Models\SubPilar;
 use App\Models\SubRincian;
 use App\Models\RekapHasil;
+use App\Models\LHE;
 use Illuminate\Http\Request;
 
 class LKEController extends Controller
@@ -59,6 +60,11 @@ class LKEController extends Controller
         $data['id'] = $data['tahun'] . $data['predikat'] . $data['satker_id'];
 
         Rekapitulasi::create($data);
+
+        $dataLHE = [
+            'id' => $data['id'],
+        ];
+        LHE::create($dataLHE);
 
         return redirect()->back()->with('success', 'Pengajuan Berhasil di Buat');
     }

@@ -57,7 +57,7 @@
                                     <button class="badge badge-info"> {{ $nilai }} </button>
                                 </td>
                                 <td class="text-center">
-                                    @if ($value->surat_pengantar_kabkota)
+                                    @if ($value->LHE->surat_pengantar_kabkota)
                                         <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
                                             data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
                                                 class="fas fa-file">
@@ -100,7 +100,8 @@
                     <div class="modal-body">
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item"
-                                src="{{ asset('storage/' . $value->surat_pengantar_kabkota) }}" allowfullscreen></iframe>
+                                src="{{ asset('storage/' . $value->LHE->surat_pengantar_kabkota) }}"
+                                allowfullscreen></iframe>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">

@@ -26,7 +26,7 @@
                 Upload Surat Rekomendasi
             </div>
             <div class="card-body">
-                <form action="/prov/surat" method="POST" enctype="multipart/form-data">
+                <form action="/tpi/lhe" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="upload" name="surat">
@@ -53,7 +53,7 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <b>{{ auth()->user()->satker->nama_satker }}</b>
-                    <form action="/tpi/lhe" method="post">
+                    <form action="/tpi/lhe/cetak" method="post">
                         @csrf
                         <input type="hidden" name="satker" value="{{ $rekap->satker->nama_satker }}">
                         <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">

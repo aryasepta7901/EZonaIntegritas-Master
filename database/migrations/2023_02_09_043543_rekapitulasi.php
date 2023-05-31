@@ -20,8 +20,7 @@ class Rekapitulasi extends Migration
             $table->char('predikat', 4);
             $table->char('status', 1)->default(0);
             $table->integer('satker_id', 4);
-            $table->text('surat_pengantar_prov');
-            $table->text('surat_pengantar_kabkota');
+
             $table->timestamps();
         });
     }

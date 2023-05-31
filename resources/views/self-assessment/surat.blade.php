@@ -49,8 +49,8 @@
                         <label class="custom-file-label" for="upload">
                             Upload</label>
                     </div>
-
-                    @if ($rekap->surat_pengantar_kabkota)
+                    {{ $rekap }}
+                    @if ($rekap->LHE->surat_pengantar_kabkota)
                         <table class="table table-bordered table-striped mt-3">
                             <thead>
                                 <tr class="text-center">
@@ -344,7 +344,7 @@
                 <div class="modal-body">
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item"
-                            src="{{ asset('storage/' . $rekap->surat_pengantar_kabkota) }}" allowfullscreen></iframe>
+                            src="{{ asset('storage/' . $rekap->LHE->surat_pengantar_kabkota) }}" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -357,32 +357,5 @@
         <!-- /.modal-dialog -->
     </div>
 
-    {{-- View Surat --}}
-    @if ($rekap != null)
-        <div class="modal fade" id="surat_pengantar">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Surat Pengantar
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item"
-                                src="{{ asset('storage/' . $rekap->first()->surat_pengantar) }}" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
 
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    @endif
 @endsection

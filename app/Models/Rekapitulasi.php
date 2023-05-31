@@ -35,4 +35,8 @@ class Rekapitulasi extends Model
     {
         return $this->belongsTo(Pengawasan::class, 'satker_id', 'satker_id');
     }
+    public function LHE()
+    {
+        return $this->belongsTo(LHE::class, 'id', 'id');
+    }
 }

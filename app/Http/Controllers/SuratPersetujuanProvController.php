@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LHE;
 use App\Models\RekapHasil;
 use App\Models\rekapitulasi;
 use Illuminate\Http\Request;
@@ -61,16 +62,16 @@ class SuratPersetujuanProvController extends Controller
         );
         if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
             // Ambil File lamanya
-            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
-            if ($rekap) {
+            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first('id');
+
+            if ($rekap->LHE->surat_pengantar_prov) {
                 // jika ada file lama maka hapus
-                Storage::delete($rekap->surat_pengantar_prov);
+                Storage::delete($rekap->LHE->surat_pengantar_prov);
             }
             $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
 
             foreach ($request->id as $key => $id) {
-
-                Rekapitulasi::updateOrCreate(
+                LHE::updateOrCreate(
                     ['id' => $id],
                     [
                         'surat_pengantar_prov' =>  $request->file('surat')->storeAs('surat_pengantar/prov/' . date('Y') . '/', $customName),
@@ -126,12 +127,12 @@ class SuratPersetujuanProvController extends Controller
         $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
 
 
-        if ($rekap->surat_pengantar_prov) {
+        if ($rekap->LHE->surat_pengantar_prov) {
             // jika ada file lama maka hapus
-            Storage::delete($rekap->surat_pengantar_prov);
+            Storage::delete($rekap->LHE->surat_pengantar_prov);
         }
         foreach ($request->id as $key => $id) {
-            Rekapitulasi::updateOrCreate(
+            LHE::updateOrCreate(
                 ['id' => $id],
                 [
                     'surat_pengantar_prov' =>  '',

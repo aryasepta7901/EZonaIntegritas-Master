@@ -84,7 +84,7 @@
                                         </td>
 
                                         {{-- Cek Apakah Surat Rekomendasi ada --}}
-                                        @if ($item->surat_pengantar_prov != '')
+                                        @if ($item->LHE->surat_pengantar_prov != '')
                                             <td class="text-center">
                                                 <button class="btn btn-info btn-sm" data-toggle="modal"
                                                     data-target="#surat_pengantar_prov{{ $item->satker_id }}"><i
@@ -133,7 +133,7 @@
                                                     <div class="modal-body">
                                                         <div class="embed-responsive embed-responsive-16by9">
                                                             <iframe class="embed-responsive-item"
-                                                                src="{{ asset('storage/' . $item->surat_pengantar_prov) }}"
+                                                                src="{{ asset('storage/' . $item->LHE->surat_pengantar_prov) }}"
                                                                 allowfullscreen></iframe>
                                                         </div>
                                                     </div>
