@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\RekapHasilImport;
+use App\Imports\RincianHasilImport;
 use App\Models\Opsi;
 use App\Models\Pilar;
 use App\Models\RekapHasil;
@@ -24,8 +26,12 @@ class RincianHasilController extends Controller
             [
                 'title' => 'Upload Rincian Hasil ',
                 'pilar' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-                'hasilSatker' => RekapHasil::select('satker_id')->orderBy('nilai', 'DESC')->groupBy('satker_id')->get(), //hanya ambil data satker //ambil satker yang sudah digroupBy
+                'hasilSatker' => RekapHasil::select('satker_id')->orderBy('nilai', 'DESC')->groupBy('satker_id')->get(), //ambil satker yang sudah digroupBy
                 'hasil' => RekapHasil::all(), //ambil semua nilai hasil
+                'satker' => Satker::get(),
+
+
+
             ]
         );
     }
@@ -48,35 +54,52 @@ class RincianHasilController extends Controller
      */
     public function store(Request $request)
     {
+
         // validasi
         $request->validate(
             [
-                'opsi_id' => 'required',
                 'satker_id' => 'required',
+
             ],
             [
-                'opsi_id.required' => 'Silahkan Pilih Jawaban',
                 'satker_id.required' => 'Silahkan Pilih Satuan Kerja',
             ]
         );
+        $pilar = Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get();
         foreach ($request->satker_id as $key => $satker) {
-            $pilar_id = $request->pilar_id;
-            $opsi_id = $request->opsi_id;
-            $bobot = $request->bobot;
-            $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot;
-            $id = date('Y') . $satker . $pilar_id;
-            RekapHasil::updateOrCreate(
-                ['id' => $id],
-                [
-                    'tahun' => date('Y'),
-                    'opsi_id' => $opsi_id,
-                    'nilai' => $nilai,
-                    'pilar_id' => $pilar_id,
-                    'satker_id' => $satker,
-                ]
-            );
+            foreach ($pilar as $value) {
+                $hasil = $value->id;
+                $pilar_id = $request->input('pilar_id' . $hasil);
+                $opsi_id = $request->$hasil;
+                $bobot =  $request->input('bobot' . $hasil);
+                $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot;
+                $id = date('Y') . $satker . $pilar_id;
+
+                RekapHasil::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'tahun' => date('Y'),
+                        'opsi_id' => $opsi_id,
+                        'nilai' => $nilai,
+                        'pilar_id' => $pilar_id,
+                        'satker_id' => $satker,
+                    ]
+                );
+            }
         }
         return redirect()->back()->with('success', 'Data Berhasil Ditambahkan');
+    }
+    public function import(Request $request)
+    {
+        $file = $request->file('excel');
+
+        $import = new RekapHasilImport;
+        $import->import($file);
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
+        }
+
+        return redirect()->back()->with('success', 'Data Berhasil di Import');
     }
 
     /**
@@ -92,7 +115,7 @@ class RincianHasilController extends Controller
             'lke.hasil.show',
             [
                 'master' => 'Upload Rincian Hasil',
-                'link' => '/hasil',
+                'link' => 'hasil',
                 'title' => 'Upload Dokumen',
                 'pilar' => Pilar::where('id', $hasil->id)->first(),
                 'hasil' => RekapHasil::where('pilar_id', $hasil->id)->orderBy('nilai', 'DESC')->get(),
@@ -117,31 +140,41 @@ class RincianHasilController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Pilar  $pilar
+     * @param  \App\Models\Satker  $pilar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RekapHasil $hasil)
+    public function update(Request $request, Satker $hasil)
     {
         // validasi
         $request->validate(
             [
-                'opsi_id' => 'required',
+                'satker_id' => 'required',
             ],
             [
-                'opsi_id.required' => 'Silahkan Pilih Jawaban',
+                'satker_id.required' => 'Silahkan Pilih Satuan Kerja',
             ]
         );
+        $pilar = Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get();
+        foreach ($pilar as $value) {
+            $hasil = $value->id;
+            $satker = $request->satker_id;
+            $pilar_id = $request->input('pilar_id' . $hasil);
+            $opsi_id = $request->$hasil;
+            $bobot =  $request->input('bobot' . $hasil);
+            $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot;
+            $id = date('Y') . $satker . $pilar_id;
 
-        $opsi_id = $request->opsi_id;
-        $bobot = $request->bobot;
-        $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot;
-        $id = $hasil->id;
-        RekapHasil::updateOrCreate(
-            ['id' => $id],
-            [
-                'opsi_id' => $opsi_id,
-                'nilai' => $nilai,
-            ]
-        );
+            RekapHasil::updateOrCreate(
+                ['id' => $id],
+                [
+                    'tahun' => date('Y'),
+                    'opsi_id' => $opsi_id,
+                    'nilai' => $nilai,
+                    'pilar_id' => $pilar_id,
+                    'satker_id' => $satker,
+                ]
+            );
+        }
 
         return redirect()->back()->with('success', 'Data Berhasil DiUpdate');
     }
@@ -150,11 +183,12 @@ class RincianHasilController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\RekapHasil  $RekapHasil
+     * @param  \App\Models\Satker  $Satker
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RekapHasil $hasil)
+    public function destroy(Satker $hasil)
     {
-        RekapHasil::destroy($hasil->id);
+        RekapHasil::where('satker_id', $hasil->id)->delete();
         return redirect()->back()->with('success', 'Data Berhasil Di Hapus');
     }
 }
