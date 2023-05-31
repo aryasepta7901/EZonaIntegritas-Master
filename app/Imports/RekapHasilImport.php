@@ -70,12 +70,11 @@ class RekapHasilImport implements ToModel, WithHeadingRow, WithValidation, Skips
     public function rules(): array
     {
         return [
-            // 'id' => 'required|unique:users',
-            // 'name'  => 'required|min:5',
-            // 'email'  => 'required|email:dns|unique:users',
-            // 'no_telp' => 'required|min:11',
-            // 'satker_id' => 'required',
-            // 'level_id' => 'required',
+            'tahun'  => 'required',
+            'satker'  => 'required',
+            'ipak'  => 'required',
+            'capaian_kinerja'  => 'required',
+            'ipkp'  => 'required',
         ];
     }
 }

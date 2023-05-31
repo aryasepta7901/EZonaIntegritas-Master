@@ -21,21 +21,34 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
      */
     public function model(array $row)
     {
-        return new User([
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'email' => $row['email'],
-            'no_telp' => $row['no_telp'],
-            'satker_id' => $row['satker_id'],
-            'level_id' => $row['level_id'],
-        ]);
+        $id = $row['nip'];
+        $user = User::where('id', $id)->first();
+        if ($user) {
+            // Jika Update
+            $user->name = $row['name'];
+            $user->email = $row['email'];
+            $user->no_telp = $row['no_telp'];
+            $user->satker_id = $row['satker_id'];
+            $user->level_id = $row['level_id'];
+            $user->save();
+        } else {
+            // jika Create
+            $User = new User([
+                'id' => $id,
+                'name' => $row['name'],
+                'email' => $row['email'],
+                'no_telp' => $row['no_telp'],
+                'satker_id' => $row['satker_id'],
+                'level_id' => $row['level_id'],
+            ]);
+            $User->save();
+        }
     }
     public function rules(): array
     {
         return [
-            'id' => 'required|unique:users',
             'name'  => 'required|min:5',
-            'email'  => 'required|email:dns|unique:users',
+            'email'  => 'required',
             'no_telp' => 'required|min:11|max:14',
             'satker_id' => 'required',
             'level_id' => 'required',

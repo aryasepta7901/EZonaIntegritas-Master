@@ -48,6 +48,10 @@ class RincianController extends Controller
     {
         $validatedData = $request->validate([
             'rincian'  => 'required|unique:rincian',
+        ], [
+            'required' => ':Attribute Wajib Diisi',
+            'unique' => ':Attribute Sudah Terdaftar',
+
         ]);
 
         $validatedData['id'] = substr($validatedData['rincian'], 0, 1);
@@ -101,9 +105,15 @@ class RincianController extends Controller
      */
     public function update(Request $request, Rincian $rincian)
     {
-        $validatedData = $request->validate([
-            'rincian'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'rincian'  => 'required',
+            ],
+            [
+                'required' => ':Attribute Wajib Diisi',
+
+            ]
+        );
 
         Rincian::where('id', $rincian->id)->update($validatedData);
 

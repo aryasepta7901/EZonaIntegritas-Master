@@ -39,6 +39,10 @@ class SubRincianController extends Controller
     {
         $validatedData = $request->validate([
             'subRincian'  => 'required|unique:subRincian',
+        ], [
+            'required' => ':Attribute Wajib Diisi',
+            'unique' => ':Attribute Sudah Terdaftar',
+
         ]);
 
         $validatedData['rincian_id'] = $request->rincian;
@@ -95,6 +99,9 @@ class SubRincianController extends Controller
     {
         $validatedData = $request->validate([
             'subRincian'  => 'required',
+        ], [
+            'required' => ':Attribute Wajib Diisi',
+
         ]);
 
 

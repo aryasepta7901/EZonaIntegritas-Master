@@ -36,7 +36,7 @@ class PersyaratanImport implements ToModel, WithHeadingRow, WithValidation, Skip
         } else {
             // jika Create
             $persyaratan = new Persyaratan([
-                'id' => $row['id'],
+                'id' => $id,
                 'tahun' => $row['tahun'],
                 'satker_id' => $row['satker_id'],
                 'wbk' => $row['wbk'],

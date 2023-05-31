@@ -24,7 +24,7 @@ class PersyaratanController extends Controller
             'persyaratan.index',
             [
                 'title' => 'Mengelola Persyaratan WBK/WBBM',
-                'persyaratan' => Persyaratan::all(),
+                'persyaratan' => Persyaratan::where('tahun', date('Y'))->get(),
                 'satker' => Satker::doesntHave('persyaratan')->get(),
             ]
         );

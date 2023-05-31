@@ -2,36 +2,6 @@
 
 @section('content')
     <div class="col-lg-12">
-
-        <div class="card">
-            <!-- /.card-header -->
-            <div class="card-header d-flex justify-content-end">
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    @foreach ($pilar as $value)
-                        <div class="col-lg-4 ">
-                            <!-- small box -->
-                            <div class="small-box bg-info ">
-                                <div class="inner" style="height: 100px">
-
-                                    <p class="text-center text-bold ">{{ $value->pilar }}</p>
-                                </div>
-
-                                <a href="/hasil/{{ $value->id }}" class="small-box-footer">Upload Dokumen <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                    @endforeach
-
-
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="col-lg-12">
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -50,6 +20,32 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session()->has('failures'))
+            <table class="table table-warning  table-responsive">
+                <tr>
+                    <th>Baris</th>
+                    <th>Attribute</th>
+                    <th>Error</th>
+                    <th>Value</th>
+                </tr>
+                @foreach (session()->get('failures') as $validasi)
+                    <tr>
+                        <td>{{ $validasi->row() - 1 }}</td>
+                        <td>{{ $validasi->attribute() }}</td>
+                        <td>
+                            <ul>
+                                @foreach ($validasi->errors() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td>{{ $validasi->values()[$validasi->attribute()] }}</td>
+                    </tr>
+                @endforeach
+
+            </table>
+        @endif
+
         <div class="card">
             <!-- /.card-header -->
             <div class="card-header d-flex justify-content-between">
@@ -59,7 +55,7 @@
                     </i> Tambah</button>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped table-responsive-lg">
                     <thead>
                         <tr class="text-center">
                             <th>No</th>
@@ -166,7 +162,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create </button>
+                        <button type="submit" class="btn btn-primary">Buat </button>
                     </div>
                 </form>
             </div>
@@ -206,7 +202,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="pilar">{{ $value->pilar }}</label>
-                                            <input type="text" name="pilar_id{{ $value->id }}"
+                                            <input type="hidden" name="pilar_id{{ $value->id }}"
                                                 value="{{ $value->id }}">
                                             <input type="hidden" name="bobot{{ $value->id }}"
                                                 value="{{ $value->bobot }}">
@@ -230,7 +226,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update </button>
+                            <button type="submit" class="btn btn-primary">Ubah </button>
                         </div>
                     </form>
                 </div>
@@ -264,7 +260,7 @@
                         @csrf
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="submit" class="btn btn-primary">Hapus</button>
                         </div>
                     </form>
                 </div>
@@ -299,8 +295,8 @@
                             File Yang diupload</p>
                         <p class="text-danger">format .xlsx / .csv</p>
                         <div class="d-flex justify-content-center">
-                            <a type="button" href="{{ asset('excel/users.xlsx') }}" class="btn btn-sm btn-info my-2"><i
-                                    class="fas fa-file"></i> Download
+                            <a type="button" href="{{ asset('excel/rincianHasil.xlsx') }}"
+                                class="btn btn-sm btn-info my-2"><i class="fas fa-file"></i> Download
                                 Template</a>
                         </div>
 

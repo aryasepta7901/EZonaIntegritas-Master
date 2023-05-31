@@ -45,6 +45,9 @@ class SubPilarController extends Controller
         $validatedData = $request->validate([
             'subPilar'  => 'required',
             'bobot'  => 'required',
+        ],    [
+            'required' => ':Attribute Wajib Diisi',
+
         ]);
         if ($subpilar) {
             $id = substr($subpilar->id, -1, 1); //ambil angka 
@@ -125,6 +128,9 @@ class SubPilarController extends Controller
         $validatedData = $request->validate([
             'subPilar'  => 'required',
             'bobot'  => 'required',
+        ],    [
+            'required' => ':Attribute Wajib Diisi',
+
         ]);
 
         SubPilar::where('id', $subpilar->id)->update($validatedData);

@@ -27,7 +27,7 @@ class RincianHasilController extends Controller
                 'title' => 'Upload Rincian Hasil ',
                 'pilar' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
                 'hasilSatker' => RekapHasil::select('satker_id')->orderBy('nilai', 'DESC')->groupBy('satker_id')->get(), //ambil satker yang sudah digroupBy
-                'hasil' => RekapHasil::all(), //ambil semua nilai hasil
+                'hasil' => RekapHasil::where('tahun', date('Y'))->get(), //ambil semua nilai hasil
                 'satker' => Satker::get(),
 
 
@@ -110,18 +110,6 @@ class RincianHasilController extends Controller
      */
     public function show(Pilar $hasil)
     {
-
-        return view(
-            'lke.hasil.show',
-            [
-                'master' => 'Upload Rincian Hasil',
-                'link' => 'hasil',
-                'title' => 'Upload Dokumen',
-                'pilar' => Pilar::where('id', $hasil->id)->first(),
-                'hasil' => RekapHasil::where('pilar_id', $hasil->id)->orderBy('nilai', 'DESC')->get(),
-                'satker' => Satker::get(),
-            ]
-        );
     }
 
     /**
@@ -145,19 +133,11 @@ class RincianHasilController extends Controller
      */
     public function update(Request $request, Satker $hasil)
     {
-        // validasi
-        $request->validate(
-            [
-                'satker_id' => 'required',
-            ],
-            [
-                'satker_id.required' => 'Silahkan Pilih Satuan Kerja',
-            ]
-        );
+        $satker = $hasil->id;
         $pilar = Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get();
         foreach ($pilar as $value) {
             $hasil = $value->id;
-            $satker = $request->satker_id;
+            $satker = $satker;
             $pilar_id = $request->input('pilar_id' . $hasil);
             $opsi_id = $request->$hasil;
             $bobot =  $request->input('bobot' . $hasil);
@@ -176,7 +156,7 @@ class RincianHasilController extends Controller
             );
         }
 
-        return redirect()->back()->with('success', 'Data Berhasil DiUpdate');
+        return redirect()->back()->with('success', 'Data Berhasil Di Update');
     }
 
     /**

@@ -39,11 +39,17 @@ class PilarController extends Controller
     public function store(Request $request)
     {
         $pilar =  Pilar::where('subrincian_id', $request->subrincian_id)->orderBy('id', 'DESC')->first(); //mengambil data terakhir yang masuk
-        $validatedData = $request->validate([
-            'pilar'  => 'required',
-            'min_wbk'  => 'required',
-            'min_wbbm'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'pilar'  => 'required',
+                'min_wbk'  => 'required',
+                'min_wbbm'  => 'required',
+            ],
+            [
+                'required' => ':Attribute Wajib Diisi',
+
+            ]
+        );
         if ($pilar) { //cek apakah data tersebut data awal atau tidak?
             $id = substr($pilar->id, -1, 1); //ambil huruf terakhir 
             $idNum = ord($id);
@@ -104,11 +110,17 @@ class PilarController extends Controller
      */
     public function update(Request $request, Pilar $pilar)
     {
-        $validatedData = $request->validate([
-            'pilar'  => 'required',
-            'min_wbk'  => 'required',
-            'min_wbbm'  => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'pilar'  => 'required',
+                'min_wbk'  => 'required',
+                'min_wbbm'  => 'required',
+            ],
+            [
+                'required' => ':Attribute Wajib Diisi',
+
+            ]
+        );
 
 
         Pilar::where('id', $pilar->id)->update($validatedData);
