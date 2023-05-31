@@ -56,7 +56,7 @@ class RekapitulasiController extends Controller
             [
                 'required' => ':attribute  harus di Upload',
                 'mimes' => 'Dokumen hanya boleh format :values,',
-                'max' => 'Dokumen hanya boleh Berukuran :max,'
+                'max' => 'Dokumen hanya boleh Berukuran 2MB,'
             ]
         );
         // Rekapitulasi
@@ -141,8 +141,8 @@ class RekapitulasiController extends Controller
     {
 
         return view('self-assessment.surat', [
-            'master' => 'lke',
-            'link' => 'satker/lke/' . $rekapitulasi->id,
+            'master' => 'LKE',
+            'link' => '/satker/lke/' . $rekapitulasi->id,
             'title' => 'Surat Pengantar BPS Kabupaten/Kota',
             'rekap' => $rekapitulasi,
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),

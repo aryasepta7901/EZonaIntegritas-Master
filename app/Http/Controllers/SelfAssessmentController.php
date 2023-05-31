@@ -52,9 +52,9 @@ class SelfAssessmentController extends Controller
 
                 ],
                 [
-                    'catatan.required' => 'Catatan Wajib di Isi,',
+                    'catatan.required' => 'Catatan Wajib di Isi',
                     'mimes' => 'Dokumen hanya boleh format :values,',
-                    'max' => 'Dokumen hanya boleh Berukuran :max,'
+                    'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB,'
                 ]
             );
 
@@ -76,7 +76,7 @@ class SelfAssessmentController extends Controller
                 $nilai4 = $request->input[4];
                 $penimbang = $nilai1 + $nilai2 + $nilai3;
                 if ($penimbang < $nilai4) {
-                    return back()->withErrors('Silahkan Cek Ulang, Isian tidak boleh melebihi' . $penimbang);
+                    return back()->withErrors('Silahkan Cek Ulang, Isian jumlah yang sudah melaporkan tidak boleh melebihi: ' . $penimbang);
                 } else {
                     $nilai = $penimbang == 0 ? 0 : ($nilai4 / ($penimbang));
                 }
@@ -101,7 +101,7 @@ class SelfAssessmentController extends Controller
             $request->validate(
                 [
                     'opsi_id' => 'required',
-                    'catatan.*'  => 'required',
+                    'catatan'  => 'required',
                     'dokumen.*' => 'mimes:pdf|max:2048',
                     'fileCreate.*' => 'mimes:pdf|max:2048',
 
@@ -309,7 +309,7 @@ class SelfAssessmentController extends Controller
                 // 'opsi_id.required' => 'Silahkan Pilih Jawaban',
                 'catatan.required' => 'Catatan Wajib di Isi',
                 'mimes' => 'Dokumen hanya boleh format :values',
-                'max' => 'Dokumen hanya boleh Berukuran :max'
+                'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
             ]
         );
 

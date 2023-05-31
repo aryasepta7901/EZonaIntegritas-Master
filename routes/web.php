@@ -74,6 +74,9 @@ Route::resource('/pilar', PilarController::class)->middleware('auth');
 Route::resource('/subpilar', SubPilarController::class)->middleware('auth');
 // // Pertanyaan
 Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
+// Upload Rincian hasil -> admin
+Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
+Route::post('/hasil/import', [RincianHasilController::class, 'import'])->name('import.import');
 // Route::resource('/pertanyaan', Pertanyaan2Controller::class)->middleware('auth');
 // Google 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
@@ -92,9 +95,7 @@ Route::post('satker/surat/cetak', [RekapitulasiController::class, 'cetak'])->mid
 
 // Self Assessment
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
-// Upload Rincian hasil -> admin
-Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
-Route::post('/hasil/import', [RincianHasilController::class, 'import'])->name('import.import');
+
 
 // Evaluator Provinsi
 Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middleware('auth');

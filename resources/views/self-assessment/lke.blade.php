@@ -258,6 +258,9 @@
     <b class="mb-3">Rincian Hasil</b>
     <div class="col-lg-12">
         <div class="card">
+            <div class="card-header">
+                <p class="badge badge-primary">Rincian Hasil diisi oleh Admin, Satker tidak wajib mengisi</p>
+            </div>
             <div class="card-body">
                 <div class="card-body">
                     <div class="row">

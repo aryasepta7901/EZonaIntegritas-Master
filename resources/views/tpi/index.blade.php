@@ -32,6 +32,7 @@
                             <th>Surat Pengantar</th>
                             <th>LKE</th>
                             <th>Status</th>
+                            <th>Tahap Evaluasi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -113,6 +114,9 @@
                                                 @endif
                                             @endif
                                         </td>
+                                        <td class="text-center">
+                                            <p class="badge badge-sm badge-info">Tahap {{ $value->tahap }}</p>
+                                        </td>
                                         {{-- View Surat Pengantar --}}
                                         <div class="modal fade" id="surat_pengantar_prov{{ $item->satker_id }}">
                                             <div class="modal-dialog modal-lg">
@@ -145,8 +149,14 @@
                                         </div>
                                     @endforeach
                                 @else
-                                    <td colspan="6" class="text-center"><button class="btn btn-info">Satker Belum
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-center"><button class="btn btn-info">Satker Belum
                                             Mengajukan Zona Integritas </button></td>
+                                    <td></td>
                                 @endif
                             </tr>
                         @endforeach

@@ -64,8 +64,6 @@ class MonitoringController extends Controller
             'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
             'DeskEvaluation' => DeskEvaluation::all(),
 
-
-
         ]);
     }
 

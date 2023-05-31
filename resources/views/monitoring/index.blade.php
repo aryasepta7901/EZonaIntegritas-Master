@@ -33,6 +33,7 @@
                                     <a href="/monitoring/lhe/{{ $value->id }}" type="button" class="btn btn-info btn-sm"><i
                                             class="fas fa-file"></i></a>
                                 </td>
+
                                 <td class="text-center">
                                     <a href="/monitoring/catatan/{{ $value->id }}" type="button"
                                         class="btn btn-info btn-sm"><i class="fas fa-file"></i></a>

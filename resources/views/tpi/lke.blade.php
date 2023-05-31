@@ -138,12 +138,19 @@
             {{-- Pengendali Teknis --}}
             @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
                 <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                    <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
-                        </i> Setuju</a>
-                    <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
-                        </i> Revisi</button>
-                    <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i class="fa fa-save">
-                        </i> Tolak</button>
+                    @if ($pengawasan->tahap == 1)
+                        <button class="btn btn-warning m-2" data-toggle="modal" data-target="#revisi"><i class="fa fa-save">
+                            </i> Revisi</button>
+                    @elseif($pengawasan->tahap == 2)
+                        <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
+                            </i> Setuju</a>
+
+                        <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i
+                                class="fa fa-save">
+                            </i> Tolak</button>
+                    @endif
+
+
                 </div>
                 {{-- Setuju LKE --}}
                 <div class="modal fade" id="setuju">

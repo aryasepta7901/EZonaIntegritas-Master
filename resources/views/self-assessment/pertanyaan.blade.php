@@ -536,6 +536,7 @@
                                                                                 <div class="form-check ml-4">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="opsi_id"
+                                                                                        @if (old('opsi_id') == $item->id) checked @endif
                                                                                         value="{{ $item->id }}">
                                                                                     <label
                                                                                         class="form-check-label">{{ $item->rincian }}</label>

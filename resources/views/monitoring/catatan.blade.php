@@ -65,20 +65,24 @@
                                                 @endphp
                                                 <td>
                                                     @if ($SelfAssessment !== null)
-                                                        @php
-                                                            $DeskEvaluation = $DeskEvaluation->where('id', $SelfAssessment->id)->first();
-                                                        @endphp
                                                         @if ($DeskEvaluation !== null)
-                                                            {{ $DeskEvaluation->catatan_dl }}
-                                                        @endif
-                                                    @endif
-                                                </td>
+                                                            @php
+                                                                $Evaluasi = $DeskEvaluation->where('id', $SelfAssessment->id)->first();
+                                                            @endphp
+                                                            @if ($Evaluasi !== null)
+                                                                {{ $Evaluasi->catatan_dl }}
+                                                            @endif
+                                                        @else
+                                                <td></td>
+                                        @endif
+                                    @endif
+                                    </td>
 
-                                            </tr>
-                                        @endforeach
-                                    @endforeach
+                                    </tr>
                                 @endforeach
                             @endforeach
+                        @endforeach
+                        @endforeach
                         @endforeach
                     </tbody>
                 </table>

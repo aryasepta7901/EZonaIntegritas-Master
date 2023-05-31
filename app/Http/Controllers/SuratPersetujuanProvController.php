@@ -56,7 +56,7 @@ class SuratPersetujuanProvController extends Controller
             [
                 'required' => ':attribute  harus di Upload',
                 'mimes' => 'Dokumen hanya boleh format :values,',
-                'max' => 'Dokumen hanya boleh Berukuran :max,'
+                'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
             ]
         );
         if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
