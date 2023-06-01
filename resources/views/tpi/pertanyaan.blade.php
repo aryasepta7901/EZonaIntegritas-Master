@@ -319,7 +319,7 @@
                                                             @endphp
                                                             @if ($rekap->status == 4 || $rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                                 {{-- Cek Apakah Surat rekomendasi sudah diupload atau belum --}}
-                                                                @if ($rekap->surat_pengantar_prov != '')
+                                                                @if ($rekap->LHE->surat_pengantar_prov != '')
                                                                     <td style="min-width:500px;">
                                                                         {{-- Anggota Tim --}}
                                                                         {{-- Update --}}
@@ -809,7 +809,7 @@
                                                                                                 <p for="input">
                                                                                                     {{ $item->rincian }}
                                                                                                 </p>
-                                                                                               
+
                                                                                                 <input type="hidden"
                                                                                                     value="{{ $item->id }}"
                                                                                                     name="opsi{{ $loop->index }}">

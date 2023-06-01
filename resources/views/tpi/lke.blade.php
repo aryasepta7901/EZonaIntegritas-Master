@@ -19,7 +19,7 @@
     $nilai_sa += $nilaiHasil;
     @endphp --}}
     @if ($rekap->status == 4)
-        @if ($rekap->surat_pengantar_prov != '')
+        @if ($rekap->LHE->surat_pengantar_prov != '')
             {{-- Anggota Tim --}}
             @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
                 <div class="col-lg-12 mb-3 d-flex justify-content-end">
