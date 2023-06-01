@@ -24,17 +24,18 @@
                 </div>
             @endif
             <div class="card-body">
-                <table id="example1" class="table table-responsive-md table-bordered table-striped table- ">
+                <table id="example1" class="table table-responsive-lg table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Tahun</th>
                             <th>Predikat</th>
                             <th>Nilai</th>
-                            <th>Status</th>
-                            <th>Surat Pengantar</th>
-                            <th>Dokumen</th>
+                            <th>Surat</th>
                             <th>Informasi</th>
+                            <th>LKE</th>
+                            <th>Status</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -58,11 +59,11 @@
                                         0
                                     @endif
                                 </td>
-                                <td>{{ $value->StatusRekap->status }}</td>
+
                                 <td class="text-center">
                                     {{-- Cek Apakah Surat pengantar kabkota sudah diupload/belum --}}
                                     @if ($value->LHE->surat_pengantar_kabkota)
-                                        <button type="button" class="btn btn-info btn-sm " data-toggle="modal"
+                                        <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
                                             data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
                                                 class="fas fa-file">
                                             </i> Kab/Kota</button>
@@ -71,16 +72,34 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a type="button" href="/satker/lke/{{ $value->id }}"
-                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
-                                </td>
-                                <td class="text-center">
-                                    <a type="button" href="/satker/rekapitulasi/{{ $value->id }}"
+                                    {{-- <a type="button" href="/satker/rekapitulasi/{{ $value->id }}"
                                         class="btn btn-sm btn-success"><i class="fa fa-file"></i> Rekap 1</a>
                                     <a type="button" href="/satker/rekap2/{{ $value->id }}"
                                         class="btn btn-sm btn-primary"><i class="fa fa-file"></i> Rekap 2</a>
                                     <a type="button" href="/satker/rekap3/{{ $value->id }}"
-                                        class="btn btn-sm btn-warning"><i class="fa fa-file"></i> Rekap 3</a>
+                                        class="btn btn-sm btn-warning"><i class="fa fa-file"></i> Rekap 3</a> --}}
+                                    <a href="/satker/lhe/{{ $value->id }}" type="button" class="btn btn-info btn-sm"><i
+                                            class="fas fa-file"></i> LHE</a>
+                                    <a href="/satker/catatan/{{ $value->id }}" type="button"
+                                        class="btn btn-info btn-sm"><i class="fas fa-file"></i> Catatan</a>
+                                </td>
+                                <td class="text-center">
+                                    <a type="button" href="/satker/lke/{{ $value->id }}"
+                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i></a>
+                                </td>
+                                <td>{{ $value->StatusRekap->status }}
+                                    @if ($value->status == 4)
+                                        @php
+                                            $status_pengawasan = $pengawasan->where('satker_id', $value->satker_id)->first();
+                                        @endphp
+                                        @if ($status_pengawasan->status == 0)
+                                            <button class="badge badge-info">Anggota Tim</button>
+                                        @elseif($status_pengawasan->status == 1)
+                                            <button class="badge badge-info">Ketua Tim</button>
+                                        @else
+                                            <button class="badge badge-info">Pengendali Teknis</button>
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

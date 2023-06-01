@@ -144,6 +144,14 @@ class SuratPersetujuanProvController extends Controller
     // Cetak Template Surat
     public function cetak(Request $request)
     {
+        $request->validate(
+            [
+                'no_surat' => 'required',
+            ],
+            [
+                'required' => ':attribute  harus di Upload',
+            ]
+        );
         // Script PhpWord
         // Creating the new document...
         $phpWord = new TemplateProcessor('template_prov.docx');
@@ -152,6 +160,7 @@ class SuratPersetujuanProvController extends Controller
 
         $phpWord->setValues([
             'y' => date('Y'),
+            'no_surat' => $request->no_surat,
             'tanggal' => date('d F Y'),
             'daerah' => substr($request->satker, 3),
         ]);

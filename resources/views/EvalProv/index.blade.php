@@ -18,16 +18,16 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped table-responsive-lg">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kabupaten/Kota</th>
+                            <th>Satuan Kerja</th>
                             <th>Predikat</th>
-                            <th>Nilai Pengungkit</th>
-                            <th>Nilai Hasil</th>
-                            <th>Surat Pengantar</th>
-                            <th>Dokumen</th>
+                            <th>Nilai </th>
+                            <th>Surat</th>
+                            <th>Informasi</th>
+                            <th>LKE</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -49,13 +49,7 @@
                                         <button class="badge badge-info">{{ round($nilai_sa, 2) }}</button>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    {{-- Hitung jumlah nilai rincian hasil --}}
-                                    @php
-                                        $nilai = $nilaiHasil->where('satker_id', $value->satker_id)->sum('nilai');
-                                    @endphp
-                                    <button class="badge badge-info"> {{ $nilai }} </button>
-                                </td>
+
                                 <td class="text-center">
                                     @if ($value->LHE->surat_pengantar_kabkota)
                                         <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
@@ -66,12 +60,32 @@
                                         -
                                     @endif
                                 </td>
+
+                                <td class="text-center">
+                                    <a href="/prov/lhe/{{ $value->id }}" type="button" class="btn btn-info btn-sm"><i
+                                            class="fas fa-file"></i> LHE</a>
+                                    <a href="/prov/catatan/{{ $value->id }}" type="button"
+                                        class="btn btn-info btn-sm"><i class="fas fa-file"></i> Catatan</a>
+                                </td>
                                 <td class="text-center">
                                     <a type="button" href="/prov/evaluasi/{{ $value->id }}"
-                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
+                                        class="btn btn-sm btn-success"><i class="fa fa-file"></i></a>
                                 </td>
                                 </td>
-                                <td>{{ $value->StatusRekap->status }}</td>
+                                <td>{{ $value->StatusRekap->status }}
+                                    @if ($value->status == 4)
+                                        @php
+                                            $status_pengawasan = $pengawasan->where('satker_id', $value->satker_id)->first();
+                                        @endphp
+                                        @if ($status_pengawasan->status == 0)
+                                            <button class="badge badge-info">Anggota Tim</button>
+                                        @elseif($status_pengawasan->status == 1)
+                                            <button class="badge badge-info">Ketua Tim</button>
+                                        @else
+                                            <button class="badge badge-info">Pengendali Teknis</button>
+                                        @endif
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

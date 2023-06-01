@@ -23,6 +23,8 @@ class MonitoringController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
+
         return view(
             'monitoring.index',
             [
@@ -39,6 +41,8 @@ class MonitoringController extends Controller
     }
     public function lhe(Rekapitulasi $rekapitulasi)
     {
+        $this->authorize('admin');
+
         return view(
             'monitoring.lhe',
             [
@@ -56,6 +60,8 @@ class MonitoringController extends Controller
     }
     public function catatan(Rekapitulasi $rekapitulasi)
     {
+        $this->authorize('admin');
+
         return view('monitoring.catatan', [
             'master' => 'Monitoring',
             'link' => '/monitoring',

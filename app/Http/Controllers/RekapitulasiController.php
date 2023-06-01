@@ -143,6 +143,35 @@ class RekapitulasiController extends Controller
 
         ]);
     }
+    public function lhe(Rekapitulasi $rekapitulasi)
+    {
+        return view(
+            'monitoring.lhe',
+            [
+                'master' => 'Rekapitulasi ',
+                'link' => '/satker/lke',
+                'title' => 'Laporan Hasil Evaluasi: ',
+                'rekap' => $rekapitulasi,
+                'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
+                'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', substr($rekapitulasi->id, 0, 4))->get(),
+                'rincianPengungkit' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+                'rincianHasil' => Rincian::where('id', 'H')->orderBy('bobot', 'DESC')->get(),
+
+            ]
+        );
+    }
+    public function catatan(Rekapitulasi $rekapitulasi)
+    {
+        return view('monitoring.catatan', [
+            'master' => 'Rekapitulasi',
+            'link' => '/satker/lke',
+            'title' => 'Catatan Reviu',
+            'rekap' => $rekapitulasi,
+            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+            'DeskEvaluation' => DeskEvaluation::all(),
+
+        ]);
+    }
     // View Surat Persetujuan BPS Kab/Kota
     public function surat(Rekapitulasi $rekapitulasi)
     {
@@ -192,6 +221,14 @@ class RekapitulasiController extends Controller
     }
     public function cetak(Request $request)
     {
+        $request->validate(
+            [
+                'no_surat' => 'required',
+            ],
+            [
+                'required' => ':attribute  harus di Upload',
+            ]
+        );
         // Script PhpWord
         // Creating the new document...
         $phpWord = new TemplateProcessor('template_kab.docx');
@@ -202,6 +239,7 @@ class RekapitulasiController extends Controller
         $bps_prov = $nama_prov;
         $phpWord->setValues([
             'y' => date('Y'),
+            'no_surat' => $request->no_surat,
             'tanggal' => date('d F Y'),
             'total_sa' => $request->nilaisa,
             'satker' => substr($request->satker, 3),

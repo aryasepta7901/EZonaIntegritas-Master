@@ -15,6 +15,7 @@ use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
 use App\Http\Controllers\Controller;
 use App\Models\DeskEvaluation;
+use App\Models\Rincian;
 
 class EvaluatorProvinsiController extends Controller
 {
@@ -29,7 +30,8 @@ class EvaluatorProvinsiController extends Controller
         return view('EvalProv.index', [
             'title' => 'Pengajuan ZI ' . auth()->user()->satker->nama_satker,
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->orderBy('status', 'DESC')->get(),
-            'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
+            'pengawasan' => Pengawasan::get(),
+
         ]);
     }
 
@@ -93,7 +95,35 @@ class EvaluatorProvinsiController extends Controller
             'rekap' => $evaluasi,
         ]);
     }
+    public function lhe(Rekapitulasi $rekapitulasi)
+    {
+        return view(
+            'monitoring.lhe',
+            [
+                'master' => 'Rekapitulasi ',
+                'link' => '/prov/evaluasi',
+                'title' => 'Laporan Hasil Evaluasi: ',
+                'rekap' => $rekapitulasi,
+                'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
+                'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', substr($rekapitulasi->id, 0, 4))->get(),
+                'rincianPengungkit' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+                'rincianHasil' => Rincian::where('id', 'H')->orderBy('bobot', 'DESC')->get(),
 
+            ]
+        );
+    }
+    public function catatan(Rekapitulasi $rekapitulasi)
+    {
+        return view('monitoring.catatan', [
+            'master' => 'Rekapitulasi',
+            'link' => '/prov/evaluasi',
+            'title' => 'Catatan Reviu',
+            'rekap' => $rekapitulasi,
+            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+            'DeskEvaluation' => DeskEvaluation::all(),
+
+        ]);
+    }
     /**
      * Show the form for editing the specified resource.
      *

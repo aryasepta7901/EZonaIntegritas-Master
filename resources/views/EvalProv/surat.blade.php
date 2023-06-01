@@ -119,12 +119,10 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <b>{{ auth()->user()->satker->nama_satker }}</b>
-                        <form action="/prov/surat/cetak" method="post">
-                            @csrf
-                            <input type="hidden" name="satker" value="{{ auth()->user()->satker->nama_satker }}">
-
-                            <button class="btn btn-primary"><i class="fas fa-download"></i></button>
-                        </form>
+                        <button class="btn btn-primary " data-toggle="modal" data-target="#download"><i
+                                class="fas fa-download">
+                            </i> Download Template
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -220,4 +218,40 @@
             <!-- /.modal-dialog -->
         </div>
     @endif
+    {{-- Download --}}
+    <div class="modal fade" id="download">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Download Template</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/prov/surat/cetak" method="post">
+                    @csrf
+                    <input type="hidden" name="satker" value="{{ auth()->user()->satker->nama_satker }}">
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="no_surat">Nomor Surat</label>
+                            <input type="text" class="form-control @error('no_surat') is-invalid  @enderror"
+                                id="no_surat" name="no_surat" value="{{ old('no_surat') }}">
+                            @error('no_surat')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Download</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection

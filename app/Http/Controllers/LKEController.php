@@ -13,6 +13,7 @@ use App\Models\SubPilar;
 use App\Models\SubRincian;
 use App\Models\RekapHasil;
 use App\Models\LHE;
+use App\Models\Pengawasan;
 use Illuminate\Http\Request;
 
 class LKEController extends Controller
@@ -31,6 +32,8 @@ class LKEController extends Controller
             'title' => 'Rekapitulasi Lembar Kerja Evaluasi',
             'persyaratan' => Persyaratan::where('satker_id', auth()->user()->satker_id)->where('tahun', date('Y'))->first(),
             'rekap' => Rekapitulasi::where('satker_id', auth()->user()->satker_id)->get(),
+            'pengawasan' => Pengawasan::get(),
+
         ]);
     }
 

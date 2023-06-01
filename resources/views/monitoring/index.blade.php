@@ -19,7 +19,6 @@
                             <th>Mengisi LKE</th>
                             <th>Diusulkan BPS Provinsi</th>
                             <th>Diusulkan BPS Pusat</th>
-                            <th>Diusulkan KemenPanRB</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,11 +89,7 @@
                                 @else
                                     <td></td>
                                 @endif
-                                {{-- BPS Pusat --}}
-                                {{-- <td class="text-center text-danger text-lg"><i class="fas fa-xmark"></i></td> --}}
-                                <td>
-                                    Cari Logika ini
-                                </td>
+
 
                             </tr>
                         @endforeach

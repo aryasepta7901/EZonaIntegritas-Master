@@ -207,7 +207,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Tambah Rincian</button>
+                        <button type="submit" class="btn btn-primary">Buat Rincian</button>
                     </div>
                 </form>
             </div>
@@ -251,7 +251,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" name="submit_rincian" class="btn btn-primary">Edit Rincian</button>
+                            <button type="submit" name="submit_rincian" class="btn btn-primary">Ubah Rincian</button>
                         </div>
                     </form>
                 </div>
@@ -275,6 +275,10 @@
                         <p class="text-danger">Apakah Anda Yakin untuk Menghapus Rincian dengan Nama:</p>
                         <b>{{ $value->rincian }}
                             ?</b>
+                        <hr>
+                        <small class="text-info">Note: Dengan Menghapus ini, maka kamu akan menghapus data <i>child</i>
+                            yang ada
+                            dibawahnya</small>
                     </div>
                     <form action="/rincian/{{ $value->id }}" method="POST" class="d-inline">
                         @method('delete')
@@ -341,7 +345,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Tambah Sub Rincian</button>
+                            <button type="submit" class="btn btn-primary">Buat Sub Rincian</button>
                         </div>
                     </form>
                 </div>
@@ -395,7 +399,7 @@
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Edit SubRincian</button>
+                                <button type="submit" class="btn btn-primary">Ubah Sub Rincian</button>
                             </div>
                         </form>
                     </div>
@@ -417,6 +421,10 @@
                             <p class="text-danger">Apakah Anda Yakin untuk Menghapus SubRincian dengan Nama:</p>
                             <b>{{ $sr->subRincian }}
                                 ?</b>
+                            <hr>
+                            <small class="text-info">Note: Dengan Menghapus ini, maka kamu akan menghapus data <i>child</i>
+                                yang ada
+                                dibawahnya</small>
                         </div>
                         <form action="/subrincian/{{ $sr->id }}" method="POST" class="d-inline">
                             @method('delete')
@@ -509,7 +517,7 @@
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Tambah Pilar</button>
+                                <button type="submit" class="btn btn-primary">Buat Pilar</button>
                             </div>
                         </form>
                     </div>
@@ -599,7 +607,7 @@
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Update Pilar</button>
+                                    <button type="submit" class="btn btn-primary">Ubah Pilar</button>
                                 </div>
                             </form>
                         </div>
@@ -621,6 +629,11 @@
                                 <p class="text-danger">Apakah Anda Yakin untuk Menghapus Pilar dengan Nama:</p>
                                 <b>{{ $p->pilar }}
                                     ?</b>
+                                <hr>
+                                <small class="text-info">Note: Dengan Menghapus ini, maka kamu akan menghapus data
+                                    <i>child</i>
+                                    yang ada
+                                    dibawahnya</small>
                             </div>
                             <form action="/pilar/{{ $p->id }}" method="POST" class="d-inline">
                                 @method('delete')
@@ -705,7 +718,7 @@
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Create SubPilar</button>
+                                    <button type="submit" class="btn btn-primary">Buat Sub Pilar</button>
                                 </div>
                             </form>
                         </div>
@@ -766,7 +779,7 @@
                                     <div class="modal-footer justify-content-between">
                                         <button type="button" class="btn btn-default"
                                             data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Edit SubPilar</button>
+                                        <button type="submit" class="btn btn-primary">Ubah Sub Pilar</button>
                                     </div>
                                 </form>
                             </div>
@@ -788,6 +801,11 @@
                                     <p class="text-danger">Apakah Anda Yakin untuk Menghapus Sub Pilar dengan Nama:</p>
                                     <b>{{ $sp->subPilar }}
                                         ?</b>
+                                    <hr>
+                                    <small class="text-info">Note: Dengan Menghapus ini, maka kamu akan menghapus data
+                                        <i>child</i>
+                                        yang ada
+                                        dibawahnya</small>
                                 </div>
                                 <form action="/subpilar/{{ $sp->id }}" method="POST" class="d-inline">
                                     @method('delete')

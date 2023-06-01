@@ -87,12 +87,14 @@ Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
 // LKE
 Route::resource('satker/lke', LKEController::class)->middleware('auth');
 Route::get('satker/lke/{lke}/{pilar}', [LKEController::class, 'pertanyaan'])->name('lke.pertanyaan')->middleware('auth');
-Route::resource('satker/rekapitulasi', RekapitulasiController::class)->middleware('auth');
-Route::get('satker/rekap2/{rekapitulasi}', [RekapitulasiController::class, 'rekap2'])->middleware('auth');
-Route::get('satker/rekap3/{rekapitulasi}', [RekapitulasiController::class, 'rekap3'])->middleware('auth');
 Route::get('satker/surat/{rekapitulasi}', [RekapitulasiController::class, 'surat'])->middleware('auth');
 Route::post('satker/surat/cetak', [RekapitulasiController::class, 'cetak'])->middleware('auth');
-
+Route::resource('satker/rekapitulasi', RekapitulasiController::class)->middleware('auth');
+Route::get('satker/lhe/{rekapitulasi}', [RekapitulasiController::class, 'lhe'])->middleware('auth'); //lhe
+Route::get('satker/catatan/{rekapitulasi}', [RekapitulasiController::class, 'catatan'])->middleware('auth'); //catatan
+// Detail Rekap
+Route::get('satker/rekap2/{rekapitulasi}', [RekapitulasiController::class, 'rekap2'])->middleware('auth');
+Route::get('satker/rekap3/{rekapitulasi}', [RekapitulasiController::class, 'rekap3'])->middleware('auth');
 // Self Assessment
 Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
 
@@ -101,6 +103,9 @@ Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware(
 Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middleware('auth');
 Route::get('/prov/evaluasi/{evaluasi}/{pilar}', [EvaluatorProvinsiController::class, 'pertanyaan'])->name('evaluasi.pertanyaan')->middleware('auth');
 // Surat Persetujuan BPS Provinsi
+Route::get('prov/lhe/{rekapitulasi}', [EvaluatorProvinsiController::class, 'lhe'])->middleware('auth'); //lhe
+Route::get('prov/catatan/{rekapitulasi}', [EvaluatorProvinsiController::class, 'catatan'])->middleware('auth'); //catatan
+
 Route::resource('/prov/surat', SuratPersetujuanProvController::class)->middleware('auth');
 Route::post('/prov/surat/cetak', [SuratPersetujuanProvController::class, 'cetak'])->name('cetak.cetak')->middleware('auth');
 
@@ -108,6 +113,8 @@ Route::post('/prov/surat/cetak', [SuratPersetujuanProvController::class, 'cetak'
 // Desk Evaluation
 Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('auth');
 Route::get('/tpi/evaluasi/{evaluasi}/{pilar}', [DeskEvaluationController::class, 'pertanyaan'])->name('evaluasi.pertanyaan')->middleware('auth');
+Route::get('tpi/lhe/{rekapitulasi}', [DeskEvaluationController::class, 'lhe'])->middleware('auth'); //lhe
+
 // LHE dan cetak LHE
 Route::resource('/tpi/lhe', LheController::class)->middleware('auth');
 Route::post('/tpi/lhe/cetak', [LheController::class, 'cetak'])->name('cetak.cetak');

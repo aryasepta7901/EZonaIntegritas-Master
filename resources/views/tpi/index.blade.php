@@ -27,12 +27,12 @@
                             <th>No</th>
                             <th>Kabupaten/Kota</th>
                             <th>Predikat</th>
-                            <th>Nilai Pengungkit</th>
-                            <th>Nilai Hasil</th>
-                            <th>Surat Pengantar</th>
+                            <th>Nilai </th>
+                            <th>Surat</th>
+                            <th>LHE</th>
                             <th>LKE</th>
                             <th>Status</th>
-                            <th>Tahap Evaluasi</th>
+                            <th>Evaluasi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,19 +74,12 @@
                                                 <button class="badge badge-info">{{ round($nilai_sa, 2) }}</button>
                                             @endif
                                         </td>
-                                        <td class="text-center">
-                                            {{-- Hitung jumlah nilai rincian hasil --}}
-                                            @php
-                                                $nilai = $nilaiHasil->where('satker_id', $item->satker_id)->sum('nilai');
-                                            @endphp
 
-                                            <button class="badge badge-info"> {{ $nilai }} </button>
-                                        </td>
 
                                         {{-- Cek Apakah Surat Rekomendasi ada --}}
                                         @if ($item->LHE->surat_pengantar_prov != '')
                                             <td class="text-center">
-                                                <button class="btn btn-info btn-sm" data-toggle="modal"
+                                                <button class="btn btn-primary btn-sm" data-toggle="modal"
                                                     data-target="#surat_pengantar_prov{{ $item->satker_id }}"><i
                                                         class="fas fa-file">
                                                     </i></button>
@@ -97,8 +90,13 @@
                                             </td>
                                         @endif
                                         <td class="text-center">
+
+                                            <a href="/tpi/lhe/{{ $item->id }}" type="button"
+                                                class="btn btn-info btn-sm"><i class="fas fa-file"></i></a>
+                                        </td>
+                                        <td class="text-center">
                                             <a type="button" href="/tpi/evaluasi/{{ $item->id }}"
-                                                class="btn btn-sm btn-success"><i class="fa fa-file"></i> LKE</a>
+                                                class="btn btn-sm btn-success"><i class="fa fa-file"></i> </a>
                                         </td>
                                         <td>{{ $item->StatusRekap->status }}
                                             @if ($item->status == 4)
@@ -154,8 +152,8 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td class="text-center"><button class="btn btn-info">Satker Belum
-                                            Mengajukan Zona Integritas </button></td>
+                                    <td class="text-center"><button class="btn btn-danger btn-sm"> Belum
+                                            Mengajukan </button></td>
                                     <td></td>
                                 @endif
                             </tr>
