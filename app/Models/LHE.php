@@ -15,8 +15,8 @@ class LHE extends Model
         'id',
         'surat_pengantar_kabkota',
         'surat_pengantar_prov',
-        'surat_pengantar_LHE1',
-        'surat_pengantar_LHE2',
+        'LHE_1',
+        'LHE_2',
 
     ];
     public function Rekapitulasi()

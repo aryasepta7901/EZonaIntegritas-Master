@@ -61,7 +61,14 @@
                         @php
                             $lg = 'col-lg-6';
                         @endphp
+                        {{-- Self-Assessment --}}
+
+                        <div class="{{ $lg }}">
+                            <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_sa, 2) }}</span>
+                            <span class="info-box-text text-center text-muted mb-0">Nilai Zona Integritas</span>
+                        </div>
                         {{-- Desk-Evaluation --}}
+
                         <div class="{{ $lg }}">
                             <span class="info-box-number text-center text-muted mb-3">{{ round($nilai_dl, 2) }}</span>
                             <span class="info-box-text text-center text-muted mb-0">Nilai Desk-Evaluation </span>

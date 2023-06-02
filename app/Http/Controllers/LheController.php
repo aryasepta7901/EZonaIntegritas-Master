@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Satker;
 use App\Models\SubPilar;
 use App\Models\Pertanyaan;
+use App\Models\LHE;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Illuminate\Http\Request;
@@ -47,9 +48,10 @@ class LheController extends Controller
     public function store(Request $request)
     {
         //
+
         $request->validate(
             [
-                'surat' => 'required|mimes:pdf|max:2048',
+                'lhe' => 'required|mimes:pdf|max:2048',
 
             ],
             [
@@ -58,26 +60,51 @@ class LheController extends Controller
                 'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
             ]
         );
-        if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
+        if ($request->submit_1) {  //lhe_1
             // Ambil File lamanya
-            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first();
-            if ($rekap) {
+            $rekap = Rekapitulasi::where('id', $request->id)->first();
+            if ($rekap->LHE->LHE_1) {
                 // jika ada file lama maka hapus
-                Storage::delete($rekap->surat_pengantar_prov);
+                Storage::delete($rekap->LHE->LHE_1);
             }
-            $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
-
-            foreach ($request->id as $key => $id) {
-
-                Rekapitulasi::updateOrCreate(
-                    ['id' => $id],
-                    [
-                        'surat_pengantar_prov' =>  $request->file('surat')->storeAs('surat_pengantar/prov/' . date('Y') . '/', $customName),
-                    ]
-                );
-            }
+            $customName = $request->file('lhe')->getClientOriginalName();
+            Rekapitulasi::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'status' => 5,
+                ]
+            );
+            Pengawasan::updateOrCreate(
+                ['id' => $request->anggota_id . $request->satker_id],
+                [
+                    'tahap' => 2,
+                    'status' => 0,
+                ]
+            );
+            LHE::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'LHE_1' =>  $request->file('lhe')->storeAs('LHE/' . date('Y') . '/' . 'Tahap1/', $customName),
+                ]
+            );
         }
-        return redirect()->back()->with('success', 'Surat Pengantar Berhasil di Simpan');
+        if ($request->submit_2) {  //lhe_1
+            // Ambil File lamanya
+            $rekap = Rekapitulasi::where('id', $request->id)->first();
+            if ($rekap->LHE->LHE_2) {
+                // jika ada file lama maka hapus
+                Storage::delete($rekap->LHE->LHE_2);
+            }
+            $customName = $request->file('lhe')->getClientOriginalName();
+
+            LHE::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'LHE_2' =>  $request->file('lhe')->storeAs('LHE/' . date('Y') . '/' . 'Tahap2/', $customName),
+                ]
+            );
+        }
+        return redirect()->back()->with('success', 'LHE Berhasil di Simpan');
     }
     public function cetak(Request $request)
     {
@@ -227,6 +254,7 @@ class LheController extends Controller
             'ketua' => User::where('id', $tpi->ketua_tim)->first(),
             'dalnis' => User::where('id', $tpi->dalnis)->first(),
             'nilai' => RekapPengungkit::where('rekapitulasi_id', $lhe->id),
+            'pengawasan' => $pengawasan,
 
             'title' => 'Laporan Hasil Evaluasi',
 
