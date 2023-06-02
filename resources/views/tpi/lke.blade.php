@@ -18,14 +18,52 @@
     {{-- @php
     $nilai_sa += $nilaiHasil;
     @endphp --}}
+    {{-- Self Assessment --}}
+    @php
+        $tot_jumlah_soal = $pertanyaan;
+        $tot_soal_terjawab = $selfAssessment;
+        $TotprogressSelf = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
+    @endphp
+    {{-- Desk Evaluation --}}
+    @if (auth()->user()->level_id == 'AT')
+        @php
+            $tot_soal_terjawab = $deskEvaluation->count('jawaban_at');
+            $aktor = 'Anggota Tim';
+        @endphp
+    @elseif(auth()->user()->level_id == 'KT')
+        @php
+            $tot_soal_terjawab = $deskEvaluation->count('jawaban_kt');
+            $aktor = 'Ketua Tim';
+        @endphp
+    @elseif(auth()->user()->level_id == 'DL')
+        @php
+            $tot_soal_terjawab = $deskEvaluation->count('jawaban_dl');
+            $aktor = 'Pengendali Teknis';
+        @endphp
+    @endif
+    @php
+        $TotprogressDesk = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
+        
+    @endphp
+
     @if ($rekap->status == 4)
         @if ($rekap->LHE->surat_pengantar_prov != '')
             {{-- Anggota Tim --}}
             @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
-                <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                    <button class="btn btn-primary m-2" data-toggle="modal" data-target="#at"><i class="fa fa-save">
-                        </i> Simpan</button>
-                </div>
+                @if ($TotprogressDesk == $TotprogressSelf)
+                    <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                        <button class="btn btn-primary m-2" data-toggle="modal" data-target="#at"><i class="fa fa-save">
+                            </i> Simpan</button>
+                    </div>
+                @else
+                    <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                        <div class="alert alert-info alert-dismissible">
+                            <h5><i class="icon fas fa-info"></i> Note</h5>
+                            Harap Lengkapi Desk-Evaluation agar bisa kirim LKE kepada Ketua
+                            Tim
+                        </div>
+                    </div>
+                @endif
                 {{-- Simpan AT --}}
                 <div class="modal fade" id="at">
                     <div class="modal-dialog">
@@ -296,46 +334,23 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <span class="info-box-text">Total Pengungkit Self-Assessment</span>
-                        @php
-                            $tot_jumlah_soal = $pertanyaan;
-                            $tot_soal_terjawab = $selfAssessment;
-                            $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
-                        @endphp
 
                         <div class="progress ">
-                            <div class="progress-bar" style="width: {{ $Totprogress }}%"></div>
+                            <div class="progress-bar" style="width: {{ $TotprogressSelf }}%"></div>
                         </div>
                         <span class="info-box-number d-flex justify-content-end ">
-                            <b class="h5 text-bold">{{ $Totprogress }}%</b>
+                            <b class="h5 text-bold">{{ $TotprogressSelf }}%</b>
                         </span>
                     </div>
                     <div class="col-lg-6">
                         {{-- Desk-Evaluation --}}
-                        @if (auth()->user()->level_id == 'AT')
-                            @php
-                                $tot_soal_terjawab = $deskEvaluation->count('jawaban_at');
-                                $aktor = 'Anggota Tim';
-                            @endphp
-                        @elseif(auth()->user()->level_id == 'KT')
-                            @php
-                                $tot_soal_terjawab = $deskEvaluation->count('jawaban_kt');
-                                $aktor = 'Ketua Tim';
-                            @endphp
-                        @elseif(auth()->user()->level_id == 'DL')
-                            @php
-                                $tot_soal_terjawab = $deskEvaluation->count('jawaban_dl');
-                                $aktor = 'Pengendali Teknis';
-                            @endphp
-                        @endif
                         <span class="info-box-text">Total Pengungkit Desk-Evaluation {{ $aktor }}</span>
-                        @php
-                            $Totprogress = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
-                        @endphp
+
                         <div class="progress ">
-                            <div class="progress-bar" style="width: {{ $Totprogress }}%"></div>
+                            <div class="progress-bar" style="width: {{ $TotprogressDesk }}%"></div>
                         </div>
                         <span class="info-box-number d-flex justify-content-end ">
-                            <b class="h5 text-bold">{{ $Totprogress }}%</b>
+                            <b class="h5 text-bold">{{ $TotprogressDesk }}%</b>
                         </span>
                     </div>
                 </div>

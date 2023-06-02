@@ -72,7 +72,7 @@
                                                         </div>
                                                     </th>
                                                     @if ($rekap->status == 4 || $rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
-                                                        @if ($rekap->surat_pengantar_prov != '')
+                                                        @if ($rekap->LHE->surat_pengantar_prov != '')
                                                             <th>
                                                                 <div class="d-flex justify-content-between">
                                                                     Desk-Evaluation

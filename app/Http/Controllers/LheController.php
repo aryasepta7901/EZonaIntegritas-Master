@@ -190,13 +190,14 @@ class LheController extends Controller
                 // 'pertanyaan' => Pertanyaan::where('subpilar_id', $value->id)->first()->pertanyaan,
             ];
             foreach ($value->pertanyaan as $pt) {
-                $dataPertanyaan[] = [
+                $data[] = [
                     'pertanyaan' => $pt->pertanyaan,
                 ];
             }
         }
+
         $phpWord->cloneRowAndSetValues('subPilar', $data);
-        $phpWord->cloneRowAndSetValues('pertanyaan', $dataPertanyaan);
+        $phpWord->cloneRowAndSetValues('pertanyaan', $data);
 
 
         // Simpan hasil proses ke file Word sementara

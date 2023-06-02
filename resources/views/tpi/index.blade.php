@@ -29,7 +29,7 @@
                             <th>Predikat</th>
                             <th>Nilai </th>
                             <th>Surat</th>
-                            <th>LHE</th>
+                            <th>Rekap</th>
                             <th>LKE</th>
                             <th>Status</th>
                             <th>Evaluasi</th>
@@ -91,7 +91,7 @@
                                         @endif
                                         <td class="text-center">
 
-                                            <a href="/tpi/lhe/{{ $item->id }}" type="button"
+                                            <a href="/tpi/info/{{ $item->id }}" type="button"
                                                 class="btn btn-info btn-sm"><i class="fas fa-file"></i></a>
                                         </td>
                                         <td class="text-center">
@@ -121,7 +121,11 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h4 class="modal-title">Surat Pengantar
-                                                            {{ $item->satker->nama_satker }}</h4>
+                                                            @php
+                                                                $prov = substr($item->satker_id, 0, 3) . '0';
+                                                                $satker = $satker->where('id', $prov)->first();
+                                                            @endphp
+                                                            {{ $satker->nama_satker }}</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
