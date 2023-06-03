@@ -90,7 +90,7 @@ Route::get('satker/lke/{lke}/{pilar}', [LKEController::class, 'pertanyaan'])->na
 Route::get('satker/surat/{rekapitulasi}', [RekapitulasiController::class, 'surat'])->middleware('auth');
 Route::post('satker/surat/cetak', [RekapitulasiController::class, 'cetak'])->middleware('auth');
 Route::resource('satker/rekapitulasi', RekapitulasiController::class)->middleware('auth');
-Route::get('satker/lhe/{rekapitulasi}', [RekapitulasiController::class, 'lhe'])->middleware('auth'); //lhe
+Route::get('satker/rekap/{rekapitulasi}', [RekapitulasiController::class, 'rekap'])->middleware('auth'); //rekapitulasi nilai
 Route::get('satker/catatan/{rekapitulasi}', [RekapitulasiController::class, 'catatan'])->middleware('auth'); //catatan
 // Detail Rekap
 Route::get('satker/rekap2/{rekapitulasi}', [RekapitulasiController::class, 'rekap2'])->middleware('auth');

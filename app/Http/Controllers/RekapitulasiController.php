@@ -145,14 +145,14 @@ class RekapitulasiController extends Controller
 
         ]);
     }
-    public function lhe(Rekapitulasi $rekapitulasi)
+    public function rekap(Rekapitulasi $rekapitulasi)
     {
         return view(
             'monitoring.lhe',
             [
                 'master' => 'Rekapitulasi ',
                 'link' => '/satker/lke',
-                'title' => 'Laporan Hasil Evaluasi: ',
+                'title' => 'Rekapitulasi Nilai',
                 'rekap' => $rekapitulasi,
                 'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
                 'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', substr($rekapitulasi->id, 0, 4))->get(),

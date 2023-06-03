@@ -406,6 +406,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
     </script>
     <!-- Stay In Position when refresh -->
+
     <script>
         // Menambahkan event listener pada tombol submit di setiap kartu accordion
         var submitButtons = document.querySelectorAll('.collapse .submit-button');
@@ -442,6 +443,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
         };
     </script>
+
+    <script>
+        // Mendapatkan URL saat ini
+        var currentURL = window.location.href;
+
+        // Mengecek apakah URL mengandung ID tujuan scroll
+        if (currentURL.indexOf("#") > -1) {
+            // Mengambil URL saat ini
+            var currentUrl = window.location.href;
+
+            // Membuat elemen <a> untuk memanipulasi URL
+            var temporaryLink = document.createElement('a');
+            temporaryLink.href = currentUrl;
+
+            // Mengambil bagian hash dari URL
+            var hash = temporaryLink.hash.slice(1); // Menghapus tanda pagar (#)
+
+            // Membagi nilai hash menjadi dua bagian berdasarkan karakter '#' pertama
+            var hashParts = hash.split('#');
+
+            // Mengambil nilai collapse2 dan hash2
+            var hash1 = hashParts[0];
+            var hash2 = hashParts[1];
+
+
+
+            // Mencari elemen dengan ID tujuan
+            var targetElement = document.getElementById(hash1);
+            var targetElement2 = document.getElementById(hash2);
+            // Memeriksa apakah elemen ditemukan 
+            if (targetElement) {
+                // Mengaktifkan elemen collapse
+                targetElement.classList.add('show');
+                targetElement.setAttribute("aria-expanded", "true");
+
+                // Melakukan scroll otomatis ke elemen tujuan
+                $('html, body').animate({
+                    scrollTop: $(targetElement2).offset().top
+                }, 1000);
+            }
+        }
+    </script>
+
 </body>
 
 </html>

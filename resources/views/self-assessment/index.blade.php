@@ -67,6 +67,12 @@
                                             data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
                                                 class="fas fa-file">
                                             </i> Kab/Kota</button>
+                                        {{-- Cek Apakah LHE sudah diupload/belum --}}
+                                        @if ($value->LHE->LHE_1)
+                                            <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
+                                                data-target="#LHE_1{{ $value->id }}"><i class="fas fa-file">
+                                                </i> LHE 1</button>
+                                        @endif
                                     @else
                                         -
                                     @endif
@@ -78,8 +84,8 @@
                                         class="btn btn-sm btn-primary"><i class="fa fa-file"></i> Rekap 2</a>
                                     <a type="button" href="/satker/rekap3/{{ $value->id }}"
                                         class="btn btn-sm btn-warning"><i class="fa fa-file"></i> Rekap 3</a> --}}
-                                    <a href="/satker/lhe/{{ $value->id }}" type="button" class="btn btn-info btn-sm"><i
-                                            class="fas fa-file"></i> LHE</a>
+                                    <a href="/satker/rekap/{{ $value->id }}" type="button"
+                                        class="btn btn-info btn-sm"><i class="fas fa-file"></i> Rekapitulasi</a>
                                     <a href="/satker/catatan/{{ $value->id }}" type="button"
                                         class="btn btn-info btn-sm"><i class="fas fa-file"></i> Catatan</a>
                                 </td>
@@ -181,6 +187,7 @@
     </div>
     {{-- View Surat --}}
     @foreach ($rekap as $value)
+        {{-- Surat Pengantar Kab/kota --}}
         <div class="modal fade" id="surat_pengantar_kabkota{{ $value->id }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -207,7 +214,31 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+        {{-- LHE --}}
+        <div class="modal fade" id="LHE_1{{ $value->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Laporan Hasil Evaluasi Tahap 1 Tahun {{ $value->tahun }}
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="{{ asset('storage/' . $value->LHE->LHE_1) }}"
+                                allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
     @endforeach
-
-
 @endsection

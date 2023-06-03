@@ -28,10 +28,10 @@
                 <div class="card">
                     <div class="card-header p-0" id="heading{{ $loop->iteration }}">
                         <h2 class="mb-0">
-                            <button href="#collapse{{ $loop->iteration }}"
+                            <button href="#{{ $value->id }}"
                                 class="d-flex py-4 px-4 align-items-center justify-content-between btn btn-link button"
-                                data-parent="#accordion" data-toggle="collapse" aria-expanded=""
-                                aria-controls="collapse{{ $loop->iteration }}">
+                                data-parent="#accordion" data-toggle="collapse" aria-expanded="tr"
+                                aria-controls="{{ $value->id }}">
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
                                     <p class="info-box-number m-4">Nilai : {{ round($total_sa, 2) }}</p>
@@ -40,7 +40,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div class="collapse" id="collapse{{ $loop->iteration }}" role="tabpanel"
+                    <div class="collapse " id="{{ $value->id }}" role="tabpanel"
                         aria-labelledby="heading{{ $loop->iteration }}">
                         <div class="card-body">
                             <div class="card">
@@ -82,6 +82,8 @@
                                                     @php
                                                         $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
                                                     @endphp
+
+                                                    {{-- {{ $desk }} --}}
                                                     {{-- Self Assessment --}}
                                                     @if ($selfAssessment != null)
                                                         {{-- Update --}}
@@ -524,7 +526,8 @@
                                                             <input type="hidden" name="penimbang"
                                                                 value="{{ $penimbang }}">
                                                             {{-- Data RekapPengungkit --}}
-                                                            <td style="min-width: 650px;">
+                                                            <td style="min-width: 650px;" id="{{ $value->id }}">
+                                                                {{ $value->id }}
                                                                 <div class="card-body">
                                                                     <div class="form-group">
                                                                         <label class="row"
@@ -632,23 +635,59 @@
                                                         </form>
                                                     @endif
                                                     {{-- Desk Evaluation --}}
+
                                                     @php
-                                                        $id = date('Y') . $rekap->satker_id . $value->id;
+                                                        $id = substr($rekap->id, 0, 4) . $rekap->satker_id . $value->id;
                                                         $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
                                                     @endphp
                                                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                         <td style="min-width: 380px;">
                                                             {{-- Pengendali Teknis --}}
                                                             @if ($deskEvaluation != null)
-                                                                <div class="card-body"
-                                                                    @if ($deskEvaluation->nilai_dl === 0) style="background-color: red" @endif>
+                                                                @if ($selfAssessment->nilai == $deskEvaluation->nilai_dl)
+                                                                    {{-- Jika Nilai SA dan DE sama maka sukses --}}
+                                                                    <div class="col-lg-12">
+                                                                        <div
+                                                                            class="alert alert-success  alert-dismissible">
+                                                                            <h5><i class="icon fas fa-check"></i> Sempurna!
+                                                                            </h5>
+                                                                            Hasil Penilaian Desk-Evaluation Sudah Sama
+                                                                            dengan hasil Self-Assessment
+                                                                        </div>
+                                                                    </div>
+                                                                @elseif ($selfAssessment->nilai != $deskEvaluation->nilai_dl)
+                                                                    {{-- Jika Nilai SA dan DE sama maka sukses --}}
+                                                                    <div class="col-lg-12">
+                                                                        <div class="alert alert-danger  alert-dismissible">
+                                                                            <h5><i class="icon fas fa-ban"></i> Perbaiki!
+                                                                            </h5>
+                                                                            Harap Perbaiki LKE sesuai dengan komentar Tim
+                                                                            Penilai Internal
+                                                                        </div>
+                                                                    </div>
+                                                                @elseif ($selfAssessment->nilai != $deskEvaluation->nilai_dl && $selfAssessment->nilai != 1)
+                                                                    {{-- Jika Nilai SA dan DE sama maka sukses --}}
+                                                                    <div class="col-lg-12">
+                                                                        <div
+                                                                            class="alert alert-warning  alert-dismissible">
+                                                                            <h5><i
+                                                                                    class="icon fas fa-exclamation-triangle"></i>
+                                                                                Perbaiki!
+                                                                            </h5>
+                                                                            Hasil Penilaian Desk-Evaluation Sudah Sama
+                                                                            dengan hasil Self-Assessment, Namun Anda dapat
+                                                                            perbaiki LKE menjadi lebih baik
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+
+                                                                <div class="card-body">
                                                                     <form action="/tpi/evaluasi/{{ $deskEvaluation->id }}"
                                                                         method="post">
                                                                         @method('put')
                                                                         @csrf
                                                                         <div class="form-group">
-                                                                            <label for="anggota">Pengendali
-                                                                                Teknis
+                                                                            <label for="anggota"> Tim Penilai Internal
                                                                             </label>
                                                                             @foreach ($value->opsi as $item)
                                                                                 @if ($item->type == 'checkbox')
@@ -665,16 +704,20 @@
                                                                                 @elseif($item->type == 'input')
                                                                                     <p for="input">
                                                                                         {{ $item->rincian }}
-                                                                                    </p>
+                                                                                    </p>@php
+                                                                                        $desk = $deskEvaluation->InputField->where('opsi_id', $item->id)->first();
+                                                                                    @endphp
                                                                                     <input type="number" min="0"
-                                                                                        class="form-control"
-                                                                                        name="jawaban_dl">
+                                                                                        required class="form-control"
+                                                                                        name="input[]"
+                                                                                        @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
+                                                                                        value="{{ $desk->input_dl }}">
                                                                                 @endif
                                                                             @endforeach
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control" rows="4" name="catatan_dl">{{ old('catatan_dl', $deskEvaluation->catatan_dl) }}  </textarea>
+                                                                            <textarea class="form-control" rows="4" readonly name="catatan_dl">{{ old('catatan_dl', $deskEvaluation->catatan_dl) }}  </textarea>
                                                                         </div>
                                                                     </form>
                                                                 </div>
@@ -683,7 +726,9 @@
                                                                     <div class="alert alert-info alert-dismissible">
                                                                         <h5><i class="icon fas fa-info"></i> Informasi!
                                                                         </h5>
-                                                                        Tim Penilai Internal Belum Melakukan Penilaian pada
+                                                                        Silahkan Lakukan Pengisian, agar Tim Penilai
+                                                                        Internal dapat
+                                                                        Melakukan Penilaian pada
                                                                         pertanyaan ini!
                                                                     </div>
                                                                 </div>
