@@ -451,27 +451,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // Mengecek apakah URL mengandung ID tujuan scroll
         if (currentURL.indexOf("#") > -1) {
             // Mengambil URL saat ini
-            var currentUrl = window.location.href;
-
-            // Membuat elemen <a> untuk memanipulasi URL
-            var temporaryLink = document.createElement('a');
-            temporaryLink.href = currentUrl;
-
-            // Mengambil bagian hash dari URL
-            var hash = temporaryLink.hash.slice(1); // Menghapus tanda pagar (#)
-
-            // Membagi nilai hash menjadi dua bagian berdasarkan karakter '#' pertama
-            var hashParts = hash.split('#');
-
-            // Mengambil nilai collapse2 dan hash2
-            var hash1 = hashParts[0];
-            var hash2 = hashParts[1];
+            var url = window.location.href;
+            var hash2 = url.substring(url.indexOf("#") + 1);
+            var hash1 = hash2.substring(0, 4)
 
 
 
             // Mencari elemen dengan ID tujuan
             var targetElement = document.getElementById(hash1);
+
             var targetElement2 = document.getElementById(hash2);
+
             // Memeriksa apakah elemen ditemukan 
             if (targetElement) {
                 // Mengaktifkan elemen collapse

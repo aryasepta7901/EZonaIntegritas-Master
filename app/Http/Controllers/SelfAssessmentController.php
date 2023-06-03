@@ -7,6 +7,7 @@ use App\Models\RekapPengungkit;
 use App\Models\SelfAssessment;
 use App\Models\UploadDokumen;
 use App\Models\InputField;
+use App\Models\Pengawasan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -41,6 +42,8 @@ class SelfAssessmentController extends Controller
      */
     public function store(Request $request)
     {
+
+        // dd(Pengawasan::where('satker_id', $request->satker_id)->first('tahap')->tahap);
 
         // Field dengan input value
         if ($request->input) {

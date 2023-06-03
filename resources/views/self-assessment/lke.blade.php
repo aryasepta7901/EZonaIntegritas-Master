@@ -478,17 +478,84 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Large Modal</h4>
+                    <h4 class="modal-title">Perlu diperbaiki</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>One fine body&hellip;</p>
+                    @foreach ($rincianPengungkit as $sr)
+                        <p>{{ $sr->subRincian }}</p>
+
+
+
+                        <table class="table table-bordered table-striped table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th>Pilar</th>
+                                    <th>Perubahan</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($sr->pilar as $p)
+                                    {{-- <tr style="background-color: rgb(246, 255, 0)">
+                                        <td data-toggle="collapse" data-target="#accordion{{ $p->id }}">
+                                            {{ $p->pilar }} <i class="fa-solid fa-caret-down"></i></td>
+                                    </tr> --}}
+                                    @foreach ($p->subPilar as $sp)
+                                        {{-- <tr style="background-color: rgb(255, 136, 0)">
+                                            <td data-toggle="collapse" data-target="#accordion{{ $sp->id }}"
+                                                class="collapse" id="accordion{{ $sp->pilar_id }}">{{ $sp->subPilar }}
+                                                <i class="fa-solid fa-caret-down"></i>
+                                            </td>
+                                        </tr> --}}
+
+                                        @foreach ($sp->pertanyaan as $value)
+                                            @php
+                                                $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
+                                            @endphp
+
+
+
+                                            <tr>
+                                                @if ($selfAssessment)
+                                                    @php
+                                                        $deskEvaluation = $selfAssessment->DeskEvaluation->first();
+                                                    @endphp
+                                                    @if ($selfAssessment->nilai != $deskEvaluation->nilai_kt || $selfAssessment->nilai == 0)
+                                                        <td>
+                                                            <a
+                                                                href="{{ asset('satker/lke/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
+                                                                {{ $value->pertanyaan }}</a>
+                                                        </td>
+                                                        @if ($selfAssessment->updated_at > $selfAssessment->deskEvaluation->first()->updated_at)
+                                                            <td class="text-center">
+                                                                <button class="badge badge-info badge-sm"> <i
+                                                                        class="fas fa-check"></i></button>
+                                                            </td>
+                                                        @else
+                                                            <td></td>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+
+                            </tbody>
+
+                        </table>
+                        {{-- @endforeach
+                            @endforeach --}}
+                    @endforeach
+
+
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
             <!-- /.modal-content -->
