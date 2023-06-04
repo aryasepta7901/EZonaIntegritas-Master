@@ -1,6 +1,97 @@
 @extends('layouts.backEnd.main')
 
 @section('content')
+    @if ($rekap->status == 4)
+        {{-- Jika status rekapitulasi dikembalikan dari TPI --}}
+        <div class="col-lg-12 mb-3 d-flex justify-content-between">
+            <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
+                </i> Lihat Perubahan</button>
+        </div>
+
+        <div class="modal fade" id="lihat">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Perubahan Hasil Evaluasi Tahap 1</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <table class="table table-bordered table-striped table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th>Pertanyaan</th>
+                                    <th>Evaluasi AT</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pilar->subPilar as $sp)
+                                    @foreach ($sp->pertanyaan as $value)
+                                        @php
+                                            $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
+                                        @endphp
+                                        <tr>
+                                            @if ($selfAssessment)
+                                                @php
+                                                    $deskEvaluation = $selfAssessment->DeskEvaluation->first();
+                                                @endphp
+                                                @if ($deskEvaluation != null)
+                                                    @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
+                                                        <form action="/tpi/evaluasi" method="post">
+                                                            @csrf
+
+                                                            <td>
+                                                                <input type="hidden" name="rekap"
+                                                                    value="{{ $rekap->id }}">
+                                                                <input type="hidden" name="pilar"
+                                                                    value="{{ $pilar->id }}">
+                                                                <input type="hidden" name="pertanyaan"
+                                                                    value="{{ $value->id }}">
+                                                                <button type="submit" name="scroll" value="scroll">
+                                                                    {{ $value->pertanyaan }}</button>
+
+                                                            </td>
+                                                        </form>
+                                                        @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
+                                                            <td class="text-center">
+                                                                <button class="badge badge-info badge-sm"> <i
+                                                                        class="fas fa-check"></i></button>
+                                                            </td>
+                                                        @else
+                                                            <td></td>
+                                                        @endif
+                                                    @else
+                                                        <td colspan="2">
+                                                            <div class="alert alert-info  alert-dismissible">
+                                                                <h5><i class="icon fas fa-info"></i> Informasi!
+                                                                </h5>
+                                                                Tidak ada perubahan pada Evaluasi Tahap 1
+                                                            </div>
+                                                        </td>
+                                                    @endif
+                                                @endif
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endif
     <div class="col-md-8 col-lg-12">
         <div id="accordion" class="myaccordion w-100" aria-multiselectable="true">
             @foreach ($subPilar as $value)
@@ -38,10 +129,10 @@
                 <div class="card">
                     <div class="card-header p-0" id="heading{{ $loop->iteration }}">
                         <h2 class="mb-0">
-                            <button href="#collapse{{ $loop->iteration }}"
+                            <button href="#{{ $value->id }}"
                                 class="d-flex py-4 px-4 align-items-center justify-content-between btn btn-link button"
                                 data-parent="#accordion" data-toggle="collapse" aria-expanded=""
-                                aria-controls="collapse{{ $loop->iteration }}">
+                                aria-controls="{{ $value->id }}">
                                 <p class="mb-0">{{ $value->subPilar }} ({{ $value->bobot }})</p>
                                 <div class="d-flex justify-content-between ">
                                     <i class="fa " aria-hidden="true"></i>
@@ -50,7 +141,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div class="collapse" id="collapse{{ $loop->iteration }}" role="tabpanel"
+                    <div class="collapse" id="{{ $value->id }}" role="tabpanel"
                         aria-labelledby="heading{{ $loop->iteration }}">
                         @if ($SatkerJawab != null)
                             <div class="card-body">
@@ -320,7 +411,8 @@
                                                             @if ($rekap->status == 4 || $rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                                 {{-- Cek Apakah Surat rekomendasi sudah diupload atau belum --}}
                                                                 @if ($rekap->LHE->surat_pengantar_prov != '')
-                                                                    <td style="min-width:500px;">
+                                                                    <td style="min-width:500px;"
+                                                                        id="{{ $value->id }}">
                                                                         {{-- Anggota Tim --}}
                                                                         {{-- Update --}}
                                                                         @if ($deskEvaluation != null)

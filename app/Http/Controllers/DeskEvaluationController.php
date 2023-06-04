@@ -66,6 +66,10 @@ class DeskEvaluationController extends Controller
      */
     public function store(Request $request)
     {
+        // Scroll up to search
+        if ($request->scroll) {
+            return redirect('/tpi/evaluasi/' . $request->rekap . '/' . $request->pilar . '#' . $request->pertanyaan);
+        }
         // Field ini hanya untuk menyimpan DeskEvaluation dari anggota tim, dikarenakan AT perlu create table terlebih dahulu
         if ($request->submit_at) {
             // Jika field merupakan input

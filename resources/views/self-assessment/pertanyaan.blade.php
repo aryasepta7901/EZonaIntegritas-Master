@@ -7,79 +7,118 @@
             <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
                 </i> Lihat Perubahan</button>
         </div>
-    @endif
-    <div class="modal fade" id="lihat">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Perlu diperbaiki</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>{{ $pilar->pilar }}</p>
 
+        <div class="modal fade" id="lihat">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Perlu diperbaiki</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @php
+                            
+                            $jumlah_soal = App\Models\Pertanyaan::where('subpilar_id', 'LIKE', '%' . $pilar->id . '%')->count();
+                            $soal_terjawab = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $pilar->id . '%')
+                                ->where('rekapitulasi_id', $rekap->id)
+                                ->count(); //mengambil nilai
+                            $soalSisa = $jumlah_soal - $soal_terjawab;
+                        @endphp
+                        <div class="col-lg-12 mb-3 d-flex justify-content-between">
+                            <h5>{{ $pilar->pilar }}</h5>
+                            <button class="btn btn-info ml-auto" data-toggle="modal" data-target="#kirimTPI">
+                                Soal Terjawab : <b>{{ $soal_terjawab }}</b>/{{ $jumlah_soal }}</button>
+                        </div>
+                        <table class="table table-bordered table-striped table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th>Pertanyaan</th>
+                                    <th>Perubahan</th>
 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($soal_terjawab < $jumlah_soal)
+                                    <div class="alert alert-info  alert-dismissible">
+                                        <h5><i class="icon fas fa-info"></i> Informasi!
+                                        </h5>
+                                        Terdapat <b>{{ $soalSisa }}</b> pertanyaan yang belum
+                                        terjawab,
+                                        Silahkan lakukan self-assessment
+                                    </div>
+                                @endif
 
-                    <table class="table table-bordered table-striped table-responsive-lg">
-                        <thead>
-                            <tr>
-                                <th>Pertanyaan</th>
-                                <th>Perubahan</th>
+                                @foreach ($pilar->subPilar as $sp)
+                                    @foreach ($sp->pertanyaan as $value)
+                                        @php
+                                            $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
+                                        @endphp
+                                        <tr>
+                                            @if ($selfAssessment)
+                                                @php
+                                                    $deskEvaluation = $selfAssessment->DeskEvaluation->first();
+                                                @endphp
+                                                @if ($deskEvaluation != null)
+                                                    @if ($selfAssessment->nilai != $deskEvaluation->nilai_dl || $selfAssessment->nilai == 0)
+                                                        <form action="/selfAssessment" method="post">
+                                                            @csrf
 
+                                                            <td>
+                                                                <input type="hidden" name="rekap"
+                                                                    value="{{ $rekap->id }}">
+                                                                <input type="hidden" name="pilar"
+                                                                    value="{{ $pilar->id }}">
+                                                                <input type="hidden" name="pertanyaan"
+                                                                    value="{{ $value->id }}">
+                                                                <button type="submit" name="scroll" value="scroll">
+                                                                    {{ $value->pertanyaan }}</button>
 
-                            </tr>
-                        </thead>
-                        <tbody>
+                                                            </td>
+                                                        </form>
+                                                        @if ($selfAssessment->updated_at > $deskEvaluation->updated_at)
+                                                            <td class="text-center">
+                                                                <button class="badge badge-info badge-sm"> <i
+                                                                        class="fas fa-check"></i></button>
+                                                            </td>
+                                                        @else
+                                                            <td></td>
+                                                        @endif
+                                                    @else
+                                                        @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
+                                                            <td colspan="2">
+                                                                <div class="alert alert-success  alert-dismissible">
+                                                                    <h5><i class="icon fas fa-check"></i> Sempurna!
+                                                                    </h5>
+                                                                    Hasil Penilaian Desk-Evaluation Sudah Sama
+                                                                    dengan hasil Self-Assessment
+                                                                </div>
+                                                            </td>
+                                                        @endif
 
-                            @foreach ($pilar->subPilar as $sp)
-                                @foreach ($sp->pertanyaan as $value)
-                                    @php
-                                        $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
-                                    @endphp
-                                    <tr>
-                                        @if ($selfAssessment)
-                                            @php
-                                                $deskEvaluation = $selfAssessment->DeskEvaluation->first();
-                                            @endphp
-                                            @if ($selfAssessment->nilai != $deskEvaluation->nilai_kt || $selfAssessment->nilai == 0)
-                                                <form
-                                                    action="{{ '/satker/lke/' . $rekap->id . '/' . $pilar->id . '#' . $value->id }}"
-                                                    method="get">
-                                                    @csrf
-                                                    <td>
-                                                        <button onclick="location.reload()" type="submit">
-                                                            {{ $value->pertanyaan }}</button>
-                                                    </td>
-                                                </form>
-                                                @if ($selfAssessment->updated_at > $selfAssessment->deskEvaluation->first()->updated_at)
-                                                    <td class="text-center">
-                                                        <button class="badge badge-info badge-sm"> <i
-                                                                class="fas fa-check"></i></button>
-                                                    </td>
-                                                @else
-                                                    <td></td>
+                                                       
+                                                    @endif
                                                 @endif
                                             @endif
-                                        @endif
-                                    </tr>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
 
 
 
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
+    @endif
     <div class="col-md-8 col-lg-12">
         @foreach ($subPilar as $value)
             @php
@@ -189,12 +228,6 @@
                                                                             for="pertanyaan">{{ $value->pertanyaan }}</label>
                                                                         <input type="hidden" name="pertanyaan_id"
                                                                             value="{{ $value->id }}">
-                                                                        @if ($selfAssessment->updated_at > $selfAssessment->deskEvaluation->first()->updated_at)
-                                                                            <p>Terdapat perubahan</p>
-                                                                        @else
-                                                                            <p>Tidak Terdapat Perubahan</p>
-                                                                        @endif
-
                                                                         @foreach ($value->opsi as $item)
                                                                             @if ($item->type == 'checkbox')
                                                                                 <div class="form-check ml-4">
@@ -616,7 +649,7 @@
 
                                                             {{-- Data RekapPengungkit --}}
                                                             <td style="min-width: 650px;" id="{{ $value->id }}">
-                                                                {{ $value->id }}
+
                                                                 <div class="card-body">
                                                                     <div class="form-group">
                                                                         <label class="row"

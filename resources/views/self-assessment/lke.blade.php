@@ -474,6 +474,7 @@
         <!-- /.modal-dialog -->
     </div>
 
+    {{-- Lihat Perubahan --}}
     <div class="modal fade" id="lihat">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -484,6 +485,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    @if ($tot_soal_terjawab < $tot_jumlah_soal)
+                        @php
+                            $soalSisa = $tot_jumlah_soal - $tot_soal_terjawab;
+                        @endphp
+
+                        <div class="alert alert-info  alert-dismissible">
+                            <h5><i class="icon fas fa-info"></i> Informasi!
+                            </h5>
+                            Terdapat <b>{{ $soalSisa }}</b> pertanyaan yang belum
+                            terjawab,
+                            Silahkan lakukan self-assessment
+                        </div>
+                    @endif
                     @foreach ($rincianPengungkit as $sr)
                         <p>{{ $sr->subRincian }}</p>
 
@@ -492,13 +506,14 @@
                         <table class="table table-bordered table-striped table-responsive-lg">
                             <thead>
                                 <tr>
-                                    <th>Pilar</th>
+                                    <th>Pertanyaan</th>
                                     <th>Perubahan</th>
 
 
                                 </tr>
                             </thead>
                             <tbody>
+
                                 @foreach ($sr->pilar as $p)
                                     {{-- <tr style="background-color: rgb(246, 255, 0)">
                                         <td data-toggle="collapse" data-target="#accordion{{ $p->id }}">
@@ -524,19 +539,21 @@
                                                     @php
                                                         $deskEvaluation = $selfAssessment->DeskEvaluation->first();
                                                     @endphp
-                                                    @if ($selfAssessment->nilai != $deskEvaluation->nilai_kt || $selfAssessment->nilai == 0)
-                                                        <td>
-                                                            <a
-                                                                href="{{ asset('satker/lke/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
-                                                                {{ $value->pertanyaan }}</a>
-                                                        </td>
-                                                        @if ($selfAssessment->updated_at > $selfAssessment->deskEvaluation->first()->updated_at)
-                                                            <td class="text-center">
-                                                                <button class="badge badge-info badge-sm"> <i
-                                                                        class="fas fa-check"></i></button>
+                                                    @if ($deskEvaluation != null)
+                                                        @if ($selfAssessment->nilai != $deskEvaluation->nilai_dl || $selfAssessment->nilai == 0)
+                                                            <td>
+                                                                <a
+                                                                    href="{{ asset('satker/lke/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
+                                                                    {{ $value->pertanyaan }}</a>
                                                             </td>
-                                                        @else
-                                                            <td></td>
+                                                            @if ($selfAssessment->updated_at > $deskEvaluation->updated_at)
+                                                                <td class="text-center">
+                                                                    <button class="badge badge-info badge-sm"> <i
+                                                                            class="fas fa-check"></i></button>
+                                                                </td>
+                                                            @else
+                                                                <td></td>
+                                                            @endif
                                                         @endif
                                                     @endif
                                                 @endif

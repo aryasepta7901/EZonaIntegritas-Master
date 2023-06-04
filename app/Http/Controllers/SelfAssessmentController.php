@@ -43,7 +43,10 @@ class SelfAssessmentController extends Controller
     public function store(Request $request)
     {
 
-        // dd(Pengawasan::where('satker_id', $request->satker_id)->first('tahap')->tahap);
+        // Scroll up to search
+        if ($request->scroll) {
+            return redirect('/satker/lke/' . $request->rekap . '/' . $request->pilar . '#' . $request->pertanyaan);
+        }
 
         // Field dengan input value
         if ($request->input) {

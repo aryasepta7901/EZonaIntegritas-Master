@@ -45,18 +45,22 @@
         $TotprogressDesk = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
         
     @endphp
-
     @if ($rekap->status == 4)
+
         @if ($rekap->LHE->surat_pengantar_prov != '')
             {{-- Anggota Tim --}}
             @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
+                <div class="col-lg-6 mb-3">
+                    <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
+                        </i> Lihat Perubahan</button>
+                </div>
                 @if ($TotprogressDesk == $TotprogressSelf)
-                    <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <div class="col-lg-6 mb-3 d-flex justify-content-end">
                         <button class="btn btn-primary m-2" data-toggle="modal" data-target="#at"><i class="fa fa-save">
                             </i> Simpan</button>
                     </div>
                 @else
-                    <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <div class="col-lg-6 mb-3 d-flex justify-content-end">
                         <div class="alert alert-info alert-dismissible">
                             <h5><i class="icon fas fa-info"></i> Note</h5>
                             Harap Lengkapi Desk-Evaluation agar bisa kirim LKE kepada Ketua
@@ -101,7 +105,11 @@
             @endif
             {{-- Ketua Tim --}}
             @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
-                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                <div class="col-lg-6 mb-3">
+                    <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
+                        </i> Lihat Perubahan</button>
+                </div>
+                <div class="col-lg-6 mb-3 d-flex justify-content-end">
                     <button class="btn btn-warning m-2" data-toggle="modal" data-target="#at"><i class="fa fa-backward">
                         </i> Kembalikan ke AT</button>
                     <button class="btn btn-primary m-2" data-toggle="modal" data-target="#kt"><i class="fa fa-save">
@@ -176,6 +184,10 @@
             {{-- Pengendali Teknis --}}
             @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
                 <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <div class="col-lg-6 mb-3">
+                        <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
+                            </i> Lihat Perubahan</button>
+                    </div>
                     @if ($pengawasan->tahap == 1)
                         <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-warning m-2"><i class="fa fa-save">
                             </i> Revisi</a>
@@ -293,6 +305,7 @@
             @endif
         @endif
     @endif
+
     <div class="col-lg-4">
         <div class="info-box bg-light">
             <div class="info-box-content">
@@ -537,11 +550,86 @@
     </div>
 
 
-
-
     <a href="/tpi/evaluasi" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
         Kembali</a>
 
+    {{-- Lihat Perubahan --}}
+    <div class="modal fade" id="lihat">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Perubahan Hasil Evaluasi Tahap 1</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    @foreach ($rincianPengungkit as $sr)
+                        <p>{{ $sr->subRincian }}</p>
+                        <table class="table table-bordered table-striped table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th>Pertanyaan</th>
+                                    <th>Evaluasi AT</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($sr->pilar as $p)
+                                    @foreach ($p->subPilar as $sp)
+                                        @foreach ($sp->pertanyaan as $value)
+                                            @php
+                                                $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
+                                            @endphp
+                                            <tr>
+                                                @if ($selfAssessment)
+                                                    @php
+                                                        $deskEvaluation = $selfAssessment->DeskEvaluation->first();
+                                                    @endphp
+                                                    @if ($deskEvaluation != null)
+                                                        @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
+                                                            {{-- Lihat perubahan pada SA --}}
+                                                            <td>
+                                                                <a
+                                                                    href="{{ asset('tpi/evaluasi/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
+                                                                    {{ $value->pertanyaan }}</a>
+                                                            </td>
+                                                            @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
+                                                                {{-- Jika Deskevaluation telah diperbarui --}}
+                                                                <td class="text-center">
+                                                                    <button class="badge badge-info badge-sm"> <i
+                                                                            class="fas fa-check"></i></button>
+                                                                </td>
+                                                            @else
+                                                                <td></td>
+                                                            @endif
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+
+                            </tbody>
+
+                        </table>
+                        {{-- @endforeach
+                            @endforeach --}}
+                    @endforeach
+
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 
 
 @endsection
