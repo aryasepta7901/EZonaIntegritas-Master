@@ -38,41 +38,49 @@
                                                 @php
                                                     $deskEvaluation = $selfAssessment->DeskEvaluation->first();
                                                 @endphp
-                                                @if ($deskEvaluation != null)
-                                                    @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
-                                                        <form action="/tpi/evaluasi" method="post">
-                                                            @csrf
-
-                                                            <td>
-                                                                <input type="hidden" name="rekap"
-                                                                    value="{{ $rekap->id }}">
-                                                                <input type="hidden" name="pilar"
-                                                                    value="{{ $pilar->id }}">
-                                                                <input type="hidden" name="pertanyaan"
-                                                                    value="{{ $value->id }}">
+                                                <form action="/tpi/evaluasi" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="rekap" value="{{ $rekap->id }}">
+                                                    <input type="hidden" name="pilar" value="{{ $pilar->id }}">
+                                                    <input type="hidden" name="pertanyaan" value="{{ $value->id }}">
+                                                    @if ($deskEvaluation != null)
+                                                        @if ($selfAssessment->updated_at < $deskEvaluation->created_at)
+                                                            {{-- data lama create dan data baru yang  di create tapi ingin tampil --}}
+                                                            <td class="">
                                                                 <button type="submit" name="scroll" value="scroll">
                                                                     {{ $value->pertanyaan }}</button>
 
                                                             </td>
-                                                        </form>
-                                                        @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
-                                                            <td class="text-center">
+                                                            <td class="text-center ">
                                                                 <button class="badge badge-info badge-sm"> <i
                                                                         class="fas fa-check"></i></button>
                                                             </td>
-                                                        @else
-                                                            <td></td>
+                                                        @endif
+                                                        @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
+                                                            {{-- Lihat perubahan pada SA --}}
+                                                            <td>
+                                                                <button type="submit" name="scroll" value="scroll">
+                                                                    {{ $value->pertanyaan }}</button>
+
+                                                            </td>
+                                                            @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
+                                                                <td class="text-center">
+                                                                    <button class="badge badge-info badge-sm"> <i
+                                                                            class="fas fa-check"></i></button>
+                                                                </td>
+                                                            @else
+                                                                <td></td>
+                                                            @endif
                                                         @endif
                                                     @else
-                                                        <td colspan="2">
-                                                            <div class="alert alert-info  alert-dismissible">
-                                                                <h5><i class="icon fas fa-info"></i> Informasi!
-                                                                </h5>
-                                                                Tidak ada perubahan pada Evaluasi Tahap 1
-                                                            </div>
+                                                        {{-- Jika SA baru create --}}
+                                                        <td class="">
+                                                            <button type="submit" name="scroll" value="scroll">
+                                                                {{ $value->pertanyaan }}</button>
                                                         </td>
+                                                        <td></td>
                                                     @endif
-                                                @endif
+                                                </form>
                                             @endif
                                         </tr>
                                     @endforeach

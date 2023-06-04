@@ -183,11 +183,11 @@
             @endif
             {{-- Pengendali Teknis --}}
             @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
-                <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                    <div class="col-lg-6 mb-3">
-                        <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
-                            </i> Lihat Perubahan</button>
-                    </div>
+                <div class="col-lg-6 mb-3">
+                    <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
+                        </i> Lihat Perubahan</button>
+                </div>
+                <div class="col-lg-6 mb-3 d-flex justify-content-end">
                     @if ($pengawasan->tahap == 1)
                         <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-warning m-2"><i class="fa fa-save">
                             </i> Revisi</a>
@@ -567,38 +567,54 @@
 
                     @foreach ($rincianPengungkit as $sr)
                         <p>{{ $sr->subRincian }}</p>
-                        <table class="table table-bordered table-striped table-responsive-lg">
+                        <table class="table table-bordered table-striped table-responsive-md">
                             <thead>
                                 <tr>
                                     <th>Pertanyaan</th>
-                                    <th>Evaluasi AT</th>
-
-
+                                    <th class="text-center" style="width: 50px">Evaluasi AT</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($sr->pilar as $p)
+                                    <tr data-toggle="collapse" data-target="#accordion{{ $p->id }}"
+                                        style="background-color: rgb(170, 255, 0)">
+                                        <td colspan="2">{{ $p->pilar }}<i class="fa-solid fa-caret-down"></i></td>
+                                    </tr>
+
                                     @foreach ($p->subPilar as $sp)
                                         @foreach ($sp->pertanyaan as $value)
-                                            @php
-                                                $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
-                                            @endphp
-                                            <tr>
+                                            <tr class="collapse" id="accordion{{ substr($value->id, 0, 3) }}">
+                                                @php
+                                                    $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
+                                                @endphp
                                                 @if ($selfAssessment)
                                                     @php
                                                         $deskEvaluation = $selfAssessment->DeskEvaluation->first();
                                                     @endphp
+
                                                     @if ($deskEvaluation != null)
+                                                        @if ($selfAssessment->updated_at < $deskEvaluation->created_at)
+                                                            {{-- data lama create dan data baru yang  di create tapi ingin tampil --}}
+                                                            <td class="">
+                                                                <a
+                                                                    href="{{ asset('tpi/evaluasi/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
+                                                                    {{ $value->pertanyaan }}</a>
+                                                            </td>
+                                                            <td class="text-center ">
+                                                                <button class="badge badge-info badge-sm"> <i
+                                                                        class="fas fa-check"></i></button>
+                                                            </td>
+                                                        @endif
                                                         @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
                                                             {{-- Lihat perubahan pada SA --}}
-                                                            <td>
+                                                            <td class="">
                                                                 <a
                                                                     href="{{ asset('tpi/evaluasi/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
                                                                     {{ $value->pertanyaan }}</a>
                                                             </td>
                                                             @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
                                                                 {{-- Jika Deskevaluation telah diperbarui --}}
-                                                                <td class="text-center">
+                                                                <td class="text-center ">
                                                                     <button class="badge badge-info badge-sm"> <i
                                                                             class="fas fa-check"></i></button>
                                                                 </td>
@@ -606,6 +622,14 @@
                                                                 <td></td>
                                                             @endif
                                                         @endif
+                                                    @else
+                                                        {{-- Jika SA baru create --}}
+                                                        <td class="">
+                                                            <a
+                                                                href="{{ asset('tpi/evaluasi/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
+                                                                {{ $value->pertanyaan }}</a>
+                                                        </td>
+                                                        <td></td>
                                                     @endif
                                                 @endif
                                             </tr>
