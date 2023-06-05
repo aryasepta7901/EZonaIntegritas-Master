@@ -113,7 +113,7 @@ Route::post('/prov/surat/cetak', [SuratPersetujuanProvController::class, 'cetak'
 // Desk Evaluation
 Route::resource('/tpi/evaluasi', DeskEvaluationController::class)->middleware('auth');
 Route::get('/tpi/evaluasi/{evaluasi}/{pilar}', [DeskEvaluationController::class, 'pertanyaan'])->name('evaluasi.pertanyaan')->middleware('auth');
-Route::get('tpi/info/{rekapitulasi}', [DeskEvaluationController::class, 'lhe'])->middleware('auth'); //lhe
+Route::get('tpi/rekap/{rekapitulasi}', [DeskEvaluationController::class, 'rekap'])->middleware('auth'); //lhe
 
 // LHE dan cetak LHE
 Route::resource('/tpi/lhe', LheController::class)->middleware('auth');

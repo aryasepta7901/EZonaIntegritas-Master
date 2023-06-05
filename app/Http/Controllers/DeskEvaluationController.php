@@ -263,14 +263,14 @@ class DeskEvaluationController extends Controller
 
         ]);
     }
-    public function lhe(Rekapitulasi $rekapitulasi)
+    public function rekap(Rekapitulasi $rekapitulasi)
     {
         return view(
             'monitoring.lhe',
             [
                 'master' => 'Rekapitulasi ',
                 'link' => '/tpi/evaluasi',
-                'title' => 'Laporan Hasil Evaluasi: ',
+                'title' => 'Rekap Nilai ',
                 'rekap' => $rekapitulasi,
                 'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
                 'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', substr($rekapitulasi->id, 0, 4))->get(),
@@ -465,7 +465,11 @@ class DeskEvaluationController extends Controller
                 $data['nilai_kt'] = $nilai;
                 $data['jawaban_dl'] = '-'; //generate
                 $tahap = Pengawasan::where('id', $request->pengawasan)->first('tahap')->tahap;
-                $data['updated_kt'] = $tahap;
+                if ($data['nilai_kt'] == 1) {
+                    $data['updated_kt'] = 2;
+                } else {
+                    $data['updated_kt'] = $tahap;
+                }
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
@@ -513,7 +517,11 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_dl'] =  $data['jawaban_kt']; //generate
                 $data['nilai_kt'] = Opsi::where('id', $data['jawaban_kt'])->first()->bobot;
                 $tahap = Pengawasan::where('id', $request->pengawasan)->first('tahap')->tahap;
-                $data['updated_kt'] = $tahap;
+                if ($data['nilai_kt'] == 1) {
+                    $data['updated_kt'] = 2;
+                } else {
+                    $data['updated_kt'] = $tahap;
+                }
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
             }
             // RekapPengungkit ->nilai_kt
@@ -557,8 +565,12 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_dl'] = '-';
                 $data['nilai_dl'] = $nilai;
                 $tahap = Pengawasan::where('id', $request->pengawasan)->first('tahap')->tahap;
-                $data['updated_dl'] = $tahap;
 
+                if ($data['nilai_dl'] == 1) {
+                    $data['updated_dl'] = 2;
+                } else {
+                    $data['updated_dl'] = $tahap;
+                }
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
@@ -594,7 +606,11 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_dl'] =  $request->jawaban_dl;
                 $data['nilai_dl'] = Opsi::where('id', $data['jawaban_dl'])->first()->bobot;
                 $tahap = Pengawasan::where('id', $request->pengawasan)->first('tahap')->tahap;
-                $data['updated_dl'] = $tahap;
+                if ($data['nilai_dl'] == 1) {
+                    $data['updated_dl'] = 2;
+                } else {
+                    $data['updated_dl'] = $tahap;
+                }
 
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
             }

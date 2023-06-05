@@ -91,7 +91,7 @@
                                         @endif
                                         <td class="text-center">
 
-                                            <a href="/tpi/info/{{ $item->id }}" type="button"
+                                            <a href="/tpi/rekap/{{ $item->id }}" type="button"
                                                 class="btn btn-info btn-sm"><i class="fas fa-file"></i></a>
                                         </td>
                                         <td class="text-center">

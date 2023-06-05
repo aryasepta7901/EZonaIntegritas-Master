@@ -66,8 +66,8 @@
                                                         }
                                                     @endphp
                                                     @if ($deskEvaluation != null)
+                                                        {{-- Jika SA tidak terdapat perubahan --}}
                                                         @if ($selfAssessment->updated_at < $deskEvaluation->created_at)
-                                                            {{-- data lama create dan data baru yang  di create tapi ingin tampil --}}
                                                             <td class="">
                                                                 <button class="btn btn-link" type="submit" name="scroll"
                                                                     value="scroll">
@@ -79,11 +79,9 @@
                                                                     <button class="badge badge-info badge-sm"> <i
                                                                             class="fas fa-check"></i></button>
                                                                 @endif
-
-
                                                                 @if ($pengawasan->tahap == 1)
                                                                     {{-- Jika evaluasi tahap 1 --}}
-                                                                    @if ($check == 1)
+                                                                    @if ($check == 1 || $check == 2)
                                                                         <button class="badge badge-info badge-sm"> <i
                                                                                 class="fas fa-check"></i></button>
                                                                     @endif
@@ -98,8 +96,8 @@
 
                                                             </td>
                                                         @endif
+                                                        {{-- Lihat perubahan pada SA --}}
                                                         @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
-                                                            {{-- Lihat perubahan pada SA --}}
                                                             <td>
                                                                 <button class="btn btn-link" type="submit" name="scroll"
                                                                     value="scroll">

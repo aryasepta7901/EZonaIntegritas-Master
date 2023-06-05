@@ -48,7 +48,7 @@
         @endif
         <div class="card">
             <div class="card-header">
-                Upload Laporan Hasil Evaluasi
+                <b> Upload Laporan Hasil Evaluasi</b>
             </div>
             <div class="card-body">
                 <form action="/tpi/lhe" method="POST" enctype="multipart/form-data">
@@ -56,8 +56,27 @@
                     <input type="hidden" name="anggota_id" value="{{ $anggota->id }}">
                     <input type="hidden" value="{{ $rekap->id }}" name="id">
                     <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
-                    <div class="custom-file">
+                    @if ($pengawasan->tahap == 2)
+                        <div class="form-group">
+                            <label class="@error('persetujuan') text-danger  @enderror" for="persetujuan">Persetujuan
+                                LKE</label>
+                            @error('persetujuan')
+                                <small class="badge badge-danger"> *{{ $message }}
+                                </small>
+                            @enderror
+                            <select class="form-control" name="persetujuan">
+                                <option value="">Pilih Persetujuan</option>
+                                <option value="6" @if (old('persetujuan') == 6) selected @endif>Setuju LKE
+                                </option>
+                                <option value="7" @if (old('persetujuan') == 7) selected @endif>Tolak LKE
+                                </option>
 
+                            </select>
+
+                        </div>
+                    @endif
+
+                    <div class="custom-file">
                         <input type="file" class="custom-file-input" id="upload" name="lhe"
                             accept="application/pdf">
                         <label class="custom-file-label" for="upload">
@@ -93,7 +112,8 @@
                                                 </i></button>
                                         </td>
                                         <td>
-                                            <p class="badge badge-info">Tahap 2</p>
+                                            <p class="badge badge-info">Tahap 2</p> <b>
+                                                {{ $rekap->StatusRekap->status }}</b>
                                         </td>
                                     </tr>
                                 @endif
@@ -197,7 +217,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Surat Pengantar
+                    <h4 class="modal-title">Laporan Hasil Evaluasi
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>

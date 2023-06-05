@@ -25,12 +25,14 @@
                                 @endif
                                 {{-- Hitung jumlah nilai rincian hasil --}}
                                 @php
-                                    $nilai = $nilaiHasil->where('satker_id', $value->satker_id)->sum('nilai');
+                                    // $nilai = $nilaiHasil->where('satker_id', $value->satker_id)->sum('nilai');
+                                    $nilai = 0;
                                 @endphp
                                 @php
                                     $total = $nilai_sa + $nilai;
                                 @endphp
-                                <p>Nilai ZI: {{ $total }}</p>
+                                <p>Nilai Self Assessment: <button class="badge badge-info">{{ round($total, 2) }}</button>
+                                </p>
 
 
                             </li>

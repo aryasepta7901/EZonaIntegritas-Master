@@ -28,11 +28,11 @@
     {{-- Desk Evaluation --}}
     @if ($pengawasan->tahap == 1)
         @php
-            $cek = 1;
+            $cek = [1, 2];
         @endphp
     @elseif($pengawasan->tahap == 2)
         @php
-            $cek = 2;
+            $cek = [2];
         @endphp
     @endif
     @if (auth()->user()->level_id == 'AT')
@@ -42,12 +42,12 @@
         @endphp
     @elseif(auth()->user()->level_id == 'KT')
         @php
-            $tot_soal_terjawab = $deskEvaluation->where('updated_kt', $cek)->count('jawaban_kt');
+            $tot_soal_terjawab = $deskEvaluation->whereIn('updated_kt', $cek)->count('jawaban_kt');
             $aktor = 'Ketua Tim';
         @endphp
     @elseif(auth()->user()->level_id == 'DL')
         @php
-            $tot_soal_terjawab = $deskEvaluation->where('updated_dl', $cek)->count('jawaban_dl');
+            $tot_soal_terjawab = $deskEvaluation->whereIn('updated_dl', $cek)->count('jawaban_dl');
             $aktor = 'Pengendali Teknis';
         @endphp
     @endif
@@ -226,10 +226,10 @@
                     @elseif($pengawasan->tahap == 2)
                         @if ($TotprogressDesk == $TotprogressSelf)
                             <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
-                                </i> Setuju</a>
-                            <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i
+                                </i> Persetujuan</a>
+                            {{-- <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i
                                     class="fa fa-save">
-                                </i> Tolak</button>
+                                </i> Tolak</button> --}}
                         @else
                             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                                 <div class="alert alert-info alert-dismissible">
@@ -502,7 +502,7 @@
                                                                         $nilai = $nilai->nilai_kt;
                                                                         $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
                                                                             ->where('rekapitulasi_id', $rekap->id)
-                                                                            ->where('updated_kt', $cek)
+                                                                            ->whereIn('updated_kt', $cek)
                                                                             ->count('jawaban_kt'); //mengambil nilai
                                                                     @endphp
                                                                 @elseif(auth()->user()->level_id == 'DL')
@@ -510,7 +510,7 @@
                                                                         $nilai = $nilai->nilai_dl;
                                                                         $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
                                                                             ->where('rekapitulasi_id', $rekap->id)
-                                                                            ->where('updated_dl', $cek)
+                                                                            ->whereIn('updated_dl', $cek)
                                                                             ->count('jawaban_dl'); //mengambil nilai
                                                                     @endphp
                                                                 @endif
@@ -666,7 +666,7 @@
 
                                                                 @if ($pengawasan->tahap == 1)
                                                                     {{-- Jika evaluasi tahap 1 --}}
-                                                                    @if ($check == 1)
+                                                                    @if ($check == 1 || $check == 2)
                                                                         <button class="badge badge-info badge-sm"> <i
                                                                                 class="fas fa-check"></i></button>
                                                                     @endif
@@ -697,7 +697,7 @@
                                                                     @endif
                                                                     @if ($pengawasan->tahap == 1)
                                                                         {{-- Jika evaluasi tahap 1 --}}
-                                                                        @if ($check == 1)
+                                                                        @if ($check == 1 || $check == 2)
                                                                             <button class="badge badge-info badge-sm"> <i
                                                                                     class="fas fa-check"></i></button>
                                                                         @endif

@@ -17,6 +17,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\TextUI\XmlConfiguration\Php;
 
 class LheController extends Controller
 {
@@ -49,19 +50,20 @@ class LheController extends Controller
     {
         //
 
-        $request->validate(
-            [
-                'lhe' => 'required|mimes:pdf|max:2048',
 
-            ],
-            [
-                'required' => ':attribute  harus di Upload',
-                'mimes' => 'Dokumen hanya boleh format :values,',
-                'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
-            ]
-        );
         if ($request->submit_1) {  //lhe_1
             // Ambil File lamanya
+            $request->validate(
+                [
+                    'lhe' => 'required|mimes:pdf|max:2048',
+
+                ],
+                [
+                    'required' => ':attribute  harus di Upload',
+                    'mimes' => 'Dokumen hanya boleh format :values,',
+                    'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
+                ]
+            );
             $rekap = Rekapitulasi::where('id', $request->id)->first();
             if ($rekap->LHE->LHE_1) {
                 // jika ada file lama maka hapus
@@ -90,13 +92,30 @@ class LheController extends Controller
         }
         if ($request->submit_2) {  //lhe_1
             // Ambil File lamanya
+            $request->validate(
+                [
+                    'persetujuan' => 'required',
+                    'lhe' => 'required|mimes:pdf|max:2048',
+                ],
+                [
+                    'required' => ':attribute  harus di Upload',
+                    'mimes' => 'Dokumen hanya boleh format :values,',
+                    'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
+
+                ]
+            );
             $rekap = Rekapitulasi::where('id', $request->id)->first();
             if ($rekap->LHE->LHE_2) {
                 // jika ada file lama maka hapus
                 Storage::delete($rekap->LHE->LHE_2);
             }
             $customName = $request->file('lhe')->getClientOriginalName();
-
+            Rekapitulasi::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'status' => $request->persetujuan,
+                ]
+            );
             LHE::updateOrCreate(
                 ['id' => $request->id],
                 [
@@ -226,10 +245,12 @@ class LheController extends Controller
         $phpWord->cloneRowAndSetValues('subPilar', $data);
         $phpWord->cloneRowAndSetValues('pertanyaan', $data);
 
+        $tahap = Pengawasan::where('satker_id', $request->satker_id)->first('tahap')->tahap;
+        // Simpan hasil proses ke file Word sementara   
+        $fileName = 'LHE_' . $request->satker . '_Tahap_' . $tahap . '.docx';
 
-        // Simpan hasil proses ke file Word sementara
-        $phpWord->saveAs($id . '.docx');
-        return response()->download($id . '.docx')->deleteFileAfterSend(true);
+        $phpWord->saveAs($fileName);
+        return response()->download($fileName)->deleteFileAfterSend(true);
     }
 
     /**
