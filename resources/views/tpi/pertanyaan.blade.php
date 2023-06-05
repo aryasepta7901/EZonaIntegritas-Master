@@ -47,6 +47,18 @@
                                                     <input type="hidden" name="rekap" value="{{ $rekap->id }}">
                                                     <input type="hidden" name="pilar" value="{{ $pilar->id }}">
                                                     <input type="hidden" name="pertanyaan" value="{{ $value->id }}">
+                                                    @php
+                                                        if ($pengawasan->status == 1) {
+                                                            // Jika ketua tim
+                                                            $check = $deskEvaluation->updated_kt;
+                                                        } elseif ($pengawasan->status == 2) {
+                                                            // Jika dalnis
+                                                            $check = $deskEvaluation->updated_dl;
+                                                        } elseif ($pengawasan->status == 0) {
+                                                            // Jika anggota tim
+                                                            $check = 0;
+                                                        }
+                                                    @endphp
                                                     @if ($deskEvaluation != null)
                                                         @if ($selfAssessment->updated_at < $deskEvaluation->created_at)
                                                             {{-- data lama create dan data baru yang  di create tapi ingin tampil --}}
@@ -61,19 +73,14 @@
                                                                     <button class="badge badge-info badge-sm"> <i
                                                                             class="fas fa-check"></i></button>
                                                                 @endif
-                                                                @php
-                                                                    if ($pengawasan->status == 1) {
-                                                                        // Jika ketua tim
-                                                                        $check = $deskEvaluation->updated_kt;
-                                                                    } else {
-                                                                        // Jika dalnis
-                                                                        $check = $deskEvaluation->updated_dl;
-                                                                    }
-                                                                @endphp
+
+
                                                                 @if ($check == 1)
                                                                     <button class="badge badge-info badge-sm"> <i
                                                                             class="fas fa-check"></i></button>
                                                                 @endif
+
+
                                                             </td>
                                                         @endif
                                                         @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
@@ -90,9 +97,18 @@
                                                                         <button class="badge badge-info badge-sm"> <i
                                                                                 class="fas fa-check"></i></button>
                                                                     @endif
-                                                                    @if ($check == 1)
-                                                                        <button class="badge badge-info badge-sm"> <i
-                                                                                class="fas fa-check"></i></button>
+                                                                    @if ($pengawasan->tahap == 1)
+                                                                        {{-- Jika evaluasi tahap 1 --}}
+                                                                        @if ($check == 1)
+                                                                            <button class="badge badge-info badge-sm"> <i
+                                                                                    class="fas fa-check"></i></button>
+                                                                        @endif
+                                                                    @elseif($pengawasan->tahap == 2)
+                                                                        {{-- Jika evaluasi tahap 2 --}}
+                                                                        @if ($check == 2)
+                                                                            <button class="badge badge-info badge-sm"> <i
+                                                                                    class="fas fa-check"></i></button>
+                                                                        @endif
                                                                     @endif
                                                                 </td>
                                                             @else
@@ -222,12 +238,33 @@
                                                     @php
                                                         $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
                                                     @endphp
+
                                                     @if ($selfAssessment != null)
                                                         <tr class="rowAccordion">
                                                             {{-- Self Assessment --}}
                                                             {{-- View --}}
                                                             <form method="POST">
                                                                 <td style="min-width: 500px;">
+                                                                    @php
+                                                                        $id = substr($rekap->id, 0, 4) . $rekap->satker_id . $value->id;
+                                                                        $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
+                                                                    @endphp
+                                                                    @if ($deskEvaluation != null)
+                                                                        @if ($selfAssessment->updated_at > $deskEvaluation->updated_at)
+                                                                            {{-- Jika Terdapat Perubahan pada Penilaian Evaluasi Tahap 1 --}}
+
+                                                                            <div class="col-lg-12">
+                                                                                <div
+                                                                                    class="alert alert-info  alert-dismissible">
+                                                                                    <h5><i class="icon fas fa-info"></i>
+                                                                                        Perubahan!
+                                                                                    </h5>
+                                                                                    Terdapat Perubahan pada Penilaian
+                                                                                    Evaluasi Tahap 1
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                    @endif
                                                                     <div class="card-body">
                                                                         <div class="form-group">
                                                                             <label
@@ -247,7 +284,8 @@
                                                                                     @php
                                                                                         $self = $selfAssessment->InputField->where('opsi_id', $item->id)->first();
                                                                                     @endphp
-                                                                                    <p for="input">{{ $item->rincian }}
+                                                                                    <p for="input">
+                                                                                        {{ $item->rincian }}
                                                                                     </p>
                                                                                     <input readonly type="number"
                                                                                         min="0"
@@ -370,7 +408,8 @@
                                                                                 <tbody>
                                                                                     @foreach ($file as $item)
                                                                                         <tr>
-                                                                                            <td>{{ $loop->iteration }}</td>
+                                                                                            <td>{{ $loop->iteration }}
+                                                                                            </td>
                                                                                             <td style="min-width: 200px">
                                                                                                 {{ $item->name }}
                                                                                                 <input type="hidden"
@@ -642,10 +681,13 @@
                                                                                             <h5><i
                                                                                                     class="icon fas fa-info"></i>
                                                                                                 Note</h5>
-                                                                                            Jawaban dibawah ini adalah Hasil
-                                                                                            dari Anggota Tim, Harap Update
+                                                                                            Jawaban dibawah ini adalah
+                                                                                            Hasil
+                                                                                            dari Anggota Tim, Harap
+                                                                                            Update
                                                                                             untuk
-                                                                                            menandakan anda ikut evaluasi
+                                                                                            menandakan anda ikut
+                                                                                            evaluasi
                                                                                         </div>
                                                                                     </div>
                                                                                 @endif
@@ -838,10 +880,12 @@
                                                                                             <h5><i
                                                                                                     class="icon fas fa-info"></i>
                                                                                                 Note</h5>
-                                                                                            Jawaban dibawah ini adalah Hasil
+                                                                                            Jawaban dibawah ini adalah
+                                                                                            Hasil
                                                                                             dari Ketua Tim, Harap Update
                                                                                             untuk
-                                                                                            menandakan anda ikut evaluasi
+                                                                                            menandakan anda ikut
+                                                                                            evaluasi
                                                                                         </div>
                                                                                     </div>
                                                                                 @endif

@@ -72,7 +72,8 @@
                                                                     value="{{ $pilar->id }}">
                                                                 <input type="hidden" name="pertanyaan"
                                                                     value="{{ $value->id }}">
-                                                                <button type="submit" name="scroll" value="scroll">
+                                                                <button type="submit" class="btn btn-link" name="scroll"
+                                                                    value="scroll">
                                                                     {{ $value->pertanyaan }}</button>
 
                                                             </td>
@@ -85,19 +86,6 @@
                                                         @else
                                                             <td></td>
                                                         @endif
-                                                    @else
-                                                        @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
-                                                            <td colspan="2">
-                                                                <div class="alert alert-success  alert-dismissible">
-                                                                    <h5><i class="icon fas fa-check"></i> Sempurna!
-                                                                    </h5>
-                                                                    Hasil Penilaian Desk-Evaluation Sudah Sama
-                                                                    dengan hasil Self-Assessment
-                                                                </div>
-                                                            </td>
-                                                        @endif
-
-                                                       
                                                     @endif
                                                 @endif
                                             @endif

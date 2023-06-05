@@ -63,15 +63,15 @@
                         <label class="custom-file-label" for="upload">
                             Upload</label>
                     </div>
-                    <table class="table table-bordered table-striped mt-3">
-                        <thead>
-                            <tr class="text-center">
-                                <th>File</th>
-                                <th>Evaluasi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($rekap->LHE->LHE_1)
+                    @if ($rekap->LHE->LHE_1)
+                        <table class="table table-bordered table-striped mt-3">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>File</th>
+                                    <th>Evaluasi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <tr>
 
                                     <td class="text-center">
@@ -85,22 +85,22 @@
                                     </td>
 
                                 </tr>
-                            @endif
-                            @if ($rekap->LHE->LHE_2)
-                                <tr>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-info btn-sm m-2" data-toggle="modal"
-                                            data-target="#lhe2"><i class="fas fa-file">
-                                            </i></button>
-                                    </td>
-                                    <td>
-                                        <p class="badge badge-info">Tahap 2</p>
-                                    </td>
-                                </tr>
-                            @endif
+                                @if ($rekap->LHE->LHE_2)
+                                    <tr>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-info btn-sm m-2" data-toggle="modal"
+                                                data-target="#lhe2"><i class="fas fa-file">
+                                                </i></button>
+                                        </td>
+                                        <td>
+                                            <p class="badge badge-info">Tahap 2</p>
+                                        </td>
+                                    </tr>
+                                @endif
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    @endif
 
 
 

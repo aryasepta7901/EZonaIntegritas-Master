@@ -62,7 +62,7 @@
                             </i> Simpan</button>
                     </div>
                 @else
-                    <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <div class="col-lg-6 mb-3 d-flex justify-content-end">
                         <div class="alert alert-info alert-dismissible">
                             <h5><i class="icon fas fa-info"></i> Note</h5>
                             Harap Lengkapi Desk-Evaluation agar bisa kirim LKE kepada Ketua
@@ -637,9 +637,12 @@
                                                                     if ($pengawasan->status == 1) {
                                                                         // Jika ketua tim
                                                                         $check = $deskEvaluation->updated_kt;
-                                                                    } else {
+                                                                    } elseif ($pengawasan->status == 2) {
                                                                         // Jika dalnis
                                                                         $check = $deskEvaluation->updated_dl;
+                                                                    } else {
+                                                                        // Jika anggota tim
+                                                                        $check = '';
                                                                     }
                                                                 @endphp
                                                                 @if ($check == 1)

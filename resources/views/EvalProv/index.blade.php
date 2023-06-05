@@ -62,8 +62,8 @@
                                 </td>
 
                                 <td class="text-center">
-                                    <a href="/prov/lhe/{{ $value->id }}" type="button" class="btn btn-info btn-sm"><i
-                                            class="fas fa-file"></i> LHE</a>
+                                    <a href="/prov/rekap/{{ $value->id }}" type="button" class="btn btn-info btn-sm"><i
+                                            class="fas fa-file"></i> Rekapitulasi</a>
                                     <a href="/prov/catatan/{{ $value->id }}" type="button"
                                         class="btn btn-info btn-sm"><i class="fas fa-file"></i> Catatan</a>
                                 </td>

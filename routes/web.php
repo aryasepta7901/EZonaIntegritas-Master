@@ -103,7 +103,7 @@ Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware(
 Route::resource('/prov/evaluasi', EvaluatorProvinsiController::class)->middleware('auth');
 Route::get('/prov/evaluasi/{evaluasi}/{pilar}', [EvaluatorProvinsiController::class, 'pertanyaan'])->name('evaluasi.pertanyaan')->middleware('auth');
 // Surat Persetujuan BPS Provinsi
-Route::get('prov/lhe/{rekapitulasi}', [EvaluatorProvinsiController::class, 'lhe'])->middleware('auth'); //lhe
+Route::get('prov/rekap/{rekapitulasi}', [EvaluatorProvinsiController::class, 'rekap'])->middleware('auth'); //lhe
 Route::get('prov/catatan/{rekapitulasi}', [EvaluatorProvinsiController::class, 'catatan'])->middleware('auth'); //catatan
 
 Route::resource('/prov/surat', SuratPersetujuanProvController::class)->middleware('auth');

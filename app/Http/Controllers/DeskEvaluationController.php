@@ -152,9 +152,7 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_at'] = '-';
                 $data['nilai_at'] = $nilai;
                 $data['jawaban_kt'] = '-'; //generate
-                $data['nilai_kt'] = $nilai; //generate
-                $data['jawaban_kt'] = '-'; //generate
-                $data['nilai_kt'] = $nilai; //generate
+                $data['jawaban_dl'] = '-'; //generate
                 DeskEvaluation::create($data);
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
@@ -190,8 +188,7 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_kt'] =   $data['jawaban_at']; //generate
                 $data['jawaban_dl'] = $data['jawaban_at']; //generate
                 $data['nilai_at'] = Opsi::where('id', $data['jawaban_at'])->first()->bobot;
-                $data['nilai_kt'] = $data['nilai_at']; //generate
-                $data['nilai_dl'] = $data['nilai_at']; //generate
+
                 DeskEvaluation::create($data);
             }
 
@@ -370,10 +367,8 @@ class DeskEvaluationController extends Controller
                 );
                 $data['jawaban_at'] = '-';
                 $data['nilai_at'] = $nilai;
-                $data['jawaban_kt'] = '-'; //generate
-                $data['nilai_kt'] = $nilai; //generate
+                $data['jawaban_kt'] = '-'; //generate    
                 $data['jawaban_dl'] = '-'; //generate
-                $data['nilai_dl'] = $nilai; //generate
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
@@ -425,8 +420,6 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_kt'] =   $data['jawaban_at']; //generate
                 $data['jawaban_dl'] =   $data['jawaban_at']; //generate
                 $data['nilai_at'] = Opsi::where('id', $data['jawaban_at'])->first()->bobot;
-                $data['nilai_kt'] =  $data['nilai_at']; //generate
-                $data['nilai_dl'] =  $data['nilai_at']; //generate
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
             }
             // RekapPengungkit ->nilai_at
@@ -446,8 +439,6 @@ class DeskEvaluationController extends Controller
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
                     'nilai_at' => round($total, 3),
-                    'nilai_kt' => round($total, 3), //generate
-                    'nilai_dl' => round($total, 3), //generate
                 ],
             );
         }
@@ -473,7 +464,6 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_kt'] = '-';
                 $data['nilai_kt'] = $nilai;
                 $data['jawaban_dl'] = '-'; //generate
-                $data['nilai_dl'] = $nilai; //generate
                 $data['updated_kt'] = 1;
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
                 // Jika field berbentuk Input
@@ -521,7 +511,6 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_kt'] =  $request->jawaban_kt;
                 $data['jawaban_dl'] =  $data['jawaban_kt']; //generate
                 $data['nilai_kt'] = Opsi::where('id', $data['jawaban_kt'])->first()->bobot;
-                $data['nilai_dl'] = $data['nilai_kt']; //generate
                 $data['updated_kt'] = 1;
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
             }
