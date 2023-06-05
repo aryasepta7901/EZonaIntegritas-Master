@@ -216,8 +216,6 @@ class DeskEvaluationController extends Controller
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
                     'nilai_at' =>  round($total, 3),
-                    'nilai_kt' =>  round($total, 3),
-                    'nilai_dl' =>  round($total, 3),
                 ],
             );
         }
@@ -476,6 +474,7 @@ class DeskEvaluationController extends Controller
                 $data['nilai_kt'] = $nilai;
                 $data['jawaban_dl'] = '-'; //generate
                 $data['nilai_dl'] = $nilai; //generate
+                $data['updated_kt'] = 1;
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
@@ -523,6 +522,7 @@ class DeskEvaluationController extends Controller
                 $data['jawaban_dl'] =  $data['jawaban_kt']; //generate
                 $data['nilai_kt'] = Opsi::where('id', $data['jawaban_kt'])->first()->bobot;
                 $data['nilai_dl'] = $data['nilai_kt']; //generate
+                $data['updated_kt'] = 1;
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
             }
             // RekapPengungkit ->nilai_kt
@@ -542,7 +542,6 @@ class DeskEvaluationController extends Controller
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
                     'nilai_kt' => round($total, 3),
-                    'nilai_dl' => round($total, 3),
                 ],
             );
         }
@@ -566,6 +565,8 @@ class DeskEvaluationController extends Controller
                 );
                 $data['jawaban_dl'] = '-';
                 $data['nilai_dl'] = $nilai;
+                $data['updated_dl'] = 1;
+
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
@@ -600,6 +601,8 @@ class DeskEvaluationController extends Controller
                 // Jika field berbentuk Checkbox
                 $data['jawaban_dl'] =  $request->jawaban_dl;
                 $data['nilai_dl'] = Opsi::where('id', $data['jawaban_dl'])->first()->bobot;
+                $data['updated_dl'] = 1;
+
                 DeskEvaluation::where('id', $evaluasi->id)->update($data);
             }
             // RekapPengungkit ->nilai_dl

@@ -24,6 +24,7 @@
         $tot_soal_terjawab = $selfAssessment;
         $TotprogressSelf = round(($tot_soal_terjawab * 100) / $tot_jumlah_soal, 2);
     @endphp
+
     {{-- Desk Evaluation --}}
     @if (auth()->user()->level_id == 'AT')
         @php
@@ -32,12 +33,12 @@
         @endphp
     @elseif(auth()->user()->level_id == 'KT')
         @php
-            $tot_soal_terjawab = $deskEvaluation->count('jawaban_kt');
+            $tot_soal_terjawab = $deskEvaluation->where('updated_kt', 1)->count('jawaban_kt');
             $aktor = 'Ketua Tim';
         @endphp
     @elseif(auth()->user()->level_id == 'DL')
         @php
-            $tot_soal_terjawab = $deskEvaluation->count('jawaban_dl');
+            $tot_soal_terjawab = $deskEvaluation->where('updated_dl', 1)->count('jawaban_dl');
             $aktor = 'Pengendali Teknis';
         @endphp
     @endif
@@ -48,11 +49,12 @@
     @if ($rekap->status == 4)
 
         @if ($rekap->LHE->surat_pengantar_prov != '')
+
             {{-- Anggota Tim --}}
             @if ($pengawasan->status == 0 && auth()->user()->level_id == 'AT')
                 <div class="col-lg-6 mb-3">
                     <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
-                        </i> Lihat Perubahan</button>
+                        </i> Lihat</button>
                 </div>
                 @if ($TotprogressDesk == $TotprogressSelf)
                     <div class="col-lg-6 mb-3 d-flex justify-content-end">
@@ -60,7 +62,7 @@
                             </i> Simpan</button>
                     </div>
                 @else
-                    <div class="col-lg-6 mb-3 d-flex justify-content-end">
+                    <div class="col-lg-12 mb-3 d-flex justify-content-end">
                         <div class="alert alert-info alert-dismissible">
                             <h5><i class="icon fas fa-info"></i> Note</h5>
                             Harap Lengkapi Desk-Evaluation agar bisa kirim LKE kepada Ketua
@@ -88,9 +90,9 @@
                                     <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
                                     <input type="hidden" name="status" value="1">
                                     <p> <b> Note:</b> <br></p>
-                                    <p>LKE akan dilanjutkan kepada </p>
+                                    <p>LKE akan dilanjutkan kepada <b>Ketua Tim </b></p>
                                     <p>Nilai Desk Evaluation Anggota Tim : <b class="badge badge-info">
-                                            {{ $nilai_sa }}</b> </p>
+                                            {{ $nilai_at }}</b> </p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -107,14 +109,24 @@
             @if ($pengawasan->status == 1 && auth()->user()->level_id == 'KT')
                 <div class="col-lg-6 mb-3">
                     <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
-                        </i> Lihat Perubahan</button>
+                        </i> Lihat</button>
                 </div>
                 <div class="col-lg-6 mb-3 d-flex justify-content-end">
-                    <button class="btn btn-warning m-2" data-toggle="modal" data-target="#at"><i class="fa fa-backward">
-                        </i> Kembalikan ke AT</button>
-                    <button class="btn btn-primary m-2" data-toggle="modal" data-target="#kt"><i class="fa fa-save">
-                        </i> Simpan</button>
-
+                    {{-- <button class="btn btn-warning m-2" data-toggle="modal" data-target="#at"><i class="fa fa-backward">
+                        </i> Kembalikan ke AT</button> --}}
+                    @if ($TotprogressDesk == $TotprogressSelf)
+                        <div class="col-lg-6 mb-3 d-flex justify-content-end">
+                            <button class="btn btn-primary m-2" data-toggle="modal" data-target="#kt"><i class="fa fa-save">
+                                </i> Simpan</button>
+                        </div>
+                    @else
+                        <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                            <div class="alert alert-info alert-dismissible">
+                                <h5><i class="icon fas fa-info"></i> Note</h5>
+                                Harap Lengkapi Desk-Evaluation agar bisa kirim LKE kepada Pengendali Teknis
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 {{-- Simpan KT(Teruskan ke DL) --}}
                 <div class="modal fade" id="kt">
@@ -136,7 +148,9 @@
                                     <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
                                     <input type="hidden" name="status" value="2">
                                     <p> <b> Note:</b> <br></p>
-                                    <p>LKE akan dilanjutkan kepada Pengendali Teknis </p>
+                                    <p>LKE akan dilanjutkan kepada <b>Pengendali Teknis </b></p>
+                                    <p>Nilai Desk Evaluation Ketua Tim : <b class="badge badge-info">
+                                            {{ $nilai_kt }}</b> </p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -185,12 +199,21 @@
             @if ($pengawasan->status == 2 && auth()->user()->level_id == 'DL')
                 <div class="col-lg-6 mb-3">
                     <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
-                        </i> Lihat Perubahan</button>
+                        </i> Lihat</button>
                 </div>
                 <div class="col-lg-6 mb-3 d-flex justify-content-end">
                     @if ($pengawasan->tahap == 1)
-                        <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-warning m-2"><i class="fa fa-save">
-                            </i> Revisi</a>
+                        @if ($TotprogressDesk == $TotprogressSelf)
+                            <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-warning m-2"><i class="fa fa-save">
+                                </i> Revisi</a>
+                        @else
+                            <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                                <div class="alert alert-info alert-dismissible">
+                                    <h5><i class="icon fas fa-info"></i> Note</h5>
+                                    Harap Lengkapi Desk-Evaluation agar bisa melakukan upload LHE
+                                </div>
+                            </div>
+                        @endif
                     @elseif($pengawasan->tahap == 2)
                         <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
                             </i> Setuju</a>
@@ -461,6 +484,7 @@
                                                                         $nilai = $nilai->nilai_kt;
                                                                         $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
                                                                             ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->where('updated_kt', 1)
                                                                             ->count('jawaban_kt'); //mengambil nilai
                                                                     @endphp
                                                                 @elseif(auth()->user()->level_id == 'DL')
@@ -468,6 +492,7 @@
                                                                         $nilai = $nilai->nilai_dl;
                                                                         $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
                                                                             ->where('rekapitulasi_id', $rekap->id)
+                                                                            ->where('updated_dl', 1)
                                                                             ->count('jawaban_dl'); //mengambil nilai
                                                                     @endphp
                                                                 @endif
@@ -553,12 +578,16 @@
     <a href="/tpi/evaluasi" class="btn btn-secondary ml-2 mb-3"><i class="fa fa-backward"></i>
         Kembali</a>
 
-    {{-- Lihat Perubahan --}}
+    {{-- Lihat  --}}
     <div class="modal fade" id="lihat">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Perubahan Hasil Evaluasi Tahap 1</h4>
+                    @if ($pengawasan->tahap == 1)
+                        <h4 class="modal-title">Pengisian Self-Assessment</h4>
+                    @else
+                        <h4 class="modal-title">Perubahan Hasil Evaluasi Tahap 1 </h4>
+                    @endif
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -571,7 +600,7 @@
                             <thead>
                                 <tr>
                                     <th>Pertanyaan</th>
-                                    <th class="text-center" style="width: 50px">Evaluasi AT</th>
+                                    <th class="text-center" style="width: 50px">Evaluasi </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -591,7 +620,6 @@
                                                     @php
                                                         $deskEvaluation = $selfAssessment->DeskEvaluation->first();
                                                     @endphp
-
                                                     @if ($deskEvaluation != null)
                                                         @if ($selfAssessment->updated_at < $deskEvaluation->created_at)
                                                             {{-- data lama create dan data baru yang  di create tapi ingin tampil --}}
@@ -601,8 +629,23 @@
                                                                     {{ $value->pertanyaan }}</a>
                                                             </td>
                                                             <td class="text-center ">
-                                                                <button class="badge badge-info badge-sm"> <i
-                                                                        class="fas fa-check"></i></button>
+                                                                @if ($pengawasan->status == 0)
+                                                                    <button class="badge badge-info badge-sm"> <i
+                                                                            class="fas fa-check"></i></button>
+                                                                @endif
+                                                                @php
+                                                                    if ($pengawasan->status == 1) {
+                                                                        // Jika ketua tim
+                                                                        $check = $deskEvaluation->updated_kt;
+                                                                    } else {
+                                                                        // Jika dalnis
+                                                                        $check = $deskEvaluation->updated_dl;
+                                                                    }
+                                                                @endphp
+                                                                @if ($check == 1)
+                                                                    <button class="badge badge-info badge-sm"> <i
+                                                                            class="fas fa-check"></i></button>
+                                                                @endif
                                                             </td>
                                                         @endif
                                                         @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
@@ -615,8 +658,14 @@
                                                             @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
                                                                 {{-- Jika Deskevaluation telah diperbarui --}}
                                                                 <td class="text-center ">
-                                                                    <button class="badge badge-info badge-sm"> <i
-                                                                            class="fas fa-check"></i></button>
+                                                                    @if ($pengawasan->status == 0)
+                                                                        <button class="badge badge-info badge-sm"> <i
+                                                                                class="fas fa-check"></i></button>
+                                                                    @endif
+                                                                    @if ($check == 1)
+                                                                        <button class="badge badge-info badge-sm"> <i
+                                                                                class="fas fa-check"></i></button>
+                                                                    @endif
                                                                 </td>
                                                             @else
                                                                 <td></td>
