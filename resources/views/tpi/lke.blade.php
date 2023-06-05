@@ -26,6 +26,15 @@
     @endphp
 
     {{-- Desk Evaluation --}}
+    @if ($pengawasan->tahap == 1)
+        @php
+            $cek = 1;
+        @endphp
+    @elseif($pengawasan->tahap == 2)
+        @php
+            $cek = 2;
+        @endphp
+    @endif
     @if (auth()->user()->level_id == 'AT')
         @php
             $tot_soal_terjawab = $deskEvaluation->count('jawaban_at');
@@ -33,12 +42,12 @@
         @endphp
     @elseif(auth()->user()->level_id == 'KT')
         @php
-            $tot_soal_terjawab = $deskEvaluation->where('updated_kt', 1)->count('jawaban_kt');
+            $tot_soal_terjawab = $deskEvaluation->where('updated_kt', $cek)->count('jawaban_kt');
             $aktor = 'Ketua Tim';
         @endphp
     @elseif(auth()->user()->level_id == 'DL')
         @php
-            $tot_soal_terjawab = $deskEvaluation->where('updated_dl', 1)->count('jawaban_dl');
+            $tot_soal_terjawab = $deskEvaluation->where('updated_dl', $cek)->count('jawaban_dl');
             $aktor = 'Pengendali Teknis';
         @endphp
     @endif
@@ -215,11 +224,20 @@
                             </div>
                         @endif
                     @elseif($pengawasan->tahap == 2)
-                        <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
-                            </i> Setuju</a>
-                        <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i
-                                class="fa fa-save">
-                            </i> Tolak</button>
+                        @if ($TotprogressDesk == $TotprogressSelf)
+                            <a href="/tpi/lhe/{{ $rekap->id }}" class="btn btn-success m-2"><i class="fa fa-save">
+                                </i> Setuju</a>
+                            <button class="btn btn-danger m-2" data-toggle="modal" data-target="#tolak"><i
+                                    class="fa fa-save">
+                                </i> Tolak</button>
+                        @else
+                            <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                                <div class="alert alert-info alert-dismissible">
+                                    <h5><i class="icon fas fa-info"></i> Note</h5>
+                                    Harap Lengkapi Desk-Evaluation agar bisa melakukan upload LHE
+                                </div>
+                            </div>
+                        @endif
                     @endif
 
 
@@ -484,7 +502,7 @@
                                                                         $nilai = $nilai->nilai_kt;
                                                                         $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
                                                                             ->where('rekapitulasi_id', $rekap->id)
-                                                                            ->where('updated_kt', 1)
+                                                                            ->where('updated_kt', $cek)
                                                                             ->count('jawaban_kt'); //mengambil nilai
                                                                     @endphp
                                                                 @elseif(auth()->user()->level_id == 'DL')
@@ -492,7 +510,7 @@
                                                                         $nilai = $nilai->nilai_dl;
                                                                         $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
                                                                             ->where('rekapitulasi_id', $rekap->id)
-                                                                            ->where('updated_dl', 1)
+                                                                            ->where('updated_dl', $cek)
                                                                             ->count('jawaban_dl'); //mengambil nilai
                                                                     @endphp
                                                                 @endif
@@ -620,6 +638,18 @@
                                                     @php
                                                         $deskEvaluation = $selfAssessment->DeskEvaluation->first();
                                                     @endphp
+                                                    @php
+                                                        if ($pengawasan->status == 1) {
+                                                            // Jika ketua tim
+                                                            $check = $deskEvaluation->updated_kt;
+                                                        } elseif ($pengawasan->status == 2) {
+                                                            // Jika dalnis
+                                                            $check = $deskEvaluation->updated_dl;
+                                                        } else {
+                                                            // Jika anggota tim
+                                                            $check = '';
+                                                        }
+                                                    @endphp
                                                     @if ($deskEvaluation != null)
                                                         @if ($selfAssessment->updated_at < $deskEvaluation->created_at)
                                                             {{-- data lama create dan data baru yang  di create tapi ingin tampil --}}
@@ -633,22 +663,21 @@
                                                                     <button class="badge badge-info badge-sm"> <i
                                                                             class="fas fa-check"></i></button>
                                                                 @endif
-                                                                @php
-                                                                    if ($pengawasan->status == 1) {
-                                                                        // Jika ketua tim
-                                                                        $check = $deskEvaluation->updated_kt;
-                                                                    } elseif ($pengawasan->status == 2) {
-                                                                        // Jika dalnis
-                                                                        $check = $deskEvaluation->updated_dl;
-                                                                    } else {
-                                                                        // Jika anggota tim
-                                                                        $check = '';
-                                                                    }
-                                                                @endphp
-                                                                @if ($check == 1)
-                                                                    <button class="badge badge-info badge-sm"> <i
-                                                                            class="fas fa-check"></i></button>
+
+                                                                @if ($pengawasan->tahap == 1)
+                                                                    {{-- Jika evaluasi tahap 1 --}}
+                                                                    @if ($check == 1)
+                                                                        <button class="badge badge-info badge-sm"> <i
+                                                                                class="fas fa-check"></i></button>
+                                                                    @endif
+                                                                @elseif($pengawasan->tahap == 2)
+                                                                    {{-- Jika evaluasi tahap 2 --}}
+                                                                    @if ($check == 2)
+                                                                        <button class="badge badge-info badge-sm"> <i
+                                                                                class="fas fa-check"></i></button>
+                                                                    @endif
                                                                 @endif
+
                                                             </td>
                                                         @endif
                                                         @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
@@ -658,6 +687,7 @@
                                                                     href="{{ asset('tpi/evaluasi/' . $rekap->id . '/' . $p->id . '#' . $value->id) }}">
                                                                     {{ $value->pertanyaan }}</a>
                                                             </td>
+
                                                             @if ($selfAssessment->updated_at < $deskEvaluation->updated_at)
                                                                 {{-- Jika Deskevaluation telah diperbarui --}}
                                                                 <td class="text-center ">
@@ -665,9 +695,18 @@
                                                                         <button class="badge badge-info badge-sm"> <i
                                                                                 class="fas fa-check"></i></button>
                                                                     @endif
-                                                                    @if ($check == 1)
-                                                                        <button class="badge badge-info badge-sm"> <i
-                                                                                class="fas fa-check"></i></button>
+                                                                    @if ($pengawasan->tahap == 1)
+                                                                        {{-- Jika evaluasi tahap 1 --}}
+                                                                        @if ($check == 1)
+                                                                            <button class="badge badge-info badge-sm"> <i
+                                                                                    class="fas fa-check"></i></button>
+                                                                        @endif
+                                                                    @elseif($pengawasan->tahap == 2)
+                                                                        {{-- Jika evaluasi tahap 2 --}}
+                                                                        @if ($check == 2)
+                                                                            <button class="badge badge-info badge-sm"> <i
+                                                                                    class="fas fa-check"></i></button>
+                                                                        @endif
                                                                     @endif
                                                                 </td>
                                                             @else

@@ -3,10 +3,16 @@
 @section('content')
     @if ($rekap->status == 4)
         {{-- Jika status rekapitulasi dikembalikan dari TPI --}}
-        <div class="col-lg-12 mb-3 d-flex justify-content-between">
-            <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
-                </i> Lihat </button>
-        </div>
+        @if (
+            ($pengawasan->status == 0 && auth()->user()->level_id == 'AT') ||
+                ($pengawasan->status == 1 && auth()->user()->level_id == 'KT') ||
+                ($pengawasan->status == 2 && auth()->user()->level_id == 'DL'))
+            <div class="col-lg-12 mb-3 d-flex justify-content-between">
+                <button class="btn btn-info" data-toggle="modal" data-target="#lihat"><i class="fa fa-eye">
+                    </i> Lihat </button>
+            </div>
+        @endif
+
 
         <div class="modal fade" id="lihat">
             <div class="modal-dialog modal-lg">
@@ -75,9 +81,18 @@
                                                                 @endif
 
 
-                                                                @if ($check == 1)
-                                                                    <button class="badge badge-info badge-sm"> <i
-                                                                            class="fas fa-check"></i></button>
+                                                                @if ($pengawasan->tahap == 1)
+                                                                    {{-- Jika evaluasi tahap 1 --}}
+                                                                    @if ($check == 1)
+                                                                        <button class="badge badge-info badge-sm"> <i
+                                                                                class="fas fa-check"></i></button>
+                                                                    @endif
+                                                                @elseif($pengawasan->tahap == 2)
+                                                                    {{-- Jika evaluasi tahap 2 --}}
+                                                                    @if ($check == 2)
+                                                                        <button class="badge badge-info badge-sm"> <i
+                                                                                class="fas fa-check"></i></button>
+                                                                    @endif
                                                                 @endif
 
 
@@ -250,19 +265,21 @@
                                                                         $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
                                                                     @endphp
                                                                     @if ($deskEvaluation != null)
-                                                                        @if ($selfAssessment->updated_at > $deskEvaluation->updated_at)
-                                                                            {{-- Jika Terdapat Perubahan pada Penilaian Evaluasi Tahap 1 --}}
-
-                                                                            <div class="col-lg-12">
-                                                                                <div
-                                                                                    class="alert alert-info  alert-dismissible">
-                                                                                    <h5><i class="icon fas fa-info"></i>
-                                                                                        Perubahan!
-                                                                                    </h5>
-                                                                                    Terdapat Perubahan pada Penilaian
-                                                                                    Evaluasi Tahap 1
+                                                                        @if ($pengawasan->tahap == 2)
+                                                                            @if ($selfAssessment->updated_at > $deskEvaluation->updated_at)
+                                                                                {{-- Jika Terdapat Perubahan pada Penilaian Evaluasi Tahap 1 --}}
+                                                                                <div class="col-lg-12">
+                                                                                    <div
+                                                                                        class="alert alert-info  alert-dismissible">
+                                                                                        <h5><i
+                                                                                                class="icon fas fa-info"></i>
+                                                                                            Perubahan!
+                                                                                        </h5>
+                                                                                        Terdapat Perubahan pada Penilaian
+                                                                                        Evaluasi Tahap 1
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
+                                                                            @endif
                                                                         @endif
                                                                     @endif
                                                                     <div class="card-body">
@@ -673,7 +690,7 @@
                                                                         {{-- Ketua Tim --}}
                                                                         @if (auth()->user()->level_id == 'KT')
                                                                             @if ($deskEvaluation != null)
-                                                                                @if ($deskEvaluation->updated_kt == 0)
+                                                                                @if ($pengawasan->tahap == 1 && $deskEvaluation->updated_kt == 0)
                                                                                     <div
                                                                                         class="col-lg-12 mb-3 d-flex justify-content-end">
                                                                                         <div
@@ -691,6 +708,25 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 @endif
+                                                                                @if ($pengawasan->tahap == 2 && $deskEvaluation->updated_kt != 2)
+                                                                                    <div
+                                                                                        class="col-lg-12 mb-3 d-flex justify-content-end">
+                                                                                        <div
+                                                                                            class="alert alert-info alert-dismissible">
+                                                                                            <h5><i
+                                                                                                    class="icon fas fa-info"></i>
+                                                                                                Note</h5>
+                                                                                            Jawaban dibawah ini adalah
+                                                                                            Hasil
+                                                                                            dari Anggota Tim, Harap
+                                                                                            Update
+                                                                                            untuk
+                                                                                            menandakan anda ikut
+                                                                                            evaluasi
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endif
+
 
                                                                                 <div class="card-body">
                                                                                     <form
@@ -716,6 +752,7 @@
                                                                                             <input type="hidden"
                                                                                                 name="pertanyaan_id"
                                                                                                 value="{{ $value->id }}">
+
 
 
                                                                                             @foreach ($value->opsi as $item)
@@ -872,7 +909,7 @@
                                                                         {{-- Pengendali Teknis --}}
                                                                         @if (auth()->user()->level_id == 'DL')
                                                                             @if ($deskEvaluation != null)
-                                                                                @if ($deskEvaluation->updated_dl == 0)
+                                                                                @if ($pengawasan->tahap == 1 && $deskEvaluation->updated_dl == 0)
                                                                                     <div
                                                                                         class="col-lg-12 mb-3 d-flex justify-content-end">
                                                                                         <div
@@ -889,6 +926,25 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 @endif
+                                                                                @if ($pengawasan->tahap == 2 && $deskEvaluation->updated_dl != 2)
+                                                                                    <div
+                                                                                        class="col-lg-12 mb-3 d-flex justify-content-end">
+                                                                                        <div
+                                                                                            class="alert alert-info alert-dismissible">
+                                                                                            <h5><i
+                                                                                                    class="icon fas fa-info"></i>
+                                                                                                Note</h5>
+                                                                                            Jawaban dibawah ini adalah
+                                                                                            Hasil
+                                                                                            dari Ketua Tim, Harap
+                                                                                            Update
+                                                                                            untuk
+                                                                                            menandakan anda ikut
+                                                                                            evaluasi
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endif
+
                                                                                 <div class="card-body">
                                                                                     <form
                                                                                         action="/tpi/evaluasi/{{ $deskEvaluation->id }}"
