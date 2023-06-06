@@ -48,11 +48,10 @@ class LheController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
 
 
         if ($request->submit_1) {  //lhe_1
-            // Ambil File lamanya
             $request->validate(
                 [
                     'lhe' => 'required|mimes:pdf|max:2048',
@@ -64,6 +63,7 @@ class LheController extends Controller
                     'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
                 ]
             );
+            // Ambil File lamanya
             $rekap = Rekapitulasi::where('id', $request->id)->first();
             if ($rekap->LHE->LHE_1) {
                 // jika ada file lama maka hapus
@@ -96,9 +96,11 @@ class LheController extends Controller
                 [
                     'persetujuan' => 'required',
                     'lhe' => 'required|mimes:pdf|max:2048',
+
                 ],
                 [
-                    'required' => ':attribute  harus di Upload',
+                    'lhe.required' => ':attribute  harus di Upload',
+                    'persetujuan.required' => ':attribute  wajib diisi',
                     'mimes' => 'Dokumen hanya boleh format :values,',
                     'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
 
@@ -127,8 +129,15 @@ class LheController extends Controller
     }
     public function cetak(Request $request)
     {
+        $request->validate(
+            [
+                'no_surat' => 'required',
+            ],
+            [
+                'required' => ':attribute  harus di Upload',
+            ]
+        );
         $satker = $request->satker;
-        $id = $request->id;
 
         // Script PhpWord
         // Creating the new document...
@@ -170,6 +179,7 @@ class LheController extends Controller
             'prov' => $nama_prov,
             'nama_daerah' => $nama_daerah,
             'tembusanDaerah' => $tembusanDaerah,
+            'no_surat' => $request->no_surat,
         ]);
 
         // Table Pemenuhan

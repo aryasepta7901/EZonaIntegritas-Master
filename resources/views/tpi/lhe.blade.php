@@ -149,24 +149,10 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <b>{{ auth()->user()->satker->nama_satker }}</b>
-                    <form action="/tpi/lhe/cetak" method="post">
-                        @csrf
-                        <input type="hidden" name="satker" value="{{ $rekap->satker->nama_satker }}">
-                        <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
-                        <input type="hidden" name="wilayah" value="{{ $rekap->satker->wilayah }}">
-                        <input type="hidden" name="id" value="{{ $rekap->id }}">
-                        <input type="hidden" name="nilaisa" value="{{ $nilai->sum('nilai_sa') }}">
-                        <input type="hidden" name="nilaidl" value="{{ $nilai->sum('nilai_dl') }}">
-                        {{-- Data TPI --}}
-                        <input type="hidden" name="at" value="{{ $anggota->name }}">
-                        <input type="hidden" name="id_at" value="{{ $anggota->id }}">
-                        <input type="hidden" name="kt" value="{{ $ketua->name }}">
-                        <input type="hidden" name="id_kt" value="{{ $ketua->id }}">
-                        <input type="hidden" name="dalnis" value="{{ $dalnis->name }}">
-                        <input type="hidden" name="id_dl" value="{{ $dalnis->id }}">
-                        {{-- Data NilaiPengungkit --}}
-                        <button class="btn btn-primary"><i class="fas fa-download"></i></button>
-                    </form>
+                    <button class="btn btn-primary " data-toggle="modal" data-target="#download"><i class="fas fa-download">
+                        </i> Download Template
+                    </button>
+
 
                 </div>
             </div>
@@ -192,7 +178,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Surat Pengantar
+                    <h4 class="modal-title">Laporan Hasil Evaluasi
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -233,6 +219,55 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
 
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    {{-- Download --}}
+    <div class="modal fade" id="download">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Download Template</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/tpi/lhe/cetak" method="post">
+                    @csrf
+                    <input type="hidden" name="satker" value="{{ $rekap->satker->nama_satker }}">
+                    <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
+                    <input type="hidden" name="wilayah" value="{{ $rekap->satker->wilayah }}">
+                    <input type="hidden" name="id" value="{{ $rekap->id }}">
+                    <input type="hidden" name="nilaisa" value="{{ $nilai->sum('nilai_sa') }}">
+                    <input type="hidden" name="nilaidl" value="{{ $nilai->sum('nilai_dl') }}">
+                    {{-- Data TPI --}}
+                    <input type="hidden" name="at" value="{{ $anggota->name }}">
+                    <input type="hidden" name="id_at" value="{{ $anggota->id }}">
+                    <input type="hidden" name="kt" value="{{ $ketua->name }}">
+                    <input type="hidden" name="id_kt" value="{{ $ketua->id }}">
+                    <input type="hidden" name="dalnis" value="{{ $dalnis->name }}">
+                    <input type="hidden" name="id_dl" value="{{ $dalnis->id }}">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="no_surat">Nomor Surat</label>
+                            <input type="text" class="form-control @error('no_surat') is-invalid  @enderror"
+                                id="no_surat" name="no_surat" value="{{ old('no_surat') }}">
+                            @error('no_surat')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Download</button>
+                    </div>
+                </form>
             </div>
             <!-- /.modal-content -->
         </div>
