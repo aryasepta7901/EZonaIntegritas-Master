@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class LHE extends Model
 {
     use HasFactory;
-    protected $table = 'LHE';
+    protected $table = 'lhe';
     public $incrementing = false;
 
     protected $fillable = [

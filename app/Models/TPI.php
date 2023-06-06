@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TPI extends Model
 {
     use HasFactory;
-    protected $table = 'TPI';
+    protected $table = 'tpi';
     public $incrementing = false;
 
     protected $fillable = [

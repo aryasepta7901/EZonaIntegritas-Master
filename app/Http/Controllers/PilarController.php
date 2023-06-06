@@ -125,7 +125,7 @@ class PilarController extends Controller
 
         Pilar::where('id', $pilar->id)->update($validatedData);
 
-        return redirect()->back()->with('success', 'New Pilar Has Ben Updated');
+        return redirect()->back()->with('success', 'Pilar Berhasil di ubah');
         // return redirect('/subrincian/' . $request->subrincian_id)->with('success', 'New Pilar Has Ben Updated');
     }
 
@@ -138,7 +138,7 @@ class PilarController extends Controller
     public function destroy(Pilar $pilar)
     {
         Pilar::destroy($pilar->id);
-        return redirect()->back()->with('success', ' Pilar Has Ben Deleted');
+        return redirect()->back()->with('success', ' Pilar Berhasil dihapus');
         // return redirect('/subrincian/' . $pilar->subrincian_id)->with('success', ' Pilar Has Ben Deleted');
     }
 }

@@ -6,7 +6,7 @@ use App\Models\Rincian;
 use App\Models\Pertanyaan;
 use App\Models\RekapHasil;
 use App\Models\SubRincian;
-use App\Models\rekapitulasi;
+use App\Models\Rekapitulasi;
 use Illuminate\Http\Request;
 use App\Models\RekapPengungkit;
 use App\Http\Controllers\Controller;

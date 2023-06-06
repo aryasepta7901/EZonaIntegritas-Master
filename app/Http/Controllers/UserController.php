@@ -22,7 +22,7 @@ class UserController extends Controller
         $this->authorize('admin');
         //
         return view(
-            'users.index',
+            'Users.index',
             [
                 'title' => 'Mengelola Pengguna',
                 'users' => User::latest()->get(),

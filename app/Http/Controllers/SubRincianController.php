@@ -38,7 +38,7 @@ class SubRincianController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'subRincian'  => 'required|unique:subRincian',
+            'subRincian'  => 'required|unique:subrincian',
         ], [
             'required' => ':Attribute Wajib Diisi',
             'unique' => ':Attribute Sudah Terdaftar',

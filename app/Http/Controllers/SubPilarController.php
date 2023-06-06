@@ -78,7 +78,7 @@ class SubPilarController extends Controller
         Rincian::where('id', $rincian_id)->update(['bobot' => $bobot + $bobotRincian]);
 
 
-        return redirect()->back()->with('success', 'New Sub Pilar Has Ben Added');
+        return redirect()->back()->with('success', 'SubPilar berhasil ditambakan');
         // return redirect('/pilar/' . $request->pilar_id)->with('success', 'New Sub Pilar Has Ben Added');
     }
 
@@ -157,7 +157,7 @@ class SubPilarController extends Controller
 
 
 
-        return redirect()->back()->with('success', 'Sub Pilar Berhasil di Update');
+        return redirect()->back()->with('success', 'SubPilar berhasil di Ubah');
         // return redirect('/pilar/' . $request->pilar_id)->with('success', 'New Sub Pilar Has Ben Updated');
     }
 
@@ -186,7 +186,7 @@ class SubPilarController extends Controller
         $bobotRincian = Rincian::where('id', $rincian_id)->first()->bobot;
         Rincian::where('id', $rincian_id)->update(['bobot' => $bobotRincian - $bobot]);
 
-        return redirect()->back()->with('success', 'New Sub Pilar Has Ben Deleted');
+        return redirect()->back()->with('success', 'SubPilar berhasil di Hapus');
         // return redirect('/pilar/' . $subpilar->pilar_id)->with('success', 'New Sub Pilar Has Ben Deleted');
     }
 }

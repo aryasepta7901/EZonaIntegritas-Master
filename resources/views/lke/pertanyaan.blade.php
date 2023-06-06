@@ -53,7 +53,7 @@
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
                                         data-target="#tambah{{ $value->id }}"><i class="fas fa-plus"></i></button>
-                                    <button class="btn btn-sm btn-success" data-toggle="modal"
+                                    <button class="btn btn-sm btn-primary" data-toggle="modal"
                                         data-target="#edit{{ $value->id }}"><i class="fas fa-pen"></i></button>
                                     <button class="btn btn-sm btn-danger" data-toggle="modal"
                                         data-target="#hapus{{ $value->id }}"><i class="fas fa-trash"></i></button>
@@ -73,7 +73,7 @@
 
                                         <button class="btn btn-sm btn-success" data-toggle="modal"
                                             data-target="#tambah{{ $sr->id }}"><i class="fas fa-plus"></i></button>
-                                        <button class="btn btn-sm btn-success" data-toggle="modal"
+                                        <button class="btn btn-sm btn-primary" data-toggle="modal"
                                             data-target="#edit{{ $sr->id }}"><i class="fas fa-pen"></i></button>
                                         <button class="btn btn-sm btn-danger" data-toggle="modal"
                                             data-target="#hapus{{ $sr->id }}"><i class="fas fa-trash"></i></button>
@@ -96,7 +96,7 @@
                                             <button class="btn btn-sm btn-success" data-toggle="modal"
                                                 data-target="#tambah{{ $p->id }}"><i
                                                     class="fas fa-plus"></i></button>
-                                            <button class="btn btn-sm btn-success" data-toggle="modal"
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal"
                                                 data-target="#edit{{ $p->id }}"><i class="fas fa-pen"></i></button>
                                             <button class="btn btn-sm btn-danger" data-toggle="modal"
                                                 data-target="#hapus{{ $p->id }}"><i
@@ -118,7 +118,7 @@
 
                                                 <a href="/pertanyaan/{{ $sp->id }}"
                                                     class="btn btn-sm btn-primary "><i class="fa fa-plus"> </i> </a>
-                                                <button class="btn btn-sm btn-success" data-toggle="modal"
+                                                <button class="btn btn-sm btn-primary" data-toggle="modal"
                                                     data-target="#edit{{ $sp->id }}"><i
                                                         class="fas fa-pen"></i></button>
                                                 <button class="btn btn-sm btn-danger" data-toggle="modal"
@@ -141,7 +141,7 @@
                                                         data-target="#info{{ $p->id }}"><i
                                                             class="fas fa-eye"></i></button>
                                                     <a href="/pertanyaan/{{ $p->id }}/edit"
-                                                        class="btn btn-sm btn-success"><i class="fa fa-pen">
+                                                        class="btn btn-sm btn-primary"><i class="fa fa-pen">
                                                         </i></a>
                                                     <button class="btn btn-sm btn-danger" data-toggle="modal"
                                                         data-target="#hapus{{ $p->id }}"><i

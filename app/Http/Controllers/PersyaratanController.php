@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\PersyaratanImport;
-use App\Models\persyaratan;
+use App\Models\Persyaratan;
 use App\Models\Satker;
 use Illuminate\Http\Request;
 use Persyaratan as GlobalPersyaratan;
