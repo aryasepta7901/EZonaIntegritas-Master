@@ -236,24 +236,24 @@ class LheController extends Controller
         $phpWord->cloneRowAndSetValues('hasil_dl', $dataTableR);
 
 
-        $subPilar = SubPilar::where('pilar_id', 'PPA')->get();
-        $data = [];
-        $dataPertanyaan = [];
+        // $subPilar = SubPilar::where('pilar_id', 'PPA')->get();
+        // $data = [];
+        // $dataPertanyaan = [];
 
-        foreach ($subPilar as $value) {
-            $data[] = [
-                'subPilar' => $value->subPilar,
-                // 'pertanyaan' => Pertanyaan::where('subpilar_id', $value->id)->first()->pertanyaan,
-            ];
-            foreach ($value->pertanyaan as $pt) {
-                $data[] = [
-                    'pertanyaan' => $pt->pertanyaan,
-                ];
-            }
-        }
+        // foreach ($subPilar as $value) {
+        //     $data[] = [
+        //         'subPilar' => $value->subPilar,
+        //         // 'pertanyaan' => Pertanyaan::where('subpilar_id', $value->id)->first()->pertanyaan,
+        //     ];
+        //     foreach ($value->pertanyaan as $pt) {
+        //         $data[] = [
+        //             'pertanyaan' => $pt->pertanyaan,
+        //         ];
+        //     }
+        // }
 
-        $phpWord->cloneRowAndSetValues('subPilar', $data);
-        $phpWord->cloneRowAndSetValues('pertanyaan', $data);
+        // $phpWord->cloneRowAndSetValues('subPilar', $data);
+        // $phpWord->cloneRowAndSetValues('pertanyaan', $data);
 
         $tahap = Pengawasan::where('satker_id', $request->satker_id)->first('tahap')->tahap;
         // Simpan hasil proses ke file Word sementara   
