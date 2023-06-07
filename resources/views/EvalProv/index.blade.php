@@ -77,12 +77,14 @@
                                         @php
                                             $status_pengawasan = $pengawasan->where('satker_id', $value->satker_id)->first();
                                         @endphp
-                                        @if ($status_pengawasan->status == 0)
-                                            <button class="badge badge-info">Anggota Tim</button>
-                                        @elseif($status_pengawasan->status == 1)
-                                            <button class="badge badge-info">Ketua Tim</button>
-                                        @else
-                                            <button class="badge badge-info">Pengendali Teknis</button>
+                                        @if ($status_pengawasan != null)
+                                            @if ($status_pengawasan->status == 0)
+                                                <button class="badge badge-info">Anggota Tim</button>
+                                            @elseif($status_pengawasan->status == 1)
+                                                <button class="badge badge-info">Ketua Tim</button>
+                                            @else
+                                                <button class="badge badge-info">Pengendali Teknis</button>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>

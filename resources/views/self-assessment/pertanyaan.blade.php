@@ -21,7 +21,7 @@
                         @php
                             
                             $jumlah_soal = App\Models\Pertanyaan::where('subpilar_id', 'LIKE', '%' . $pilar->id . '%')->count();
-                            $soal_terjawab = App\Models\selfAssessment::where('pertanyaan_id', 'LIKE', '%' . $pilar->id . '%')
+                            $soal_terjawab = App\Models\SelfAssessment::where('pertanyaan_id', 'LIKE', '%' . $pilar->id . '%')
                                 ->where('rekapitulasi_id', $rekap->id)
                                 ->count(); //mengambil nilai
                             $soalSisa = $jumlah_soal - $soal_terjawab;

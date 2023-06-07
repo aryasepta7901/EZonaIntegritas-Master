@@ -122,6 +122,6 @@ Route::post('/tpi/lhe/cetak', [LheController::class, 'cetak'])->name('cetak.ceta
 
 
 // Monitoring
-Route::resource('/monitoring', MonitoringController::class)->middleware('auth')->only(['index']);
+Route::resource('/monitoring', MonitoringController::class)->middleware('auth')->only(['index', 'destroy']);
 Route::get('/monitoring/lhe/{rekapitulasi}', [MonitoringController::class, 'lhe'])->middleware('auth');
 Route::get('/monitoring/catatan/{rekapitulasi}', [MonitoringController::class, 'catatan'])->middleware('auth');

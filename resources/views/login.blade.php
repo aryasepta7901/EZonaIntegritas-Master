@@ -31,7 +31,14 @@
                     <a href="/" class="h1"><b>E-</b>Zona Integritas</a>
                 </div>
                 <div class="card-body">
-
+                    @if (session()->has('loginError'))
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">&times;</button>
+                            <h5><i class="icon fas fa-check"></i> Gagal!</h5>
+                            {{ session('loginError') }}
+                        </div>
+                    @endif
                     <form action="/login" method="post">
                         @csrf
                         <div class="input-group mb-3">
@@ -43,7 +50,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" placeholder="Password" name="password">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>

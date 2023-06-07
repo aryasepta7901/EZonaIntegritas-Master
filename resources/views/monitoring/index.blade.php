@@ -19,6 +19,7 @@
                             <th>Mengisi LKE</th>
                             <th>Diusulkan BPS Provinsi</th>
                             <th>Diusulkan BPS Pusat</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,6 +90,8 @@
                                 @else
                                     <td></td>
                                 @endif
+                                <td> <button class="btn btn-sm btn-danger" data-toggle="modal"
+                                        data-target="#hapus{{ $value->id }}"><i class="fa fa-trash"></i></button></td>
 
 
                             </tr>
@@ -101,4 +104,34 @@
         </div>
         <!-- /.card -->
     </div>
+    {{-- Hapus --}}
+    @foreach ($rekap as $value)
+        <div class="modal fade" id="hapus{{ $value->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Hapus</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger">Apakah Anda Yakin untuk Menghapus Data Rekap:</p>
+                        <b>{{ $value->satker->nama_satker }}
+                            ?</b>
+                    </div>
+                    <form action="/monitoring/{{ $value->id }}" method="POST" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Hapus</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endforeach
 @endsection

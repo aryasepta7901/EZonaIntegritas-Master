@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LHE;
 use App\Models\RekapHasil;
-use App\Models\rekapitulasi;
+use App\Models\Rekapitulasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;

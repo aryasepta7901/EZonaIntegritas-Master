@@ -40,10 +40,8 @@ class GoogleController extends Controller
     // Login Manual
     public function login(Request $request)
     {
-
         $findUser = User::where('email', $request->email)->first();
         if ($findUser && $request->password == 'zi2023') {
-
             Auth::login($findUser);
             return redirect()->intended('dashboard');
         }

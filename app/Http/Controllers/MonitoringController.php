@@ -134,8 +134,9 @@ class MonitoringController extends Controller
      * @param  \App\Models\rekapitulasi  $rekapitulasi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(rekapitulasi $rekapitulasi)
+    public function destroy(rekapitulasi $monitoring)
     {
-        //
+        Rekapitulasi::destroy($monitoring->id);
+        return redirect()->back()->with('success', 'Rekap Berhasil di Hapus');
     }
 }

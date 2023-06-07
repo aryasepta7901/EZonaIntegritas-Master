@@ -8,7 +8,7 @@ use App\Models\Pilar;
 use App\Models\SubPilar;
 use App\Models\Pengawasan;
 use App\Models\Pertanyaan;
-use App\Models\Rekaphasil;
+use App\Models\RekapHasil;
 use App\Models\SubRincian;
 use App\Models\anggota_tpi;
 use App\Models\Rekapitulasi;
