@@ -89,11 +89,11 @@
                                         <hr>
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     @php
                                         $jumlah_satker = $value->pengawasan->count();
                                     @endphp
-                                    {{ $jumlah_satker }}
+                                    <button class="badge badge-info badge-sm"> {{ $jumlah_satker }}</button>
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-success" data-toggle="modal"
