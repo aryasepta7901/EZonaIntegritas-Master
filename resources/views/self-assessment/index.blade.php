@@ -67,14 +67,24 @@
                                             data-target="#surat_pengantar_kabkota{{ $value->id }}"><i
                                                 class="fas fa-file">
                                             </i> Kab/Kota</button>
-                                        {{-- Cek Apakah LHE sudah diupload/belum --}}
-                                        @if ($value->LHE->LHE_1)
-                                            <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
-                                                data-target="#LHE_1{{ $value->id }}"><i class="fas fa-file">
-                                                </i> LHE 1</button>
-                                        @endif
-                                    @else
-                                        -
+                                    @endif
+
+                                    {{-- Surat Pengantar Provinsi --}}
+                                    @if ($value->LHE->surat_pengantar_prov)
+                                        <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
+                                            data-target="#surat_pengantar_prov{{ $value->id }}"><i class="fas fa-file">
+                                            </i> Prov</button>
+                                    @endif
+                                    {{-- Cek Apakah LHE sudah diupload/belum --}}
+                                    @if ($value->LHE->LHE_1)
+                                        <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
+                                            data-target="#LHE_1{{ $value->id }}"><i class="fas fa-file">
+                                            </i> LHE 1</button>
+                                    @endif
+                                    @if ($value->LHE->LHE_2)
+                                        <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
+                                            data-target="#LHE_2{{ $value->id }}"><i class="fas fa-file">
+                                            </i> LHE 2</button>
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -216,6 +226,34 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+        {{-- Surat Pengantar Provinsi --}}
+        <div class="modal fade" id="surat_pengantar_prov{{ $value->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Surat Pengantar Provinsi
+
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item"
+                                src="{{ asset('storage/' . $value->LHE->surat_pengantar_prov) }}"
+                                allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
         {{-- LHE --}}
         <div class="modal fade" id="LHE_1{{ $value->id }}">
             <div class="modal-dialog modal-lg">
@@ -230,6 +268,31 @@
                     <div class="modal-body">
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item" src="{{ asset('storage/' . $value->LHE->LHE_1) }}"
+                                allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <div class="modal fade" id="LHE_2{{ $value->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Laporan Hasil Evaluasi Tahap 2 Tahun {{ $value->tahun }}
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="{{ asset('storage/' . $value->LHE->LHE_2) }}"
                                 allowfullscreen></iframe>
                         </div>
                     </div>

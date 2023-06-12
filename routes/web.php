@@ -21,6 +21,7 @@ use App\Http\Controllers\RincianHasilController;
 use App\Http\Controllers\SelfAssessmentController;
 use App\Http\Controllers\SuratPersetujuanProvController;
 use App\Http\Controllers\Pertanyaan2Controller;
+use App\Http\Controllers\TimelineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,8 @@ Route::get('/dashboard', function () {
     ]);
 })->name('dashboard')->middleware('auth');
 
+// timeline
+Route::resource('/timeline', TimelineController::class)->middleware('auth');
 
 // users
 Route::resource('/users', UserController::class)->middleware('auth');

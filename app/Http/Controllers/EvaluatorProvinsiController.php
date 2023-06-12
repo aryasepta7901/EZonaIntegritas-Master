@@ -75,6 +75,7 @@ class EvaluatorProvinsiController extends Controller
             'rekap' => $evaluasi,
             'pertanyaan' => Pertanyaan::count(),
             'selfAssessment' => SelfAssessment::where('rekapitulasi_id', $evaluasi->id)->count(),
+            'DeskEvaluation' => DeskEvaluation::where('rekapitulasi_id', $evaluasi->id)->count('jawaban_dl'), // total soal yang terjawab oleh TPI
             'rincianPengungkit' => SubRincian::where('rincian_id', 'p')->get(),
             'rincianHasil' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $evaluasi->id)->get(),

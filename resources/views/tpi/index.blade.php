@@ -75,20 +75,28 @@
                                             @endif
                                         </td>
 
+                                        <td class="text-center">
 
-                                        {{-- Cek Apakah Surat Rekomendasi ada --}}
-                                        @if ($item->LHE->surat_pengantar_prov != '')
-                                            <td class="text-center">
-                                                <button class="btn btn-primary btn-sm" data-toggle="modal"
+                                            {{-- Cek Apakah Surat Rekomendasi ada --}}
+                                            @if ($item->LHE->surat_pengantar_prov != '')
+                                                <button class="btn btn-primary btn-sm m-1" data-toggle="modal"
                                                     data-target="#surat_pengantar_prov{{ $item->satker_id }}"><i
                                                         class="fas fa-file">
-                                                    </i></button>
-                                            </td>
-                                        @else
-                                            <td class="text-center">
-                                                <button class="btn btn-info btn-sm">No Dokumen</button>
-                                            </td>
-                                        @endif
+                                                    </i> Prov</button>
+                                            @endif
+                                            @if ($item->LHE->LHE_1)
+                                                <button type="button" class="btn btn-primary btn-sm m-1 "
+                                                    data-toggle="modal" data-target="#LHE_1{{ $item->satker_id }}"><i
+                                                        class="fas fa-file">
+                                                    </i> LHE 1</button>
+                                            @endif
+                                            @if ($item->LHE->LHE_2)
+                                                <button type="button" class="btn btn-primary btn-sm " data-toggle="modal"
+                                                    data-target="#LHE_2{{ $item->satker_id }}"><i class="fas fa-file">
+                                                    </i> LHE 2</button>
+                                            @endif
+                                        </td>
+
                                         <td class="text-center">
 
                                             <a href="/tpi/rekap/{{ $item->id }}" type="button"
@@ -136,6 +144,65 @@
                                                         <div class="embed-responsive embed-responsive-16by9">
                                                             <iframe class="embed-responsive-item"
                                                                 src="{{ asset('storage/' . $item->LHE->surat_pengantar_prov) }}"
+                                                                allowfullscreen></iframe>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        {{-- LHE --}}
+                                        <div class="modal fade" id="LHE_1{{ $item->satker_id }}">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Laporan Hasil Evaluasi Tahap 1 Tahun
+                                                            {{ $item->tahun }}
+                                                        </h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="embed-responsive embed-responsive-16by9">
+                                                            <iframe class="embed-responsive-item"
+                                                                src="{{ asset('storage/' . $item->LHE->LHE_1) }}"
+                                                                allowfullscreen></iframe>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <div class="modal fade" id="LHE_2{{ $item->satker_id }}">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Laporan Hasil Evaluasi Tahap 2 Tahun
+                                                            {{ $item->tahun }}
+                                                        </h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="embed-responsive embed-responsive-16by9">
+                                                            <iframe class="embed-responsive-item"
+                                                                src="{{ asset('storage/' . $item->LHE->LHE_2) }}"
                                                                 allowfullscreen></iframe>
                                                         </div>
                                                     </div>
