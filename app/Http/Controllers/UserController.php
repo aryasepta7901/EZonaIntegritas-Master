@@ -24,6 +24,7 @@ class UserController extends Controller
         return view(
             'Users.index',
             [
+
                 'title' => 'Mengelola Pengguna',
                 'users' => User::latest()->get(),
                 'level' => Level::all(),

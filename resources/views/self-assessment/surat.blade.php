@@ -43,6 +43,7 @@
                     @csrf
                     <input type="hidden" value="{{ $rekap->id }}" name="id">
                     <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
+                    <input type="hidden" name="nilai" value="{{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="upload" name="surat"
                             accept="application/pdf">

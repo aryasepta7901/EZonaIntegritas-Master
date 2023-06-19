@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeskEvaluationController;
 use App\Http\Controllers\EvaluatorProvinsiController;
 use App\Http\Controllers\GoogleController;
@@ -43,12 +44,7 @@ Route::get('/login', function () {
     return view('login');
 })->name('login')->middleware('guest');
 // dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard', [
-        'title' => 'Dashboard'
-    ]);
-})->name('dashboard')->middleware('auth');
-
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 // timeline
 Route::resource('/timeline', TimelineController::class)->middleware('auth');
 

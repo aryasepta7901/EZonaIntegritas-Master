@@ -13,9 +13,12 @@ use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
 use App\Models\LHE;
 use App\Http\Controllers\Controller;
+use App\Mail\Email;
 use App\Models\Pengawasan;
 use App\Models\Rincian;
 use App\Models\Satker;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PengawasanSatker;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -49,42 +52,55 @@ class RekapitulasiController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
-        $request->validate(
-            [
-                'surat' => 'required|mimes:pdf|max:2048',
-
-            ],
-            [
-                'required' => ':attribute  harus di Upload',
-                'mimes' => 'Dokumen hanya boleh format :values,',
-                'max' => 'Dokumen hanya boleh Berukuran 2MB,'
-            ]
-        );
-        // Rekapitulasi
-        if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
-            // Ambil File lamanya
-
-            $rekap = Rekapitulasi::where('id', $request->id)->first();
-            if ($rekap->LHE->surat_pengantar_kabkota) {
-                // jika ada file lama maka hapus
-                Storage::delete($rekap->LHE->surat_pengantar_kabkota);
-            }
-            $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
-            Rekapitulasi::updateOrCreate(
-                ['id' => $request->id],
-                [
-                    'status' => 1,
-                ]
-            );
-            LHE::updateOrCreate(
-                ['id' => $request->id],
-                [
-                    'surat_pengantar_kabkota' =>  $request->file('surat')->storeAs('surat_pengantar/kabkota/' . date('Y') . '/', $customName),
-                ]
-            );
+        $id_kabkota =$request->satker_id;
+        $id_prov =substr($request->satker_id,0,3).'0';
+        $prov =User::where('satker_id',$id_prov)->where('level_id','EP')->get();
+        $kabkota =User::where('satker_id',$id_kabkota)->where('level_id','PT')->first();
+        // Kirim Notif Gmail
+        foreach($prov as $value){
+        $data = [
+            'prov' => $value->satker->nama_satker,
+            'kabkota' => $kabkota->satker->nama_satker,
+            'nilai' => $request->nilai,
+        ];
+        Mail::to($value->email)->send(new Email($data));
         }
+        
+        // $request->validate(
+        //     [
+        //         'surat' => 'required|mimes:pdf|max:2048',
+
+        //     ],
+        //     [
+        //         'required' => ':attribute  harus di Upload',
+        //         'mimes' => 'Dokumen hanya boleh format :values,',
+        //         'max' => 'Dokumen hanya boleh Berukuran 2MB,'
+        //     ]
+        // );
+        // // Rekapitulasi
+        // if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
+        //     // Ambil File lamanya
+
+        //     $rekap = Rekapitulasi::where('id', $request->id)->first();
+        //     if ($rekap->LHE->surat_pengantar_kabkota) {
+        //         // jika ada file lama maka hapus
+        //         Storage::delete($rekap->LHE->surat_pengantar_kabkota);
+        //     }
+        //     $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
+        //     Rekapitulasi::updateOrCreate(
+        //         ['id' => $request->id],
+        //         [
+        //             'status' => 1,
+        //         ]
+        //     );
+        //     LHE::updateOrCreate(
+        //         ['id' => $request->id],
+        //         [
+        //             'surat_pengantar_kabkota' =>  $request->file('surat')->storeAs('surat_pengantar/kabkota/' . date('Y') . '/', $customName),
+        //         ]
+        //     );
+          
+        // }
         return redirect('satker/lke')->with('success', 'Surat Rekomendasi Berhasil di Simpan');
     }
 

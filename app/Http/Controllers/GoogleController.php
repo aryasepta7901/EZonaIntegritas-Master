@@ -21,7 +21,16 @@ class GoogleController extends Controller
             $findUser = User::where('email', $user->getEmail())->first();
             if ($findUser) {
                 Auth::login($findUser);
-                return redirect()->intended('dashboard');
+                if ($findUser->level_id == 'PT') {
+                    $url = 'satker/lke';
+                } elseif ($findUser->level_id == 'EP') {
+                    $url = 'prov/evaluasi';
+                } elseif ($findUser->level_id == 'AT' || $findUser->level_id == 'KT' || $findUser->level_id == 'DL') {
+                    $url = '/tpi/evaluasi';
+                } else {
+                    $url = 'dashboard';
+                }
+                return redirect()->intended($url);
             }
         } catch (\Throwable $th) {
         }
@@ -45,7 +54,17 @@ class GoogleController extends Controller
         if ($findUser && $request->password == 'zi2023') {
 
             Auth::login($findUser);
-            return redirect()->intended('dashboard');
+            if ($findUser->level_id == 'PT') {
+                $url = 'satker/lke';
+            } elseif ($findUser->level_id == 'EP') {
+                $url = 'prov/evaluasi';
+            } elseif ($findUser->level_id == 'AT' || $findUser->level_id == 'KT' || $findUser->level_id == 'DL') {
+                $url = '/tpi/evaluasi';
+            } else {
+                $url = 'dashboard';
+            }
+
+            return redirect()->intended($url);
         }
         // Jika gagal
         return back()->with('loginError', 'Login Failed!');
