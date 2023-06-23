@@ -51,22 +51,6 @@ class RekapitulasiController extends Controller
      */
     public function store(Request $request)
     {
-        $id_kabkota = $request->satker_id;
-        $id_prov = substr($request->satker_id, 0, 3) . '0';
-        $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
-        $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->first();
-        $namakabkota=  $kabkota->satker->nama_satker;
-        // Kirim Notif Gmail
-        foreach ($prov as $value) { //kirim ke beberapa evalProv
-            $data = [
-                'title' => 'Hasil Penilaian Mandiri '. $namakabkota,
-                'prov' => $value->satker->nama_satker,
-                'kabkota' =>$namakabkota,
-                'nilai' => $request->nilai,
-            ];
-            Mail::to($value->email)->send(new SAEmail($data));
-        }
-
         $request->validate(
             [
                 'surat' => 'required|mimes:pdf|max:2048',
@@ -78,6 +62,22 @@ class RekapitulasiController extends Controller
                 'max' => 'Dokumen hanya boleh Berukuran 2MB,'
             ]
         );
+        // Kirim Surat (Gmail)
+        $id_kabkota = $request->satker_id;
+        $id_prov = substr($request->satker_id, 0, 3) . '0';
+        $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
+        $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->first();
+        $namakabkota =  $kabkota->satker->nama_satker;
+        // Kirim Notif Gmail
+        foreach ($prov as $value) { //kirim ke beberapa evalProv
+            $data = [
+                'title' => 'Hasil Penilaian Mandiri ' . $namakabkota,
+                'prov' => $value->satker->nama_satker,
+                'kabkota' => $namakabkota,
+                'nilai' => $request->nilai,
+            ];
+            Mail::to($value->email)->send(new SAEmail($data));
+        }
         // Rekapitulasi
         if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
             // Ambil File lamanya

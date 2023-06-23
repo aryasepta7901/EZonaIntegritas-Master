@@ -326,6 +326,8 @@
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
+                        <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
+                        <input type="hidden" name="nilai" value="{{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}">
                         <input type="hidden" name="status" value="1">
                         <p> <b> Note:</b> <br></p>
                         <p>Harap Periksa Kembali Isian anda , apakah sudah lengkap atau tidak , jika LKE

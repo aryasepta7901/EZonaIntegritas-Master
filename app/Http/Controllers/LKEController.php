@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SAEmail;
 use App\Models\DeskEvaluation;
 use App\Models\Persyaratan;
 use App\Models\Pertanyaan;
@@ -14,7 +15,9 @@ use App\Models\SubRincian;
 use App\Models\RekapHasil;
 use App\Models\LHE;
 use App\Models\Pengawasan;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class LKEController extends Controller
 {
@@ -137,7 +140,24 @@ class LKEController extends Controller
     public function update(Request $request, Rekapitulasi $rekapitulasi)
     {
         // Kirim LKE
+        // Function ini digunakan oleh Provinsi dan kab/kota(khusus kab/kota hanya ketika tindak lanjut dari provinsi) 
         $id = $request->id;
+        $id_kabkota = $request->satker_id;
+        $id_prov = substr($request->satker_id, 0, 3) . '0';
+        $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
+        $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->first();
+        $namakabkota=  $kabkota->satker->nama_satker;
+        // Kirim Notif Gmail
+        foreach ($prov as $value) { //kirim ke beberapa evalProv
+            $data = [
+                'title' => 'Hasil Penilaian Mandiri '. $namakabkota,
+                'prov' => $value->satker->nama_satker,
+                'kabkota' =>$namakabkota,
+                'nilai' => $request->nilai,
+            ];
+            Mail::to($value->email)->send(new SAEmail($data));
+        }
+
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
 
         return redirect('/satker/lke')->with('success', 'LKE Berhasil Di Kirim');

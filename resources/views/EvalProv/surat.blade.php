@@ -1,7 +1,6 @@
 @extends('layouts.backEnd.main')
 
 @section('content')
-
     @if ($rekap->count() != 0)
         <div class="col-lg-4">
             <div class="card card-primary card-outline">
@@ -70,6 +69,7 @@
                         @csrf
                         @foreach ($rekap as $value)
                             <input type="hidden" value="{{ $value->id }}" name="id[]">
+                            <input type="hidden" value="{{ $value->satker_id }}" name="satker[]">
                         @endforeach
                         <input type="hidden" name="satker_id" value="{{ auth()->user()->satker_id }}">
                         <div class="custom-file">

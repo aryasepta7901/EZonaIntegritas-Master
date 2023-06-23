@@ -151,7 +151,7 @@ class EvaluatorProvinsiController extends Controller
 
         $id = $request->id;
 
-        // Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
+        Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
         if ($request->pengawasan_id) {
             Pengawasan::where('id', $request->pengawasan_id)->update(['status' => $request->statusPengawasan]);
         }
@@ -159,12 +159,16 @@ class EvaluatorProvinsiController extends Controller
             // Jika dilakukan TPI
             return redirect('/tpi/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
         } else {
-            $id_kabkota = $request->satker_id;
-            $id_prov = substr($request->satker_id, 0, 3) . '0';
-            $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
-            $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->get();
-            $namakabkota =  $kabkota->first()->satker->nama_satker;
-            $namaProv = $prov->first()->satker->nama_satker;
+
+            if ($request->status == 2 || $request->status == 3) {
+                //Jika LKE ditolak atau revisi
+                $id_kabkota = $request->satker_id;
+                $id_prov = substr($request->satker_id, 0, 3) . '0';
+                $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
+                $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->get();
+                $namakabkota =  $kabkota->first()->satker->nama_satker;
+                $namaProv = $prov->first()->satker->nama_satker;
+            }
             // Jika dilakukan provinsi 
             if ($request->status == 4) {
                 // Jika LKE disetujui
@@ -183,11 +187,11 @@ class EvaluatorProvinsiController extends Controller
                     Mail::to($value->email)->send(new EPEmail($data));
                 }
                 $pesan = 'LKE Berhasil di Revisi, LKE akan dikembalikan kepada Satuan Kerja';
-            } else {
+            } elseif ($request->status == 3) {
                 // Jika Tolak LKE
                 foreach ($kabkota as $value) { //kirim ke beberapa evalProv
                     $data = [
-                        'title' => 'Penilaian Pendahuluan  ' . $namaProv,
+                        'title' => 'Penilaian Pendahuluan  :' . $namaProv,
                         'status' => 'Tidak disetujui',
                         'pesan' => 'Satker Akan dilakukan Pembinaan',
                         'prov' => $namaProv,
