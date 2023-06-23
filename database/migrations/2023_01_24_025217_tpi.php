@@ -14,7 +14,7 @@ class Tpi extends Migration
     public function up()
     {
         Schema::create('TPI', function (Blueprint $table) {
-            $table->string('id', 12)->primary(); //nama.tahun.wilayah
+            $table->char('id', 12)->primary(); //nama.tahun.wilayah
             $table->year('tahun');
             $table->string('nama');
             $table->bigInteger('dalnis'); //15

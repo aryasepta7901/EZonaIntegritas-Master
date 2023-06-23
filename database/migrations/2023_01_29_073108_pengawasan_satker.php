@@ -14,8 +14,8 @@ class PengawasanSatker extends Migration
     public function up()
     {
         Schema::create('pengawasan_satker', function (Blueprint $table) {
-            $table->id()->unique(); //anggota_id.satker_id
-            $table->string('satker_id', 4);
+            $table->id(); //anggota_id.satker_id
+            $table->integer('satker_id'); //4
             $table->string('tpi_id', 12);
             $table->bigInteger('anggota_id'); //15
             $table->char('tahap', 1);
@@ -23,6 +23,8 @@ class PengawasanSatker extends Migration
             $table->timestamps();
 
             $table->foreign('tpi_id')->references('id')->on('TPI')->onDelete('cascade');
+            $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
+
         });
     }
 

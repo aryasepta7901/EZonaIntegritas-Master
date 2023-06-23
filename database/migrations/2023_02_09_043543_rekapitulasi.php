@@ -19,9 +19,11 @@ class Rekapitulasi extends Migration
             $table->year('tahun');
             $table->char('predikat', 4);
             $table->char('status', 1)->default(0);
-            $table->integer('satker_id', 4);
+            $table->integer('satker_id'); //4
 
             $table->timestamps();
+            $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
+
         });
     }
 

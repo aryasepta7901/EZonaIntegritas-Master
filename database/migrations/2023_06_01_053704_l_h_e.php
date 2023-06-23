@@ -14,13 +14,14 @@ class LHE extends Migration
     public function up()
     {
         Schema::create('LHE', function (Blueprint $table) {
-            $table->char('id', 12)->primary(); // one to one rekapitulasi_id
+            $table->id();
+            $table->char('rekapitulasi_id', 12); // one to one rekapitulasi_id
             $table->text('surat_pengantar_kabkota');
             $table->text('surat_pengantar_prov');
             $table->text('LHE_1'); //tahap 1
             $table->text('LHE_2'); //tahap 2
             $table->timestamps();
-            $table->foreign('id')->references('id')->on('rekapitulasi')->onDelete('cascade');
+            $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
         });
     }
 

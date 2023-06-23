@@ -23,6 +23,7 @@ class InputField extends Migration
             $table->char('selfassessment_id', 15);
             $table->timestamps();
             $table->foreign('selfassessment_id')->references('id')->on('self_assessment')->onDelete('cascade');
+            $table->foreign('opsi_id')->references('id')->on('opsi')->onDelete('cascade');
         });
     }
 

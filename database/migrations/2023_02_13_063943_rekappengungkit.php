@@ -23,6 +23,7 @@ class RekapPengungkit extends Migration
             $table->char('pilar_id', 3);
             $table->timestamps();
             $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
+            $table->foreign('pilar_id')->references('id')->on('pilar')->onDelete('cascade');
         });
     }
 

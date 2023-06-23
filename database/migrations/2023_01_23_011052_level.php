@@ -14,7 +14,7 @@ class Level extends Migration
     public function up()
     {
         Schema::create('level', function (Blueprint $table) {
-            $table->char('id', 2);
+            $table->char('id', 2)->primary();
             $table->string('name');
         });
     }

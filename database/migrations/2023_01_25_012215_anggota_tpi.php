@@ -15,8 +15,8 @@ class AnggotaTpi extends Migration
     {
         Schema::create('anggota_tpi', function (Blueprint $table) {
 
-            $table->string('id', 19)->primary(); //tpi_id.tahun
-            $table->string('tpi_id', 12);
+            $table->bigInteger('id')->primary(); //tpi_id.tahun
+            $table->char('tpi_id', 12);
             $table->bigInteger('anggota_id');
             $table->timestamps();
 

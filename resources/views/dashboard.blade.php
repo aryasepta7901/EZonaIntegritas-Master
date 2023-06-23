@@ -21,7 +21,7 @@
                                 <p>Jumlah User</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-bag"></i>
+                                <i class="fas fa-users"></i>
                             </div>
                             <a href="/users" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
@@ -36,7 +36,7 @@
                                 <p>Jumlah TPI</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
+                                <i class="fas fa-globe"></i>
                             </div>
                             <a href="/tim" class="small-box-footer">More Info<i
                                     class="fas fa-arrow-circle-right"></i></a>
@@ -52,7 +52,7 @@
                                 <p>Jumlah Satker yang memenuhi</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-person-add"></i>
+                                <i class="fas fa-list"></i>
                             </div>
                             <a href="/persyaratan" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
@@ -67,7 +67,7 @@
                                 <p>Jumlah Pertanyaan</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
+                                <i class=" fas fa-question"></i>
                             </div>
                             <a href="/pertanyaan" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
@@ -77,14 +77,14 @@
                     <!-- ./col -->
                     <div class="col-lg-4 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-danger">
+                        <div class="small-box bg-teal">
                             <div class="inner">
                                 <h3>{{ $rincianHasil }}</h3>
 
                                 <p>Jumlah Upload Rincian Hasil</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
+                                <i class="fas fa-file"></i>
                             </div>
                             <a href="/hasil" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
@@ -94,14 +94,14 @@
                     <!-- ./col -->
                     <div class="col-lg-4 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-danger">
+                        <div class="small-box bg-fuchsia">
                             <div class="inner">
                                 <h3>{{ $pengajuan }}</h3>
 
                                 <p>Jumlah Pengajuan</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
+                                <i class="fas fa-list"></i>
                             </div>
                             <a href="/monitoring" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>

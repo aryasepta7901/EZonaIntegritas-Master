@@ -14,7 +14,7 @@ class Satker extends Migration
     public function up()
     {
         Schema::create('satker', function (Blueprint $table) {
-            $table->id()->unique();
+            $table->integer('id')->primary();
             $table->string('nama_satker');
             $table->char('wilayah', 1);
             $table->timestamps();

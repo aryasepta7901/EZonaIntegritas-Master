@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class Email extends Mailable
+class SAEmail extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
@@ -30,6 +30,8 @@ class Email extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.email');
+        
+        return $this->subject('Penilaian Pendahuluan Zona Integritas')->markdown('emails.SAEmail');
+        
     }
 }
