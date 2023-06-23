@@ -5,7 +5,7 @@ Kepada Tim Evaluator {{ $data['prov'] }}, diberitahukan bahwa Satker {{ $data['k
 dengan Nilai Self Assessment <b>{{ $data['nilai'] }}</b>,
 Silahkan Lakukan Penilaian Pendahuluan terhadap Satker Tersebut.
 
-@component('mail::button', ['url' => env('APP_URL').'/prov/evaluasi'])
+@component('mail::button', ['url' => env('APP_URL').'prov/evaluasi'])
 Penilaian Pendahuluan
 @endcomponent
 

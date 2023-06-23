@@ -65,7 +65,7 @@ class LKEController extends Controller
         Rekapitulasi::create($data);
 
         $dataLHE = [
-            'id' => $data['id'],
+            'rekapitulasi_id' => $data['id'],
         ];
         LHE::create($dataLHE);
 

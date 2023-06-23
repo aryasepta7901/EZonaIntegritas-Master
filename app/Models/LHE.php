@@ -12,7 +12,7 @@ class LHE extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'id',
+        'rekapitulasi_id',
         'surat_pengantar_kabkota',
         'surat_pengantar_prov',
         'LHE_1',
@@ -21,6 +21,6 @@ class LHE extends Model
     ];
     public function Rekapitulasi()
     {
-        return $this->belongsTo(Rekapitulasi::class, 'id', 'id');
+        return $this->belongsTo(Rekapitulasi::class, 'rekapitulasi_id');
     }
 }

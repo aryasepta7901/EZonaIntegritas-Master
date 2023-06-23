@@ -14,8 +14,11 @@ use Illuminate\Http\Request;
 use App\Models\SelfAssessment;
 use App\Models\RekapPengungkit;
 use App\Http\Controllers\Controller;
+use App\Mail\EPEmail;
 use App\Models\DeskEvaluation;
 use App\Models\Rincian;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class EvaluatorProvinsiController extends Controller
 {
@@ -148,7 +151,7 @@ class EvaluatorProvinsiController extends Controller
 
         $id = $request->id;
 
-        Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
+        // Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
         if ($request->pengawasan_id) {
             Pengawasan::where('id', $request->pengawasan_id)->update(['status' => $request->statusPengawasan]);
         }
@@ -156,8 +159,45 @@ class EvaluatorProvinsiController extends Controller
             // Jika dilakukan TPI
             return redirect('/tpi/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
         } else {
+            $id_kabkota = $request->satker_id;
+            $id_prov = substr($request->satker_id, 0, 3) . '0';
+            $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
+            $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->get();
+            $namakabkota =  $kabkota->first()->satker->nama_satker;
+            $namaProv = $prov->first()->satker->nama_satker;
             // Jika dilakukan provinsi 
-            return redirect('/prov/evaluasi')->with('success', 'LKE Berhasil Di Setujui, Silahkan Cetak Surat Pengantar');
+            if ($request->status == 4) {
+                // Jika LKE disetujui
+                $pesan = 'LKE Berhasil Di Setujui, Silahkan Cetak Surat Pengantar';
+            } elseif ($request->status == 2) {
+                // Jika Revisi LKE
+                // Kirim Notif Gmail
+                foreach ($kabkota as $value) { //kirim ke beberapa pic satker
+                    $data = [
+                        'title' => 'Penilaian Pendahuluan:' . $namaProv,
+                        'status' => 'Perlu Perbaikan',
+                        'pesan' => 'Silahkan Lakukan Perbaikan Terhadap LKE tersebut',
+                        'prov' => $namaProv,
+                        'kabkota' => $namakabkota,
+                    ];
+                    Mail::to($value->email)->send(new EPEmail($data));
+                }
+                $pesan = 'LKE Berhasil di Revisi, LKE akan dikembalikan kepada Satuan Kerja';
+            } else {
+                // Jika Tolak LKE
+                foreach ($kabkota as $value) { //kirim ke beberapa evalProv
+                    $data = [
+                        'title' => 'Penilaian Pendahuluan  ' . $namaProv,
+                        'status' => 'Tidak disetujui',
+                        'pesan' => 'Satker Akan dilakukan Pembinaan',
+                        'prov' => $namaProv,
+                        'kabkota' => $namakabkota,
+                    ];
+                    Mail::to($value->email)->send(new EPEmail($data));
+                }
+                $pesan = 'LKE Ditolak';
+            }
+            return redirect('/prov/evaluasi')->with('success', $pesan);
         }
     }
 

@@ -37,6 +37,6 @@ class Rekapitulasi extends Model
     }
     public function LHE()
     {
-        return $this->belongsTo(LHE::class, 'id', 'id');
+        return $this->hasOne(LHE::class, 'rekapitulasi_id');
     }
 }

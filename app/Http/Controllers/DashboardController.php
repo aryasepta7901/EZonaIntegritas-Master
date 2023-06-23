@@ -15,6 +15,8 @@ class DashboardController extends Controller
     //
     public function index()
     {
+        $this->authorize('admin');
+
         return view('dashboard', [
             'title' => 'Dashboard',
             'user' => User::count(),

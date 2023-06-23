@@ -428,6 +428,7 @@
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
+                        <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                         <input type="hidden" name="status" value="2">
                         <p> <b> Note:</b> <br></p>
                         <p>LKE akan dikembalikan ke {{ $rekap->satker->nama_satker }} untuk diperbaiki kembali</p>
@@ -460,6 +461,7 @@
                     <div class="modal-body">
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
                         <input type="hidden" name="status" value="3">
+                        <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                         <p> <b> Note:</b> <br></p>
                         <p>LKE : {{ $rekap->satker->nama_satker }} akan ditolak dan dilakukan pembinaan</p>
                     </div>

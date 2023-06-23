@@ -1,0 +1,12 @@
+migrate 
+
+php artisan migrate: ->untuk melihat fitur
+
+-pada studi kasus ini, silahkan komen foreign di satker, agar tidak terjadi error. jika sudah semua ke push, maka refresh untuk table user saja
+
+
+-integer tidak bisa dikasi panjang, hanya bisa dikategorikan based on type
+-jika terjadi error pada suatu tabel, maka harus di drop dulu table tersebut
+
+for refresh spesific file
+php artisan migrate:refresh --path=/database/migrations/2014_10_12_000000_create_users_table.php
