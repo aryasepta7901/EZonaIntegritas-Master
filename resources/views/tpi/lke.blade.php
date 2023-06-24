@@ -68,7 +68,7 @@
                 @if ($TotprogressDesk == $TotprogressSelf)
                     <div class="col-lg-6 mb-3 d-flex justify-content-end">
                         <button class="btn btn-primary m-2" data-toggle="modal" data-target="#at"><i class="fa fa-save">
-                            </i> Simpan</button>
+                            </i> Kirim</button>
                     </div>
                 @else
                     <div class="col-lg-6 mb-3 d-flex justify-content-end">
@@ -96,7 +96,8 @@
                                 @method('put')
                                 @csrf
                                 <div class="modal-body">
-                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
+                                    <input type="hidden" name="nilai_at" value="{{ $nilai_at }}">
+                                    <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                                     <input type="hidden" name="status" value="1">
                                     <p> <b> Note:</b> <br></p>
                                     <p>LKE akan dilanjutkan kepada <b>Ketua Tim </b></p>
@@ -126,7 +127,7 @@
                     @if ($TotprogressDesk == $TotprogressSelf)
                         <div class="col-lg-6 mb-3 d-flex justify-content-end">
                             <button class="btn btn-primary m-2" data-toggle="modal" data-target="#kt"><i class="fa fa-save">
-                                </i> Simpan</button>
+                                </i> Kirim</button>
                         </div>
                     @else
                         <div class="col-lg-12 mb-3 d-flex justify-content-end">
@@ -154,7 +155,8 @@
                                 @method('put')
                                 @csrf
                                 <div class="modal-body">
-                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
+                                    <input type="hidden" name="nilai_at" value="{{ $nilai_at }}">
+                                    <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                                     <input type="hidden" name="status" value="2">
                                     <p> <b> Note:</b> <br></p>
                                     <p>LKE akan dilanjutkan kepada <b>Pengendali Teknis </b></p>
@@ -623,14 +625,15 @@
                             </thead>
                             <tbody>
                                 @foreach ($sr->pilar as $p)
-                                    <tr data-toggle="collapse" data-target="#accordion{{ $p->id }}"
+                                    {{-- <tr data-toggle="collapse" data-target="#accordion{{ $p->id }}"
                                         style="background-color: rgb(170, 255, 0)">
                                         <td colspan="2">{{ $p->pilar }}<i class="fa-solid fa-caret-down"></i></td>
-                                    </tr>
+                                    </tr> --}}
 
                                     @foreach ($p->subPilar as $sp)
                                         @foreach ($sp->pertanyaan as $value)
-                                            <tr class="collapse" id="accordion{{ substr($value->id, 0, 3) }}">
+                                            {{-- <tr class="collapse" id="accordion{{ substr($value->id, 0, 3) }}"> --}}
+                                            <tr>
                                                 @php
                                                     $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
                                                 @endphp

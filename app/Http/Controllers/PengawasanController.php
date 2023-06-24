@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DLEmailDL;
 use App\Models\Pengawasan;
+use App\Models\Satker;
+use App\Models\TPI;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PengawasanController extends Controller
 {
@@ -99,14 +104,43 @@ class PengawasanController extends Controller
      */
     public function update(Request $request, Pengawasan $pengawasan)
     {
+        // Kirim Notif Gmail
+        $id_satker = $request->satker_id;
+        $tpi_id = $pengawasan->tpi_id;
+        $tpi = TPI::where('id', $tpi_id)->first();
 
-        Pengawasan::where('id', $request->pengawasan_id)->update(['status' => $request->status]);
-        if ($request->status == 1)
+        $dalnis = $tpi->dalnis;
+        $nama_satker = Satker::where('id', $id_satker)->first('nama_satker')->nama_satker;
+        $data = [
+            'title' => 'Hasil Penilaian Evaluasi:' . $nama_satker . '[Tahap ' . $pengawasan->tahap .']',
+            'nama_satker' => $nama_satker,
+        ];
+        // Untuk kirim LKE ke ketua tim dan dalnis
+        Pengawasan::where('id', $pengawasan->id)->update(['status' => $request->status]);
+        if ($request->status == 1) {
+            // informasi ketua_tim
+            $ketua = $tpi->ketua_tim;
+            $user = User::where('id', $ketua)->first();
+            $email = $user->email;
+            $name = $user->name;
+            $data['name'] = $name;
+            $data['nilai'] = $request->nilai_at;
+            $data['status'] = 'Anggota Tim';
             $kata = 'LKE Berhasil di Kirim ke Ketua Tim';
-        elseif ($request->status == 2)
+        } elseif ($request->status == 2) {
+            // informasi dalnis
+            $dalnis = $tpi->dalnis;
+            $user = User::where('id', $dalnis)->first();
+            $email = $user->email;
+            $name = $user->name;
+            $data['name'] = $name;
+            $data['nilai'] = $request->nilai_dalnis;
+            $data['status'] = 'Ketua Tim';
             $kata = ' LKE Berhasil di Kirim ke Pengendali Teknis';
-        elseif ($request->status == 0)
+        } elseif ($request->status == 0) {
             $kata = ' LKE dikembalikan ke Anggota Tim';
+        }
+        Mail::to($email)->send(new DLEmailDL($data));
 
 
         return redirect('/tpi/evaluasi')->with('success', $kata);

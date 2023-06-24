@@ -30,8 +30,11 @@ class DeskEvaluation extends Migration
             $table->text('catatan_dl')->nullable();
             $table->double('nilai_dl', 6, 2)->nullable();
             $table->bigInteger('pengawasan_id');
-            $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
+            $table->integer('updated_kt')->default(0);
+            $table->integer('updated_dl')->default(0);
             $table->timestamps();
+
+            $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
         });
     }
 

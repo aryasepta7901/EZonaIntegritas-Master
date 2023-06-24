@@ -1,7 +1,8 @@
 @component('mail::message')
+# Yth Tim Penilai Internal Inspektorat Utama BPS RI
 
-
-Kepada Tim Penilai Internal, diberitahukan bahwa Satker berikut telah mengirimkan LKE
+Satuan Kerja {{ $data['nama_prov'] }} telah melakukan penilaian pendahuluan. 
+Berikut nama satuan kerja yang diajukan
 @component('mail::table')
 {{-- <table>
     <thead>
@@ -19,10 +20,15 @@ Kepada Tim Penilai Internal, diberitahukan bahwa Satker berikut telah mengirimka
         @endforeach
     </tbody>
 </table> --}}
-| Satker        | Predikat       
-| :-------------: |:-------------:|
+| Satker        | Predikat    | Nilai   
+| :-------------: |:-------------:|:-------------:|
 @foreach ($data['rekapitulasi'] as $value)
-| {{ $value->satker->nama_satker }}     | {{ $value->predikat }}      |
+@foreach ($value->RekapPengungkit as $item)
+@php
+    $nilai_sa = $item->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
+@endphp
+@endforeach
+| {{ $value->satker->nama_satker }}     | {{ $value->predikat }}      | {{ round($nilai_sa, 2) }}
 @endforeach
 
 

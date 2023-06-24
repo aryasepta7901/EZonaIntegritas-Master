@@ -86,36 +86,36 @@ class SuratPersetujuanProvController extends Controller
         $tpi = array_unique($tpi_array);
         foreach ($tpi as $item) {
             // ambil email
-            $user[] = User::where('id', $item)->first('email');
+            $user[] = User::where('id', $item)->first('email')->email;
         }
 
         // Kirim Notif Gmail
-        foreach ($user as $value) { //kirim ke beberapa evalProv
-            $data = [
-                'title' => 'Hasil Penilaian Pendahuluan ' . $nama_prov,
-                'rekapitulasi' => $rekapitulasi,
-            ];
-            Mail::to($value->email)->send(new EPEmailDL($data));
+        $data = [
+            'title' => 'Hasil Penilaian Pendahuluan ' . $nama_prov,
+            'rekapitulasi' => $rekapitulasi,
+            'nama_prov' => $nama_prov,
+        ];
+        Mail::to($user)->send(new EPEmailDL($data));
+
+        if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
+            // Ambil File lamanya
+            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first('id');
+
+            if ($rekap->LHE->surat_pengantar_prov) {
+                // jika ada file lama maka hapus
+                Storage::delete($rekap->LHE->surat_pengantar_prov);
+            }
+            $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
+
+            foreach ($request->id as $key => $id) {
+                LHE::updateOrCreate(
+                    ['rekapitulasi_id' => $id],
+                    [
+                        'surat_pengantar_prov' =>  $request->file('surat')->storeAs('surat_pengantar/prov/' . date('Y') . '/', $customName),
+                    ]
+                );
+            }
         }
-        // if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
-        //     // Ambil File lamanya
-        //     $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first('id');
-
-        //     if ($rekap->LHE->surat_pengantar_prov) {
-        //         // jika ada file lama maka hapus
-        //         Storage::delete($rekap->LHE->surat_pengantar_prov);
-        //     }
-        //     $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
-
-        //     foreach ($request->id as $key => $id) {
-        //         LHE::updateOrCreate(
-        //             ['id' => $id],
-        //             [
-        //                 'surat_pengantar_prov' =>  $request->file('surat')->storeAs('surat_pengantar/prov/' . date('Y') . '/', $customName),
-        //             ]
-        //         );
-        //     }
-        // }
         return redirect()->back()->with('success', 'Surat Pengantar Berhasil di Simpan');
     }
 

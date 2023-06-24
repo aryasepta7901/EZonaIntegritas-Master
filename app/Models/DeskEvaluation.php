@@ -25,6 +25,8 @@ class DeskEvaluation extends Model
         'nilai_kt',
         'nilai_dl',
         'pengawasan_id',
+        'updated_kt',
+        'updated_dl',
 
     ];
     public function SelfAssessment()

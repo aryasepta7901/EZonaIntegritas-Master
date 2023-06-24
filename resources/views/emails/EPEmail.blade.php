@@ -1,6 +1,7 @@
 @component('mail::message')
+# Yth PIC Satuan Kerja {{ $data['kabkota'] }}
 
-Kepada PIC Satker {{ $data['kabkota'] }}, diberitahukan bahwa  {{ $data['prov'] }} telah melakukan penilaian pendahuluan 
+Tim Evaluator   {{ $data['prov'] }} telah melakukan penilaian pendahuluan 
 dan memutuskan bahwa LKE <b>{{ $data['status'] }}</b>
 ,{{ $data['pesan'] }}
 @component('mail::button', ['url' => env('APP_URL').'satker/lke'])

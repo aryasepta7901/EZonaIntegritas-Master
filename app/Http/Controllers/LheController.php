@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\LHEImport;
+use App\Mail\DLEmailPT;
 use App\Models\Pengawasan;
 use App\Models\Pilar;
 use App\Models\Rekapitulasi;
@@ -16,6 +17,7 @@ use App\Models\LHE;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\TextUI\XmlConfiguration\Php;
 
@@ -47,9 +49,19 @@ class LheController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-
-
+    {  // Kirim Notif Gmail
+        $id_satker = $request->satker_id;
+        $satker = Satker::where('id', $id_satker)->first();
+        $id_satker = $satker->id;
+        $user = User::where('satker_id', $id_satker)->get();
+        foreach ($user as $item) {
+            $email[] = $item->email;
+        }
+        $nama_satker = $satker->nama_satker;
+        $data = [
+            'title' => 'Hasil Penilaian Evaluasi:' . $nama_satker . '[Tahap ' . $request->tahap_pengawasan . ']',
+            'nama_satker' => $nama_satker,
+        ];
 
         if ($request->submit_1) {  //lhe_1
             $request->validate(
@@ -63,6 +75,10 @@ class LheController extends Controller
                     'max' => 'Dokumen hanya boleh Berukuran maksimal 2MB'
                 ]
             );
+            // Kirim Gmail
+            $data['status'] = 'Perlu Perbaikan';
+            $data['pesan'] = 'silahkan lakukan perbaikan terhadap LKE tersebut';
+            Mail::to($email)->send(new DLEmailPT($data));
             // Ambil File lamanya
             $rekap = Rekapitulasi::where('id', $request->id)->first();
             if ($rekap->LHE->LHE_1) {
@@ -84,11 +100,12 @@ class LheController extends Controller
                 ]
             );
             LHE::updateOrCreate(
-                ['id' => $request->id],
+                ['rekapitulasi_id' => $request->id],
                 [
                     'LHE_1' =>  $request->file('lhe')->storeAs('LHE/' . date('Y') . '/' . 'Tahap1/', $customName),
                 ]
             );
+            return redirect('/tpi/evaluasi')->with('success', 'LHE Berhasil di Simpan');
         }
         if ($request->submit_2) {  //lhe_1
             // Ambil File lamanya
@@ -106,6 +123,17 @@ class LheController extends Controller
 
                 ]
             );
+            // Kirim Gmail
+            if ($request->persetujuan == '6') {
+                // Jika disetujui
+                $data['status'] = 'Disetujui';
+                $data['pesan'] = 'satuan kerja akan dipersiapkan untuk pengajuan kepada Kementrian PanRB';
+            } else {
+                // Jika Ditolak
+                $data['status'] = 'Ditolak';
+                $data['pesan'] = 'satuan kerja akan dilakukan pembinaan';
+            }
+            Mail::to($email)->send(new DLEmailPT($data));
             $rekap = Rekapitulasi::where('id', $request->id)->first();
             if ($rekap->LHE->LHE_2) {
                 // jika ada file lama maka hapus
@@ -119,13 +147,13 @@ class LheController extends Controller
                 ]
             );
             LHE::updateOrCreate(
-                ['id' => $request->id],
+                ['rekapitulasi_id' => $request->id],
                 [
                     'LHE_2' =>  $request->file('lhe')->storeAs('LHE/' . date('Y') . '/' . 'Tahap2/', $customName),
                 ]
             );
+            return redirect()->back()->with('success', 'LHE Berhasil di Simpan');
         }
-        return redirect()->back()->with('success', 'LHE Berhasil di Simpan');
     }
     public function cetak(Request $request)
     {
@@ -300,7 +328,6 @@ class LheController extends Controller
      */
     public function edit(Rekapitulasi $rekapitulasi)
     {
-        //
     }
 
     /**

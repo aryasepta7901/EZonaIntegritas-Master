@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PTEmailDL;
 use App\Mail\SAEmail;
 use App\Models\DeskEvaluation;
 use App\Models\Persyaratan;
@@ -15,6 +16,8 @@ use App\Models\SubRincian;
 use App\Models\RekapHasil;
 use App\Models\LHE;
 use App\Models\Pengawasan;
+use App\Models\Satker;
+use App\Models\TPI;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -137,28 +140,54 @@ class LKEController extends Controller
      * @param  \App\Models\Rekapitulasi  $rekapitulasi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rekapitulasi $rekapitulasi)
+    public function update(Request $request, Rekapitulasi $lke)
     {
         // Kirim LKE
-        // Function ini digunakan oleh Provinsi dan kab/kota(khusus kab/kota hanya ketika tindak lanjut dari provinsi) 
-        $id = $request->id;
-        $id_kabkota = $request->satker_id;
-        $id_prov = substr($request->satker_id, 0, 3) . '0';
-        $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
-        $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->first();
-        $namakabkota=  $kabkota->satker->nama_satker;
-        // Kirim Notif Gmail
-        foreach ($prov as $value) { //kirim ke beberapa evalProv
+        // Function ini digunakan oleh Provinsi dan kab/kota(khusus kab/kota hanya ketika tindak lanjut dari TPI) 
+        if ($lke->status == '0' || $lke->status == 2) {
+            // Provinsi
+            $id = $request->id;
+            $id_kabkota = $request->satker_id;
+            $id_prov = substr($request->satker_id, 0, 3) . '0';
+            $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
+            $kabkota = User::where('satker_id', $id_kabkota)->where('level_id', 'PT')->first();
+            $namakabkota =  $kabkota->satker->nama_satker;
+            // Kirim Notif Gmail
+            foreach ($prov as $value) { //kirim ke beberapa evalProv
+                $data = [
+                    'title' => 'Hasil Penilaian Mandiri ' . $namakabkota,
+                    'prov' => $value->satker->nama_satker,
+                    'kabkota' => $namakabkota,
+                    'nilai' => $request->nilai,
+                ];
+                Mail::to($value->email)->send(new SAEmail($data));
+            }
+        }
+        if ($lke->status == '5') {
+            // Satker pada tahap 5(tindak lanjut dari TPI)
+            $id_satker = $lke->satker_id;
+            $namaSatker = Satker::where('id', $id_satker)->first()->nama_satker;
+            $pengawasan = Pengawasan::where('satker_id', $id_satker)->first();
+            $anggota = $pengawasan->anggota_id;
+            $id_tpi = $pengawasan->tpi_id;
+
+            $tpi = TPI::where('id', $id_tpi)->first();
+            $dalnis = $tpi->dalnis;
+            $ketua = $tpi->ketua_tim;
+            $tpi_array = [$dalnis, $ketua, $anggota];
+
+            foreach ($tpi_array as $tpi) {
+                $email[] = User::where('id', $tpi)->first()->email;
+            }
             $data = [
-                'title' => 'Hasil Penilaian Mandiri '. $namakabkota,
-                'prov' => $value->satker->nama_satker,
-                'kabkota' =>$namakabkota,
-                'nilai' => $request->nilai,
+                'title' => 'Hasil Revisi Penilaian Mandiri ' . $namaSatker,
+                'namaSatker' => $namaSatker,
+                'nilai' =>$request->nilai,
             ];
-            Mail::to($value->email)->send(new SAEmail($data));
+            Mail::to($email)->send(new PTEmailDL($data));
         }
 
-        Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
+        Rekapitulasi::where('id', $lke->id)->update(['status' => $request->status]);
 
         return redirect('/satker/lke')->with('success', 'LKE Berhasil Di Kirim');
     }

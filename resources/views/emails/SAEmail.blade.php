@@ -1,9 +1,10 @@
 @component('mail::message')
+# Yth  Tim Evaluator {{ $data['prov'] }}
 
 
-Kepada Tim Evaluator {{ $data['prov'] }}, diberitahukan bahwa Satker {{ $data['kabkota'] }} telah mengirimkan LKE
-dengan Nilai Self Assessment <b>{{ $data['nilai'] }}</b>,
-Silahkan Lakukan Penilaian Pendahuluan terhadap Satker Tersebut.
+PIC Satuan kerja {{ $data['kabkota'] }} telah mengirimkan LKE
+dengan Nilai Self-Assessment <b>{{ $data['nilai'] }}</b>,
+silahkan lakukan penilaian pendahuluan terhadap LKE yang telah dikirimkan.
 
 @component('mail::button', ['url' => env('APP_URL').'prov/evaluasi'])
 Penilaian Pendahuluan

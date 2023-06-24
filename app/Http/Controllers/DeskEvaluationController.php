@@ -268,7 +268,7 @@ class DeskEvaluationController extends Controller
         return view(
             'monitoring.lhe',
             [
-                'master' => 'Rekapitulasi ',
+                'master' => 'Desk-Evaluation ',
                 'link' => '/tpi/evaluasi',
                 'title' => 'Rekap Nilai ',
                 'rekap' => $rekapitulasi,

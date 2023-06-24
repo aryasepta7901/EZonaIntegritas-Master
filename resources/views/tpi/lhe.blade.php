@@ -54,6 +54,7 @@
                 <form action="/tpi/lhe" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="anggota_id" value="{{ $anggota->id }}">
+                    <input type="hidden" name="tahap_pengawasan" value="{{ $pengawasan->tahap }}">
                     <input type="hidden" value="{{ $rekap->id }}" name="id">
                     <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                     @if ($pengawasan->tahap == 2)

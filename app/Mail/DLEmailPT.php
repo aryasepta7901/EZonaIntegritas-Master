@@ -7,12 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class EPEmail extends Mailable
+class DLEmailPT extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
-
-
     /**
      * Create a new message instance.
      *
@@ -31,6 +29,6 @@ class EPEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->data['title'])->markdown('emails.EPEmail');
+        return $this->subject($this->data['title'])->markdown('emails.DLEmailPT');
     }
 }
