@@ -72,7 +72,7 @@ class EvaluatorProvinsiController extends Controller
         $this->authorize('EvalProv');
 
         return view('self-assessment.lke', [
-            'master' => 'Evaluasi Provinsi ',
+            'master' => 'Penilaian Pendahuluan',
             'link' => '/prov/evaluasi',
             'title' => 'Lembar Kerja Evaluasi',
             'rekap' => $evaluasi,

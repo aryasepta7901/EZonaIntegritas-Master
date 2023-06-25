@@ -54,7 +54,7 @@
                         <a href="/prov/evaluasi" class="nav-link {{ Request::is('prov*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
-                                Evaluasi Kabupaten/Kota
+                                Penilaian Pendahuluan
                             </p>
                         </a>
                     </li>

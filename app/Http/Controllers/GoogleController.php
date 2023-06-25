@@ -31,6 +31,8 @@ class GoogleController extends Controller
                     $url = 'dashboard';
                 }
                 return redirect()->intended($url);
+            } else {
+                return redirect('login')->with('loginError', 'Akun Tidak Terdaftar!');
             }
         } catch (\Throwable $th) {
         }
