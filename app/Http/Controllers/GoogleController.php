@@ -35,6 +35,7 @@ class GoogleController extends Controller
                 return redirect('login')->with('loginError', 'Akun Tidak Terdaftar!');
             }
         } catch (\Throwable $th) {
+            // test
         }
     }
     public function logout(Request $request)
