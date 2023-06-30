@@ -328,11 +328,11 @@
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
                         <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
                         <input type="hidden" name="nilai" value="{{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}">
-                        <input type="hidden" name="status" value="1">
+                        <input type="hidden" name="status" value="8">
                         <p> <b> Note:</b> <br></p>
                         <p>Harap Periksa Kembali Isian anda , apakah sudah lengkap atau tidak , jika LKE
                             sudah dikirim maka
-                            tidak akan bisa diisi kembali. LKE akan dikirim dan di cek oleh <b>Validator Provinsi</b></p>
+                            tidak akan bisa diisi kembali. LKE akan dikirim kepada <b>Validator Provinsi</b></p>
                         <button class="btn btn-sm btn-info">Total Nilai : {{ round($nilai_sa, 2) }}</button>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -398,7 +398,7 @@
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="id" value="{{ $rekap->id }}">
-                        <input type="hidden" name="status" value="4">
+                        <input type="hidden" name="status" value="8">
                         <p> <b> Note:</b> <br></p>
                         <p>LKE yang telah disetujui akan dikirimkan ke TPI Inspektorat Utama, setelah menyetujui LKE
                             silahkan cetak surat pengantar untuk di Upload ke sistem </p>

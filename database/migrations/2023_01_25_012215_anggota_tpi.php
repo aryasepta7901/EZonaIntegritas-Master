@@ -17,10 +17,11 @@ class AnggotaTpi extends Migration
 
             $table->bigInteger('id')->primary(); //tpi_id.tahun
             $table->char('tpi_id', 12);
-            $table->bigInteger('anggota_id');
+            $table->unsignedBigInteger('anggota_id');
             $table->timestamps();
 
             $table->foreign('tpi_id')->references('id')->on('TPI')->onDelete('cascade');
+            $table->foreign('anggota_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

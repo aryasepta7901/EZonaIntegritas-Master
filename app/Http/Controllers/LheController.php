@@ -177,8 +177,9 @@ class LheController extends Controller
         {
             // ambil data provinsi
             $prov = substr($request->satker_id, 0, 3) . '0';
-            $nama_prov = Satker::where('id', $prov)->first()->nama_satker;
-            $tembusanDaerah = $nama_prov;
+            $provName = Satker::where('id', $prov)->first()->nama_satker;
+            $nama_prov = Substr($provName, 4);
+            $tembusanDaerah = $provName;
         } else {
             // jika levelnya bps provinsi
             $nama_prov = '';

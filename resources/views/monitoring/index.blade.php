@@ -56,7 +56,11 @@
                                 {{-- Progress --}}
                                 {{-- Mengisi LKE --}}
                                 @if ($value->status >= 1)
-                                    <td class="text-center text-success text-lg"><i class="fas fa-check"></i></td>
+                                    <td class="text-center text-success text-lg"><i class="fas fa-check"></i>
+                                        @if ($value->status == 5)
+                                            <button class="badge badge-info">Tindak Lanjut TPI</button>
+                                        @endif
+                                    </td>
                                     {{-- Proses Pengisian LKE --}}
                                 @elseif($value->status == 0)
                                     <td class="text-center text-warning text-lg "><i

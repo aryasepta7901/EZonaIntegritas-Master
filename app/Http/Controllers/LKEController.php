@@ -21,6 +21,7 @@ use App\Models\TPI;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class LKEController extends Controller
 {
@@ -66,8 +67,10 @@ class LKEController extends Controller
             'tahun' => date('Y'),
             'satker_id' => $request->satker_id,
         ];
-        $data['id'] = $data['tahun'] . $data['predikat'] . $data['satker_id'];
-
+        $uuid = Str::uuid()->toString();
+        $uuidWithoutNumbersAndDashes = preg_replace('/[0-9-]/', '', $uuid);
+        $uuidWithoutRepeatedLetters = preg_replace('/(\w)\1+/', '', $uuidWithoutNumbersAndDashes);
+        $data['id'] = substr($uuidWithoutRepeatedLetters, 0, 8) . $data['satker_id'];
         Rekapitulasi::create($data);
 
         $dataLHE = [
@@ -144,9 +147,8 @@ class LKEController extends Controller
     {
         // Kirim LKE
         // Function ini digunakan oleh Provinsi dan kab/kota(khusus kab/kota hanya ketika tindak lanjut dari TPI) 
-        if ($lke->status == '0' || $lke->status == 2) {
+        if ($lke->status == 0 || $lke->status == 2) {
             // Provinsi
-            $id = $request->id;
             $id_kabkota = $request->satker_id;
             $id_prov = substr($request->satker_id, 0, 3) . '0';
             $prov = User::where('satker_id', $id_prov)->where('level_id', 'EP')->get();
@@ -154,14 +156,15 @@ class LKEController extends Controller
             $namakabkota =  $kabkota->satker->nama_satker;
             // Kirim Notif Gmail
             foreach ($prov as $value) { //kirim ke beberapa evalProv
-                $data = [
-                    'title' => 'Hasil Penilaian Mandiri ' . $namakabkota,
-                    'prov' => $value->satker->nama_satker,
-                    'kabkota' => $namakabkota,
-                    'nilai' => $request->nilai,
-                ];
-                Mail::to($value->email)->send(new SAEmail($data));
+                $email[] = $value->email;
             }
+            $data = [
+                'title' => 'Hasil Penilaian Mandiri ' . $namakabkota,
+                'prov' => $value->satker->nama_satker,
+                'kabkota' => $namakabkota,
+                'nilai' => $request->nilai,
+            ];
+            Mail::to($email)->send(new SAEmail($data));
         }
         if ($lke->status == '5') {
             // Satker pada tahap 5(tindak lanjut dari TPI)
@@ -182,7 +185,7 @@ class LKEController extends Controller
             $data = [
                 'title' => 'Hasil Revisi Penilaian Mandiri ' . $namaSatker,
                 'namaSatker' => $namaSatker,
-                'nilai' =>$request->nilai,
+                'nilai' => $request->nilai,
             ];
             Mail::to($email)->send(new PTEmailDL($data));
         }

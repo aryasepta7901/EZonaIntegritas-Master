@@ -30,7 +30,7 @@ class SuratPersetujuanProvController extends Controller
             'master' => 'Penilaian Pendahuluan',
             'link' => '/prov/evaluasi',
             'title' => 'Surat Pengantar',
-            'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7])->get(),
+            'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7, 8])->get(),
             'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
 
 
@@ -99,7 +99,7 @@ class SuratPersetujuanProvController extends Controller
 
         if ($request->file('surat')) { //cek apakah ada dokumen yang di upload
             // Ambil File lamanya
-            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('status', 4)->first('id');
+            $rekap = Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->where('tahun', date('Y'))->first('id');
 
             if ($rekap->LHE->surat_pengantar_prov) {
                 // jika ada file lama maka hapus
@@ -107,7 +107,9 @@ class SuratPersetujuanProvController extends Controller
             }
             $customName = $request->satker_id . '-' . $request->file('surat')->getClientOriginalName();
 
+            Rekapitulasi::where('id', $request->id)->update(['status' => 4]);
             foreach ($request->id as $key => $id) {
+                Rekapitulasi::where('id', $id)->update(['status' => 4]);
                 LHE::updateOrCreate(
                     ['rekapitulasi_id' => $id],
                     [
@@ -170,7 +172,7 @@ class SuratPersetujuanProvController extends Controller
         }
         foreach ($request->id as $key => $id) {
             LHE::updateOrCreate(
-                ['id' => $id],
+                ['rekapitulasi_id' => $id],
                 [
                     'surat_pengantar_prov' =>  '',
                 ]

@@ -170,7 +170,7 @@ class EvaluatorProvinsiController extends Controller
                 $namaProv = $prov->first()->satker->nama_satker;
             }
             // Jika dilakukan provinsi 
-            if ($request->status == 4) {
+            if ($request->status == 8) {
                 // Jika LKE disetujui
                 $pesan = 'LKE Berhasil Di Setujui, Silahkan Cetak Surat Pengantar';
             } elseif ($request->status == 2) {

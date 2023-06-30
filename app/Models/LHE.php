@@ -9,7 +9,7 @@ class LHE extends Model
 {
     use HasFactory;
     protected $table = 'lhe';
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [
         'rekapitulasi_id',
