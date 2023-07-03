@@ -63,10 +63,10 @@ class DatabaseSeeder extends Seeder
         // Rincian::insert($rincian);
 
         $status_rekap = [
-            [
-                'id' => 0,
-                'status' => 'Penilaian Mandiri',
-            ],
+            // [
+            //     'id' => 0,
+            //     'status' => 'Penilaian Mandiri',
+            // ],
             [
                 'id' => 1,
                 'status' => 'Proses Penilaian BPS Provinsi',
@@ -95,8 +95,12 @@ class DatabaseSeeder extends Seeder
                 'id' => 7,
                 'status' => 'Tidak Diusulkan BPS Pusat',
             ],
+            [
+                'id' => 8,
+                'status' => 'Cetak Surat Pengantar Provinsi',
+            ],
         ];
-        // StatusRekap::insert($status_rekap);
+        StatusRekap::insert($status_rekap);
 
         $subRincian = [
             [
@@ -124,6 +128,6 @@ class DatabaseSeeder extends Seeder
                 'rincian_id' => 'P'
             ],
         ];
-        SubRincian::insert($subRincian);
+        // SubRincian::insert($subRincian);
     }
 }

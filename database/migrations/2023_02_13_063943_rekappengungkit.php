@@ -19,7 +19,7 @@ class RekapPengungkit extends Migration
             $table->double('nilai_at', 6, 3)->nullable();
             $table->double('nilai_kt', 6, 3)->nullable();
             $table->double('nilai_dl', 6, 3)->nullable();
-            $table->char('rekapitulasi_id', 12);
+            $table->char('rekapitulasi_id', 36);
             $table->char('pilar_id', 3);
             $table->timestamps();
             $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');

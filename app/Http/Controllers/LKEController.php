@@ -68,9 +68,10 @@ class LKEController extends Controller
             'satker_id' => $request->satker_id,
         ];
         $uuid = Str::uuid()->toString();
-        $uuidWithoutNumbersAndDashes = preg_replace('/[0-9-]/', '', $uuid);
+        $uuidWithoutNumbersAndDashes = preg_replace('/[-]/', '', $uuid);
         $uuidWithoutRepeatedLetters = preg_replace('/(\w)\1+/', '', $uuidWithoutNumbersAndDashes);
-        $data['id'] = substr($uuidWithoutRepeatedLetters, 0, 8) . $data['satker_id'];
+
+        $data['id'] = $uuidWithoutRepeatedLetters . $data['satker_id'];
         Rekapitulasi::create($data);
 
         $dataLHE = [

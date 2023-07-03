@@ -15,7 +15,7 @@ class LHE extends Migration
     {
         Schema::create('LHE', function (Blueprint $table) {
             $table->id();
-            $table->char('rekapitulasi_id', 12); // one to one rekapitulasi_id
+            $table->char('rekapitulasi_id', 36);
             $table->text('surat_pengantar_kabkota')->nullable();
             $table->text('surat_pengantar_prov')->nullable();
             $table->text('LHE_1')->nullable(); //tahap 1

@@ -19,7 +19,7 @@ class SelfAssessment extends Migration
             $table->char('opsi_id', 6);
             $table->text('catatan');
             $table->double('nilai', 6, 2);
-            $table->char('rekapitulasi_id', 12);
+            $table->char('rekapitulasi_id', 36);
             $table->integer('satker_id'); // 4
             $table->char('pertanyaan_id', 5);
             $table->timestamps();
@@ -27,7 +27,6 @@ class SelfAssessment extends Migration
             $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
             $table->foreign('pertanyaan_id')->references('id')->on('pertanyaan')->onDelete('cascade');
             $table->foreign('opsi_id')->references('id')->on('opsi')->onDelete('cascade');
-
         });
     }
 

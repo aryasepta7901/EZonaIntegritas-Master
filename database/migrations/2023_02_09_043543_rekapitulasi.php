@@ -15,7 +15,7 @@ class Rekapitulasi extends Migration
     {
         Schema::create('rekapitulasi', function (Blueprint $table) {
 
-            $table->char('id', 12)->primary(); //tahun.predikat.satker_id
+            $table->uuid('id')->primary();
             $table->year('tahun');
             $table->char('predikat', 4);
             $table->char('status', 1)->default(0);
@@ -23,7 +23,6 @@ class Rekapitulasi extends Migration
 
             $table->timestamps();
             $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
-
         });
     }
 

@@ -15,7 +15,7 @@ class DeskEvaluation extends Migration
     {
         Schema::create('desk_evaluation', function (Blueprint $table) {
             $table->char('id', 15)->primary(); // one to one id_selfassessment
-            $table->char('rekapitulasi_id', 12);
+            $table->char('rekapitulasi_id', 36);
 
             // Anggota Tim
             $table->char('jawaban_at', 6)->nullable();
