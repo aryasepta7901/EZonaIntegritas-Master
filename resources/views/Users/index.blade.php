@@ -295,7 +295,6 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-
                                         <label class="@error('satker_id') text-danger  @enderror"
                                             for="satker">Satker</label>
                                         @error('satker_id')

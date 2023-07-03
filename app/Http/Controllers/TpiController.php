@@ -53,8 +53,6 @@ class TpiController extends Controller
     public function store(Request $request)
     {
         // validasi
-
-
         $request->validate(
             [
                 'nama' => 'required',
@@ -75,6 +73,7 @@ class TpiController extends Controller
         $tpi = TPI::where('id', $id)->first();
 
         if ($tpi == null) {
+            // cek apakah id sudah terdaftar
             $data = [
                 'id' =>  $id,
                 'tahun' => $tahun,
@@ -132,7 +131,6 @@ class TpiController extends Controller
                 'title' => ' Wilayah pengawasan ' . $tim->nama,
                 'tpi' => $tim,
                 'pengawasan' => Pengawasan::where('tpi_id', $tim->id)->get(),
-                'anggota' => anggota_tpi::where('tpi_id', $tim->id)->get(),
                 'satker' => Satker::doesntHave('pengawasan')->get(),
             ]
 
@@ -190,9 +188,7 @@ class TpiController extends Controller
             ];
             TPI::where('id', $tpi_id)->update($data);
         } else {
-
             $tpi = TPI::where('id', $tpi_id)->first();
-
             if ($tpi == null) {
                 TPI::where('id', $tim->id)->delete(); //delete data lama
                 $data = [

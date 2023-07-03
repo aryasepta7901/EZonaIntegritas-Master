@@ -16,7 +16,7 @@ class Satker extends Model
     }
     public function persyaratan()
     {
-        return $this->hasOne(Persyaratan::class, 'satker_id');
+        return $this->hasOne(Persyaratan::class, 'satker_id')->where('tahun', date('Y'));
     }
     public function rekapitulasi()
     {
@@ -25,6 +25,6 @@ class Satker extends Model
 
     public function RekapHasil()
     {
-        return $this->hasOne(RekapHasil::class, 'satker_id');
+        return $this->hasOne(RekapHasil::class, 'satker_id')->where('tahun', date('Y'));
     }
 }

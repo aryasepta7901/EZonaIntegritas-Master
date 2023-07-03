@@ -52,7 +52,6 @@ class PengawasanController extends Controller
             [
                 'anggota_id.required' => 'Anggota TPI Wajib di Pilih',
                 'satker_id.required' => 'Wilayah Pengawasan Satuan Kerja wajib di isi',
-
             ]
         );
 
@@ -112,7 +111,7 @@ class PengawasanController extends Controller
         $dalnis = $tpi->dalnis;
         $nama_satker = Satker::where('id', $id_satker)->first('nama_satker')->nama_satker;
         $data = [
-            'title' => 'Hasil Penilaian Evaluasi:' . $nama_satker . '[Tahap ' . $pengawasan->tahap .']',
+            'title' => 'Hasil Penilaian Evaluasi:' . $nama_satker . '[Tahap ' . $pengawasan->tahap . ']',
             'nama_satker' => $nama_satker,
         ];
         // Untuk kirim LKE ke ketua tim dan dalnis

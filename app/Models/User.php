@@ -61,11 +61,11 @@ class User extends Authenticatable
     }
     public function ketua()
     {
-        return $this->hasOne(TPI::class, 'ketua_tim');
+        return $this->hasOne(TPI::class, 'ketua_tim')->where('tahun', date('Y'));
     }
     public function anggota()
     {
-        return $this->hasOne(anggota_tpi::class, 'anggota_id');
+        return $this->hasOne(anggota_tpi::class, 'anggota_id'); //perlu diperbaiki tahun
     }
     public function pengawasan()
     {

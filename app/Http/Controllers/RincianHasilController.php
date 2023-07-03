@@ -28,7 +28,7 @@ class RincianHasilController extends Controller
                 'pilar' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
                 'hasilSatker' => RekapHasil::select('satker_id')->orderBy('nilai', 'DESC')->groupBy('satker_id')->get(), //ambil satker yang sudah digroupBy
                 'hasil' => RekapHasil::where('tahun', date('Y'))->get(), //ambil semua nilai hasil
-                'satker' => Satker::get(),
+                'satker' => Satker::doesntHave('RekapHasil')->get(),
 
 
 

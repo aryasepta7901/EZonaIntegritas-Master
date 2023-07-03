@@ -43,6 +43,12 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('login');
 })->name('login')->middleware('guest');
+// Google 
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+Route::post('login', [GoogleController::class, 'login'])->name('login');
+Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
+
 // dashboard
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 // timeline
@@ -77,11 +83,6 @@ Route::resource('/pertanyaan', PertanyaanController::class)->middleware('auth');
 Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
 Route::post('/hasil/import', [RincianHasilController::class, 'import'])->name('import.import');
 // Route::resource('/pertanyaan', Pertanyaan2Controller::class)->middleware('auth');
-// Google 
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
-Route::post('login', [GoogleController::class, 'login'])->name('login');
-Route::get('logout', [GoogleController::class, 'logout'])->name('logout');
 
 // LKE
 Route::resource('satker/lke', LKEController::class)->middleware('auth');
