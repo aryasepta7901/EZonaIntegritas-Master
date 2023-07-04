@@ -14,7 +14,7 @@
                         {{-- @php 
                             $total = round($nilaiPengungkit->sum('nilai_sa'), 2) + $nilaiHasil;
                         @endphp --}}
-                        <p>Nilai Self Assessment: {{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}</p>
+                        <p>Nilai Self Assessment: {{ round($nilaiPengungkit, 2) }}</p>
                     </li>
                 </ul>
             </div>
@@ -43,7 +43,7 @@
                     @csrf
                     <input type="hidden" value="{{ $rekap->id }}" name="id">
                     <input type="hidden" name="satker_id" value="{{ $rekap->satker_id }}">
-                    <input type="hidden" name="nilai" value="{{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}">
+                    <input type="hidden" name="nilai" value="{{ round($nilaiPengungkit, 2) }}">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="upload" name="surat"
                             accept="application/pdf">
@@ -158,7 +158,7 @@
                                         <td class="text-center">{{ $r->bobot }}</td>
                                         @php
                                             // Ambil Nilai Pengungkit
-                                            $nilai = $nilaiPengungkit->sum('nilai_sa');
+                                            $nilai = $nilaiPengungkit;
                                             $persentase = (round($nilai, 2) * 100) / $r->bobot;
                                         @endphp
                                         <td class="text-center">{{ round($nilai, 2) }}</td>
@@ -239,7 +239,7 @@
                                         <td class="text-center">{{ $r->bobot }}</td>
                                         @php
                                             // Ambil Nilai Pengungkit
-                                            $nilai = $nilaiPengungkit->sum('nilai_sa');
+                                            $nilai = $nilaiPengungkit;
                                             $persentase = (round($nilai, 2) * 100) / $r->bobot;
                                         @endphp
                                         <td class="text-center">{{ round($nilai, 2) }}</td>
@@ -367,7 +367,7 @@
 
                 <form action="/satker/surat/cetak" method="post">
                     @csrf
-                    <input type="hidden" value="{{ round($nilaiPengungkit->sum('nilai_sa'), 2) }}" name="nilaisa">
+                    <input type="hidden" value="{{ round($nilaiPengungkit, 2) }}" name="nilaisa">
                     <input type="hidden" value="{{ $rekap->satker->nama_satker }}" name="satker">
                     <input type="hidden" value="{{ $rekap->satker_id }}" name="satker_id">
                     <input type="hidden" value="{{ $rekap->id }}" name="id">

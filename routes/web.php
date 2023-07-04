@@ -94,7 +94,10 @@ Route::get('/monitoring/catatan/{rekapitulasi}', [MonitoringController::class, '
 // LKE
 Route::resource('satker/lke', LKEController::class)->middleware('auth');
 Route::get('satker/lke/{lke}/{pilar}', [LKEController::class, 'pertanyaan'])->name('lke.pertanyaan')->middleware('auth');
-Route::get('satker/surat/{rekapitulasi}', [RekapitulasiController::class, 'surat'])->middleware('auth');
+// Self Assessment
+Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
+// Rekapitulasi
+Route::get('satker/surat/{rekapitulasi}', [RekapitulasiController::class, 'show'])->middleware('auth');
 Route::post('satker/surat/cetak', [RekapitulasiController::class, 'cetak'])->middleware('auth');
 Route::resource('satker/rekapitulasi', RekapitulasiController::class)->middleware('auth');
 Route::get('satker/rekap/{rekapitulasi}', [RekapitulasiController::class, 'rekap'])->middleware('auth'); //rekapitulasi nilai
@@ -102,8 +105,7 @@ Route::get('satker/catatan/{rekapitulasi}', [RekapitulasiController::class, 'cat
 // Detail Rekap
 Route::get('satker/rekap2/{rekapitulasi}', [RekapitulasiController::class, 'rekap2'])->middleware('auth');
 Route::get('satker/rekap3/{rekapitulasi}', [RekapitulasiController::class, 'rekap3'])->middleware('auth');
-// Self Assessment
-Route::resource('/selfAssessment', SelfAssessmentController::class)->middleware('auth');
+Route::get('satker/rekapFull/{rekapitulasi}', [RekapitulasiController::class, 'rekapFull'])->middleware('auth');
 
 
 // Evaluator Provinsi

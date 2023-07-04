@@ -103,14 +103,27 @@ class RekapitulasiController extends Controller
         }
         return redirect('satker/lke')->with('success', 'Surat Rekomendasi Berhasil di Simpan');
     }
+    // View Surat Persetujuan BPS Kab/Kota
+    public function show(Rekapitulasi $rekapitulasi)
+    {
 
+        return view('self-assessment.surat', [
+            'master' => 'LKE',
+            'link' => '/satker/lke/' . $rekapitulasi->id,
+            'title' => 'Surat Pengantar BPS Kabupaten/Kota',
+            'rekap' => $rekapitulasi,
+            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id)->sum('nilai_sa'),
+            // 'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', date('Y'))->sum('nilai'),
+            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
+        ]);
+    }
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Rekapitulasi  $rekapitulasi
      * @return \Illuminate\Http\Response
      */
-    public function show(Rekapitulasi $rekapitulasi)
+    public function rekapFull(Rekapitulasi $rekapitulasi)
     {
         $this->authorize('pic');
         return view('self-assessment.rekap.rekap', [
@@ -190,21 +203,7 @@ class RekapitulasiController extends Controller
 
         ]);
     }
-    // View Surat Persetujuan BPS Kab/Kota
-    public function surat(Rekapitulasi $rekapitulasi)
-    {
 
-        return view('self-assessment.surat', [
-            'master' => 'LKE',
-            'link' => '/satker/lke/' . $rekapitulasi->id,
-            'title' => 'Surat Pengantar BPS Kabupaten/Kota',
-            'rekap' => $rekapitulasi,
-            'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
-            'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', date('Y'))->sum('nilai'),
-
-            'rincian' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
-        ]);
-    }
     /**
      * Show the form for editing the specified resource.
      *
