@@ -72,17 +72,14 @@
                                                             @if ($Evaluasi !== null)
                                                                 {{ $Evaluasi->catatan_dl }}
                                                             @endif
-                                                        @else
-                                                <td></td>
-                                        @endif
-                                    @endif
-                                    </td>
-
-                                    </tr>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
                                 @endforeach
                             @endforeach
-                        @endforeach
-                        @endforeach
                         @endforeach
                     </tbody>
                 </table>

@@ -194,8 +194,8 @@ class PertanyaanController extends Controller
 
         Pertanyaan::where('id', $pertanyaan->id)->update($validatedData);
 
-        // Jika bentuk input field
         Opsi::where('pertanyaan_id', $pertanyaan->id)->delete();
+        // Jika bentuk input field
         $no = 1;
         $bobot = 1;
         if ($request->type === 'input') {
@@ -214,7 +214,7 @@ class PertanyaanController extends Controller
         } else {
             // Jika bentuknya checbox
             if ($request->rincian != null) {
-                // Jika Mengubah rincian satu ke rincian lain
+                // Jika Mengubah rincian satu ke rincian lain, misal Opsi Ya/Tidak ->A/B/C
                 foreach ($request->rincian as $key => $rincian) {
                     Opsi::updateOrCreate(
                         ['id' => $pertanyaan->id . $no++],

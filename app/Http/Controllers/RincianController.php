@@ -53,11 +53,18 @@ class RincianController extends Controller
             'unique' => ':Attribute Sudah Terdaftar',
 
         ]);
+        $id = substr($validatedData['rincian'], 0, 1);
 
-        $validatedData['id'] = substr($validatedData['rincian'], 0, 1);
+        $rincian = Rincian::where('id', $id)->first(); //cek apakah id ada yang sama
+        if ($rincian) {
+            // Jika ID sudah terdaftar
+            $ascii = ord($id) + 1;
+            $validatedData['id'] = chr($ascii);
+        } else {
+            // Jika ID belum terdaftar
+            $validatedData['id'] = $id;
+        }
         $validatedData['bobot'] = 0;
-
-
         Rincian::create($validatedData);
 
         return redirect('/pertanyaan')->with('success', 'Rincian Berhasil di Tambahkan');

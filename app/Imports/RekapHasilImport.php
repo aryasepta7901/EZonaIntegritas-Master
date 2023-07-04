@@ -50,11 +50,9 @@ class RekapHasilImport implements ToModel, WithHeadingRow, WithValidation, Skips
                 // Update
                 $rekapHasil->opsi_id = $opsi_id;
                 $rekapHasil->nilai =  Opsi::where('id', $opsi_id)->first()->bobot * $bobot;
-                // Update kolom lain yang ingin Anda perbarui
                 $rekapHasil->save();
-                // Hapus data anggota
             } else {
-                // Jika update
+                // Jika Create
                 $RekapHasil = new RekapHasil([
                     'id' => $id,
                     'tahun' => $tahun,

@@ -96,8 +96,6 @@
                                 @endif
                                 <td> <button class="btn btn-sm btn-danger" data-toggle="modal"
                                         data-target="#hapus{{ $value->id }}"><i class="fa fa-trash"></i></button></td>
-
-
                             </tr>
                         @endforeach
 

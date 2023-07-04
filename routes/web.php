@@ -84,6 +84,13 @@ Route::resource('/hasil', RincianHasilController::class)->middleware('auth');
 Route::post('/hasil/import', [RincianHasilController::class, 'import'])->name('import.import');
 // Route::resource('/pertanyaan', Pertanyaan2Controller::class)->middleware('auth');
 
+// Monitoring
+Route::resource('/monitoring', MonitoringController::class)->middleware('auth')->only(['index', 'destroy']);
+Route::get('/monitoring/lhe/{rekapitulasi}', [MonitoringController::class, 'lhe'])->middleware('auth');
+Route::get('/monitoring/catatan/{rekapitulasi}', [MonitoringController::class, 'catatan'])->middleware('auth');
+
+
+
 // LKE
 Route::resource('satker/lke', LKEController::class)->middleware('auth');
 Route::get('satker/lke/{lke}/{pilar}', [LKEController::class, 'pertanyaan'])->name('lke.pertanyaan')->middleware('auth');
@@ -118,10 +125,3 @@ Route::get('tpi/rekap/{rekapitulasi}', [DeskEvaluationController::class, 'rekap'
 // LHE dan cetak LHE
 Route::resource('/tpi/lhe', LheController::class)->middleware('auth');
 Route::post('/tpi/lhe/cetak', [LheController::class, 'cetak'])->name('cetak.cetak');
-
-
-
-// Monitoring
-Route::resource('/monitoring', MonitoringController::class)->middleware('auth')->only(['index', 'destroy']);
-Route::get('/monitoring/lhe/{rekapitulasi}', [MonitoringController::class, 'lhe'])->middleware('auth');
-Route::get('/monitoring/catatan/{rekapitulasi}', [MonitoringController::class, 'catatan'])->middleware('auth');

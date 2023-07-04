@@ -145,8 +145,6 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label for="pilar">{{ $value->pilar }}</label>
-                                        <input type="hidden" name="pilar_id{{ $value->id }}"
-                                            value="{{ $value->id }}">
                                         <input type="hidden" name="bobot{{ $value->id }}" value="{{ $value->bobot }}">
                                         @foreach ($value->opsi as $item)
                                             <div class="form-check ml-4">
@@ -202,16 +200,14 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="pilar">{{ $value->pilar }}</label>
-                                            <input type="hidden" name="pilar_id{{ $value->id }}"
-                                                value="{{ $value->id }}">
                                             <input type="hidden" name="bobot{{ $value->id }}"
                                                 value="{{ $value->bobot }}">
                                             @foreach ($value->opsi as $item)
                                                 <div class="form-check ml-4">
                                                     {{-- untuk mengambil data rekapHasil --}}
                                                     @php
-                                                        $id = date('Y') . $satker->satker_id . $value['id'];
-                                                        $RekapHasil = $hasil->where('id', $id)->first();
+                                                        $id = date('Y') . $satker->satker_id . $value['id']; //id_rekapHasil
+                                                        $RekapHasil = $hasil->where('id', $id)->first(); //  mengambil idRekapHasil by Pilar
                                                     @endphp
                                                     <input @if ($RekapHasil->opsi_id == $item->id) checked @endif
                                                         class="form-check-input" type="radio"

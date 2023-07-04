@@ -44,9 +44,19 @@ class SubRincianController extends Controller
             'unique' => ':Attribute Sudah Terdaftar',
 
         ]);
-
         $validatedData['rincian_id'] = $request->rincian;
-        $validatedData['id'] = $validatedData['rincian_id'] . substr($validatedData['subRincian'], 0, 1);
+        $id =  $validatedData['rincian_id'] . substr($validatedData['subRincian'], 0, 1);
+        $subrincian = SubRincian::where('id', $id)->first(); //cek apakah id ada yang sama
+        if ($subrincian) {
+            // Jika ID sudah terdaftar
+            $id_sub = substr($id, -1); //ambil satu id
+            $ascii = ord($id_sub) + 1;
+            $validatedData['id'] = $validatedData['rincian_id'] . chr($ascii);
+        } else {
+            // Jika ID belum terdaftar
+            $validatedData['id'] = $id;
+        }
+
         $validatedData['bobot'] = 0;
 
         SubRincian::create($validatedData);

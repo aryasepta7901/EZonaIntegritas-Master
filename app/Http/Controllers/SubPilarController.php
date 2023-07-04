@@ -57,8 +57,6 @@ class SubPilarController extends Controller
         }
         $validatedData['pilar_id'] = $request->pilar_id;
         $validatedData['id'] = $validatedData['pilar_id'] . $id;
-
-
         SubPilar::create($validatedData);
 
         $bobot = $validatedData['bobot'];
@@ -148,7 +146,6 @@ class SubPilarController extends Controller
             $subrincian_id = substr($request->pilar_id, 0, 2);
             $bobotSubRincian = SubRincian::where('id', $subrincian_id)->first()->bobot;
             SubRincian::where('id', $subrincian_id)->update(['bobot' => $bobot + $bobotSubRincian]);
-
             // Rincian
             $rincian_id = substr($request->pilar_id, 0, 1);
             $bobotRincian = Rincian::where('id', $rincian_id)->first()->bobot;

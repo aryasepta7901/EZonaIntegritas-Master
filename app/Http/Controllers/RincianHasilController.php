@@ -26,12 +26,9 @@ class RincianHasilController extends Controller
             [
                 'title' => 'Upload Rincian Hasil ',
                 'pilar' => Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get(),
-                'hasilSatker' => RekapHasil::select('satker_id')->orderBy('nilai', 'DESC')->groupBy('satker_id')->get(), //ambil satker yang sudah digroupBy
+                'hasilSatker' => RekapHasil::select('satker_id')->orderBy('nilai', 'DESC')->groupBy('satker_id')->where('tahun', date('Y'))->get(), //ambil satker yang sudah digroupBy
                 'hasil' => RekapHasil::where('tahun', date('Y'))->get(), //ambil semua nilai hasil
                 'satker' => Satker::doesntHave('RekapHasil')->get(),
-
-
-
             ]
         );
     }
@@ -68,11 +65,10 @@ class RincianHasilController extends Controller
         $pilar = Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get();
         foreach ($request->satker_id as $key => $satker) {
             foreach ($pilar as $value) {
-                $hasil = $value->id;
-                $pilar_id = $request->input('pilar_id' . $hasil);
-                $opsi_id = $request->$hasil;
-                $bobot =  $request->input('bobot' . $hasil);
-                $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot;
+                $pilar_id = $value->id; //id_pilar
+                $bobot_pilar =  $request->input('bobot' . $pilar_id); //bobot pilar
+                $opsi_id = $request->$pilar_id; // ambil nilai opsi_id
+                $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot_pilar; //bobot_opsi *bobot_pilar
                 $id = date('Y') . $satker . $pilar_id;
 
                 RekapHasil::updateOrCreate(
@@ -136,12 +132,10 @@ class RincianHasilController extends Controller
         $satker = $hasil->id;
         $pilar = Pilar::where('subrincian_id', 'LIKE', '%' . 'H' . '%')->get();
         foreach ($pilar as $value) {
-            $hasil = $value->id;
-            $satker = $satker;
-            $pilar_id = $request->input('pilar_id' . $hasil);
-            $opsi_id = $request->$hasil;
-            $bobot =  $request->input('bobot' . $hasil);
-            $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot;
+            $pilar_id = $value->id;
+            $opsi_id = $request->$pilar_id;  // ambil nilai opsi_id
+            $bobot_pilar =  $request->input('bobot' . $hasil);
+            $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot_pilar;
             $id = date('Y') . $satker . $pilar_id;
 
             RekapHasil::updateOrCreate(

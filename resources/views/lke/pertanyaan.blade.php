@@ -183,7 +183,6 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
                 <form method="post" action="/rincian">
                     @csrf
                     <div class="modal-body">
@@ -296,7 +295,7 @@
     @endforeach
 
 
-
+    {{-- Tambah --}}
     {{-- subRincian ,Pilar, SubPilar,Pertanyaan --}}
     @foreach ($rincian as $r)
         {{-- Subrincian --}}

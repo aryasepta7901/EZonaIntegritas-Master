@@ -76,10 +76,6 @@
                             </div>
                         </div>
                         <div id="new" class="col-lg-12"></div>
-
-
-
-
                     </div>
                     <div class="row">
                         <div class="col-lg-12">

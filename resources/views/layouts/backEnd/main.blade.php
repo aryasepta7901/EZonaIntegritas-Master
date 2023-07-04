@@ -236,6 +236,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             })
         </script>
         <script type="text/javascript">
+            // untuk field bentuk input value
             $("#row").click(function() {
                 newData =
                     '<div id="row"<div class="form-group">' +
@@ -306,11 +307,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<input type="hidden" name="type" value="checkbox">' +
                     // Ya
                     ' <div class="form-group">' +
-                    '<input type="text" class="form-control"name = "rincian[]"' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="Ya,"' +
                     'required placeholder = "Opsi Ya" >' +
                     '<input type="hidden" name="bobot1" value="1">' +
                     // Tidak
-                    '<input type="text" class="form-control"name = "rincian[]" ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="Tidak" ' +
                     'required placeholder = "Opsi Tidak" >' +
                     '<input type="hidden" name="bobot2" value="0">  </div>';
             } else if (selectedValue === 'checkbox2') {
@@ -319,15 +320,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<input type="hidden" name="type" value="checkbox">' +
                     // A
                     '   <div class="form-group">' +
-                    '<input type="text" class="form-control"name = "rincian[]"' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="A."' +
                     'required placeholder = "Opsi A" >' +
                     '<input type="hidden" name="bobot1" value="1">' +
                     // B
-                    '<input type="text" class="form-control"name = "rincian[]" ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="B." ' +
                     'required placeholder = "Opsi B" >' +
                     '<input type="hidden" name="bobot2" value="0.5">' +
                     // C
-                    '<input type="text" class="form-control"name = "rincian[]" ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="C." ' +
                     'required placeholder = "Opsi C" >' +
                     '<input type="hidden" name="bobot3" value="0">  </div>';
             } else if (selectedValue === 'checkbox3') {
@@ -336,19 +337,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<input type="hidden" name="type" value="checkbox">' +
                     // A
                     '   <div class="form-group">' +
-                    '<input type="text" class="form-control"name = "rincian[]"' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="A."' +
                     'required placeholder = "Opsi A" >' +
                     '<input type="hidden" name="bobot1" value="1">' +
                     // B
-                    '<input type="text" class="form-control"name = "rincian[]" ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="B." ' +
                     'required placeholder = "Opsi B" >' +
                     '<input type="hidden" name="bobot2" value="0.67">' +
                     // C
-                    '<input type="text" class="form-control"name = "rincian[]" ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="C." ' +
                     'required placeholder = "Opsi C" >' +
                     '<input type="hidden" name="bobot3" value="0.33">' +
                     // D
-                    '<input type="text" class="form-control"name = "rincian[]" ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="D." ' +
                     'required placeholder = "Opsi D" >' +
                     '<input type="hidden" name="bobot4" value="0">  </div>';
             } else if (selectedValue === 'checkbox4') {
@@ -358,23 +359,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     '<input type="hidden" name="type" value="checkbox">' +
                     // A
                     '   <div class="form-group">' +
-                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}" ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="A." ' +
                     'required placeholder = "Opsi A" >' +
                     '<input type="hidden" name="bobot1" value="1">' +
                     // B
-                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="B."  ' +
                     'required placeholder = "Opsi B" >' +
                     '<input type="hidden" name="bobot2" value="0.75">' +
                     // C
-                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="C."  ' +
                     'required placeholder = "Opsi C" >' +
                     '<input type="hidden" name="bobot3" value="0.5">' +
                     // D
-                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="D."  ' +
                     'required placeholder = "Opsi D" >' +
                     '<input type="hidden" name="bobot4" value="0.25">' +
                     // E
-                    '<input type="text" class="form-control"name = "rincian[]" value="{{ old('rincian[]') }}"  ' +
+                    '<input type="text" class="form-control"name = "rincian[]" value="E."  ' +
                     'required placeholder = "Opsi E" >' +
                     '<input type="hidden" name="bobot5" value="0">  </div>';
             } else {
