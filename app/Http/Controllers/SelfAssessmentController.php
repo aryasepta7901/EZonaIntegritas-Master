@@ -133,11 +133,11 @@ class SelfAssessmentController extends Controller
             'satker_id' => $satker_id,
             'pertanyaan_id' => $pertanyaan_id,
         ];
+        // Jika field berbentuk Input
         if ($request->input) {
             $data['opsi_id'] = '-';
             $data['nilai'] = $nilai;
             SelfAssessment::create($data);
-            // Jika field berbentuk Input
             foreach ($request->input as $key => $input) {
                 $opsi = $request->input('opsi' . $key);
                 InputField::updateOrCreate(
@@ -321,6 +321,7 @@ class SelfAssessmentController extends Controller
 
         if ($request->input) {
             $data['nilai'] = $nilai;
+            $data['catatan'] = $request->catatan;
             SelfAssessment::where('id', $selfAssessment->id)->update($data);
             // Jika field berbentuk Input
             foreach ($request->input as $key => $input) {

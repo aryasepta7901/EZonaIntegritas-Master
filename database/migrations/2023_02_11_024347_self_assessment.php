@@ -26,7 +26,7 @@ class SelfAssessment extends Migration
             $table->foreign('rekapitulasi_id')->references('id')->on('rekapitulasi')->onDelete('cascade');
             $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
             $table->foreign('pertanyaan_id')->references('id')->on('pertanyaan')->onDelete('cascade');
-            $table->foreign('opsi_id')->references('id')->on('opsi')->onDelete('cascade');
+            // $table->foreign('opsi_id')->references('id')->on('opsi')->onDelete('cascade');
         });
     }
 
