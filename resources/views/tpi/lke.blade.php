@@ -654,6 +654,7 @@
                                                         }
                                                     @endphp
                                                     @if ($deskEvaluation != null)
+                                                        {{-- jika pada tahap tindak lanjut TPI, PIC satker tidak melakukan perubahan --}}
                                                         @if ($selfAssessment->updated_at < $deskEvaluation->created_at)
                                                             {{-- data lama create dan data baru yang  di create tapi ingin tampil --}}
                                                             <td class="">
@@ -683,6 +684,7 @@
 
                                                             </td>
                                                         @endif
+                                                        {{-- jika pada tahap tindak lanjut TPI, PIC satker  melakukan perubahan --}}
                                                         @if ($selfAssessment->updated_at > $deskEvaluation->created_at)
                                                             {{-- Lihat perubahan pada SA --}}
                                                             <td class="">

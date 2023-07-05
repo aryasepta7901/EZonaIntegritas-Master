@@ -39,7 +39,7 @@ class DeskEvaluationController extends Controller
                 'anggota' => anggota_tpi::where('anggota_id', auth()->user()->id)->first(),
                 'pengawasan' => Pengawasan::get(),
                 'dalnis' => TPI::where('dalnis', auth()->user()->id)->get(), // satu dalnis bisa 2 tim
-                'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
+                // 'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
                 'satker' => Satker::all(),
 
             ]

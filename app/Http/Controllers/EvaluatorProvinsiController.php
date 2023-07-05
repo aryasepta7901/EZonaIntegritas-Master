@@ -153,12 +153,7 @@ class EvaluatorProvinsiController extends Controller
 
         Rekapitulasi::where('id', $id)->update(['status' => $request->status]);
 
-        // if ($evaluasi->status == 4 || $evaluasi->status == 5) { //hanya bisa diakses ketika statusnya adalah penilaian tpi dan revisi tpi
-        //     // Jika dilakukan TPI
-        //     Pengawasan::where('id', $request->pengawasan_id)->update(['status' => $request->statusPengawasan]);
-        //     return redirect('/tpi/evaluasi')->with('success', 'LKE Berhasil Di Kirim');
-        // } else {
-        // }
+
 
         if ($request->status == 2 || $request->status == 3) {
             //Jika LKE ditolak atau revisi
