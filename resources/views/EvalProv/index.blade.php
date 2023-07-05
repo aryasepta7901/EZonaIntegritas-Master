@@ -12,8 +12,9 @@
         @endif
         <div class="card">
             <div class="card-header">
-                <div class="d-flex justify-content-end">
-                    <a href="/prov/surat" class="btn btn-primary"><i class="fa fa-print">
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-info btn-sm">Tahun : {{ date('Y') }}</button>
+                    <a href="/prov/surat" class="btn btn-primary ml-auto"><i class="fa fa-print">
                         </i> Cetak Surat Pengantar</a>
                 </div>
             </div>

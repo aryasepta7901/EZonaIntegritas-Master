@@ -31,7 +31,7 @@ class SuratPersetujuanProvController extends Controller
             'link' => '/prov/evaluasi',
             'title' => 'Surat Pengantar',
             'rekap' => Rekapitulasi::where('satker_id', 'LIKE', '%' . substr(auth()->user()->satker_id, 0, 3) . '%')->whereIn('status', [4, 5, 6, 7, 8])->get(),
-            'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
+            // 'nilaiHasil' => RekapHasil::where('tahun', date('Y'))->get(),
 
 
         ]);
@@ -171,6 +171,7 @@ class SuratPersetujuanProvController extends Controller
             Storage::delete($rekap->LHE->surat_pengantar_prov);
         }
         foreach ($request->id as $key => $id) {
+            Rekapitulasi::where('id', $id)->update(['status' => 8]);
             LHE::updateOrCreate(
                 ['rekapitulasi_id' => $id],
                 [
