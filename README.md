@@ -13,15 +13,15 @@ Sistem evaluasi zona integritas berbasis web merupakan sistem yang dibangun untu
 - Fitur ```Monitoring Progress``` digunakan untuk melakukan monitoring terhadap nilai self-assessment, status pengajuan, dokumen LHE dan catatan TPI.
 
 ### PIC Satker
-Terdapat fitur  ```Self-Assessment ``` dan ```Digitalisasi Surat Pengantar BPS Kab/Kota```
+Terdapat fitur  ```Self-Assessment ``` dan ```Digitalisasi Surat Pengantar BPS Kab/Kota```.
 Satuan kerja dapat melakukan pengajuan dan penilaian mandiri (self-assessment) dengan cara menjawab pertanyaan pada LKE, serta mutiple upload bukti dukung, Jika levelnya adalah BPS Kabupaten/Kota maka PIC satker harus melakukan unggah surat pengantar dari Kepala BPS Kabupaten/Kota berdasarkan template yang telah disediakan
 
 ### Evaluator Provinsi
-Terdapat fitur  ```Penilaian Pendahuluan ``` dan ```Digitalisasi Surat Pengantar BPS Provinsi```
+Terdapat fitur  ```Penilaian Pendahuluan ``` dan ```Digitalisasi Surat Pengantar BPS Provinsi```.
 Evaluator Provinsi akan melakukan penilaian pendahuluan, meliputi setuju, revisi, dan tolak LKE. Jika LKE disetujui maka evaluator provinsi harus melakukan unggah surat pengantar dari Kepala BPS Provinsi berdasarkan template yang telah disediakan
 
 ### TPI
-Terdapat fitur  ```Desk-Evaluation ``` dan ```Digitalisasi LHE```
+Terdapat fitur  ```Desk-Evaluation ``` dan ```Digitalisasi LHE```.
 Tim Penilai internal (TPI) akan melakukan penilaian evaluasi (desk-evaluation) yang dilakukan secara bertahap dan berjenjang mulai dari anggota tim, ketua tim, dan pengendali teknis(dalnis). Jika Tahapan evaluasi masih dalam tahap pertama, maka dalnis akan mengembalikan LKE kepada satuan kerja dengan tambahan Laporan Hasil Evaluasi (LHE), jika tahap evaluasi sudah tahap kedua, maka dalnis akan menentukan apakah menyetujui atau tolak LKE. Jika LKE disetujui maka satker tersebut akan diajukan kepada KemenPANRB beserta LHE, jika tidak maka satker tersebut akan dilakukan pembinaan
 
 
