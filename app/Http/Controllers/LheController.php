@@ -171,7 +171,7 @@ class LheController extends Controller
         // Creating the new document...
         $phpWord = new TemplateProcessor('template_lhe.docx');
 
-
+        
         if (substr($request->satker_id, -1) != 0) //cek apakah levelnya adalah bps provinsi
         // Jika levelnya bps kab/kota maka
         {
