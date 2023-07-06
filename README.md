@@ -4,7 +4,7 @@ Sistem evaluasi zona integritas berbasis web merupakan sistem yang dibangun untu
 
 ## Fitur
 
-# Admin
+### Admin
 - Fitur ```login ``` yang memungkinkan pengguna untuk melakukan login sebelum menggunakan fitur-fitur lain yang terdapat dalam sistem
 - Fitur ```Mengelola Pengguna``` digunakan untuk melakukan pengelolaan data pengguna
 - Fitur ```Mengelola Wilayah TPI``` digunakan untuk melakukan pengelolaan data TPI, dan wilayah tugas pengawasan dari anggota tim tersebut
