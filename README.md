@@ -15,15 +15,14 @@ Sistem evaluasi zona integritas berbasis web merupakan sistem yang dibangun untu
 
 ## Repository structure
 
-- Directory [Kode Program](https://git.stis.ac.id/ElisaImania/sistem-informasi-manajemen-risiko-berbasis-web/-/tree/main/Kode%20Program) berisi kode-kode program dari sistem yang dibangun
+- Directory [Kode Program](https://git.stis.ac.id/AryaSepta/E-Zona-Integritas/-/tree/master/Code) berisi kode-kode program dari sistem yang dibangun
 - Directory [Panduan Penggunaan Sistem](https://git.stis.ac.id/ElisaImania/sistem-informasi-manajemen-risiko-berbasis-web/-/tree/main/Panduan%20Penggunaan%20Sistem) berisi file tentang cara menggunakan sistem
-- Directory [Rancangan Sistem](https://git.stis.ac.id/ElisaImania/sistem-informasi-manajemen-risiko-berbasis-web/-/tree/main/Rancangan%20Sistem) berisi gambar tentang proses bisnis serta beberapa use case diagram dari sistem yang diusulkan
-- Directory [Referensi](https://git.stis.ac.id/ElisaImania/sistem-informasi-manajemen-risiko-berbasis-web/-/tree/main/Referensi) berisi referensi atau literatur yang digunakan dalam penelitian
+- Directory [Rancangan Sistem](https://git.stis.ac.id/ElisaImania/sistem-informasi-manajemen-risiko-berbasis-web/-/tree/main/Rancangan%20Sistem) berisi Product Requirement Document (PRD), dan Functional Specification Document (FSD) yang telah disepakati oleh subject matter.
 - Directory [SQL Dump](https://git.stis.ac.id/ElisaImania/sistem-informasi-manajemen-risiko-berbasis-web/-/tree/main/SQL%20Dump) berisi syntax SQL yang digunakan dalam basis data sistem
 
 ## Instalasi
 
-- Clone repository pada penyimpanan perangkat lokal menggunakan perintah ```git clone https://git.stis.ac.id/ElisaImania/sistem-informasi-manajemen-risiko-berbasis-web.git```
+- Clone repository pada penyimpanan perangkat lokal menggunakan perintah ```git clone https://git.stis.ac.id/AryaSepta/E-Zona-Integritas.git``` 
 - Unduh dan install aplikasi XAMPP
 - Buka aplikasi XAMPP serta hidupkan MySQL serta Apache pada aplikasi tersebut
 - Buat database baru dengan nama sesuai dengan konfigurasi yang terdapat pada file ```.env```
