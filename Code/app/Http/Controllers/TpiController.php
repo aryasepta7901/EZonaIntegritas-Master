@@ -55,7 +55,7 @@ class TpiController extends Controller
         // validasi
         $request->validate(
             [
-                'nama' => 'required',
+                'nama' => 'required|max:5',
                 'wilayah'  => 'required',
                 'dalnis'  => 'required',
                 'ketua_tim'  => 'required',
@@ -63,6 +63,7 @@ class TpiController extends Controller
             ],
             [
                 'required' => ':attribute Wajib di Isi',
+                'max' => ':attribute hanya boleh maksimal 4 karakter, contoh:Tim 1',
             ]
         );
         // TPI
@@ -160,7 +161,7 @@ class TpiController extends Controller
 
         $request->validate(
             [
-                'nama' => 'required',
+                'nama' => 'required|max:5',
                 'wilayah'  => 'required',
                 'dalnis'  => 'required',
                 'ketua_tim'  => 'required',
@@ -168,6 +169,8 @@ class TpiController extends Controller
             ],
             [
                 'required' => ':attribute Wajib di Isi',
+                'max' => ':attribute hanya boleh maksimal 4 karakter, contoh:Tim 1',
+
             ]
         );
         $nama = $request->nama;

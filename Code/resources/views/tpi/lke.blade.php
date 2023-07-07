@@ -433,19 +433,37 @@
                                         ->count(); //mengambil nilai
                                     $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
                                 @endphp
+                                @if (auth()->user()->level_id == 'AT')
+                                    @php
+                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                            ->where('rekapitulasi_id', $rekap->id)
+                                            ->count('jawaban_at'); //mengambil nilai
+                                    @endphp
+                                @elseif(auth()->user()->level_id == 'KT')
+                                    @php
+                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                            ->where('rekapitulasi_id', $rekap->id)
+                                            ->whereIn('updated_kt', $cek)
+                                            ->count('jawaban_kt'); //mengambil nilai
+                                    @endphp
+                                @elseif(auth()->user()->level_id == 'DL')
+                                    @php
+                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                            ->where('rekapitulasi_id', $rekap->id)
+                                            ->whereIn('updated_dl', $cek)
+                                            ->count('jawaban_dl'); //mengambil nilai
+                                    @endphp
+                                @endif
                                 <div class="col-lg-4">
                                     <a href="/tpi/evaluasi/{{ $rekap->id }}/{{ $value->id }}">
                                         @php
-                                            if ($progress >= 0 && $progress <= 25) {
-                                                $warna = 'orange';
-                                            } elseif ($progress >= 25 && $progress <= 50) {
+                                            if ($soal_terjawabTPI < $soal_terjawab) {
                                                 $warna = 'warning';
-                                            } elseif ($progress >= 50 && $progress <= 75) {
-                                                $warna = 'teal';
-                                            } elseif ($progress >= 75 && $progress <= 100) {
+                                            } elseif ($soal_terjawabTPI = $soal_terjawab) {
                                                 $warna = 'success';
                                             }
                                         @endphp
+
                                         <div class="info-box bg-{{ $warna }}">
                                             <div class="info-box-content">
                                                 <span class="info-box-text text-bold mb-3 text-center">
@@ -517,7 +535,7 @@
                                                                     @endphp
                                                                 @endif
                                                                 @php
-                                                                    $progress = round(($soal_terjawab * 100) / $jumlah_soal, 2);
+                                                                    $progress = round(($soal_terjawabTPI * 100) / $jumlah_soal, 2);
                                                                 @endphp
                                                                 {{ round($nilai, 2) }}
                                                             @else
@@ -531,7 +549,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="d-flex justify-content-between">
-                                                            <small>Menjawab {{ $soal_terjawab }} dari {{ $jumlah_soal }}
+                                                            <small>Menjawab {{ $soal_terjawabTPI }} dari
+                                                                {{ $jumlah_soal }}
                                                                 Soal
                                                             </small>
                                                             <small class="info-box-number">{{ $progress }}%</small>
@@ -625,15 +644,14 @@
                             </thead>
                             <tbody>
                                 @foreach ($sr->pilar as $p)
-                                    {{-- <tr data-toggle="collapse" data-target="#accordion{{ $p->id }}"
+                                    <tr data-toggle="collapse" data-target="#accordion{{ $p->id }}"
                                         style="background-color: rgb(170, 255, 0)">
                                         <td colspan="2">{{ $p->pilar }}<i class="fa-solid fa-caret-down"></i></td>
-                                    </tr> --}}
+                                    </tr>
 
                                     @foreach ($p->subPilar as $sp)
                                         @foreach ($sp->pertanyaan as $value)
-                                            {{-- <tr class="collapse" id="accordion{{ substr($value->id, 0, 3) }}"> --}}
-                                            <tr>
+                                            <tr class="collapse" id="accordion{{ substr($value->id, 0, 3) }}">
                                                 @php
                                                     $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
                                                 @endphp

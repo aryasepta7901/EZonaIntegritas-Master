@@ -77,7 +77,7 @@ class TpiImport implements ToModel, SkipsEmptyRows, WithHeadingRow, WithValidati
     {
         return [
             'tahun' => 'required',
-            'nama' => 'required',
+            'nama' => 'required|max:4',
             'wilayah'  => 'required',
             'dalnis'  => 'required',
             'ketua_tim'  => 'required',

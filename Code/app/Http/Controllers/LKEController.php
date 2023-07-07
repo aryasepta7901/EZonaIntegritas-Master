@@ -104,7 +104,6 @@ class LKEController extends Controller
             'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $lke->id)->get(),
             'nilaiHasil' => RekapHasil::where('satker_id', $lke->satker_id)->where('tahun', date('Y'))->get(),
 
-
         ]);
     }
 

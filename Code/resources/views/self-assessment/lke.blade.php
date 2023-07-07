@@ -1,21 +1,111 @@
 @extends('layouts.backEnd.main')
 
 @section('content')
+    {{-- Rincian Pengungkit --}}
+    @php
+        $nilai_sa = $nilaiPengungkit->sum('nilai_sa');
+        $nilai_dl = $nilaiPengungkit->sum('nilai_dl');
+        $min_wbk = 0;
+        $min_wbbm = 0;
+        $total = 0;
+    @endphp
+    @foreach ($rincianPengungkit as $item)
+        @foreach ($item->pilar as $value)
+            @php
+                $min_wbk += $value->min_wbk;
+                $min_wbbm += $value->min_wbbm;
+            @endphp
+        @endforeach
+    @endforeach
+    @if ($rekap->predikat == 'WBK')
+        @php
+            $min_predikat = 'min_wbk';
+            $nilai = $min_wbk;
+        @endphp
+    @else
+        @php
+            $min_predikat = 'min_wbbm';
+            $nilai = $min_wbbm;
+            
+        @endphp
+    @endif
     @can('pic')
         @if ($rekap->status == 0 && substr(auth()->user()->satker_id, -1) != 0)
             {{-- Jika status rekapitulasi masih dalam tahap penilaian mandiri dan yang mengajukan BPS Kab/kota: --}}
-            <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                <a href="/satker/surat/{{ $rekap->id }}" class="btn btn-primary"><i class="fa fa-save">
-                    </i> Kirim LKE</a>
-            </div>
+            @foreach ($rincianPengungkit as $item)
+                @foreach ($item->pilar as $value)
+                    @php
+                        // Ambil Nilai Pengungkit
+                        $nilai = $value->RekapPengungkit->where('rekapitulasi_id', $rekap->id)->first();
+                    @endphp
+                    @if ($nilai !== null)
+                        @if (round($nilai->nilai_sa, 2) < $value->$min_predikat)
+                        @else
+                            @php
+                                $total += 1;
+                            @endphp
+                        @endif
+                    @else
+                    @endif
+                @endforeach
+            @endforeach
+            @if ($total < 12)
+                @php
+                    $hasil = 12 - $total;
+                @endphp
+                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <div class="alert alert-info alert-dismissible">
+                        <h5><i class="icon fas fa-info"></i> Note</h5>
+                        Harap lakukan Self-Assessment pada semua kotak pilar. Terdapat <b>{{ $hasil }}</b> pilar yang
+                        belum
+                        memenuhi nilai minimal
+                    </div>
+                </div>
+            @else
+                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <a href="/satker/surat/{{ $rekap->id }}" class="btn btn-primary"><i class="fa fa-save">
+                        </i> Kirim LKE</a>
+                </div>
+            @endif
         @elseif($rekap->status == 0 && substr(auth()->user()->satker_id, -1) == 0)
             {{-- - Jika status rekapitulasi masih dalam tahap penilaian mandiri dan yang mengajukan adalah BPS Provinsi --}}
-            <div class="col-lg-12 mb-3 d-flex justify-content-end">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
-                    </i> Kirim LKE</button>
-            </div>
+            @foreach ($rincianPengungkit as $item)
+                @foreach ($item->pilar as $value)
+                    @php
+                        // Ambil Nilai Pengungkit
+                        $nilai = $value->RekapPengungkit->where('rekapitulasi_id', $rekap->id)->first();
+                    @endphp
+                    @if ($nilai !== null)
+                        @if (round($nilai->nilai_sa, 2) < $value->$min_predikat)
+                        @else
+                            @php
+                                $total += 1;
+                            @endphp
+                        @endif
+                    @else
+                    @endif
+                @endforeach
+            @endforeach
+            @if ($total < 12)
+                @php
+                    $hasil = 12 - $total;
+                @endphp
+                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <div class="alert alert-info alert-dismissible">
+                        <h5><i class="icon fas fa-info"></i> Note</h5>
+                        Harap lakukan Self-Assessment pada semua kotak pilar. Terdapat <b>{{ $hasil }}</b> pilar yang
+                        belum
+                        memenuhi nilai minimal
+                    </div>
+                </div>
+            @else
+                <div class="col-lg-12 mb-3 d-flex justify-content-end">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
+                        </i> Kirim LKE</button>
+                </div>
+            @endif
         @elseif ($rekap->status == 2)
-            {{-- Jika status rekapitulasi dikembalikan dari BPS Provinsi --}}
+            {{-- Jika status rekapitulasi dikembalikan dari Evaluator Provinsi --}}
             <div class="col-lg-12 mb-3 d-flex justify-content-end">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#simpan"><i class="fa fa-save">
                     </i> Kirim LKE</button>
@@ -47,11 +137,6 @@
         <div class="info-box bg-light">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-bold mb-3">{{ $rekap->satker->nama_satker }}</span>
-                {{-- Rincian Pengungkit --}}
-                @php
-                    $nilai_sa = $nilaiPengungkit->sum('nilai_sa');
-                    $nilai_dl = $nilaiPengungkit->sum('nilai_dl');
-                @endphp
                 {{-- Rincian Hasil -> sepertinya ini tidak digunakan --}}
                 {{-- @php
                     $total_sa += $nilaiHasil->sum('nilai');
@@ -163,32 +248,39 @@
                                             $link = '/satker/lke';
                                         @endphp
                                     @endcan
+
                                     <a href="{{ $link }}/{{ $rekap->id }}/{{ $value->id }}">
                                         @php
-                                            if ($progress >= 0 && $progress <= 25) {
-                                                $warna = 'orange';
-                                            } elseif ($progress >= 25 && $progress <= 50) {
-                                                $warna = 'warning';
-                                            } elseif ($progress >= 50 && $progress <= 75) {
-                                                $warna = 'teal';
-                                            } elseif ($progress >= 75 && $progress <= 100) {
-                                                $warna = 'success';
-                                            }
+                                            // Ambil Nilai Pengungkit
+                                            $nilai = $value->RekapPengungkit->where('rekapitulasi_id', $rekap->id)->first();
                                         @endphp
+                                        @if ($nilai !== null)
+                                            @php
+                                                if (round($nilai->nilai_sa, 2) < $value->$min_predikat) {
+                                                    $warna = 'warning';
+                                                } else {
+                                                    $warna = 'success';
+                                                }
+                                            @endphp
+                                        @else
+                                            @php
+                                                $warna = 'orange';
+                                            @endphp
+                                        @endif
+
                                         <div class="info-box bg-{{ $warna }}">
                                             <div class="info-box-content">
-                                                <span class="info-box-text text-bold mb-3 text-center">
+                                                <span class="info-box-text text-bold mb-2 text-center">
                                                     {{ $value->pilar }}
                                                 </span>
-                                                @php
-                                                    // Ambil Nilai Pengungkit
-                                                    $nilai = $value->RekapPengungkit->where('rekapitulasi_id', $rekap->id)->first();
-                                                @endphp
                                                 <div class="row">
                                                     {{-- Self Assessment --}}
                                                     <div class="col-lg-12">
                                                         <span class="info-box-text  text-bold   text-center">
                                                             Self-Assessment
+                                                            <p class="info-box-number d-inline">
+                                                                ({{ $value->$min_predikat }})
+                                                            </p>
                                                         </span>
                                                         <span class="info-box-number">
                                                             {{-- Jika nilai ada di database --}}
@@ -198,13 +290,15 @@
                                                                 0
                                                             @endif /
                                                             {{ $value->bobot }}
+
                                                         </span>
                                                         <div class="progress ">
                                                             <div class="progress-bar" style="width: {{ $progress }}% ">
                                                             </div>
                                                         </div>
                                                         <div class="d-flex justify-content-between">
-                                                            <small>Menjawab {{ $soal_terjawab }} dari {{ $jumlah_soal }}
+                                                            <small>Menjawab {{ $soal_terjawab }} dari
+                                                                {{ $jumlah_soal }}
                                                                 Soal
                                                             </small>
                                                             <small class="info-box-number">{{ $progress }}%</small>
@@ -245,7 +339,8 @@
                                                                     {{ $jumlah_soal }}
                                                                     Soal
                                                                 </small>
-                                                                <small class="info-box-number">{{ $progress }}%</small>
+                                                                <small
+                                                                    class="info-box-number">{{ $progress }}%</small>
                                                             </div>
                                                         </div>
                                                     @endif

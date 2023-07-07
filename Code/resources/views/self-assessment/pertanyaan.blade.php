@@ -747,7 +747,7 @@
                                                     {{-- Desk Evaluation --}}
 
                                                     @php
-                                                        $id = substr($rekap->id, 0, 4) . $rekap->satker_id . $value->id;
+                                                        $id = $rekap->tahun . $rekap->satker_id . $value->id;
                                                         $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
                                                     @endphp
                                                     @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
