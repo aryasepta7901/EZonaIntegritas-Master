@@ -109,7 +109,7 @@ class EvaluatorProvinsiController extends Controller
                 'title' => 'Rekapitulasi Nilai',
                 'rekap' => $rekapitulasi,
                 'nilaiPengungkit' => RekapPengungkit::where('rekapitulasi_id', $rekapitulasi->id),
-                'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', substr($rekapitulasi->id, 0, 4))->get(),
+                'nilaiHasil' => RekapHasil::where('satker_id', $rekapitulasi->satker_id)->where('tahun', $rekapitulasi->tahun)->get(),
                 'rincianPengungkit' => Rincian::where('id', 'P')->orderBy('bobot', 'DESC')->get(),
                 'rincianHasil' => Rincian::where('id', 'H')->orderBy('bobot', 'DESC')->get(),
 

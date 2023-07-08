@@ -47,7 +47,7 @@
                                 <td class="text-center">
                                     @php
                                         $nilai = $nilaiHasil
-                                            ->where('tahun', substr($value->id, 0, 4))
+                                            ->where('tahun', $value->tahun)
                                             ->where('satker_id', $value->satker_id)
                                             ->sum('nilai');
                                     @endphp
