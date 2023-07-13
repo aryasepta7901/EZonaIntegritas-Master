@@ -14,14 +14,15 @@ class UploadDokumen extends Migration
     public function up()
     {
         Schema::create('upload_dokumen', function (Blueprint $table) {
-            $table->char('id', 14)->primary();
+            // $table->char('id', 14)->primary();
+            $table->increments('id');
             $table->string('file');
             $table->string('name');
             $table->char('dokumenlke_id', 6);
-            $table->char('selfassessment_id', 15);
+            $table->unsignedInteger('selfassessment_id');
             $table->timestamps();
             $table->foreign('selfassessment_id')->references('id')->on('self_assessment')->onDelete('cascade');
-            $table->foreign('dokumenlke_id')->references('id')->on('dokumenLKE')->onDelete('cascade');
+            // $table->foreign('dokumenlke_id')->references('id')->on('dokumenLKE')->onDelete('cascade');
         });
     }
 

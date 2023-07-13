@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Level;
 use App\Models\Rincian;
+use App\Models\Satker;
 use App\Models\StatusRekap;
 use App\Models\SubRincian;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 
@@ -46,7 +48,7 @@ class DatabaseSeeder extends Seeder
             ],
 
         ];
-        // Level::insert($level);
+        Level::insert($level);
 
         $rincian = [
             [
@@ -60,7 +62,7 @@ class DatabaseSeeder extends Seeder
                 'bobot' => 60.00,
             ]
         ];
-        // Rincian::insert($rincian);
+        Rincian::insert($rincian);
 
         $status_rekap = [
             // [
@@ -89,11 +91,11 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'id' => 6,
-                'status' => 'Diusulkan BPS Pusat',
+                'status' => 'Diusulkan BPS RI',
             ],
             [
                 'id' => 7,
-                'status' => 'Tidak Diusulkan BPS Pusat',
+                'status' => 'Tidak Diusulkan BPS RI',
             ],
             [
                 'id' => 8,
@@ -128,6 +130,27 @@ class DatabaseSeeder extends Seeder
                 'rincian_id' => 'P'
             ],
         ];
-        // SubRincian::insert($subRincian);
+        SubRincian::insert($subRincian);
+
+        $satker = [
+            [
+                'id' => '1000',
+                'nama_sakter' => 'Inspektorat Utama',
+                'wilayah' => '1',
+            ]
+        ];
+        // Satker::insert($satker);
+
+        $user = [
+            [
+                'id' => '11123123121',
+                'name' => 'M.Arya',
+                'email' => 'aryasepta7901@gmail.com',
+                'no_telp' => '082279157895',
+                'satker_id' => '1000',
+                'level_id' => 'A',
+            ]
+        ];
+        User::insert($user);
     }
 }

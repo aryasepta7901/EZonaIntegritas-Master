@@ -69,10 +69,8 @@ class RincianHasilController extends Controller
                 $bobot_pilar =  $request->input('bobot' . $pilar_id); //bobot pilar
                 $opsi_id = $request->$pilar_id; // ambil nilai opsi_id
                 $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot_pilar; //bobot_opsi *bobot_pilar
-                $id = date('Y') . $satker . $pilar_id;
 
-                RekapHasil::updateOrCreate(
-                    ['id' => $id],
+                RekapHasil::insert(
                     [
                         'tahun' => date('Y'),
                         'opsi_id' => $opsi_id,
@@ -134,20 +132,20 @@ class RincianHasilController extends Controller
         foreach ($pilar as $value) {
             $pilar_id = $value->id;
             $opsi_id = $request->$pilar_id;  // ambil nilai opsi_id
-            $bobot_pilar =  $request->input('bobot' . $hasil);
+            $bobot_pilar =  $request->input('bobot' . $pilar_id);
             $nilai = Opsi::where('id', $opsi_id)->first()->bobot * $bobot_pilar;
-            $id = date('Y') . $satker . $pilar_id;
-
-            RekapHasil::updateOrCreate(
-                ['id' => $id],
+            $id = RekapHasil::where('satker_id', $satker)
+                ->where('pilar_id', $value->id)
+                ->first()->id;
+            $data =
                 [
                     'tahun' => date('Y'),
                     'opsi_id' => $opsi_id,
                     'nilai' => $nilai,
                     'pilar_id' => $pilar_id,
                     'satker_id' => $satker,
-                ]
-            );
+                ];
+            RekapHasil::where('id', $id)->update($data);
         }
 
         return redirect()->back()->with('success', 'Data Berhasil Di Update');

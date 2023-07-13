@@ -18,6 +18,7 @@ use App\Models\LHE;
 use App\Models\Rincian;
 use App\Models\Satker;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -257,7 +258,7 @@ class RekapitulasiController extends Controller
         $phpWord->setValues([
             'y' => date('Y'),
             'no_surat' => $request->no_surat,
-            'tanggal' => date('d F Y'),
+            'tanggal' => Carbon::parse(date(''))->isoFormat('DD MMMM YYYY', 'id'),
             'total_sa' => $request->nilaisa,
             'satker' => substr($request->satker, 3),
             'bps_prov' => $bps_prov,

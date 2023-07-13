@@ -14,7 +14,7 @@ class Rekaphasil extends Migration
     public function up()
     {
         Schema::create('rekaphasil', function (Blueprint $table) {
-            $table->char('id', 11)->primary(); //tahun.satker.pilar_id
+            $table->increments('id');
             $table->year('tahun');
             $table->char('opsi_id', 4);
             $table->double('nilai', 6, 2);
@@ -25,7 +25,6 @@ class Rekaphasil extends Migration
             $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
             $table->foreign('pilar_id')->references('id')->on('pilar')->onDelete('cascade');
             $table->foreign('opsi_id')->references('id')->on('opsi')->onDelete('cascade');
-
         });
     }
 

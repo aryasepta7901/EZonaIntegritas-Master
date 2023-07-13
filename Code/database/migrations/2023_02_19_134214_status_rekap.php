@@ -14,7 +14,7 @@ class StatusRekap extends Migration
     public function up()
     {
         Schema::create('status_rekap', function (Blueprint $table) {
-            $table->id();
+            $table->char('id', 1)->primary();
             $table->string('status');
         });
     }

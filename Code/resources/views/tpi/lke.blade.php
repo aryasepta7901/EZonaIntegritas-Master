@@ -89,10 +89,8 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            @php
-                                $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
-                            @endphp
-                            <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
+
+                            <form method="post" action="/pengawasan/{{ $pengawasan->id }}">
                                 @method('put')
                                 @csrf
                                 <div class="modal-body">
@@ -148,10 +146,8 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            @php
-                                $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
-                            @endphp
-                            <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
+
+                            <form method="post" action="/pengawasan/{{ $pengawasan->id }}">
                                 @method('put')
                                 @csrf
                                 <div class="modal-body">
@@ -183,14 +179,12 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            @php
-                                $pengawasan_id = $pengawasan->anggota_id . $rekap->satker->id;
-                            @endphp
-                            <form method="post" action="/pengawasan/{{ $pengawasan_id }}">
+
+                            <form method="post" action="/pengawasan/{{ $pengawasan->id }}">
                                 @method('put')
                                 @csrf
                                 <div class="modal-body">
-                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan_id }}">
+                                    <input type="hidden" name="pengawasan_id" value="{{ $pengawasan->id }}">
                                     <input type="hidden" name="status" value="0">
                                     <p> <b> Note:</b> <br></p>
                                     <p>LKE akan dikembalikan kepada Anggota Tim </p>
@@ -435,20 +429,20 @@
                                 @endphp
                                 @if (auth()->user()->level_id == 'AT')
                                     @php
-                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')
                                             ->where('rekapitulasi_id', $rekap->id)
                                             ->count('jawaban_at'); //mengambil nilai
                                     @endphp
                                 @elseif(auth()->user()->level_id == 'KT')
                                     @php
-                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')
                                             ->where('rekapitulasi_id', $rekap->id)
                                             ->whereIn('updated_kt', $cek)
                                             ->count('jawaban_kt'); //mengambil nilai
                                     @endphp
                                 @elseif(auth()->user()->level_id == 'DL')
                                     @php
-                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                        $soal_terjawabTPI = App\Models\DeskEvaluation::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')
                                             ->where('rekapitulasi_id', $rekap->id)
                                             ->whereIn('updated_dl', $cek)
                                             ->count('jawaban_dl'); //mengambil nilai
@@ -583,7 +577,7 @@
                     <div class="row">
                         @foreach ($rincianHasil as $value)
                             <div class="col-lg-4">
-                                <div class="info-box bg-warning">
+                                <div class="info-box bg-info">
                                     <div class="info-box-content" style="height: 150px">
                                         <span class="info-box-number text-bold mb-3 text-center">
                                             {{ $value->pilar }}

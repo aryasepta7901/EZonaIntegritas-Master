@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SelfAssessment extends Model
 {
     protected $table = 'self_assessment';
-    public $incrementing = false;
+    public $incrementing = true;
     public $timestamps = true;
     use HasFactory;
 

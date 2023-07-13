@@ -259,8 +259,8 @@
                                                             <form method="POST">
                                                                 <td style="min-width: 500px;">
                                                                     @php
-                                                                        $id = substr($rekap->id, 0, 4) . $rekap->satker_id . $value->id;
-                                                                        $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
+                                                                        
+                                                                        $deskEvaluation = $DeskEvaluation->where('id', $selfAssessment->id)->first();
                                                                     @endphp
                                                                     @if ($deskEvaluation != null)
                                                                         @if ($pengawasan->tahap == 2)
@@ -496,8 +496,7 @@
                                                             </form>
                                                             {{-- Desk Evaluation TPI --}}
                                                             @php
-                                                                $id = date('Y') . $rekap->satker_id . $value->id;
-                                                                $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
+                                                                $deskEvaluation = $DeskEvaluation->where('id', $selfAssessment->id)->first();
                                                             @endphp
                                                             @if ($rekap->status == 4 || $rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
                                                                 {{-- Cek Apakah Surat rekomendasi sudah diupload atau belum --}}
@@ -532,6 +531,9 @@
                                                                                             <input type="hidden"
                                                                                                 name="pertanyaan_id"
                                                                                                 value="{{ $value->id }}">
+                                                                                            <input type="hidden"
+                                                                                                name="id_self"
+                                                                                                value="{{ $selfAssessment->id }}">
 
                                                                                             @foreach ($value->opsi as $item)
                                                                                                 @if ($item->type == 'checkbox')
@@ -624,7 +626,9 @@
                                                                                             <input type="hidden"
                                                                                                 value="{{ $pengawasan->id }}"
                                                                                                 name="pengawasan">
-
+                                                                                            <input type="hidden"
+                                                                                                name="id_self"
+                                                                                                value="{{ $selfAssessment->id }}">
                                                                                             @foreach ($value->opsi as $item)
                                                                                                 @if ($item->type == 'checkbox')
                                                                                                     <div
@@ -750,7 +754,9 @@
                                                                                             <input type="hidden"
                                                                                                 name="pertanyaan_id"
                                                                                                 value="{{ $value->id }}">
-
+                                                                                            <input type="hidden"
+                                                                                                name="id_self"
+                                                                                                value="{{ $selfAssessment->id }}">
 
 
                                                                                             @foreach ($value->opsi as $item)
@@ -843,7 +849,9 @@
                                                                                             <input type="hidden"
                                                                                                 value="{{ $pengawasan->id }}"
                                                                                                 name="pengawasan">
-
+                                                                                            <input type="hidden"
+                                                                                                name="id_self"
+                                                                                                value="{{ $selfAssessment->id }}">
                                                                                             @foreach ($value->opsi as $item)
                                                                                                 @if ($item->type == 'checkbox')
                                                                                                     <div
@@ -969,7 +977,9 @@
                                                                                             <input type="hidden"
                                                                                                 name="pertanyaan_id"
                                                                                                 value="{{ $value->id }}">
-
+                                                                                            <input type="hidden"
+                                                                                                name="id_self"
+                                                                                                value="{{ $selfAssessment->id }}">
                                                                                             @foreach ($value->opsi as $item)
                                                                                                 @if ($item->type == 'checkbox')
                                                                                                     <div
@@ -1061,7 +1071,9 @@
                                                                                             <input type="hidden"
                                                                                                 value="{{ $pengawasan->id }}"
                                                                                                 name="pengawasan">
-
+                                                                                            <input type="hidden"
+                                                                                                name="id_self"
+                                                                                                value="{{ $selfAssessment->id }}">
                                                                                             @foreach ($value->opsi as $item)
                                                                                                 @if ($item->type == 'checkbox')
                                                                                                     <div

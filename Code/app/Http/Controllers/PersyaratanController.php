@@ -59,7 +59,6 @@ class PersyaratanController extends Controller
         // Satker_id
         foreach ($request->satker_id as $key => $satker_id) {
             $tahun = date('Y');
-            $id = $satker_id . $tahun;
             if ($request->persyaratan == 'wbk') {
                 // Jika yang dipilih WBK
                 $wbk = 1;
@@ -69,8 +68,7 @@ class PersyaratanController extends Controller
                 $wbk = 1;
                 $wbbm = 1;
             }
-            persyaratan::updateOrCreate(
-                ['id' => $id],
+            persyaratan::insert(
                 [
                     'tahun' =>  $tahun,
                     'satker_id' => $satker_id,
@@ -126,8 +124,6 @@ class PersyaratanController extends Controller
     {
         $validatedData['satker_id'] = $persyaratan->satker_id;
         $validatedData['tahun'] = date('Y');
-
-        $validatedData['id'] = $validatedData['satker_id'] . $validatedData['tahun'];
 
         if ($request->persyaratan == 'wbk') {
             // Jika yang dipilih WBK

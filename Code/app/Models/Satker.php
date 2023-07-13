@@ -8,7 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Satker extends Model
 {
     use HasFactory;
+
     protected $table = 'satker';
+    protected $fillable = [
+        'id',
+        'nama_satker',
+        'wilayah',
+        'no_telp',
+        'satker_id',
+        'level_id',
+
+    ];
 
     public function pengawasan()
     {

@@ -136,15 +136,13 @@ class DeskEvaluationController extends Controller
                     ]
                 );
             }
-
-            $id = date('Y') . $request->satker_id . $request->pertanyaan_id;
-
             $data = [
-                'id' => $id,
+                'id' => $request->id_self,
                 'catatan_at' => $request->catatan_at,
                 'catatan_kt' => $request->catatan_at, //generate
                 'catatan_dl' => $request->catatan_at, //generate
                 'pengawasan_id' => $request->pengawasan,
+                'pertanyaan_id' => $request->pertanyaan_id,
                 'rekapitulasi_id' => $request->rekapitulasi_id,
             ];
 
@@ -157,8 +155,9 @@ class DeskEvaluationController extends Controller
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
                     $opsi = $request->input('opsi' . $key);
+                    $id = InputField::where('opsi_id', $opsi)->where('selfassessment_id', $request->id_self)->first()->id;
                     InputField::updateOrCreate(
-                        ['id' => $opsi . $data['id']],
+                        ['id' => $id],
                         [
                             'input_at' => $input,
                             'input_kt' => $input, //generate
@@ -167,7 +166,8 @@ class DeskEvaluationController extends Controller
                     );
                 }
                 $opsi0 = $request->input('opsi0');
-                $dataPertama = $opsi0 . $data['id'];
+                $dataPertama = InputField::where('opsi_id', $opsi0)->where('selfassessment_id', $request->id_self)->first()->id;
+
 
                 if ($opsi0 == 'PRE3A1' || $opsi0 == 'PRE3B1') {
                     InputField::where('id', $dataPertama)->update([
@@ -197,24 +197,25 @@ class DeskEvaluationController extends Controller
             // RekapPengungkit ->nilai_at
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
-            $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPengungkit::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('pilar_id', $pilar_id)->where('rekapitulasi_id', $rekapitulasi_id)->first(); //ambil nilai lama
 
             $penimbang = $request->penimbang;
-            if ($nilaiLama->nilai_at !== null)
+
+            $dataRekap = [
+                'rekapitulasi_id' => $rekapitulasi_id,
+                'pilar_id' => $pilar_id,
+            ];
+            if ($nilaiLama !== null) {
+                // Jika terdapat nilai lama
                 $total = $data['nilai_at'] * $penimbang + $nilaiLama->nilai_at;
-            else {
+                $dataRekap['nilai_at'] = round($total, 3);
+                RekapPengungkit::where('id', $nilaiLama->id)->update($dataRekap);
+            } else {
                 $total = $data['nilai_at'] * $penimbang;
+                $dataRekap['nilai_at'] = round($total, 3);
+                RekapPengungkit::create($dataRekap);
             }
-            RekapPengungkit::updateOrCreate(
-                ['id' => $id],
-                [
-                    'rekapitulasi_id' => $rekapitulasi_id,
-                    'pilar_id' => $pilar_id,
-                    'nilai_at' =>  round($total, 3),
-                ],
-            );
         }
 
 
@@ -373,8 +374,9 @@ class DeskEvaluationController extends Controller
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
                     $opsi = $request->input('opsi' . $key);
+                    $id = InputField::where('opsi_id', $opsi)->where('selfassessment_id', $request->id_self)->first()->id;
                     InputField::updateOrCreate(
-                        ['id' => $opsi . $data['id']],
+                        ['id' => $id],
                         [
                             'input_at' => $input,
                             'input_kt' => $input, //generate
@@ -383,7 +385,8 @@ class DeskEvaluationController extends Controller
                     );
                 }
                 $opsi0 = $request->input('opsi0');
-                $dataPertama = $opsi0 . $evaluasi->id;
+                $dataPertama = InputField::where('opsi_id', $opsi0)->where('selfassessment_id', $request->id_self)->first()->id;
+
                 if ($opsi0 == 'PRE3A1' || $opsi0 == 'PRE3B1') {
                     InputField::where('id', $dataPertama)->update(
                         [
@@ -425,16 +428,15 @@ class DeskEvaluationController extends Controller
             // RekapPengungkit ->nilai_at
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
-            $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPengungkit::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('pilar_id', $pilar_id)->where('rekapitulasi_id', $rekapitulasi_id)->first(); //ambil nilai lama
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
                 $total = ($data['nilai_at'] * $penimbang) + $nilaiLama->nilai_at - ($evaluasi->nilai_at * $penimbang);
             }
             RekapPengungkit::updateOrCreate(
-                ['id' => $id],
+                ['id' => $nilaiLama->id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
@@ -474,8 +476,10 @@ class DeskEvaluationController extends Controller
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
                     $opsi = $request->input('opsi' . $key);
+                    $id = InputField::where('opsi_id', $opsi)->where('selfassessment_id', $request->id_self)->first()->id;
+
                     InputField::updateOrCreate(
-                        ['id' => $opsi . $data['id']],
+                        ['id' => $id],
                         [
                             'input_kt' => $input,
                             'input_dl' => $input, //generate
@@ -483,7 +487,8 @@ class DeskEvaluationController extends Controller
                     );
                 }
                 $opsi0 = $request->input('opsi0');
-                $dataPertama = $opsi0 . $evaluasi->id;
+                $dataPertama = InputField::where('opsi_id', $opsi0)->where('selfassessment_id', $request->id_self)->first()->id;
+
                 if ($opsi0 == 'PRE3A1' || $opsi0 == 'PRE3B1') {
                     InputField::where('id', $dataPertama)->update(
                         [
@@ -527,16 +532,16 @@ class DeskEvaluationController extends Controller
             // RekapPengungkit ->nilai_kt
             $rekapitulasi_id = $request->rekapitulasi_id;
             $pilar_id = $request->pilar_id;
-            $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPengungkit::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('pilar_id', $pilar_id)->where('rekapitulasi_id', $rekapitulasi_id)->first(); //ambil nilai lama
+
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
                 $total = ($data['nilai_kt'] * $penimbang) + $nilaiLama->nilai_kt - ($evaluasi->nilai_kt * $penimbang);
             }
             RekapPengungkit::updateOrCreate(
-                ['id' => $id],
+                ['id' => $nilaiLama->id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,
@@ -575,15 +580,18 @@ class DeskEvaluationController extends Controller
                 // Jika field berbentuk Input
                 foreach ($request->input as $key => $input) {
                     $opsi = $request->input('opsi' . $key);
+                    $id = InputField::where('opsi_id', $opsi)->where('selfassessment_id', $request->id_self)->first()->id;
+
                     InputField::updateOrCreate(
-                        ['id' => $opsi . $data['id']],
+                        ['id' => $id],
                         [
                             'input_dl' => $input,
                         ]
                     );
                 }
                 $opsi0 = $request->input('opsi0');
-                $dataPertama = $opsi0 . $evaluasi->id;
+                $dataPertama = InputField::where('opsi_id', $opsi0)->where('selfassessment_id', $request->id_self)->first()->id;
+
                 if ($opsi0 == 'PRE3A1' || $opsi0 == 'PRE3B1') {
                     InputField::where('id', $dataPertama)->update(['input_dl' => $nilai * 100]);
                 } elseif ($opsi0 == 'PRE2A1') {
@@ -619,14 +627,15 @@ class DeskEvaluationController extends Controller
             $pilar_id = $request->pilar_id;
             $id = $pilar_id . $rekapitulasi_id;
             // Cek apakah ada nilai lama
-            $nilaiLama = RekapPengungkit::where('id', $id)->first();
+            $nilaiLama = RekapPengungkit::where('pilar_id', $pilar_id)->where('rekapitulasi_id', $rekapitulasi_id)->first(); //ambil nilai lama
+
             $penimbang = $request->penimbang;
             if ($evaluasi) {
                 // Jika Update
                 $total = ($data['nilai_dl'] * $penimbang) + $nilaiLama->nilai_dl - ($evaluasi->nilai_dl * $penimbang);
             }
             RekapPengungkit::updateOrCreate(
-                ['id' => $id],
+                ['id' => $nilaiLama->id],
                 [
                     'rekapitulasi_id' => $rekapitulasi_id,
                     'pilar_id' => $pilar_id,

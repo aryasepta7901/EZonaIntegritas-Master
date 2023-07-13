@@ -41,10 +41,8 @@ class RekapHasilImport implements ToModel, WithHeadingRow, WithValidation, Skips
             $bobot = Pilar::where('id', $pilar_id)->first('bobot')->bobot;
             $tahun = $row['tahun'];
             $satker = $row['satker'];
-            $id = $tahun . $satker . $pilar_id;
 
-            $rekapHasil = RekapHasil::where('id', $id)->first();
-
+            $rekapHasil = RekapHasil::where('pilar_id', $pilar_id)->where('satker_id', $satker)->first();
 
             if ($rekapHasil) {
                 // Update
@@ -54,7 +52,6 @@ class RekapHasilImport implements ToModel, WithHeadingRow, WithValidation, Skips
             } else {
                 // Jika Create
                 $RekapHasil = new RekapHasil([
-                    'id' => $id,
                     'tahun' => $tahun,
                     'opsi_id' => $opsi_id,
                     'pilar_id' => $pilar_id,

@@ -17,6 +17,7 @@ use App\Models\LHE;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\TextUI\XmlConfiguration\Php;
@@ -92,13 +93,14 @@ class LheController extends Controller
                     'status' => 5,
                 ]
             );
-            Pengawasan::updateOrCreate(
-                ['id' => $request->anggota_id . $request->satker_id],
+            $id_pengawasan = Pengawasan::where('satker_id', $request->satker_id)->where('anggota_id', $request->anggota_id)->first()->id;
+            $data =
                 [
                     'tahap' => 2,
                     'status' => 0,
-                ]
-            );
+                ];
+            Pengawasan::where('id', $id_pengawasan)->update($data);
+
             LHE::updateOrCreate(
                 ['rekapitulasi_id' => $request->id],
                 [
@@ -171,7 +173,7 @@ class LheController extends Controller
         // Creating the new document...
         $phpWord = new TemplateProcessor('template_lhe.docx');
 
-        
+
         if (substr($request->satker_id, -1) != 0) //cek apakah levelnya adalah bps provinsi
         // Jika levelnya bps kab/kota maka
         {
@@ -195,7 +197,7 @@ class LheController extends Controller
         // Edit String
         $phpWord->setValues([
             'y' => date('Y'),
-            'tanggal' => date('d F Y'),
+            'tanggal' => Carbon::parse(date(''))->isoFormat('DD MMMM YYYY', 'id'),
             'satker' => $satker,
             'total_sa' =>  round($request->nilaisa, 2),
             'total_dl' =>  round($request->nilaidl, 2),

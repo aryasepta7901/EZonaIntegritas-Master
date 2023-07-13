@@ -22,8 +22,7 @@ class PersyaratanImport implements ToModel, WithHeadingRow, WithValidation, Skip
      */
     public function model(array $row)
     {
-        $id = $row['satker_id'] . $row['tahun'];
-        $persyaratan = Persyaratan::where('id', $id)->first();
+        $persyaratan = Persyaratan::where('satker_id', $row['satker_id'])->where('tahun', $row['tahun'])->first();
 
         if ($persyaratan) {
             // Jika update
@@ -36,7 +35,6 @@ class PersyaratanImport implements ToModel, WithHeadingRow, WithValidation, Skip
         } else {
             // jika Create
             $persyaratan = new Persyaratan([
-                'id' => $id,
                 'tahun' => $row['tahun'],
                 'satker_id' => $row['satker_id'],
                 'wbk' => $row['wbk'],

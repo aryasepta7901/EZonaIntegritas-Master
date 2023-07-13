@@ -315,7 +315,7 @@
                                                                 @if ($nilai !== null)
                                                                     @php
                                                                         $nilai = $nilai->nilai_dl;
-                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('id', 'LIKE', '%' . $value->id . '%')
+                                                                        $soal_terjawab = App\Models\DeskEvaluation::where('pertanyaan_id', 'LIKE', '%' . $value->id . '%')
                                                                             ->where('rekapitulasi_id', $rekap->id)
                                                                             ->count('jawaban_dl'); //mengambil nilai
                                                                     @endphp

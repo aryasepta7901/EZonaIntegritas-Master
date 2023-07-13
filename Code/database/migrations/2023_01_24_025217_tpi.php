@@ -14,11 +14,11 @@ class Tpi extends Migration
     public function up()
     {
         Schema::create('TPI', function (Blueprint $table) {
-            $table->char('id', 12)->primary(); //nama.tahun.wilayah
+            $table->char('id', 12)->primary();
             $table->year('tahun');
             $table->string('nama');
-            $table->bigInteger('dalnis'); //15
-            $table->bigInteger('ketua_tim'); //15
+            $table->unsignedBigInteger('dalnis'); //15
+            $table->unsignedBigInteger('ketua_tim'); //15
             $table->char('wilayah', 1);
             $table->timestamps();
         });

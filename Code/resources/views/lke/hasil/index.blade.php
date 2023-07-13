@@ -206,8 +206,10 @@
                                                 <div class="form-check ml-4">
                                                     {{-- untuk mengambil data rekapHasil --}}
                                                     @php
-                                                        $id = date('Y') . $satker->satker_id . $value['id']; //id_rekapHasil
-                                                        $RekapHasil = $hasil->where('id', $id)->first(); //  mengambil idRekapHasil by Pilar
+                                                        $RekapHasil = $hasil
+                                                            ->where('satker_id', $satker->satker_id)
+                                                            ->where('pilar_id', $value->id)
+                                                            ->first(); //  mengambil idRekapHasil by Pilar
                                                     @endphp
                                                     <input @if ($RekapHasil->opsi_id == $item->id) checked @endif
                                                         class="form-check-input" type="radio"

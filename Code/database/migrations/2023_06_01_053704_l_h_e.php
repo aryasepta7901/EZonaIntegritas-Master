@@ -14,7 +14,7 @@ class LHE extends Migration
     public function up()
     {
         Schema::create('LHE', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->char('rekapitulasi_id', 36);
             $table->text('surat_pengantar_kabkota')->nullable();
             $table->text('surat_pengantar_prov')->nullable();

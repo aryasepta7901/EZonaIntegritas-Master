@@ -14,7 +14,8 @@ class SelfAssessment extends Migration
     public function up()
     {
         Schema::create('self_assessment', function (Blueprint $table) {
-            $table->char('id', 15)->primary(); //tahun.satker_id.pertanyaan_id
+            // $table->char('id', 15)->primary(); //tahun.satker_id.pertanyaan_id
+            $table->increments('id');
             $table->year('tahun');
             $table->char('opsi_id', 6);
             $table->text('catatan');

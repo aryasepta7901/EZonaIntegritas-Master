@@ -10,7 +10,7 @@ class anggota_tpi extends Model
 {
     use HasFactory;
     protected $table = 'anggota_tpi';
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [
         'id',

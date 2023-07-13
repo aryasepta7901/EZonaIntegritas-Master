@@ -56,9 +56,7 @@ class PengawasanController extends Controller
         );
 
         foreach ($request->satker_id as $key => $satker) {
-            $id = $validatedData['anggota_id'] . $satker;
-            Pengawasan::updateOrCreate(
-                ['id' => $id],
+            Pengawasan::insert(
                 [
                     'tpi_id' =>  $request->tpi_id,
                     'anggota_id' => $validatedData['anggota_id'],

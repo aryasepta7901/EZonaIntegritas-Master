@@ -14,13 +14,14 @@ class Persyaratan extends Migration
     public function up()
     {
         Schema::create('persyaratan', function (Blueprint $table) {
-            $table->id(); //satker_id.tahun
+            $table->increments('id');
             $table->year('tahun');
             $table->integer('satker_id'); //4
             $table->boolean('wbk')->default(0);
             $table->boolean('wbbm')->default(0);
-            $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
+            $table->timestamps();
 
+            $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade');
         });
     }
 

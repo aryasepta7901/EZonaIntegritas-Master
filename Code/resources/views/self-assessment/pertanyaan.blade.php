@@ -188,8 +188,6 @@
                                                     @php
                                                         $selfAssessment = $value->SelfAssessment->where('rekapitulasi_id', $rekap->id)->first();
                                                     @endphp
-
-
                                                     {{-- Self Assessment --}}
                                                     @if ($selfAssessment != null)
                                                         {{-- Update --}}
@@ -427,8 +425,8 @@
                                                                                         <td style="min-width: 200px">
                                                                                             {{ $item->name }}
                                                                                             <input type="hidden"
-                                                                                                name="upload_id{{ $loop->index }}"
-                                                                                                value="{{ $item->id }}">
+                                                                                                name="name{{ $loop->index }}"
+                                                                                                value="{{ $item->name }}">
                                                                                         </td>
                                                                                         <td class="text-center">
                                                                                             <button type="button"
@@ -745,115 +743,135 @@
                                                         </form>
                                                     @endif
                                                     {{-- Desk Evaluation --}}
+                                                    @if ($selfAssessment != null)
+                                                        @php
+                                                            $deskEvaluation = $DeskEvaluation->where('id', $selfAssessment->id)->first();
+                                                        @endphp
+                                                        @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
+                                                            <td style="min-width: 380px;">
+                                                                {{-- Pengendali Teknis --}}
+                                                                @if ($deskEvaluation != null)
+                                                                    @if ($selfAssessment->nilai == $deskEvaluation->nilai_dl)
+                                                                        {{-- Jika Nilai SA dan DE sama maka sukses --}}
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="alert alert-success  alert-dismissible">
+                                                                                <h5><i class="icon fas fa-check"></i>
+                                                                                    Sempurna!
+                                                                                </h5>
+                                                                                Hasil Penilaian Desk-Evaluation Sudah Sama
+                                                                                dengan hasil Self-Assessment
+                                                                            </div>
+                                                                        </div>
+                                                                    @elseif ($selfAssessment->nilai != $deskEvaluation->nilai_dl)
+                                                                        {{-- Jika Nilai SA dan DE sama maka sukses --}}
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="alert alert-danger  alert-dismissible">
+                                                                                <h5><i class="icon fas fa-ban"></i>
+                                                                                    Perbaiki!
+                                                                                </h5>
+                                                                                Harap Perbaiki LKE sesuai dengan komentar
+                                                                                Tim
+                                                                                Penilai Internal
+                                                                            </div>
+                                                                        </div>
+                                                                    @elseif ($selfAssessment->nilai != $deskEvaluation->nilai_dl && $selfAssessment->nilai != 1)
+                                                                        {{-- Jika Nilai SA dan DE sama maka sukses --}}
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="alert alert-warning  alert-dismissible">
+                                                                                <h5><i
+                                                                                        class="icon fas fa-exclamation-triangle"></i>
+                                                                                    Perbaiki!
+                                                                                </h5>
+                                                                                Hasil Penilaian Desk-Evaluation Sudah Sama
+                                                                                dengan hasil Self-Assessment, Namun Anda
+                                                                                dapat
+                                                                                perbaiki LKE menjadi lebih baik
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
 
-                                                    @php
-                                                        $id = $rekap->tahun . $rekap->satker_id . $value->id;
-                                                        $deskEvaluation = $DeskEvaluation->where('id', $id)->first();
-                                                    @endphp
-                                                    @if ($rekap->status == 5 || $rekap->status == 6 || $rekap->status == 7)
-                                                        <td style="min-width: 380px;">
-                                                            {{-- Pengendali Teknis --}}
-                                                            @if ($deskEvaluation != null)
-                                                                @if ($selfAssessment->nilai == $deskEvaluation->nilai_dl)
-                                                                    {{-- Jika Nilai SA dan DE sama maka sukses --}}
-                                                                    <div class="col-lg-12">
-                                                                        <div
-                                                                            class="alert alert-success  alert-dismissible">
-                                                                            <h5><i class="icon fas fa-check"></i> Sempurna!
-                                                                            </h5>
-                                                                            Hasil Penilaian Desk-Evaluation Sudah Sama
-                                                                            dengan hasil Self-Assessment
-                                                                        </div>
+                                                                    <div class="card-body">
+                                                                        <form
+                                                                            action="/tpi/evaluasi/{{ $deskEvaluation->id }}"
+                                                                            method="post">
+                                                                            @method('put')
+                                                                            @csrf
+                                                                            <div class="form-group">
+                                                                                <label for="anggota"> Tim Penilai Internal
+                                                                                </label>
+                                                                                @foreach ($value->opsi as $item)
+                                                                                    @if ($item->type == 'checkbox')
+                                                                                        <div class="form-check ml-4">
+                                                                                            <input class="form-check-input"
+                                                                                                type="radio"
+                                                                                                name="jawaban_dl"
+                                                                                                value="{{ $item->id }}"
+                                                                                                @if ($deskEvaluation->jawaban_dl == $item->id) checked @endif>
+
+                                                                                            <label
+                                                                                                class="form-check-label">{{ $item->rincian }}</label>
+                                                                                        </div>
+                                                                                    @elseif($item->type == 'input')
+                                                                                        <p for="input">
+                                                                                            {{ $item->rincian }}
+                                                                                        </p>@php
+                                                                                            $desk = $deskEvaluation->InputField->where('opsi_id', $item->id)->first();
+                                                                                        @endphp
+                                                                                        <input type="number"
+                                                                                            min="0" required
+                                                                                            class="form-control"
+                                                                                            name="input[]"
+                                                                                            @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
+                                                                                            value="{{ $desk->input_dl }}">
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="catatan">Catatan</label>
+                                                                                <textarea class="form-control" rows="4" readonly name="catatan_dl">{{ old('catatan_dl', $deskEvaluation->catatan_dl) }}  </textarea>
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
-                                                                @elseif ($selfAssessment->nilai != $deskEvaluation->nilai_dl)
-                                                                    {{-- Jika Nilai SA dan DE sama maka sukses --}}
+                                                                @else
                                                                     <div class="col-lg-12">
-                                                                        <div class="alert alert-danger  alert-dismissible">
-                                                                            <h5><i class="icon fas fa-ban"></i> Perbaiki!
+                                                                        <div class="alert alert-info alert-dismissible">
+                                                                            <h5><i class="icon fas fa-info"></i> Informasi!
                                                                             </h5>
-                                                                            Harap Perbaiki LKE sesuai dengan komentar Tim
-                                                                            Penilai Internal
-                                                                        </div>
-                                                                    </div>
-                                                                @elseif ($selfAssessment->nilai != $deskEvaluation->nilai_dl && $selfAssessment->nilai != 1)
-                                                                    {{-- Jika Nilai SA dan DE sama maka sukses --}}
-                                                                    <div class="col-lg-12">
-                                                                        <div
-                                                                            class="alert alert-warning  alert-dismissible">
-                                                                            <h5><i
-                                                                                    class="icon fas fa-exclamation-triangle"></i>
-                                                                                Perbaiki!
-                                                                            </h5>
-                                                                            Hasil Penilaian Desk-Evaluation Sudah Sama
-                                                                            dengan hasil Self-Assessment, Namun Anda dapat
-                                                                            perbaiki LKE menjadi lebih baik
+                                                                            Silahkan Lakukan Pengisian, agar Tim Penilai
+                                                                            Internal dapat
+                                                                            Melakukan Penilaian pada
+                                                                            pertanyaan ini!
                                                                         </div>
                                                                     </div>
                                                                 @endif
+                                                                <hr>
+                                                                <p>Bukti Dukung:</p>
+                                                                <ul>
+                                                                    @foreach ($value->dokumen as $item)
+                                                                        <li>{{ $item->dokumen }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                                Link :
+                                                                <a target="__self"
+                                                                    href="{{ $value->info }}">{{ $value->info }}</a>
+                                                            </td>
+                                                        @else
+                                                            <td style="min-width: 150px;">
+                                                                <p>Bukti Dukung:</p>
+                                                                <ul>
+                                                                    @foreach ($value->dokumen as $item)
+                                                                        <li>{{ $item->dokumen }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                                Link :
+                                                                <a target="__self"
+                                                                    href="{{ $value->info }}">{{ $value->info }}</a>
 
-                                                                <div class="card-body">
-                                                                    <form action="/tpi/evaluasi/{{ $deskEvaluation->id }}"
-                                                                        method="post">
-                                                                        @method('put')
-                                                                        @csrf
-                                                                        <div class="form-group">
-                                                                            <label for="anggota"> Tim Penilai Internal
-                                                                            </label>
-                                                                            @foreach ($value->opsi as $item)
-                                                                                @if ($item->type == 'checkbox')
-                                                                                    <div class="form-check ml-4">
-                                                                                        <input class="form-check-input"
-                                                                                            type="radio"
-                                                                                            name="jawaban_dl"
-                                                                                            value="{{ $item->id }}"
-                                                                                            @if ($deskEvaluation->jawaban_dl == $item->id) checked @endif>
-
-                                                                                        <label
-                                                                                            class="form-check-label">{{ $item->rincian }}</label>
-                                                                                    </div>
-                                                                                @elseif($item->type == 'input')
-                                                                                    <p for="input">
-                                                                                        {{ $item->rincian }}
-                                                                                    </p>@php
-                                                                                        $desk = $deskEvaluation->InputField->where('opsi_id', $item->id)->first();
-                                                                                    @endphp
-                                                                                    <input type="number" min="0"
-                                                                                        required class="form-control"
-                                                                                        name="input[]"
-                                                                                        @if ($item->id == 'PRE3A1' || $item->id == 'PRE3B1' || $item->id == 'PRE2A1') readonly @endif
-                                                                                        value="{{ $desk->input_dl }}">
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="catatan">Catatan</label>
-                                                                            <textarea class="form-control" rows="4" readonly name="catatan_dl">{{ old('catatan_dl', $deskEvaluation->catatan_dl) }}  </textarea>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            @else
-                                                                <div class="col-lg-12">
-                                                                    <div class="alert alert-info alert-dismissible">
-                                                                        <h5><i class="icon fas fa-info"></i> Informasi!
-                                                                        </h5>
-                                                                        Silahkan Lakukan Pengisian, agar Tim Penilai
-                                                                        Internal dapat
-                                                                        Melakukan Penilaian pada
-                                                                        pertanyaan ini!
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            <hr>
-                                                            <p>Bukti Dukung:</p>
-                                                            <ul>
-                                                                @foreach ($value->dokumen as $item)
-                                                                    <li>{{ $item->dokumen }}</li>
-                                                                @endforeach
-                                                            </ul>
-                                                            Link :
-                                                            <a target="__self"
-                                                                href="{{ $value->info }}">{{ $value->info }}</a>
-                                                        </td>
+                                                            </td>
+                                                        @endif
                                                     @else
                                                         <td style="min-width: 150px;">
                                                             <p>Bukti Dukung:</p>
@@ -868,8 +886,6 @@
 
                                                         </td>
                                                     @endif
-
-
                                                 </tr>
                                             @endforeach
                                         </tbody>

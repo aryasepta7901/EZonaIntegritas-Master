@@ -11,6 +11,7 @@ use App\Models\Satker;
 use App\Models\TPI;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -201,7 +202,7 @@ class SuratPersetujuanProvController extends Controller
         $phpWord->setValues([
             'y' => date('Y'),
             'no_surat' => $request->no_surat,
-            'tanggal' => date('d F Y'),
+            'tanggal' => Carbon::parse(date(''))->isoFormat('DD MMMM YYYY', 'id'),
             'daerah' => substr($request->satker, 3),
         ]);
         $dataSatker = [];

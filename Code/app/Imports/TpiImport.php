@@ -12,6 +12,8 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Support\Str;
+
 
 class TpiImport implements ToModel, SkipsEmptyRows, WithHeadingRow, WithValidation, SkipsOnFailure, WithCalculatedFormulas
 {
@@ -23,8 +25,11 @@ class TpiImport implements ToModel, SkipsEmptyRows, WithHeadingRow, WithValidati
      */
     public function model(array $row)
     {
-        $id = strtoupper(str_replace(' ', '', $row['nama'] . $row['tahun'] .  'wil' . $row['wilayah']));
-        $tpi = TPI::where('id', $id)->first();
+        // Id
+        $uuid = Str::uuid()->toString();
+        $uuidWithoutNumbersAndDashes = preg_replace('/[-]/', '', $uuid);
+        $id = substr(preg_replace('/(\w)\1+/', '', $uuidWithoutNumbersAndDashes), 0, 12);
+        $tpi = TPI::where('nama', $row['nama'])->where('wilayah', $row['wilayah'])->first();
 
 
         // Jika user ditemukan, perbarui data
@@ -37,6 +42,7 @@ class TpiImport implements ToModel, SkipsEmptyRows, WithHeadingRow, WithValidati
             // Update kolom lain yang ingin Anda perbarui
             $tpi->save();
             // Hapus data anggota
+            $id = $tpi->id;
             anggota_tpi::where('tpi_id', $id)->delete();
         }
 
@@ -51,6 +57,7 @@ class TpiImport implements ToModel, SkipsEmptyRows, WithHeadingRow, WithValidati
                 'wilayah' => $row['wilayah'],
             ]);
             $tpi->save();
+            $id = $id;
         }
         if (empty($row['anggota_3']) && empty($row['anggota_2'])) {
             // Jika anggota_3 dan anggota_2 tidak diisi maka:
@@ -64,7 +71,6 @@ class TpiImport implements ToModel, SkipsEmptyRows, WithHeadingRow, WithValidati
 
         for ($i = 1; $i <= $no; $i++) {
             $anggota_tpi = new anggota_tpi([
-                'id' => $row['anggota_' . $i] . $row['tahun'],
                 'tpi_id' => $id,
                 'anggota_id' => $row['anggota_' . $i],
             ]);
@@ -77,7 +83,7 @@ class TpiImport implements ToModel, SkipsEmptyRows, WithHeadingRow, WithValidati
     {
         return [
             'tahun' => 'required',
-            'nama' => 'required|max:4',
+            'nama' => 'required',
             'wilayah'  => 'required',
             'dalnis'  => 'required',
             'ketua_tim'  => 'required',

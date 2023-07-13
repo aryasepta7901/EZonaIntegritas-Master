@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Persyaratan extends Model
 {
-    public $incrementing = false;
-    public $timestamps = false;
+    public $incrementing = true;
+    public $timestamps = true;
     protected $table = 'persyaratan';
     use HasFactory;
 

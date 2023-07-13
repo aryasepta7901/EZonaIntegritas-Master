@@ -9,6 +9,8 @@ use App\Models\Satker;
 use App\Models\TPI;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class TpiController extends Controller
 {
@@ -55,7 +57,7 @@ class TpiController extends Controller
         // validasi
         $request->validate(
             [
-                'nama' => 'required|max:5',
+                'nama' => 'required',
                 'wilayah'  => 'required',
                 'dalnis'  => 'required',
                 'ketua_tim'  => 'required',
@@ -63,38 +65,32 @@ class TpiController extends Controller
             ],
             [
                 'required' => ':attribute Wajib di Isi',
-                'max' => ':attribute hanya boleh maksimal 4 karakter, contoh:Tim 1',
             ]
         );
         // TPI
         $nama = $request->nama;
         $wilayah = $request->wilayah;
         $tahun = date('Y');
-        $id = strtoupper(str_replace(' ', '', $nama . $tahun .  'wil' . $wilayah));
-        $tpi = TPI::where('id', $id)->first();
+        // Id
+        $uuid = Str::uuid()->toString();
+        $uuidWithoutNumbersAndDashes = preg_replace('/[-]/', '', $uuid);
+        $id = substr(preg_replace('/(\w)\1+/', '', $uuidWithoutNumbersAndDashes), 0, 12);
 
-        if ($tpi == null) {
-            // cek apakah id sudah terdaftar
-            $data = [
-                'id' =>  $id,
-                'tahun' => $tahun,
-                'nama' => $nama,
-                'dalnis' => $request->dalnis,
-                'ketua_tim' => $request->ketua_tim,
-                'wilayah' => $wilayah,
-            ];
-            TPI::create($data);
-        } else {
-            return back()->withErrors('ID Sudah Terdaftar');
-        }
+        $data = [
+            'id' => $id,
+            'tahun' => $tahun,
+            'nama' => $nama,
+            'dalnis' => $request->dalnis,
+            'ketua_tim' => $request->ketua_tim,
+            'wilayah' => $wilayah,
+        ];
+        TPI::create($data);
 
         // Anggota TPI
         foreach ($request->anggota as $key => $anggota) {
-            $id = $anggota . $tahun;
-            anggota_tpi::updateOrCreate(
-                ['id' => $id],
+            anggota_tpi::insert(
                 [
-                    'tpi_id' =>  $data['id'],
+                    'tpi_id' =>  $id,
                     'anggota_id' => $anggota,
                 ]
             );
@@ -161,7 +157,7 @@ class TpiController extends Controller
 
         $request->validate(
             [
-                'nama' => 'required|max:5',
+                'nama' => 'required',
                 'wilayah'  => 'required',
                 'dalnis'  => 'required',
                 'ketua_tim'  => 'required',
@@ -169,53 +165,26 @@ class TpiController extends Controller
             ],
             [
                 'required' => ':attribute Wajib di Isi',
-                'max' => ':attribute hanya boleh maksimal 4 karakter, contoh:Tim 1',
-
             ]
         );
         $nama = $request->nama;
         $wilayah = $request->wilayah;
         $tahun = date('Y');
-        $tpi_id = strtoupper(str_replace(' ', '', $nama . $tahun .  'wil' . $wilayah));
-
-        // cek apakah id lama sama baru berbeda
-        if ($tim->id == $tpi_id) {
-            // Jika sama maka
-            $data = [
-                'id' =>  $tpi_id,
-                'tahun' => $tahun,
-                'nama' => $nama,
-                'dalnis' => $request->dalnis,
-                'ketua_tim' => $request->ketua_tim,
-                'wilayah' => $wilayah,
-            ];
-            TPI::where('id', $tpi_id)->update($data);
-        } else {
-            $tpi = TPI::where('id', $tpi_id)->first();
-            if ($tpi == null) {
-                TPI::where('id', $tim->id)->delete(); //delete data lama
-                $data = [
-                    'id' =>  $tpi_id,
-                    'tahun' => $tahun,
-                    'nama' => $nama,
-                    'dalnis' => $request->dalnis,
-                    'ketua_tim' => $request->ketua_tim,
-                    'wilayah' => $wilayah,
-                ];
-                TPI::create($data);
-            } else {
-                return back()->withErrors('ID Sudah Terdaftar');
-            }
-        }
+        //
+        $data = [
+            'tahun' => $tahun,
+            'nama' => $nama,
+            'dalnis' => $request->dalnis,
+            'ketua_tim' => $request->ketua_tim,
+            'wilayah' => $wilayah,
+        ];
+        TPI::where('id', $tim->id)->update($data);
         // Anggota TPI
-
         anggota_tpi::where('tpi_id', $tim->id)->delete(); //delete data lama
         foreach ($request->anggota as $key => $anggota) {
-            $id = $anggota . date('Y');
-            anggota_tpi::updateOrCreate(
-                ['id' => $id],
+            anggota_tpi::insert(
                 [
-                    'tpi_id' =>  $tpi_id,
+                    'tpi_id' =>  $tim->id,
                     'anggota_id' => $anggota,
                 ]
             );

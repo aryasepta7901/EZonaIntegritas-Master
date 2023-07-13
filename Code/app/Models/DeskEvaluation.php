@@ -15,6 +15,7 @@ class DeskEvaluation extends Model
     protected $fillable = [
         'id',
         'rekapitulasi_id',
+        'pertanyaan_id',
         'jawaban_at',
         'jawaban_kt',
         'jawaban_dl',
