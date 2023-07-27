@@ -393,12 +393,29 @@
 
                         </div>
                     </div>
+<<<<<<< HEAD
+
+                </div> <!-- / row -->
+
+
+
+
+            </div>
+
+        </section><!-- End Hukum Section -->
+    </main><!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+
+=======
                 </div> <!-- / row -->
             </div>
         </section><!-- End Hukum Section -->
     </main><!-- End #main -->
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
+>>>>>>> 1eb266e (update)
         <div class="footer-top">
             <div class="container">
                 <div class="row gy-4 d-flex justify-content-between">

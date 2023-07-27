@@ -294,8 +294,6 @@
         </div>
     @endforeach
 
-
-    {{-- Tambah --}}
     {{-- subRincian ,Pilar, SubPilar,Pertanyaan --}}
     @foreach ($rincian as $r)
         {{-- Subrincian --}}
@@ -421,7 +419,8 @@
                             <b>{{ $sr->subRincian }}
                                 ?</b>
                             <hr>
-                            <small class="text-info">Note: Dengan Menghapus ini, maka kamu akan menghapus data <i>child</i>
+                            <small class="text-info">Note: Dengan Menghapus ini, maka kamu akan menghapus data
+                                <i>child</i>
                                 yang ada
                                 dibawahnya</small>
                         </div>
@@ -868,7 +867,8 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="text-danger">Apakah Anda Yakin untuk Menghapus Pertanyaan dengan Isi:</p>
+                                        <p class="text-danger">Apakah Anda Yakin untuk Menghapus Pertanyaan dengan Isi:
+                                        </p>
                                         <b>{{ $p->pertanyaan }}
                                             ?</b>
                                     </div>

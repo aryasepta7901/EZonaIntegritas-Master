@@ -96,6 +96,7 @@ return [
 
     'fallback_locale' => 'id',
 
+
     /*
     |--------------------------------------------------------------------------
     | Faker Locale
@@ -106,6 +107,7 @@ return [
     | localized telephone numbers, street address information and more.
     |
     */
+
 
     'faker_locale' => 'id_ID',
 

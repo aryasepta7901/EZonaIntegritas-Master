@@ -16,7 +16,7 @@
         @endphp
     @endforeach
     {{-- @php
-    $nilai_sa += $nilaiHasil;
+    $nilai_sa += $nilaiHasil;   
     @endphp --}}
     {{-- Self Assessment --}}
     @php

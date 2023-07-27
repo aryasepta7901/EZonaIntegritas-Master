@@ -76,6 +76,13 @@
                             </div>
                         </div>
                         <div id="new" class="col-lg-12"></div>
+<<<<<<< HEAD
+
+
+
+
+=======
+>>>>>>> 1eb266e (update)
                     </div>
                     <div class="row">
                         <div class="col-lg-12">

@@ -290,7 +290,6 @@
                                                                 0
                                                             @endif /
                                                             {{ $value->bobot }}
-
                                                         </span>
                                                         <div class="progress ">
                                                             <div class="progress-bar" style="width: {{ $progress }}% ">
