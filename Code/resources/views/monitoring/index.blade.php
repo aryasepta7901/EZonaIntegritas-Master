@@ -42,7 +42,7 @@
                                     @php
                                         $nilai_sa = $nilaiPengungkit->where('rekapitulasi_id', $value->id)->sum('nilai_sa');
                                     @endphp
-                                    {{ $nilai_sa }}
+                                    {{ round($nilai_sa) }}
                                 </td>
                                 <td class="text-center">
                                     @php
@@ -51,7 +51,8 @@
                                             ->where('satker_id', $value->satker_id)
                                             ->sum('nilai');
                                     @endphp
-                                    {{ $nilai }}
+                                    {{ round($nilai) }}
+
                                 </td>
                                 {{-- Progress --}}
                                 {{-- Mengisi LKE --}}
