@@ -9,7 +9,6 @@
         $min_wbbm = 0;
         $total = 0;
     @endphp
-
     @foreach ($rincianPengungkit as $item)
         @foreach ($item->pilar as $value)
             @php
