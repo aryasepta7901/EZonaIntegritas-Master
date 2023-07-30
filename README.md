@@ -31,8 +31,7 @@ Tim Penilai internal (TPI) akan melakukan penilaian evaluasi (desk-evaluation) y
 - Directory [Panduan Penggunaan Sistem](https://github.com/aryasepta7901/EZonaIntegritas-Master/tree/master/Panduan%20Penggunaan%20Sistem) berisi file tentang cara menggunakan sistem
 - Directory [Rancangan Sistem](https://github.com/aryasepta7901/EZonaIntegritas-Master/tree/master/Rancangan%20Sistem) berisi Product Requirement Document (PRD), dan Functional Specification Document (FSD) yang telah disepakati oleh subject matter.
 - Directory [SQL Dump](https://github.com/aryasepta7901/EZonaIntegritas-Master/tree/master/SQL) berisi syntax SQL yang digunakan dalam basis data sistem
-- Directory [Buku]([https://git.stis.ac.id/AryaSepta/E-Zona-Integritas/-/tree/master/Buku](https://github.com/aryasepta7901/EZonaIntegritas-Master/tree/master/Buku
-)) berisi buku skripsi dan makalah sidang
+- Directory [Buku](https://github.com/aryasepta7901/EZonaIntegritas-Master/tree/master/Buku) berisi buku skripsi dan makalah sidang
 
 ## Instalasi
 
