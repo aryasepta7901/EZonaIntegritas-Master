@@ -35,7 +35,7 @@ Tim Penilai internal (TPI) akan melakukan penilaian evaluasi (desk-evaluation) y
 
 ## Instalasi
 
-- Clone repository pada penyimpanan perangkat lokal menggunakan perintah ```git clone https://git.stis.ac.id/AryaSepta/E-Zona-Integritas.git``` 
+- Clone repository pada penyimpanan perangkat lokal menggunakan perintah ```https://github.com/aryasepta7901/EZonaIntegritas-Master.git``` 
 - Unduh dan install aplikasi XAMPP
 - Buka aplikasi XAMPP serta hidupkan MySQL serta Apache pada aplikasi tersebut
 - Buat database baru dengan nama sesuai dengan konfigurasi yang terdapat pada file ```.env```
